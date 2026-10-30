@@ -69,6 +69,7 @@ flowchart LR
 |<img src="https://github.com/wjsdbghks2-eng.png" width="60"> | 전유환 |[@wjsdbghks2-eng](https://github.com/BigskyYang) | 개발  | 하는동안 부지런히 배우면서 열심히 하겠습니다! |
 | | | | | |
 | <img src="https://github.com/jyjy8940.png" width="60"> | 최지연 | [@jyjy8940](https://github.com/jyjy8940) | 미정 | 맛있는 거 먹으면서 파이팅! |
+|<img src="https://github.com/junhyeok-1.png" width="60">|박준혁|[@junhyeok-1](https://github.com/junhyeok-1)|팀원|열심히 하겠습니다.! |
 
 <br>
 
