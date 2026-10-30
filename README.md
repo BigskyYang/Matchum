@@ -66,7 +66,7 @@ flowchart LR
 | 사진 | 이름 | GitHub | 역할 | 한 마디 |
 | :---: | :---: | :---: | --- | --- |
 | <img src="https://github.com/BigskyYang.png" width="60"> | 양대천 | [@BigskyYang](https://github.com/BigskyYang) | 개발, 레포 관리 | 모르는 건 편하게 물어보세요! |
-| | | | | |
+|<img src="https://github.com/wjsdbghks2-eng.png" width="60"> | 전유환 |[@wjsdbghks2-eng](https://github.com/BigskyYang) | 개발  | 하는동안 부지런히 배우면서 열심히 하겠습니다! |
 | | | | | |
 | | | | | |
 
