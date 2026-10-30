@@ -1,0 +1,64 @@
+@import 'tailwindcss';
+
+/*
+ * 공통 테마. 모든 화면은 여기 정의된 토큰을 클래스로 쓴다.
+ *   색상   → bg-cream, text-ink, bg-primary-strong ...
+ *   둥글기 → rounded-card, rounded-button
+ *   그림자 → shadow-soft, shadow-button, shadow-button-pressed
+ *   폭     → max-w-app
+ *   애니   → animate-float
+ */
+@theme {
+  --font-sans: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, 'Apple SD Gothic Neo',
+    'Noto Sans KR', 'Malgun Gothic', sans-serif;
+
+  /* 배경 */
+  --color-cream: #fff9f2; /* 앱 화면 */
+  --color-backdrop: #fbeee6; /* PC에서 앱 양옆 */
+
+  /* 파스텔 포인트 */
+  --color-primary: #f8b4bf;
+  --color-primary-soft: #fde4e8;
+  --color-primary-strong: #e06a80; /* 버튼처럼 흰 글씨를 올리는 곳 */
+  --color-primary-shade: #c4566b; /* 버튼 아래 입체 그림자 */
+  --color-mint: #cdeee0;
+  --color-butter: #ffeeb8;
+  --color-lavender: #e3dbf8;
+
+  /* 글자 */
+  --color-ink: #4a3f3f;
+  --color-ink-soft: #8a7c78;
+  --color-ink-faint: #b5a8a3;
+
+  --radius-card: 1.75rem;
+  --radius-button: 1.25rem;
+
+  --shadow-soft: 0 8px 24px rgb(224 106 128 / 0.12);
+  --shadow-button: 0 6px 0 var(--color-primary-shade), 0 10px 20px rgb(224 106 128 / 0.25);
+  --shadow-button-pressed: 0 2px 0 var(--color-primary-shade), 0 4px 10px rgb(224 106 128 / 0.2);
+
+  --container-app: 430px;
+
+  --animate-float: float 3s ease-in-out infinite;
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-12px);
+    }
+  }
+}
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-backdrop font-sans text-ink antialiased;
+    word-break: keep-all;
+  }
+}
