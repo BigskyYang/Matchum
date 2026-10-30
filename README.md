@@ -68,7 +68,7 @@ flowchart LR
 | <img src="https://github.com/BigskyYang.png" width="60"> | 양대천 | [@BigskyYang](https://github.com/BigskyYang) | 개발, 레포 관리 | 모르는 건 편하게 물어보세요! |
 | | | | | |
 | | | | | |
-| | | | | |
+| <img src="https://github.com/jyjy8940.png" width="60"> | 최지연 | [@jyjy8940](https://github.com/jyjy8940) | 미정 | 맛있는 거 먹으면서 파이팅! |
 
 <br>
 
