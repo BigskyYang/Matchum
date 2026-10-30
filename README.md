@@ -68,7 +68,7 @@ flowchart LR
 | <img src="https://github.com/BigskyYang.png" width="60"> | 양대천 | [@BigskyYang](https://github.com/BigskyYang) | 개발, 레포 관리 | 모르는 건 편하게 물어보세요! |
 |<img src="https://github.com/wjsdbghks2-eng.png" width="60"> | 전유환 |[@wjsdbghks2-eng](https://github.com/BigskyYang) | 개발  | 하는동안 부지런히 배우면서 열심히 하겠습니다! |
 | | | | | |
-|<img src="https://github.com/junhyeok-1.png" width="60">|박준혁|@junhyeok-1|팀원|열심히 하겠습니다.! |
+|<img src="https://github.com/junhyeok-1.png" width="60">|박준혁|[@junhyeok-1](https://github.com/junhyeok-1)|팀원|열심히 하겠습니다.! |
 
 <br>
 
