@@ -64,6 +64,21 @@ print(f'부트스트랩 ARI 평균 {np.mean(ari):.3f} (최소 {np.min(ari):.3f})
 for m, g in mod.groupby(mod):
     print(f'  모듈 {m}: {", ".join(g.index)}')
 
+# 모듈 이름 = 데이터로 확인한 식품군: 모듈 평균(표준화 잔차)과 식품군 섭취량의 스피어만 상관 r ≥ 0.2 상위 2개
+FOOD = {'보조_DAIRY_G': '유제품', '보조_MEAT_G': '육류', '보조_FISH_G': '생선', '보조_EGG_G': '달걀',
+        '보조_LEGUME_G': '콩류', '식습관_LS_FRUIT': '과일', '식습관_LS_VEG1': '채소'}
+F = d[list(FOOD)].copy()
+for c in ['식습관_LS_FRUIT', '식습관_LS_VEG1']:          # 1=하루3회 … 9=거의 안 먹음, 99=무응답 → 클수록 자주
+    F[c] = 10 - F[c].where(F[c] != 99)
+Zs = (R - R.mean()) / R.std()
+food_r = pd.DataFrame({m: F.corrwith(Zs[g.index].mean(axis=1), method='spearman') for m, g in mod.groupby(mod)}).T
+food_r.columns = [FOOD[c] for c in food_r.columns]
+MOD_FOOD = {m: [f for f, r in food_r.loc[m].sort_values(ascending=False).items() if r >= 0.2][:3] for m in food_r.index}
+print('\n[모듈 ↔ 식품군 상관]'); print(food_r.round(2).to_string())
+mod_df = pd.DataFrame({'모듈': mod, '식품군': mod.map(lambda m: '·'.join(MOD_FOOD[m]))})
+mod_df.to_csv(OUT / '영양소모듈.csv', encoding='utf-8-sig')
+food_r.to_csv(OUT / '모듈_식품군_상관.csv', encoding='utf-8-sig')
+
 fig, ax = plt.subplots(figsize=(9, 4))
 dendrogram(Z, labels=NUTRIENTS, ax=ax, color_threshold=Z[-(best_k - 1), 2])
 ax.set_title(f'영양소 모듈 (에너지 보정 섭취 상관, k={best_k}, 실루엣 {sil[best_k]:.2f})'); ax.set_ylabel('1 - 스피어만 상관')
@@ -90,10 +105,10 @@ ant = ABSORPTION.query('유형=="저해"')
 FAT_SOL = {'비타민A', '비타민D', '비타민E'}
 
 
-MOD_NAME = {}  # 모듈 번호 → 대표 이름 (구성 영양소로 자동 생성)
-for m, g in mod.groupby(mod):
-    MOD_NAME[m] = '·'.join(g.index)
-COMMON = need.drop_duplicates('영양소').query('전체미달률 >= 0.5')['영양소'].tolist()
+MOD_NAME = {m: f"{'·'.join(g.index)} ({'·'.join(MOD_FOOD[m]) or '식품군 불명확'})" for m, g in mod.groupby(mod)}
+# 공통 주의: EAR 기준(부족 판정 가능)을 AI 기준(참고)보다 앞에, 그 안에서는 미달률 높은 순
+COMMON = (need.drop_duplicates('영양소').query('전체미달률 >= 0.5')
+              .assign(ai=lambda x: x['기준'].eq('AI')).sort_values(['ai', '전체미달률'], ascending=[True, False])['영양소'].tolist())
 COMMON_SUPP = [n for n in COMMON if n not in FOOD_ONLY]
 MAX_PICK = 4
 
@@ -108,8 +123,17 @@ def combo(c):
     together = sorted({f'{r.A}+{r.B}' for r in syn.itertuples() if r.A in picks and r.B in picks})
     apart = sorted({f'{r.A}/{r.B}({r.근거강도})' for r in ant.itertuples() if r.A in picks and r.B in picks})
     mods = sorted({int(mod[n]) for n in picks})
+    # 고객 군집 ↔ 영양소 모듈 매칭 (변별력 위해 유형특이 우선)
+    #  유형특이 영양소가 있는 모듈만 매칭(유형특이 수 많은 순). 유형특이가 없으면 공통주의 상위 2개 영양소의 모듈
+    spec_all = list(g['영양소'])[:MAX_PICK]                # 유형특이 상위 4개(인·칼륨 포함: 식품 안내에는 씀)
+    ms = {m: sum(n in spec_all for n in gm.index) for m, gm in mod.groupby(mod)}
+    matched = [m for m, s in sorted(ms.items(), key=lambda x: -x[1]) if s > 0][:3]
+    if not matched:
+        matched = list(dict.fromkeys(int(mod[n]) for n in COMMON[:2]))
     return dict(
         유형특이조합=' + '.join(picks) if picks else '(없음: 공통 주의만 안내)',
+        매칭모듈=' | '.join(MOD_NAME[m] for m in matched),
+        식품안내=', '.join(dict.fromkeys(f for m in matched for f in MOD_FOOD[m])),
         식품군모듈=' | '.join(MOD_NAME[m] for m in mods),
         원인=('식사량형 → 끼니 챙기기 우선' if meal >= 0.5 else '구성형') if spec else '',
         흡수짝추가=', '.join(sorted(set(add))),
