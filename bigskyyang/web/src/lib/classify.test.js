@@ -19,8 +19,19 @@ describe('classify', () => {
 
   it('설문 응답 → 변수 변환 → 유형 판정까지 이어진다', () => {
     const { features } = encode(SAMPLE)
-    const { main, leaf } = classify(toVector(features, model.features))
+    const { leaf, mainId } = classify(toVector(features, model.features))
     expect(model.leaves).toContain(leaf)
-    expect(MAIN_TYPES[main]).toBeDefined()
+    expect(MAIN_TYPES[mainId]).toBeDefined()
+  })
+
+  it('군집 번호가 바뀌어도 유형 ID로 같은 유형을 찾는다', () => {
+    // export_model.py가 번호가 바뀐 것을 찾아 이전 ID를 물려준 상황을 흉내 낸다
+    const swapped = { ...model, typeIds: { ...model.typeIds, Group_0: 'Group_1', Group_1: 'Group_0' } }
+    const leaf = model.leaves.find((l) => l.startsWith('Group_1-'))
+    const node = model.children[parentOf(leaf)]
+    const raw = node.centers[leaf].map((z, i) => z * node.std[i] + node.mean[i])
+    const result = classify(raw, swapped)
+    expect(result.main).toBe('Group_1')
+    expect(result.mainId).toBe('Group_0')
   })
 })

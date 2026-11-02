@@ -180,17 +180,22 @@ for c in combo.index:
 
 rec = pd.DataFrame(rows)
 
-# %% 가격 조사 대상 목록 (가격 파일이 아직 없을 때만 새로 만듦 → 팀원이 채운 파일을 덮어쓰지 않음)
-if not PRICE_FILE.exists():
-    idx = list(dict.fromkeys(price_cand + p.index[p['식품명'].isin(rec['식품명'])].tolist()))
-    cand = p.loc[idx, ['식품코드', '식품명', '제조사명', '품목제조신고번호', '제품유형명', '주성분', '1회분량', 'n_day', '1일개수']]
-    cand = cand.rename(columns={'n_day': '1일섭취횟수'})
-    # 제품명에 '120정', 'x 365캡슐' 같은 총개수가 있으면 미리 채움 (확인 필요)
-    cnt = cand['식품명'].str.extract(r'(\d+)\s*(?:정|캡슐|포|병|구미|소프트젤|베지캡)')[0]
-    cand['총개수_제품명추정'] = pd.to_numeric(cnt, errors='coerce')
-    cand['검색어'] = cand['식품명'] + ' ' + cand['제조사명'].fillna('')
-    for col in ['판매가격(원)', '총개수', '판매처', 'URL', '조사일', '비고']:
-        cand[col] = ''
+# %% 가격 조사 대상 목록: 없으면 새로 만들고, 있으면 '새 후보만 덧붙임' (팀원이 채운 가격은 그대로 둠)
+idx = list(dict.fromkeys(price_cand + p.index[p['식품명'].isin(rec['식품명'])].tolist()))
+cand = p.loc[idx, ['식품코드', '식품명', '제조사명', '품목제조신고번호', '제품유형명', '주성분', '1회분량', 'n_day', '1일개수']]
+cand = cand.rename(columns={'n_day': '1일섭취횟수'})
+cnt = cand['식품명'].str.extract(r'(\d+)\s*(?:정|캡슐|포|병|구미|소프트젤|베지캡)')[0]   # 제품명의 '120정' 등 (확인 필요)
+cand['총개수_제품명추정'] = pd.to_numeric(cnt, errors='coerce')
+cand['검색어'] = cand['식품명'] + ' ' + cand['제조사명'].fillna('')
+for col in ['판매가격(원)', '총개수', '판매처', 'URL', '조사일', '비고']:
+    cand[col] = ''
+if PRICE_FILE.exists():
+    old = pd.read_excel(PRICE_FILE)
+    add = cand[~cand['식품코드'].isin(old['식품코드'])]
+    if len(add):
+        pd.concat([old, add.sort_values(['제품유형명', '식품명'])], ignore_index=True).to_excel(PRICE_FILE, index=False)
+    print('가격 조사 대상: 기존', len(old), '개 + 새 후보', len(add), '개 →', PRICE_FILE.name)
+else:
     cand.sort_values(['제품유형명', '식품명']).to_excel(PRICE_FILE, index=False)
     print('가격 조사 대상', len(cand), '개 →', PRICE_FILE.name)
 rec.to_csv(OUT / '추천_군집별.csv', index=False, encoding='utf-8-sig')
