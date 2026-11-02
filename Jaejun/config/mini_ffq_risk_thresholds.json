@@ -1,0 +1,62 @@
+{
+  "protein": {
+    "low_max": 0.07856593743638715,
+    "mid_max": 0.725304741744632,
+    "method": "2016_holdout_prediction_tertiles",
+    "population": "KNHANES_2016_FFQ_age_19_64"
+  },
+  "calcium": {
+    "low_max": 0.8556150028868373,
+    "mid_max": 0.9958581995383506,
+    "method": "2016_holdout_prediction_tertiles",
+    "population": "KNHANES_2016_FFQ_age_19_64"
+  },
+  "iron": {
+    "low_max": 0.00720687478662089,
+    "mid_max": 0.2097426967331579,
+    "method": "2016_holdout_prediction_tertiles",
+    "population": "KNHANES_2016_FFQ_age_19_64"
+  },
+  "phosphorus": {
+    "low_max": 0.016003881884398087,
+    "mid_max": 0.34021685167197374,
+    "method": "2016_holdout_prediction_tertiles",
+    "population": "KNHANES_2016_FFQ_age_19_64"
+  },
+  "vitamin_b1": {
+    "low_max": 0.0136160758018475,
+    "mid_max": 0.21052271013185392,
+    "method": "2016_holdout_prediction_tertiles",
+    "population": "KNHANES_2016_FFQ_age_19_64"
+  },
+  "vitamin_b2": {
+    "low_max": 0.29405230007559197,
+    "mid_max": 0.9474869818022086,
+    "method": "2016_holdout_prediction_tertiles",
+    "population": "KNHANES_2016_FFQ_age_19_64"
+  },
+  "vitamin_c": {
+    "low_max": 0.3211029452633829,
+    "mid_max": 0.6904504362979235,
+    "method": "2016_holdout_prediction_tertiles",
+    "population": "KNHANES_2016_FFQ_age_19_64"
+  },
+  "fiber": {
+    "low_max": 0.772978655859894,
+    "mid_max": 0.9776913140923706,
+    "method": "2016_holdout_prediction_tertiles",
+    "population": "KNHANES_2016_FFQ_age_19_64"
+  },
+  "potassium": {
+    "low_max": 0.8415289667715268,
+    "mid_max": 0.9819352662324881,
+    "method": "2016_holdout_prediction_tertiles",
+    "population": "KNHANES_2016_FFQ_age_19_64"
+  },
+  "sodium_excess": {
+    "low_max": 0.2015233920286604,
+    "mid_max": 0.82899465393526,
+    "method": "2016_holdout_prediction_tertiles",
+    "population": "KNHANES_2016_FFQ_age_19_64"
+  }
+}

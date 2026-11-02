@@ -1,17 +1,12 @@
 # CHANGELOG
 
-## v1.2-dual-signal
-- validated mini-FFQ incremental value in same participants using 2012-2016 ALL+FFQ
-- richer lifestyle AUC 0.664 -> +3Q 0.856 -> +5Q 0.881
-- promoted 5Q habitual mini-FFQ to formal survey input
-- added dual-signal pipeline
-- probabilities are not averaged across lifestyle and habitual-diet modules
-
-
-## v1.2-candidate
-- added habitual mini-FFQ model candidate trained on KNHANES 2012-2015 FFQ
-- independent 2016 validation
-- strict 2025 KDRI-compatible 10-nutrient targets
-- mean AUC: demographic 0.613 / 3Q 0.848 / 5Q 0.877
-- mini-FFQ remains separate from production pipeline pending ALL-file integration
-
+## v1.2 FINAL
+- HEI-derived same-day leakage removed from production pathway
+- validated 5Q habitual mini-FFQ using KNHANES 2012–2016 ALL+FFQ
+- same-participant incremental validation completed
+- 65+ fallback policy added
+- mini-FFQ Low/Mid/High thresholds added
+- supplement safety gate added
+- final API response schema frozen
+- lifestyle and habitual-diet probabilities kept separate
+- cluster/NBTI integration left as explicit external hook until team mapping is frozen
