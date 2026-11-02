@@ -1,0 +1,11 @@
+{
+  "HEI_PROTF": 4.0,
+  "HEI_DAIRY": 5.0,
+  "_bridge_meta": {
+    "protein_food_servings_day": 2.0,
+    "dairy_servings_day": 0.5,
+    "method": "KHEI proportional scoring bridge v1",
+    "assumption": "1 reported eating occasion approximates 1 serving",
+    "production_status": "prototype_requires_validation"
+  }
+}

@@ -1,0 +1,11 @@
+*.csv
+*.xlsx
+/.claude
+__pycache__/
+*.pyc
+.venv/
+.env
+.DS_Store
+data/
+# 웹앱이 쓰는 문항·유형·모델 데이터는 올린다 (원자료 data/ 폴더와 다름)
+!bigskyyang/web/src/data/

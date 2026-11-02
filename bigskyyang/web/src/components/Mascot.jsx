@@ -7,7 +7,10 @@ const prefersReducedMotion = () => window.matchMedia?.('(prefers-reduced-motion:
 // gif:  public/mascot/{gif}.gif (선택). 크림색 배경 위에서 만든 애니메이션이라 앱 배경과 이어져 보인다.
 //       '동작 줄이기'를 켠 사용자에게는 정지 이미지를 보여준다.
 // float: 정지 이미지일 때 둥실거리는 애니메이션 (GIF는 스스로 움직이므로 적용하지 않음)
-export default function Mascot({ name = 'default', gif, float = false, className = '' }) {
+// size:  'md'(176px, 기본) | 'sm'(96px, 설문 화면 등)
+const SIZES = { md: 'size-44', sm: 'size-24' }
+
+export default function Mascot({ name = 'default', gif, float = false, size = 'md', className = '' }) {
   const imageSrc = `/mascot/${name}.png`
   const gifSrc = gif && !prefersReducedMotion() ? `/mascot/${gif}.gif` : null
   const [failed, setFailed] = useState([])
@@ -26,14 +29,14 @@ export default function Mascot({ name = 'default', gif, float = false, className
     )
   }
 
-  const box = `size-44 shrink-0 ${float ? 'animate-float motion-reduce:animate-none' : ''} ${className}`
+  const box = `${SIZES[size]} shrink-0 ${float ? 'animate-float motion-reduce:animate-none' : ''} ${className}`
 
   if (failed.includes(imageSrc)) {
     return (
       <div
         role="img"
         aria-label="마스코트"
-        className={`${box} flex items-center justify-center rounded-full bg-primary-soft text-7xl shadow-soft ring-8 ring-white/70`}
+        className={`${box} flex items-center justify-center rounded-full bg-primary-soft shadow-soft ring-8 ring-white/70 ${size === 'sm' ? 'text-4xl' : 'text-7xl'}`}
       >
         💊
       </div>

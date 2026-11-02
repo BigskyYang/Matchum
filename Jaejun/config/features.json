@@ -1,0 +1,22 @@
+[
+  "설명_sex",
+  "설명_age",
+  "ML_smoker",
+  "ML_cigarettes_day",
+  "ML_drink_month",
+  "ML_drink_freq_ord",
+  "ML_drink_amount_ord",
+  "ML_aerobic",
+  "ML_strength_days",
+  "ML_sedentary_min",
+  "ML_sleep_hours",
+  "ML_stress",
+  "ML_breakfast_freq_ord",
+  "ML_lunch_freq_ord",
+  "ML_dinner_freq_ord",
+  "ML_eatingout_freq_ord",
+  "식습관_LS_FRUIT",
+  "식습관_LS_VEG2",
+  "HEI_PROTF",
+  "HEI_DAIRY"
+]
