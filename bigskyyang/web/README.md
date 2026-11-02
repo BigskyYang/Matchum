@@ -70,6 +70,21 @@ python scripts/build_nutrient_profiles.py --nutrients <개인별 영양소 CSV>
 - 영양소 결과표의 유형·영양소·등급
 - 웹 설문 문항 ↔ `Jaejun/config/survey_schema_v3.json` (문항이 추가되거나 보기 개수가 바뀌면 실패)
 
-## 기타
-- 마스코트 이미지: `public/mascot/` (start.png, thinking.png, happy.png, default.png, hello.gif). 없으면 💊 placeholder로 표시
-- Vercel 배포 시 Root Directory를 `bigskyyang/web`으로 지정. SPA 새로고침은 `vercel.json`이 처리
+## 이미지 (`bigskyyang` 폴더에서)
+- 마스코트 원본: `public/mascot/` (start.png, thinking.png, happy.png, default.png, hello.gif)
+- 휴대폰에서 빨리 뜨도록 WebP를 먼저 쓴다 (원본 대비 약 90% 작음). 마스코트를 새로 넣거나 바꿨으면:
+  ```bash
+  python scripts/optimize_mascots.py
+  ```
+  움직이는 이미지는 배경을 투명하게 바꿔 화면 배경과 경계가 보이지 않는다. WebP가 없으면 원본, 원본도 없으면 💊 placeholder로 표시
+- 링크 공유 미리보기 이미지 `public/og.png` (1200×630). 서비스 이름이나 마스코트가 바뀌면:
+  ```bash
+  python scripts/make_share_image.py
+  ```
+
+## 배포 (Vercel)
+1. vercel.com에 GitHub 계정으로 로그인 → **Add New… → Project** → `BigskyYang/Matchum` 저장소 **Import**
+2. **Root Directory**를 `bigskyyang/web`으로 지정 (Framework Preset은 Vite로 자동 인식)
+3. **Deploy**. 이후 `main`에 push할 때마다 자동으로 다시 배포된다
+- SPA 새로고침(`/survey`, `/result` 직접 접속)은 `vercel.json`이 처리
+- 공유 미리보기 이미지 주소는 Vercel 배포 주소로 자동으로 채워진다. 도메인을 따로 붙였다면 환경변수 `SITE_URL`(예: `https://nbti.example.com`)을 넣는다
