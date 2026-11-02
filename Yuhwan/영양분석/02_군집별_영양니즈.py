@@ -28,8 +28,9 @@ warnings.filterwarnings('ignore')
 plt.rcParams['font.family'] = 'Malgun Gothic'
 plt.rcParams['axes.unicode_minus'] = False
 
-CLUSTER_FILE = ROOT / 'KMeans_Final_MicroClustered.xlsx'
-LABEL_COL = 'Sub_Cluster'
+# 2026-11-02 지연님 k-medoids 11개 유형 (Jiyeon/KMedoids_Lifestyle_MicroClustered.xlsx, Raw_Data 시트)
+CLUSTER_FILE = ROOT / 'KMedoids_Lifestyle_MicroClustered.xlsx'
+LABEL_COL = 'Micro_Cluster'
 OR_CUT, RATE_CUT, SMALL_N = 1.2, 0.50, 100
 
 d = add_status(load_persons(CLUSTER_FILE, LABEL_COL))
