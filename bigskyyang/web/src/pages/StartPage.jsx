@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom'
 import Mascot from '../components/Mascot.jsx'
+import PrimaryButton from '../components/PrimaryButton.jsx'
 import { SERVICE_NAME } from '../config.js'
 
 export default function StartPage() {
@@ -12,12 +12,7 @@ export default function StartPage() {
       </section>
 
       <footer className="mt-10">
-        <Link
-          to="/survey"
-          className="block w-full rounded-button bg-primary-strong py-5 text-center text-lg font-bold text-white shadow-button transition-[translate,box-shadow] duration-100 select-none active:translate-y-1 active:shadow-button-pressed"
-        >
-          검사 시작하기
-        </Link>
+        <PrimaryButton to="/survey">검사 시작하기</PrimaryButton>
 
         <p className="mt-5 text-center text-xs leading-relaxed text-ink-faint">
           추천 결과는 참고용이며 의료적 진단이나 처방을 대체하지 않습니다.
