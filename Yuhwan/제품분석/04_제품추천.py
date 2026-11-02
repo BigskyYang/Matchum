@@ -34,6 +34,11 @@ combo = pd.read_csv(NOUT / '군집별_추천영양소조합.csv', encoding='utf-
 need = pd.read_csv(NOUT / '군집별_영양니즈_long.csv', encoding='utf-8-sig')
 prof = pd.read_csv(NOUT / '군집_요약.csv', encoding='utf-8-sig', index_col=0)
 p = pd.read_csv(OUT / 'product_types.csv', encoding='utf-8-sig')
+# v5: 02에서 새로 만든 열(주목적·목적일치·종합형·원료 배지)을 붙임 (군집 벡터는 그대로라 03을 다시 돌릴 필요 없음)
+_f = pd.read_csv(OUT / 'product_features.csv', encoding='utf-8-sig')
+_new = [c for c in _f.columns if c not in p.columns]
+p = p.merge(_f[['식품코드'] + _new].drop_duplicates('식품코드'), on='식품코드', how='left')
+p['주목적_기능성'] = p['주목적_기능성'].fillna('')
 raw = pd.read_csv(ROOT / '전국건강기능식품영양성분정보표준데이터.csv', encoding='cp949', low_memory=False)
 p = p.merge(raw[['식품코드', '에너지(kcal)']].drop_duplicates('식품코드'), on='식품코드', how='left')
 p['일_에너지'] = p['에너지(kcal)'].fillna(0) * p['n_day']
@@ -140,34 +145,52 @@ for c in combo.index:
     match_rows.append(dict(cluster=c, 매칭유형=' | '.join(f'{t}({sim[t]:.2f})' for t in types), 유형수=k,
                            안전장치_추가=k - K_TYPES))
 
-    # 3) 장르
+    # 3) 장르 (v5: 준혁님 5가지 큐레이션 + 우리 방식 혼합)
+    #   충분함량형: 핵심 영양소 중 하나 이상을 기준치 100%↑로 채우고(UL 이하), 나머지 핵심 성분도 30%↑ (준혁님 '최고 함량'을 UL·적정 기준으로 수정)
+    #   편의형    : 1일 1회 1개로 끝나는 제품 중 핵심 커버율 순 (준혁님 '섭취 편의성')
+    #   가성비형  : 가격 조사 후 1일 가격당 커버율 (가격 없으면 '가격 조사 중'으로 비움)
+    #   종합형    : 종합비타민 전용 풀에서 따로 (준혁님 아이디어, '메가' 키워드 제외) — 단일 영양소 장르에서는 종합형 제외
+    #   원료 형태(D3·rTG·활성비타민B·장용성 등)는 순위가 아니라 배지로 표시 / 대중성·브랜드 점수는 쓰지 않음 (팀 원칙)
+    #   목적 일치: 기능성 주목적 제품(간·면역 등)은 핵심 영양소 이름이 제품명에 있을 때만 후보
     core = (spec_cols or [COLMAP[n] for n in COMMON])[:2]
     core_cov = cov[core].sum(axis=1)
     extra = (p[V] > 0).sum(axis=1) - (cov > 0).sum(axis=1)
-    adequate = pd.Series(True, index=p.index)
-    for q in [x for x in cols if x in QUANT]:
-        adequate &= ~((p[f'v_{q}'] > 0) & (p[f'v_{q}'] < 30))
-    q_ok = in_type & adequate & (core_cov > 0) & (cov[[x for x in cols if x in QUANT]].sum(axis=1) > 0)
-
+    purpose = pd.Series(False, index=p.index)
+    for k in core:
+        if f'목적일치_{k}' in p.columns:
+            purpose |= (cov[k] > 0) & (p[f'목적일치_{k}'] == 1)
+    single = in_type & purpose & (p['종합형'] == 0) & (core_cov > 0)
+    qcore = [k for k in core if k in QUANT]
+    full = pd.Series(False, index=p.index)
+    low = pd.Series(False, index=p.index)
+    for k in qcore:
+        full |= p[f'v_{k}'] >= 100
+        low |= (p[f'v_{k}'] > 0) & (p[f'v_{k}'] < 30)
+    suff = single & full & ~low
+    # 이름에 핵심 영양소가 적힌 제품(예: '비타민B 컴플렉스') 우선: 함량이 둘 다 기준치 이상이면 커버율이 같아져 순서가 임의로 정해지는 문제 보완
+    named = pd.Series(0.0, index=p.index)
+    for k in core:
+        if f'name_{k}' in p.columns:
+            named = np.maximum(named, p[f'name_{k}'].fillna(0))
+    conv = single & p['1일개수'].eq(1) & p['n_day'].eq(1)
     n_spec = (cov[spec_cols] >= 0.3).sum(axis=1) if spec_cols else 0
     n_comm = (cov[common_cols] >= 0.3).sum(axis=1)
-    allin_ok = ok & p['제품유형명'].isin(multi_types)
+    multi = ok & (p['종합형'] == 1)
     genres = {
-        '품질형': pick(p[q_ok], (core_cov + 0.3 * wcov - 0.05 * extra)[q_ok]),
-        '올인원형': pick(p[allin_ok], (100 * n_spec + 10 * n_comm + wcov)[allin_ok]),
+        '충분함량형': pick(p[suff], (core_cov + 0.3 * wcov - 0.05 * extra + 0.5 * named)[suff]),
+        '편의형(1일 1회 1개)': pick(p[conv], (core_cov + 0.3 * wcov - 0.05 * extra + 0.5 * named)[conv]),
     }
     if has_price:
-        pv = in_type & p['price_per_day'].notna()
-        genres['가성비형'] = pick(p[pv], (wcov / p['price_per_day'])[pv])
-    else:
-        easy = in_type & p['1일개수'].between(1, 4)
-        genres['간편형(가격 확보 전 임시)'] = pick(p[easy & (core_cov > 0)], ((core_cov + 0.3 * wcov) / p['1일개수'].clip(lower=1))[easy & (core_cov > 0)])
+        pv = single & p['price_per_day'].notna()
+        genres['가성비형'] = pick(p[pv], ((core_cov + 0.3 * wcov) / p['price_per_day'])[pv])
+    genres['종합형'] = pick(p[multi], (100 * n_spec + 10 * n_comm + wcov)[multi])
 
     get = lambda col: combo.loc[c, col] if col in combo.columns and pd.notna(combo.loc[c, col]) else ''
     web[c] = {'유형특이': [n for n in get('유형특이조합').split(' + ') if not n.startswith('(')],
               '공통주의': COMMON, '원인': get('원인'), '매칭영양소모듈': get('매칭모듈'), '식품안내': get('식품안내'),
               '같이복용': get('같이'), '따로복용': get('따로'), '식품으로만': get('식품으로만'),
-              '매칭제품유형': types, '참고정보(순위없음)': REFERENCE, '장르': {}}
+              '매칭제품유형': types, '참고정보(순위없음)': REFERENCE,
+              '가성비형': '' if has_price else '가격 조사 중 (가격조사_대상.xlsx)', '장르': {}}
     for g, df in genres.items():
         web[c]['장르'][g] = []
         for _, r in df.iterrows():
@@ -175,7 +198,8 @@ for c in combo.index:
             unknown = [x for x in covers if x not in QUANT]
             item = dict(식품명=r['식품명'], 제조사=r['제조사명'], 제품유형=r['제품유형명'], 주성분=r['주성분'],
                         덮는영양소=covers, 함량미상=unknown, 가중커버율=round(float(wcov[r.name]), 3), 일개수=r['1일개수'],
-                        표시형태=[f for f in ['D3', 'rTG', '리포좀', '활성엽산'] if r.get(f'form_{f}', 0) == 1])
+                        표시형태=[f for f in ['D3', 'rTG', '리포좀', '활성엽산', '활성비타민B', '장용성'] if r.get(f'form_{f}', 0) == 1],
+                        주목적=r.get('주목적_기능성', '') or '비타민·미네랄')
             web[c]['장르'][g].append(item)
             rows.append(dict(cluster=c, 장르=g, **{kk: vv for kk, vv in item.items() if kk != '표시형태'}))
 
