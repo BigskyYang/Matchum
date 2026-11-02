@@ -324,3 +324,228 @@ BMI보다 실제 식품섭취 정보가 핵심 predictor로 작동함을 확인�
 >
 > 현재 단계는 연구용 Prototype v1이며,  
 > 향후 웹 설문 serving과 KNHANES 학습변수 간 calibration 후 서비스 연결 예정임.
+
+
+---
+
+## 12. 설문 응답 전처리 코드
+
+`src/preprocess_survey.py`에서 실제 사용자 설문 응답을 모델 입력형식으로 변환함.
+
+### 입력
+
+`examples/example_raw_survey_response.json`
+
+형태의 원시 설문 JSON을 사용함.
+
+### 출력
+
+```text
+raw survey response
+        ↓
+preprocess_survey_response()
+        ↓
+model_features
+bridge_features
+profile_features
+```
+
+- `model_features`  
+  현재 모델에서 바로 사용하는 생활습관·식습관 변수 18개
+
+- `bridge_features`  
+  Q25/Q26에서 계산한 식품군의 대략적인 servings/day  
+  현재는 `HEI_PROTF`, `HEI_DAIRY`와 동일하지 않으므로 직접 모델에 넣지 않음
+
+- `profile_features`  
+  교대근무, PHQ-9, 고혈압, 당뇨, 이상지질혈증 등 별도 해석 레이어
+
+### 주요 자동 처리
+
+- 비흡연자 → `ML_smoker=0`, `ML_cigarettes_day=0`
+- 비음주자 → 음주 관련 변수 자동 0
+- 중강도 + 2×고강도 운동시간 → `ML_aerobic`
+- 평일/휴일 취침·기상시간 → 5:2 가중 평균 수면시간
+- 식사빈도/외식빈도 → ordinal coding
+- 과일/채소 빈도 → KNHANES-style category code
+- Q25/Q26 → approximate servings/day
+
+### 사용 예
+
+```python
+import json
+from src.preprocess_survey import preprocess_survey_response
+
+with open("examples/example_raw_survey_response.json", encoding="utf-8") as f:
+    survey = json.load(f)
+
+result = preprocess_survey_response(survey)
+print(result["model_features"])
+```
+
+현재 `model_features`에는 `HEI_PROTF`, `HEI_DAIRY`가 의도적으로 포함되지 않음.  
+향후 survey-to-training calibration이 완료되면 `attach_calibrated_food_features()`를 사용해
+두 변수를 붙인 뒤 `predict.py`로 전달하도록 설계함.
+
+
+---
+
+## 13. Q25/Q26 Food Bridge v1
+
+웹 설문의 주요 식품군 문항을 현재 모델의 `HEI_PROTF`, `HEI_DAIRY`
+입력 스케일로 연결하기 위해 `src/food_bridge.py`를 추가함.
+
+### 변환 원리
+
+#### Q25. 고기·생선·달걀·콩류
+
+먼저 응답 빈도를 approximate servings/day로 변환함.
+
+```text
+거의 없음    -> 0.00
+주 1~2회     -> 0.21
+주 3~4회     -> 0.50
+주 5~7회     -> 0.86
+하루 1회     -> 1.00
+하루 2회     -> 2.00
+하루 3회 이상 -> 3.00
+```
+
+그 다음 공식 KHEI의 성별·연령별 최대점 기준을 적용함.
+
+```text
+남성 19-64세 : 5 servings/day -> 10점
+여성 19-64세 : 4 servings/day -> 10점
+남성 65세 이상: 4 servings/day -> 10점
+여성 65세 이상: 2.5 servings/day -> 10점
+```
+
+중간 섭취량은 비례점수로 계산하고 최대 10점으로 제한함.
+
+#### Q26. 우유·유제품
+
+```text
+1 serving/day 이상 -> 10점
+0 serving/day       -> 0점
+```
+
+중간 값은 동일하게 비례점수로 계산함.
+
+### 코드
+
+```python
+from src.food_bridge import bridge_food_questions
+
+bridge = bridge_food_questions(
+    sex_code=1,
+    age=23,
+    protein_food_frequency="하루 2회",
+    dairy_frequency="주 3~4회",
+)
+
+print(bridge["HEI_PROTF"])
+print(bridge["HEI_DAIRY"])
+```
+
+### 현재 상태
+
+이 bridge는 **공식 KHEI scoring rule과 동일한 0-10 스케일**을 사용하지만,
+웹 설문의 "섭취 횟수 1회"를 "KDRI 1 serving"으로 근사한다는 가정이 있음.
+
+따라서:
+
+- Prototype / 내부 시연: 사용 가능
+- 연구 결과 해석: 사용 가능하나 approximation 명시
+- 실제 상용 서비스 배포: 별도 validation 권장
+
+### End-to-end 실행
+
+`src/pipeline.py`를 사용하면 다음 흐름이 한 번에 실행됨.
+
+```text
+Raw survey JSON
+      ↓
+preprocess_survey_response()
+      ↓
+Q25/Q26 food bridge v1
+      ↓
+20 model features
+      ↓
+14 nutrient-risk models
+      ↓
+Low / Mid / High
+```
+
+```python
+from src.pipeline import predict_from_survey
+
+result = predict_from_survey(survey_json)
+```
+
+
+---
+
+## 14. 비예측 설명 레이어
+
+영양예측에 직접 넣지 않는 문항은 `profile_layer.py`에서 별도로 해석함.
+
+### 정신건강
+
+`src/mental_health.py`
+
+PHQ-9은 nutrition model predictor로 사용하지 않음.
+
+자동 생성 항목:
+
+- PHQ-9 total score (0-27)
+- severity category
+- `total >= 10` screening flag
+- PHQ-9 item 9 positive 여부
+- safety flag
+
+PHQ-9 9번 문항이 0보다 큰 경우에는 단순 영양결과 화면으로 바로 진행하지 않고,
+실제 서비스에서 별도의 안전 안내 및 적절한 도움 연결 흐름이 필요함.
+
+### 대사건강
+
+`src/metabolic_context.py`
+
+다음 의사진단 여부를 설명용 context로 사용함.
+
+- 고혈압
+- 당뇨병
+- 이상지질혈증
+
+자동 생성 항목:
+
+- 보유 질환 수
+- 질환 목록
+- `none / one / multiple` context
+- 결과 해석 시 우선 확인할 영양항목
+
+예:
+- 고혈압 → 나트륨 과잉, 칼륨, 식이섬유 결과 우선 표시
+- 당뇨/이상지질혈증 → 식이섬유 및 전체 식사패턴 해석에 참고
+
+이 정보는 **예측확률을 바꾸지 않으며**, 결과의 설명 순서와 문맥을 조정하는 데만 사용함.
+
+### 교대근무
+
+교대근무 여부 역시 nutrition model predictor가 아니라
+생활습관 프로파일 설명용 변수로만 유지함.
+
+### 최종 pipeline 결과
+
+`predict_from_survey()`는 이제 다음을 함께 반환함.
+
+```text
+predictions       = 14개 영양소 위험예측
+model_features    = 실제 ML 입력값
+bridge_features   = Q25/Q26 bridge 정보
+profile_summary
+ ├─ mental_health
+ ├─ metabolic_health
+ └─ work_pattern
+```
+
+즉 영양예측과 정신건강/대사건강 설명 레이어가 코드상에서도 분리되어 있음.

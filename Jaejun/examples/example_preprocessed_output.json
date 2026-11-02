@@ -1,0 +1,46 @@
+{
+  "model_features": {
+    "설명_sex": 1,
+    "설명_age": 23.0,
+    "ML_smoker": 0,
+    "ML_cigarettes_day": 0.0,
+    "ML_drink_month": 1,
+    "ML_drink_freq_ord": 4,
+    "ML_drink_amount_ord": 3,
+    "ML_aerobic": 1,
+    "ML_strength_days": 1,
+    "ML_sedentary_min": 600.0,
+    "ML_sleep_hours": 7.642857142857143,
+    "ML_stress": 1,
+    "ML_breakfast_freq_ord": 1,
+    "ML_lunch_freq_ord": 1,
+    "ML_dinner_freq_ord": 1,
+    "ML_eatingout_freq_ord": 2,
+    "식습관_LS_FRUIT": 6,
+    "식습관_LS_VEG2": 1
+  },
+  "bridge_features": {
+    "protein_food_servings_day": 2.0,
+    "dairy_servings_day": 0.5
+  },
+  "profile_features": {
+    "shift_work": "아니오",
+    "phq9": [
+      0,
+      0,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "hypertension_diagnosed": false,
+    "diabetes_diagnosed": false,
+    "dyslipidemia_diagnosed": false
+  },
+  "warnings": [
+    "protein_food_servings_day / dairy_servings_day are approximate survey-side bridge values and must not be treated as HEI_PROTF / HEI_DAIRY without calibration."
+  ]
+}
