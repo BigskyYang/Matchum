@@ -1,0 +1,27 @@
+{
+  "pregnant_or_breastfeeding": {
+    "action": "stop_product_recommendation",
+    "message": "임신·수유 중에는 일반 성인 기준 자동 제품 추천을 중단하고 전문가 상담을 안내합니다."
+  },
+  "kidney_disease_or_stones": {
+    "action": "caution",
+    "nutrients": [
+      "calcium",
+      "potassium",
+      "phosphorus"
+    ],
+    "message": "신장질환 또는 신장결석 이력이 있으면 칼슘·칼륨·인 함유 제품 자동 추천을 제한합니다."
+  },
+  "anticoagulant_or_aspirin": {
+    "action": "caution",
+    "nutrients": [
+      "omega3",
+      "vitamin_k"
+    ],
+    "message": "항응고제·아스피린 복용 시 오메가3·비타민K 관련 제품은 자동 추천에서 제외하거나 주의 표시합니다."
+  },
+  "current_supplements": {
+    "action": "duplicate_and_ul_check",
+    "message": "현재 복용 중인 영양제와 성분 중복 및 상한섭취량(UL) 초과 가능성을 점검합니다."
+  }
+}

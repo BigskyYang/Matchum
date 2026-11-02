@@ -1,0 +1,22 @@
+{
+  "version": "v1.2-final",
+  "nutrition": {
+    "lifestyle_risk": "dict[str,float]",
+    "habitual_diet_risk": "dict[str,float] | null",
+    "habitual_diet_risk_band": "dict[str,Low|Mid|High] | null",
+    "habitual_diet_available": "bool",
+    "habitual_diet_fallback_reason": "null | mini_ffq_validated_for_age_19_64_only | mini_ffq_incomplete",
+    "combination_policy": "separate_signals_no_probability_averaging"
+  },
+  "profile_summary": "object",
+  "dietary_context": "object|null",
+  "lifestyle_cluster": {
+    "status": "awaiting_final_cluster_mapping",
+    "cluster_id": "null",
+    "cluster_name": "null"
+  },
+  "supplement_safety": {
+    "product_recommendation_blocked": "bool",
+    "flags": "list[object]"
+  }
+}
