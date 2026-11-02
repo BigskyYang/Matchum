@@ -147,3 +147,38 @@ research/
 5. 필요 시 nutrient domain score 병행
 
 현재 Git의 기본 inference path는 **survey-only service model**임.
+
+
+---
+
+## Incremental validation (same participants)
+
+The mini-FFQ value was tested in the same KNHANES participants after adding
+historical lifestyle variables from the ALL files.
+
+### Core lifestyle, 2012-2015 train -> 2016 validation
+- lifestyle only: mean AUC **0.626**
+- lifestyle + 3Q: **0.850**
+- lifestyle + 5Q: **0.878**
+
+### Richer lifestyle, 2014-2015 train -> 2016 validation
+Includes aerobic activity and meal-frequency variables.
+- lifestyle only: mean AUC **0.664**
+- lifestyle + 3Q: **0.856**
+- lifestyle + 5Q: **0.881**
+
+This supports the incremental value of the 5 habitual food-frequency questions.
+
+Important:
+The 0.881 value is validation performance for historical FFQ-based habitual
+nutrient-risk targets, not a direct estimate of the current 2022-2024 web
+service model performance.
+
+## v1.2 policy
+
+v1.2 uses a dual-signal architecture:
+- `lifestyle_risk`
+- `habitual_diet_risk`
+
+The probabilities are not directly averaged because the two models were trained
+on different cohorts and target constructions.

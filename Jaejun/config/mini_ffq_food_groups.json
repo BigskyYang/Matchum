@@ -1,0 +1,41 @@
+{
+  "meat": [
+    "FQ_R_PORK",
+    "FQ_S_PORK",
+    "FQ_F_PORK",
+    "FQ_C_PORK",
+    "FQ_R_BEEF",
+    "FQ_F_BEEF",
+    "FQ_HAM",
+    "FQ_PORKBY",
+    "FQ_T_CHIC",
+    "FQ_S_CHIC",
+    "FQ_F_CHIC",
+    "FQ_R_DUCK"
+  ],
+  "fish": [
+    "FQ_MACKER",
+    "FQ_HAIRT",
+    "FQ_ANCH",
+    "FQ_SQUID",
+    "FQ_SCRAB",
+    "FQ_SFISH",
+    "FQ_FPASTE"
+  ],
+  "egg": [
+    "FQ_F_EGG",
+    "FQ_S_EGG"
+  ],
+  "legume": [
+    "FQ_BNCURD",
+    "FQ_S_BEAN",
+    "FQ_S_SOYP",
+    "FQ_J_SOYP"
+  ],
+  "dairy": [
+    "FQ_MILK",
+    "FQ_L_YOGU",
+    "FQ_C_YOGU",
+    "FQ_BN_MILK"
+  ]
+}
