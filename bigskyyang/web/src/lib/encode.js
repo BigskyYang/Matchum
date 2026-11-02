@@ -60,9 +60,22 @@ export function encode(a) {
     fruit: a.fruit,
     proteinServings: a.protein,
     dairyServings: a.dairy,
+    // 선택 문항(PHQ-9·대사건강): 답하지 않았으면 null
+    optional: a.extra === 'more' ? optionalAnswers(a) : null,
   }
 
   return { features, extras }
+}
+
+function optionalAnswers(a) {
+  const phq = Array.from({ length: 9 }, (_, i) => a[`phq${i + 1}`] ?? 0)
+  return {
+    phqTotal: phq.reduce((sum, v) => sum + v, 0),
+    phqItem9: phq[8],
+    hypertension: a.dx_hypertension === 'yes',
+    diabetes: a.dx_diabetes === 'yes',
+    dyslipidemia: a.dx_dyslipidemia === 'yes',
+  }
 }
 
 // 모델 변수 순서대로 배열로 만든다

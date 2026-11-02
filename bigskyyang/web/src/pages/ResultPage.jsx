@@ -5,16 +5,22 @@ import PrimaryButton, { SecondaryButton } from '../components/PrimaryButton.jsx'
 import Card, { Chips } from '../components/result/Card.jsx'
 import FoodGrid from '../components/result/FoodGrid.jsx'
 import HabitSignals from '../components/result/HabitSignals.jsx'
+import MetabolicCard from '../components/result/MetabolicCard.jsx'
+import MindCard from '../components/result/MindCard.jsx'
 import MissionList from '../components/result/MissionList.jsx'
+import NutrientRisks from '../components/result/NutrientRisks.jsx'
 import PartnerCard from '../components/result/PartnerCard.jsx'
+import nutrientProfiles from '../data/nutrientProfiles.json'
 import { BALANCED_FOODS, pickTips } from '../data/tips.js'
 import { LEAF_TYPES, MAIN_TYPES, leafCode } from '../data/types.js'
 import { classify, model } from '../lib/classify.js'
 import { encode, toVector } from '../lib/encode.js'
+import { lookupProfile, rankNutrients, supplementsFor } from '../lib/nutrition.js'
 import { SCORE_AXES, bestPartner, groupScores, hashtags, scores, share } from '../lib/profile.js'
 import { clearSurvey, loadSurvey } from '../lib/storage.js'
 
-const PENDING = '유형별 영양 분석이 끝나면 이곳에 표시돼요.'
+// 유형별 영양소 결과표가 아직 없을 때
+const PENDING = '유형별 영양 분석 결과가 준비되면 이곳에 표시돼요.'
 const MAX_MISSIONS = 3
 const MAX_FOODS = 6
 const SHIFT_MISSION = { icon: '🌙', title: '잠·식사 시간 지키기', detail: '근무가 바뀌어도 잠드는 시간과 식사 시간을 최대한 일정하게!' }
@@ -38,6 +44,9 @@ function useResult() {
       if (!foods.some((x) => x.label === f.label)) foods.push(f)
     }
     const partner = bestPartner(model, myScores, main, Object.keys(MAIN_TYPES))
+    const profile = lookupProfile(nutrientProfiles, leaf, main)
+    const ranked = profile ? rankNutrients(profile) : []
+    const optional = extras.optional
 
     return {
       leaf,
@@ -53,8 +62,10 @@ function useResult() {
         MAX_MISSIONS,
       ),
       foods: (foods.length ? foods : BALANCED_FOODS).slice(0, MAX_FOODS),
-      nutrients: leafType.nutrients ?? mainType.nutrients,
-      supplements: leafType.supplements ?? mainType.supplements,
+      ranked,
+      supplements: supplementsFor(ranked),
+      optional,
+      hasCondition: Boolean(optional && (optional.hypertension || optional.diabetes || optional.dyslipidemia)),
       partner: { type: typeInfo(partner.label), helps: partner.helps },
     }
   }, [])
@@ -112,16 +123,33 @@ export default function ResultPage() {
         <FoodGrid foods={r.foods} />
       </Card>
 
-      <Card title="부족하기 쉬운 영양소" icon="🥄">
-        <Chips items={r.nutrients} empty={PENDING} />
+      <Card title="내 유형이 챙겨야 할 영양소" icon="🥄">
+        {r.ranked.length ? <NutrientRisks ranked={r.ranked} /> : <p className="text-sm text-ink-faint">{PENDING}</p>}
       </Card>
 
       <Card title="고려해 볼 수 있는 건강기능식품 원료" icon="💊">
-        <Chips items={r.supplements} empty={PENDING} />
-        <p className="mt-3 text-xs leading-relaxed text-ink-faint">
-          질환이 있거나 약을 먹고 있다면 섭취 전에 의사·약사와 상담하세요.
+        <Chips
+          items={r.supplements}
+          empty={r.ranked.length ? '‘주의’ 영양소가 없어요. 지금처럼 음식으로 골고루 챙겨 주세요!' : PENDING}
+        />
+        <p className={`mt-3 text-xs leading-relaxed ${r.hasCondition ? 'font-semibold text-primary-shade' : 'text-ink-faint'}`}>
+          {r.hasCondition
+            ? '진단받은 질환이 있으니, 건강기능식품은 꼭 담당 의사·약사와 먼저 상의하세요.'
+            : '질환이 있거나 약을 먹고 있다면 섭취 전에 의사·약사와 상담하세요.'}
         </p>
       </Card>
+
+      {r.optional && (
+        <Card title="마음 건강 체크" icon="💗">
+          <MindCard total={r.optional.phqTotal} item9={r.optional.phqItem9} />
+        </Card>
+      )}
+
+      {r.hasCondition && (
+        <Card title="진단받은 질환이 있다면" icon="🩺">
+          <MetabolicCard optional={r.optional} />
+        </Card>
+      )}
 
       <Card title="같이 다니면 좋은 유형" icon="🤝">
         <PartnerCard me={r.mainType} partner={r.partner.type} helps={r.partner.helps} />

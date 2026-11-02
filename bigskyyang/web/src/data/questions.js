@@ -1,5 +1,9 @@
 // 설문 문항 정의 (bigskyyang/사용자_설문조사_초안.html 기준)
 // 문항을 빼거나 순서를 바꾸려면 이 배열만 고치면 된다. 응답 → 모델 변수 변환은 lib/encode.js에서 한다.
+// 문항 구성은 Jaejun/SURVEY_V3.md(설문 v3)를 따른다. 단, 만 나이는 생년월일로 받는다.
+//
+// 핵심 문항(생활습관·식습관)이 끝나면 'extra' 문항에서 선택 문항(PHQ-9·대사건강)을 더 할지 고른다.
+// 선택 문항은 군집·영양 판정에 쓰지 않고 결과 화면의 간단한 안내에만 쓴다.
 //
 // type (choice 외에는 모두 휴대폰에서 위아래로 드래그해 고르는 휠 선택기)
 //   choice   : 보기 중 하나 선택 (누르면 바로 다음 문항)
@@ -43,7 +47,41 @@ export const SECTIONS = {
   meal: '식사습관',
   veg: '채소·과일',
   food: '주요 식품',
+  extra: '선택 문항',
+  mind: '마음 건강',
+  metabolic: '대사 건강',
 }
+
+// 선택 문항 영역 (진행률을 핵심 문항과 따로 센다)
+export const OPTIONAL_SECTIONS = ['mind', 'metabolic']
+
+const wantsExtra = (a) => a.extra === 'more'
+
+// PHQ-9 응답 (값 = 점수 0~3)
+const PHQ_OPTIONS = [
+  { label: '전혀 아니다', value: 0 },
+  { label: '여러 날 동안', value: 1 },
+  { label: '일주일 이상', value: 2 },
+  { label: '거의 매일', value: 3 },
+]
+
+// 국민건강영양조사 PHQ-9 한국어판 문항
+const PHQ_ITEMS = [
+  '일 또는 여가 활동을 하는 데 흥미나 즐거움을 느끼지 못함',
+  '기분이 가라앉거나, 우울하거나, 희망이 없음',
+  '잠이 들거나 계속 잠을 자는 것이 어려움, 또는 잠을 너무 많이 잠',
+  '피곤하다고 느끼거나 기운이 거의 없음',
+  '입맛이 없거나 과식을 함',
+  '자신을 부정적으로 봄. 혹은 자신이 실패자라고 느끼거나 자신 또는 가족을 실망시킴',
+  '신문을 읽거나 텔레비전을 보는 것과 같은 일에 집중하는 것이 어려움',
+  '다른 사람들이 주목할 정도로 너무 느리게 움직이거나 말을 함. 또는 반대로 평상시보다 많이 움직여서 너무 안절부절못하거나 들떠 있음',
+  '차라리 죽는 것이 더 낫겠다고 생각하거나 어떤 식으로든 자신을 해칠 것이라고 생각함',
+]
+
+const YES_NO = [
+  { label: '예', value: 'yes' },
+  { label: '아니오', value: 'no' },
+]
 
 export const QUESTIONS = [
   // 1. 기본정보
@@ -196,14 +234,16 @@ export const QUESTIONS = [
   {
     id: 'shift_work',
     section: 'sleep',
-    title: '교대근무 또는 야간·새벽근무를 하고 있습니까?',
+    title: '야간·교대·불규칙 근무를 하고 있습니까?',
     type: 'choice',
+    // 생활패턴 해석용 (모델 입력 아님)
     options: [
       { label: '아니오', value: 'no' },
-      { label: '예, 교대근무', value: 'shift' },
-      { label: '예, 주로 야간근무', value: 'night' },
-      { label: '예, 주로 새벽근무', value: 'dawn' },
-      { label: '근무시간이 일정하지 않음', value: 'irregular' },
+      { label: '야간근무', value: 'night' },
+      { label: '정기적 교대근무', value: 'shift' },
+      { label: '24시간 교대근무', value: 'shift24' },
+      { label: '불규칙 근무', value: 'irregular' },
+      { label: '기타', value: 'other' },
     ],
   },
 
@@ -286,6 +326,42 @@ export const QUESTIONS = [
       { label: '하루 1회 정도', value: 1 },
       { label: '하루 2회 이상', value: 2 },
     ],
+  },
+
+  // 11. 선택 문항 여부
+  {
+    id: 'extra',
+    section: 'extra',
+    title: '핵심 질문이 끝났어요! 마음 건강·대사 건강 질문도 답해 볼까요?',
+    help: ['선택 문항 12개예요. 유형 판정에는 쓰지 않고, 결과 화면에서 간단한 안내만 드려요.', '응답은 이 휴대폰에만 잠시 저장되고 어디에도 전송되지 않아요.'],
+    type: 'choice',
+    options: [
+      { label: '결과 바로 보기', value: 'skip' },
+      { label: '추가 질문 답하기 (선택)', value: 'more' },
+    ],
+  },
+
+  // 12. 마음 건강 (PHQ-9)
+  ...PHQ_ITEMS.map((text, i) => ({
+    id: `phq${i + 1}`,
+    section: 'mind',
+    title: text,
+    help: ['지난 2주 동안 이런 문제를 얼마나 자주 겪었는지 골라 주세요.'],
+    type: 'choice',
+    options: PHQ_OPTIONS,
+    showIf: wantsExtra,
+  })),
+
+  // 13. 대사 건강 (결과 해석용)
+  { id: 'dx_hypertension', section: 'metabolic', title: '의사에게 고혈압 진단을 받은 적이 있습니까?', type: 'choice', options: YES_NO, showIf: wantsExtra },
+  { id: 'dx_diabetes', section: 'metabolic', title: '의사에게 당뇨병 진단을 받은 적이 있습니까?', type: 'choice', options: YES_NO, showIf: wantsExtra },
+  {
+    id: 'dx_dyslipidemia',
+    section: 'metabolic',
+    title: '의사에게 이상지질혈증(고지혈증) 진단을 받은 적이 있습니까?',
+    type: 'choice',
+    options: YES_NO,
+    showIf: wantsExtra,
   },
 ]
 

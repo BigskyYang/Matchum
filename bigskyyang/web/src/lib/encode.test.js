@@ -65,7 +65,7 @@ describe('visibleQuestions', () => {
     expect(ids).not.toContain('smoke_now')
     expect(ids).not.toContain('cigarettes')
     expect(ids).not.toContain('drink_freq')
-    expect(ids).toHaveLength(22) // 26문항 - 흡연 2 - 음주 2
+    expect(ids).toHaveLength(23) // 핵심 26문항 + 선택 여부 1 - 흡연 2 - 음주 2 (선택 문항은 답하기 전이라 숨김)
   })
 
   it('최근 1년 음주를 안 했으면 음주량 문항만 건너뛴다', () => {
