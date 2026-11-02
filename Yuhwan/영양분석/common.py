@@ -85,6 +85,13 @@ def load_persons(cluster_file=ROOT / 'KMeans_Final_MicroClustered.xlsx', label_c
     d['age'] = d['설명_age']
     d['age_grp'] = pd.cut(d['age'], AGE_BINS, labels=AGE_LABELS)
     d['w'] = d['wt_tot'] / 3   # 3개년 통합 가중치 (이용지침서 p47 예제 방식)
+    # 파생변수 1: 과일·채소 섭취빈도(최근 1년, 설문) → 주당 횟수 (이용지침서 p228 보기를 대표값으로 근사)
+    #   1 하루3회↑=21, 2 하루2회=14, 3 하루1회=7, 4 주5-6회=5.5, 5 주2-4회=3, 6 주1회=1,
+    #   7 월2-3회=0.58(2.5/4.3), 8 월1회=0.23(1/4.3), 9 거의 안 먹음=0, 99 모름/무응답=결측
+    per_week = {1: 21, 2: 14, 3: 7, 4: 5.5, 5: 3, 6: 1, 7: 2.5 / 4.3, 8: 1 / 4.3, 9: 0}
+    d['과일_주당'] = d['식습관_LS_FRUIT'].map(per_week)
+    d['채소_김치포함_주당'] = d['식습관_LS_VEG1'].map(per_week)
+    d['채소_김치제외_주당'] = d['식습관_LS_VEG2'].map(per_week)
     return d
 
 
@@ -97,4 +104,9 @@ def add_status(d):
         d[f'ref_{n}'] = ref
         d[f'ratio_{n}'] = d[col] / ref
         d[f'below_{n}'] = (d[col] < ref).astype(int)
+    # 파생변수 2: 부족 영양소 개수 (EAR 기준 11개 중 미만 개수 = 부족 위험 / AI 기준 4개는 참고라 따로)
+    ear = [n for n in KDRI if KDRI[n][1] == 'EAR']
+    ai = [n for n in KDRI if KDRI[n][1] == 'AI']
+    d['부족개수_EAR'] = d[[f'below_{n}' for n in ear]].sum(axis=1)
+    d['미만개수_AI'] = d[[f'below_{n}' for n in ai]].sum(axis=1)
     return d

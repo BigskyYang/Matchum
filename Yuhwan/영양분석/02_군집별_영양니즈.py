@@ -97,6 +97,12 @@ prof['에너지섭취'] = d.groupby('cluster').apply(lambda g: np.average(g['영
 # 오메가3 참고용 대리지표: 조사일 생선 섭취 0g 비율 (하루 기록이라 개인 판단 불가, 군집 비교만)
 prof['생선0g비율'] = d.groupby('cluster').apply(lambda g: np.average(g['보조_FISH_G'] == 0, weights=g['w']))
 print('전체 생선0g비율', round(np.average(d['보조_FISH_G'] == 0, weights=d['w']), 3))
+# 파생변수 군집 평균 (가중): 부족 영양소 개수(EAR 11개 중), 과일·채소 주당 횟수
+wmean = lambda col: d.groupby('cluster').apply(lambda g: np.average(g[col].dropna(), weights=g.loc[g[col].notna(), 'w']))
+for col in ['부족개수_EAR', '미만개수_AI', '과일_주당', '채소_김치제외_주당']:
+    prof[col] = wmean(col)
+print('전체 부족개수_EAR', round(np.average(d['부족개수_EAR'], weights=d['w']), 2),
+      '| 과일_주당', round(np.average(d['과일_주당'].dropna(), weights=d.loc[d['과일_주당'].notna(), 'w']), 2))
 prof['표본적음'] = prof['n'] < SMALL_N
 prof.to_csv(OUT / '군집_요약.csv', encoding='utf-8-sig')
 

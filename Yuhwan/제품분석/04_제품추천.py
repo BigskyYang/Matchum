@@ -99,8 +99,16 @@ def pick(df, score, n=3):
 
 
 # %% 군집별 추천
-has_price = 'price_per_day' in p.columns
-rows, web, match_rows = [], {}, []
+# 가격: 팀원이 채운 output/가격조사_대상.xlsx가 있으면 1일 가격 계산 → 가성비형 자동 전환
+#   1일 가격 = 판매가격 ÷ (총개수 ÷ 1일개수). 가격이 없는 제품은 가성비형 후보에서만 빠짐
+PRICE_FILE = OUT / '가격조사_대상.xlsx'
+if PRICE_FILE.exists():
+    pr = pd.read_excel(PRICE_FILE)
+    pr = pr[pd.to_numeric(pr['판매가격(원)'], errors='coerce').gt(0) & pd.to_numeric(pr['총개수'], errors='coerce').gt(0)]
+    pr['price_per_day'] = pr['판매가격(원)'].astype(float) / (pr['총개수'].astype(float) / pr['1일개수'].astype(float))
+    p = p.merge(pr[['식품코드', 'price_per_day']], on='식품코드', how='left')
+has_price = 'price_per_day' in p.columns and p['price_per_day'].notna().sum() >= 30
+rows, web, match_rows, price_cand = [], {}, [], []
 for c in combo.index:
     w, spec_cols = targets(c)
     cols = list(w)
@@ -126,6 +134,8 @@ for c in combo.index:
         k += 1
     types = order[:k]
     in_type = ok & p['제품유형명'].isin(types)
+    for t in types:                                                 # 가격 조사 후보: 매칭 유형마다 커버율 상위 10
+        price_cand += wcov[in_type & p['제품유형명'].eq(t)].nlargest(10).index.tolist()
     match_rows.append(dict(cluster=c, 매칭유형=' | '.join(f'{t}({sim[t]:.2f})' for t in types), 유형수=k,
                            안전장치_추가=k - K_TYPES))
 
@@ -146,7 +156,8 @@ for c in combo.index:
         '올인원형': pick(p[allin_ok], (100 * n_spec + 10 * n_comm + wcov)[allin_ok]),
     }
     if has_price:
-        genres['가성비형'] = pick(p[in_type], (wcov / p['price_per_day'])[in_type])
+        pv = in_type & p['price_per_day'].notna()
+        genres['가성비형'] = pick(p[pv], (wcov / p['price_per_day'])[pv])
     else:
         easy = in_type & p['1일개수'].between(1, 4)
         genres['간편형(가격 확보 전 임시)'] = pick(p[easy & (core_cov > 0)], ((core_cov + 0.3 * wcov) / p['1일개수'].clip(lower=1))[easy & (core_cov > 0)])
@@ -168,6 +179,20 @@ for c in combo.index:
             rows.append(dict(cluster=c, 장르=g, **{kk: vv for kk, vv in item.items() if kk != '표시형태'}))
 
 rec = pd.DataFrame(rows)
+
+# %% 가격 조사 대상 목록 (가격 파일이 아직 없을 때만 새로 만듦 → 팀원이 채운 파일을 덮어쓰지 않음)
+if not PRICE_FILE.exists():
+    idx = list(dict.fromkeys(price_cand + p.index[p['식품명'].isin(rec['식품명'])].tolist()))
+    cand = p.loc[idx, ['식품코드', '식품명', '제조사명', '품목제조신고번호', '제품유형명', '주성분', '1회분량', 'n_day', '1일개수']]
+    cand = cand.rename(columns={'n_day': '1일섭취횟수'})
+    # 제품명에 '120정', 'x 365캡슐' 같은 총개수가 있으면 미리 채움 (확인 필요)
+    cnt = cand['식품명'].str.extract(r'(\d+)\s*(?:정|캡슐|포|병|구미|소프트젤|베지캡)')[0]
+    cand['총개수_제품명추정'] = pd.to_numeric(cnt, errors='coerce')
+    cand['검색어'] = cand['식품명'] + ' ' + cand['제조사명'].fillna('')
+    for col in ['판매가격(원)', '총개수', '판매처', 'URL', '조사일', '비고']:
+        cand[col] = ''
+    cand.sort_values(['제품유형명', '식품명']).to_excel(PRICE_FILE, index=False)
+    print('가격 조사 대상', len(cand), '개 →', PRICE_FILE.name)
 rec.to_csv(OUT / '추천_군집별.csv', index=False, encoding='utf-8-sig')
 pd.DataFrame(match_rows).to_csv(OUT / '군집x제품유형_매칭.csv', index=False, encoding='utf-8-sig')
 (OUT / 'recommendations.json').write_text(json.dumps(web, ensure_ascii=False, indent=1, default=str), encoding='utf-8')
