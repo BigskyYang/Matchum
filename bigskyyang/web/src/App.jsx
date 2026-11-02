@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import MobileFrame from './components/MobileFrame.jsx'
+import ResultPage from './pages/ResultPage.jsx'
 import StartPage from './pages/StartPage.jsx'
 import SurveyPage from './pages/SurveyPage.jsx'
 
@@ -9,6 +10,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<StartPage />} />
         <Route path="/survey" element={<SurveyPage />} />
+        <Route path="/result" element={<ResultPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </MobileFrame>
