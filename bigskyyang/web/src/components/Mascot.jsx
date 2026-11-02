@@ -12,6 +12,8 @@ const prefersReducedMotion = () => window.matchMedia?.('(prefers-reduced-motion:
 // float: 정지 이미지일 때 둥실거리는 애니메이션 (움직이는 이미지는 스스로 움직이므로 적용하지 않음)
 // size:  'md'(176px, 기본) | 'sm'(96px, 설문 화면 등)
 const SIZES = { md: 'size-44', sm: 'size-24' }
+// 움직이는 이미지는 캐릭터 주변 여백이 정지 이미지보다 넓어서 박스를 크게 잡아야 캐릭터 크기가 비슷해진다
+const ANIMATED_SIZES = { md: 'size-64', sm: 'size-32' }
 
 export default function Mascot({ name = 'default', gif, float = false, size = 'md', className = '' }) {
   const animated = gif && !prefersReducedMotion() ? [`/mascot/${gif}.webp`, `/mascot/${gif}.gif`] : []
@@ -33,8 +35,7 @@ export default function Mascot({ name = 'default', gif, float = false, size = 'm
     )
   }
 
-  // 움직이는 이미지는 캐릭터 주변 여백이 정지 이미지보다 넓어서 박스를 크게 잡아야 캐릭터 크기가 비슷해진다
-  const box = tried < animated.length ? `size-64 shrink-0 ${className}` : still
+  const box = tried < animated.length ? `${ANIMATED_SIZES[size]} shrink-0 ${className}` : still
   return (
     <img
       key={src}

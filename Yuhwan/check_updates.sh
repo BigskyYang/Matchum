@@ -7,7 +7,7 @@ REPO="C:/python-course/Matchum"
 STATE="$(cd "$(dirname "$0")" && pwd)/.last_checked_commit"
 
 cd "$REPO"
-git pull --rebase -q
+git pull --rebase --autostash -q   # 작업 중인 변경이 있어도 pull (임시 보관 후 복원)
 HEAD=$(git rev-parse HEAD)
 if [ -f "$STATE" ] && git cat-file -e "$(cat "$STATE")" 2>/dev/null; then
   BASE=$(cat "$STATE")

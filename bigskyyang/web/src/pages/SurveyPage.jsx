@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import Mascot from '../components/Mascot.jsx'
 import PrimaryButton from '../components/PrimaryButton.jsx'
 import ChoiceInput from '../components/survey/ChoiceInput.jsx'
@@ -7,6 +7,7 @@ import ProgressBar from '../components/survey/ProgressBar.jsx'
 import { DateWheel, DurationWheel, NumberWheel, TimeWheel } from '../components/survey/WheelInputs.jsx'
 import { OPTIONAL_SECTIONS, SECTIONS, visibleQuestions } from '../data/questions.js'
 import { loadSurvey, saveSurvey } from '../lib/storage.js'
+import { resolveStep, surveyPath } from '../lib/surveyFlow.js'
 
 function QuestionStep({ q, answer, isLast, onAnswer }) {
   // 휠 입력은 이전 응답이 있으면 그 값, 없으면 문항의 initial 값에서 시작
@@ -44,16 +45,25 @@ function QuestionStep({ q, answer, isLast, onAnswer }) {
   )
 }
 
+// 문항마다 주소(/survey?q=문항ID)를 하나씩 쌓아서, 휴대폰의 뒤로·앞으로 가기로 문항을 오갈 수 있다
 export default function SurveyPage() {
   const navigate = useNavigate()
+  const [params] = useSearchParams()
   const [state, setState] = useState(loadSurvey)
   const busy = useRef(false)
 
-  useEffect(() => saveSurvey(state), [state])
-
   const list = visibleQuestions(state.answers)
-  const step = Math.min(state.step, list.length - 1)
+  const step = resolveStep(list, state.answers, params.get('q'), state.step)
   const q = list[step]
+
+  // 응답과 지금 위치를 저장해 새로고침해도 이어서 할 수 있게 한다
+  useEffect(() => saveSurvey({ ...state, step }), [state, step])
+
+  // 주소를 지금 문항에 맞춘다 (처음 들어왔거나, 답하지 않은 문항으로 건너뛰려 한 경우)
+  useEffect(() => {
+    if (params.get('q') !== q.id) navigate(surveyPath(q), { replace: true })
+    window.scrollTo(0, 0)
+  }, [q, params, navigate])
   // 지금까지 답한 비율. 핵심 문항과 선택 문항(PHQ-9·대사건강)은 따로 0~100%로 센다
   // (선택 문항을 열었을 때 진행률이 뒤로 줄어들지 않게)
   const part = list.filter((x) => OPTIONAL_SECTIONS.includes(x.section) === OPTIONAL_SECTIONS.includes(q.section))
@@ -68,8 +78,7 @@ export default function SurveyPage() {
     const go = () => {
       busy.current = false
       setState({ answers, step: done ? idx : idx + 1, done })
-      if (done) navigate('/result')
-      else window.scrollTo(0, 0)
+      navigate(done ? '/result' : surveyPath(next[idx + 1]))
     }
     // 보기를 누른 경우 선택 표시가 잠깐 보이도록 조금 늦게 넘어간다
     if (q.type === 'choice') {
@@ -81,9 +90,12 @@ export default function SurveyPage() {
     }
   }
 
+  // 화면의 ‹ 버튼은 휴대폰 뒤로 가기와 똑같이 동작한다.
+  // 이 사이트 안에서 쌓인 기록이 없으면(주소로 바로 들어온 경우) 이전 문항이나 시작 화면으로 간다
   const back = () => {
-    if (step === 0) navigate('/')
-    else setState((s) => ({ ...s, step: step - 1 }))
+    if ((window.history.state?.idx ?? 0) > 0) navigate(-1)
+    else if (step > 0) navigate(surveyPath(list[step - 1]), { replace: true })
+    else navigate('/')
   }
 
   return (
