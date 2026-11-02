@@ -17,7 +17,7 @@ from sklearn.model_selection import cross_val_score
 from common import *
 
 warnings.filterwarnings('ignore')
-d = add_status(load_persons(ROOT / 'KMedoids_Lifestyle_MicroClustered.xlsx', 'Micro_Cluster'))
+d = add_status(load_persons(FINAL_CLUSTER_FILE, 'Micro_Cluster'))
 LS = ['식습관_LS_FRUIT', '식습관_LS_VEG2']
 e = d[d[LS].ne(99).all(axis=1)].copy()          # 99 = 모름/무응답만 제외
 A = pd.concat([pd.get_dummies(e[['sex', 'age_grp', 'cluster']].astype(str), drop_first=True).astype(float),

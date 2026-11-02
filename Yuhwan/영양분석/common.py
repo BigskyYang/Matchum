@@ -73,6 +73,10 @@ LIFESTYLE_ABSORPTION = pd.DataFrame([
 # 지용성(A·D·E·K)은 지방과 같은 방식으로 흡수(2권 p49) → 복용 안내 '식사와 함께'
 
 
+# 최종 11개 유형: Jiyeon/kmedoids_finally.py 를 COMPLETECASE CSV로 실행한 결과 (개인 단위라 깃허브엔 안 올림)
+FINAL_CLUSTER_FILE = ROOT / 'KMedoids_Final_Corrected.xlsx'
+
+
 def load_persons(cluster_file=ROOT / 'KMeans_Final_MicroClustered.xlsx', label_col='Sub_Cluster'):
     """ID + 군집 라벨 파일과 ANALYSIS_BASE를 ID로 결합. 군집 파일의 ML_ 생활습관 변수도 같이 가져온다."""
     cf = Path(cluster_file)
@@ -80,6 +84,10 @@ def load_persons(cluster_file=ROOT / 'KMeans_Final_MicroClustered.xlsx', label_c
     keep = ['ID', label_col] + [c for c in lab.columns if c.startswith('ML_')]
     base = pd.read_csv(ROOT / 'KNHANES_2022_2024_ANALYSIS_BASE.csv', encoding='utf-8-sig', low_memory=False)
     d = lab[keep].rename(columns={label_col: 'cluster'}).merge(base, on='ID', how='inner')
+    # 유형 이름은 지연님 코드가 군집 번호에 고정으로 붙여서 데이터와 안 맞는 곳이 있음(0_A·0_B 뒤바뀜)
+    # → 분석·웹 키는 번호만 사용 (예: 'Group_0_A(유산소형)' → 'Group_0_A'), 엑셀 이름은 참고로 보관
+    d['엑셀이름'] = d['cluster'].astype(str).str.extract(r'\((.*)\)$')[0].fillna('')
+    d['cluster'] = d['cluster'].astype(str).str.replace(r'\(.*\)$', '', regex=True)
     assert len(d) == len(lab), '군집 파일 ID 중 ANALYSIS_BASE에 없는 ID가 있음'
     d['sex'] = d['설명_sex'].map({1: '남자', 2: '여자'})
     d['age'] = d['설명_age']

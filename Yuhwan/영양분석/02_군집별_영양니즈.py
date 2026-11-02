@@ -28,8 +28,8 @@ warnings.filterwarnings('ignore')
 plt.rcParams['font.family'] = 'Malgun Gothic'
 plt.rcParams['axes.unicode_minus'] = False
 
-# 2026-11-02 지연님 k-medoids 11개 유형 (Jiyeon/KMedoids_Lifestyle_MicroClustered.xlsx, Raw_Data 시트)
-CLUSTER_FILE = ROOT / 'KMedoids_Lifestyle_MicroClustered.xlsx'
+# 최종 11개 유형 (2026-11-02 지연님 kmedoids_finally.py, 시드 고정 버전) → common.FINAL_CLUSTER_FILE
+CLUSTER_FILE = FINAL_CLUSTER_FILE
 LABEL_COL = 'Micro_Cluster'
 OR_CUT, RATE_CUT, SMALL_N = 1.2, 0.50, 100
 
@@ -105,6 +105,14 @@ for col in ['부족개수_EAR', '미만개수_AI', '과일_주당', '채소_김�
 print('전체 부족개수_EAR', round(np.average(d['부족개수_EAR'], weights=d['w']), 2),
       '| 과일_주당', round(np.average(d['과일_주당'].dropna(), weights=d.loc[d['과일_주당'].notna(), 'w']), 2))
 prof['표본적음'] = prof['n'] < SMALL_N
+# 생활습관 프로필 (비가중 평균, 군집을 만든 변수 그대로) → 유형 이름이 데이터와 맞는지 확인용
+LS = {'근력운동_일': 'ML_strength_days', '유산소실천': 'ML_aerobic', '좌식_분': 'ML_sedentary_min', '수면_시간': 'ML_sleep_hours',
+      '스트레스': 'ML_stress', '음주_월': 'ML_drink_month', '흡연': 'ML_smoker', '흡연_개비': 'ML_cigarettes_day',
+      '아침빈도': 'ML_breakfast_freq_ord', '외식빈도': 'ML_eatingout_freq_ord'}
+for k, col in LS.items():
+    prof[k] = d.groupby('cluster')[col].mean()
+prof['엑셀이름(확인중)'] = d.groupby('cluster')['엑셀이름'].first()
+ls_all = pd.Series({k: d[col].mean() for k, col in LS.items()}, name='전체')
 prof.to_csv(OUT / '군집_요약.csv', encoding='utf-8-sig')
 
 # %% 출력
@@ -113,6 +121,8 @@ print(res.drop_duplicates('영양소').set_index('영양소')[['기준', '전체
       .assign(전체미달률=lambda x: (x['전체미달률'] * 100).round(1)).to_string())
 print('\n[군집 요약]')
 print(prof.round(2).to_string())
+print('\n[생활습관 프로필 - 이름 확인용]')
+print(pd.concat([prof[list(LS)], ls_all.to_frame().T]).round(2).to_string())
 
 # %% 그림: 보정 오즈비 히트맵 (★ 유형특이)
 piv = res.pivot(index='cluster', columns='영양소', values='보정OR')[NUTRIENTS]

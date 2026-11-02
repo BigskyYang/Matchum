@@ -12,7 +12,8 @@ import numpy as np
 import pandas as pd
 from common import *
 
-CLUSTER_FILE = ROOT / 'KMedoids_Lifestyle_MicroClustered.xlsx'   # 웹도 11개 유형 사용 (2026-11-02 팀 결정)
+# 최종 11개 유형 (2026-11-02 지연님 kmedoids_finally.py, 시드 고정 버전) → common.FINAL_CLUSTER_FILE
+CLUSTER_FILE = FINAL_CLUSTER_FILE
 LABEL_COL = 'Micro_Cluster'
 
 d = add_status(load_persons(CLUSTER_FILE, LABEL_COL))

@@ -22,8 +22,8 @@ plt.rcParams['font.family'] = 'Malgun Gothic'
 plt.rcParams['axes.unicode_minus'] = False
 rng = np.random.default_rng(42)
 
-# 2026-11-02 지연님 k-medoids 11개 유형 (Jiyeon/KMedoids_Lifestyle_MicroClustered.xlsx, Raw_Data 시트)
-CLUSTER_FILE = ROOT / 'KMedoids_Lifestyle_MicroClustered.xlsx'
+# 최종 11개 유형 (2026-11-02 지연님 kmedoids_finally.py, 시드 고정 버전) → common.FINAL_CLUSTER_FILE
+CLUSTER_FILE = FINAL_CLUSTER_FILE
 LABEL_COL = 'Micro_Cluster'
 d = load_persons(CLUSTER_FILE, LABEL_COL)
 need = pd.read_csv(OUT / '군집별_영양니즈_long.csv', encoding='utf-8-sig')

@@ -64,6 +64,25 @@ p['대상_남성'] = nm.str.contains(r'남성|맨즈|포\s?맨|실버맨|for\s?m
 p['대상_실버'] = nm.str.contains(r'실버|시니어|50\+|50플러스|silver|senior', case=False, regex=True)
 p['식사대용'] = p['일_에너지'] >= 200
 
+# %% 재준님 안전 규칙 연결 (Jaejun/config/supplement_safety_rules.json)
+#  신장질환·결석 → calcium·potassium·phosphorus / 항응고제·아스피린 → omega3·vitamin_k 함유 제품 제한
+#  함량 칸이 있는 성분(칼슘·칼륨·인)은 1일 함량 > 0 또는 제품명에 성분명, 칸이 없는 성분(오메가3·비타민K)은 제품명 키워드
+#  → 제품마다 '함유' 표시만 붙이고, 걸러내기는 웹에서 설문 응답으로 (임신·수유는 규칙상 추천 자체 중단이라 표시 불필요)
+SAFETY_RULES = json.loads((ROOT / 'Jaejun_config' / 'supplement_safety_rules.json').read_text(encoding='utf-8')) \
+    if (ROOT / 'Jaejun_config' / 'supplement_safety_rules.json').exists() else None
+SAFETY = {
+    'calcium': (p['일_칼슘'].fillna(0) > 0) | nm.str.contains('칼슘|calcium', case=False),
+    'potassium': (p['일_칼륨'].fillna(0) > 0) | nm.str.contains('칼륨|potassium', case=False),
+    'phosphorus': p['일_인'].fillna(0) > 0,
+    'omega3': p['has_오메가3'] == 1,
+    'vitamin_k': p['has_비타민 K'] == 1,
+}
+SAFETY_BASIS = {'calcium': '1일 함량>0 또는 제품명', 'potassium': '1일 함량>0 또는 제품명', 'phosphorus': '1일 함량>0',
+                'omega3': '제품명 키워드(오메가·EPA·DHA·rTG·크릴)', 'vitamin_k': '제품명 키워드(비타민K·K2·메나퀴논)'}
+for k, s in SAFETY.items():
+    p[f'safety_{k}'] = s.astype(bool)
+p = p.copy()   # 열을 많이 붙여서 생기는 조각난 프레임 경고 방지
+
 # 제품 자체의 주성분(유형 이름과 다를 수 있어 같이 표시)
 Xv = p[V].astype(float).copy()
 qcols = [f'v_{q}' for q in QUANT]
@@ -186,7 +205,8 @@ for c in combo.index:
     genres['종합형'] = pick(p[multi], (100 * n_spec + 10 * n_comm + wcov)[multi])
 
     get = lambda col: combo.loc[c, col] if col in combo.columns and pd.notna(combo.loc[c, col]) else ''
-    web[c] = {'유형특이': [n for n in get('유형특이조합').split(' + ') if not n.startswith('(')],
+    web[c] = {'유형ID': c, '유형이름': '(이름 확인 중)', '엑셀이름(참고)': prof.loc[c, '엑셀이름(확인중)'] if '엑셀이름(확인중)' in prof.columns else '',
+              '유형특이': [n for n in get('유형특이조합').split(' + ') if not n.startswith('(')],
               '공통주의': COMMON, '원인': get('원인'), '매칭영양소모듈': get('매칭모듈'), '식품안내': get('식품안내'),
               '같이복용': get('같이'), '따로복용': get('따로'), '식품으로만': get('식품으로만'),
               '매칭제품유형': types, '참고정보(순위없음)': REFERENCE,
@@ -195,11 +215,14 @@ for c in combo.index:
         web[c]['장르'][g] = []
         for _, r in df.iterrows():
             covers = [x for x in cols if cov.loc[r.name, x] >= 0.3]
+            if not covers:      # 필요한 영양소를 하나도 30% 이상 못 채우는 제품은 빼기 (예: Group_2_B 종합형 '슈퍼 그린(엽록소)')
+                continue
             unknown = [x for x in covers if x not in QUANT]
             item = dict(식품명=r['식품명'], 제조사=r['제조사명'], 제품유형=r['제품유형명'], 주성분=r['주성분'],
                         덮는영양소=covers, 함량미상=unknown, 가중커버율=round(float(wcov[r.name]), 3), 일개수=r['1일개수'],
                         표시형태=[f for f in ['D3', 'rTG', '리포좀', '활성엽산', '활성비타민B', '장용성'] if r.get(f'form_{f}', 0) == 1],
-                        주목적=r.get('주목적_기능성', '') or '비타민·미네랄')
+                        주목적=r.get('주목적_기능성', '') or '비타민·미네랄',
+                        안전_함유=[k for k in SAFETY if r[f'safety_{k}']])
             web[c]['장르'][g].append(item)
             rows.append(dict(cluster=c, 장르=g, **{kk: vv for kk, vv in item.items() if kk != '표시형태'}))
 
@@ -226,7 +249,12 @@ else:
     print('가격 조사 대상', len(cand), '개 →', PRICE_FILE.name)
 rec.to_csv(OUT / '추천_군집별.csv', index=False, encoding='utf-8-sig')
 pd.DataFrame(match_rows).to_csv(OUT / '군집x제품유형_매칭.csv', index=False, encoding='utf-8-sig')
-(OUT / 'recommendations.json').write_text(json.dumps(web, ensure_ascii=False, indent=1, default=str), encoding='utf-8')
+web_out = {'_meta': {'유형키': 'Micro_Cluster 번호 (api_response_schema의 lifestyle_cluster.cluster_id)',
+                     '안전_함유_기준': SAFETY_BASIS,
+                     '안전규칙': {'kidney_disease_or_stones': ['calcium', 'potassium', 'phosphorus'],
+                               'anticoagulant_or_aspirin': ['omega3', 'vitamin_k'],
+                               'pregnant_or_breastfeeding': '추천 중단'}}, **web}
+(OUT / 'recommendations.json').write_text(json.dumps(web_out, ensure_ascii=False, indent=1, default=str), encoding='utf-8')
 
 # %% 변별력 점검: 군집 간 추천 겹침(Jaccard). 공통주의만 있는 군집은 원래 같으므로 유형특이 군집끼리도 따로
 spec_cl = [c for c in combo.index if not combo.loc[c, '유형특이조합'].startswith('(')]
@@ -245,3 +273,9 @@ print('필터로 빠지는 제품: 식사대용', int(p['식사대용'].sum()), 
       '| 여성용', int(p['대상_여성'].sum()), '| 남성용', int(p['대상_남성'].sum()), '| 실버', int(p['대상_실버'].sum()))
 print(pd.DataFrame(match_rows).to_string(index=False))
 print(div.round(2).to_string(index=False))
+
+# %% 안전 표시 개수: 전체 후보 제품 / 추천된 제품(군집×장르 칸 기준)
+print('\n[안전 함유 표시] 전체 제품', len(p), '개 중:', {k: int(p[f'safety_{k}'].sum()) for k in SAFETY})
+rec['안전_함유'] = rec['안전_함유'].apply(lambda x: x if isinstance(x, list) else [])
+print(pd.DataFrame({k: rec.groupby('cluster')['안전_함유'].apply(lambda s: sum(k in x for x in s)) for k in SAFETY})
+      .assign(추천칸=rec.groupby('cluster').size()).to_string())
