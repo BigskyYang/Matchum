@@ -2,6 +2,7 @@
 # # [C]-③ 제품 성분 군집 실험: 코사인 계층적 vs k-medoids
 # 왜 군집화하나: 제품 75%가 공식 분류상 '복합제품'이라 어떤 유형인지 알 수 없음 → 성분 구성으로 유형을 찾음
 # 왜 코사인: 함량 크기보다 '어떤 성분을 어떤 비율로' 담았는지가 유형을 결정. 고함량 단일제가 튀는 것도 줄임
+# v3: k 범위 4~20, k-medoids 시작점 10회(재추출 시 5회)로 확대 — v2에서 선택된 k=16이 범위 끝이라 확인용
 # 비교 기준 (실험 전에 확정한 순서)
 #   1) 안정성: 80% 재추출 10회, 겹치는 제품의 ARI 평균
 #   2) 실루엣(코사인), 0.02 미만 차이는 동률
@@ -67,10 +68,10 @@ def kmedoids(D, k, n_init=3, max_iter=50, seed=0):
     return best[1]
 
 
-def run(method, D, k, seed=0):
+def run(method, D, k, seed=0, n_init=10):
     if method == 'hier':
         return fcluster(linkage(squareform(D, checks=False), 'average'), k, 'maxclust') - 1, None
-    return kmedoids(D, k, seed=seed)
+    return kmedoids(D, k, n_init=n_init, seed=seed)
 
 
 def top3(X, lab):
@@ -88,13 +89,13 @@ for kind in ['cap100', 'cap300', 'log']:
     D = squareform(pdist(X, 'cosine'))
     D = np.nan_to_num(D, nan=1.0)
     for method in ['hier', 'kmedoids']:
-        for k in range(4, 17):
+        for k in range(4, 21):
             lab, med = run(method, D, k)
             sizes = np.bincount(lab)
             aris = []
             for b in range(10):
                 idx = np.sort(rng.choice(len(D), int(0.8 * len(D)), replace=False))
-                lb, _ = run(method, D[np.ix_(idx, idx)], k, seed=b + 1)
+                lb, _ = run(method, D[np.ix_(idx, idx)], k, seed=b + 1, n_init=5)
                 aris.append(adjusted_rand_score(lab[idx], lb))
             t3 = top3(X, lab)
             covered = set(sum(map(list, t3.values()), []))
