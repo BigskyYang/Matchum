@@ -24,6 +24,7 @@ import json
 import re
 import numpy as np
 import pandas as pd
+from price_file import read_price_file, write_price_file
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / '제품분석' / 'output'
@@ -103,7 +104,7 @@ def pick(df, score, n=3):
 #   1일 가격 = 판매가격 ÷ (총개수 ÷ 1일개수). 가격이 없는 제품은 가성비형 후보에서만 빠짐
 PRICE_FILE = OUT / '가격조사_대상.xlsx'
 if PRICE_FILE.exists():
-    pr = pd.read_excel(PRICE_FILE)
+    pr = read_price_file(PRICE_FILE)
     pr = pr[pd.to_numeric(pr['판매가격(원)'], errors='coerce').gt(0) & pd.to_numeric(pr['총개수'], errors='coerce').gt(0)]
     pr['price_per_day'] = pr['판매가격(원)'].astype(float) / (pr['총개수'].astype(float) / pr['1일개수'].astype(float))
     p = p.merge(pr[['식품코드', 'price_per_day']], on='식품코드', how='left')
@@ -182,21 +183,22 @@ rec = pd.DataFrame(rows)
 
 # %% 가격 조사 대상 목록: 없으면 새로 만들고, 있으면 '새 후보만 덧붙임' (팀원이 채운 가격은 그대로 둠)
 idx = list(dict.fromkeys(price_cand + p.index[p['식품명'].isin(rec['식품명'])].tolist()))
-cand = p.loc[idx, ['식품코드', '식품명', '제조사명', '품목제조신고번호', '제품유형명', '주성분', '1회분량', 'n_day', '1일개수']]
-cand = cand.rename(columns={'n_day': '1일섭취횟수'})
+cand = p.loc[idx, ['식품코드', '식품명', '제조사명', '품목제조신고번호', '제품유형명', '주성분', '1회분량', '영양성분제공단위량', 'n_day', '1일개수']]
+cand = cand.rename(columns={'n_day': '1일섭취횟수', '영양성분제공단위량': '1회분량중량'})
 cnt = cand['식품명'].str.extract(r'(\d+)\s*(?:정|캡슐|포|병|구미|소프트젤|베지캡)')[0]   # 제품명의 '120정' 등 (확인 필요)
 cand['총개수_제품명추정'] = pd.to_numeric(cnt, errors='coerce')
 cand['검색어'] = cand['식품명'] + ' ' + cand['제조사명'].fillna('')
 for col in ['판매가격(원)', '총개수', '판매처', 'URL', '조사일', '비고']:
     cand[col] = ''
 if PRICE_FILE.exists():
-    old = pd.read_excel(PRICE_FILE)
+    old = read_price_file(PRICE_FILE)
+    if '1회분량중량' not in old.columns:                      # 예전 형식 파일이면 1회분량중량 채워 넣기
+        old['1회분량중량'] = old['식품코드'].map(p.drop_duplicates('식품코드').set_index('식품코드')['영양성분제공단위량'])
     add = cand[~cand['식품코드'].isin(old['식품코드'])]
-    if len(add):
-        pd.concat([old, add.sort_values(['제품유형명', '식품명'])], ignore_index=True).to_excel(PRICE_FILE, index=False)
+    write_price_file(pd.concat([old, add.sort_values(['제품유형명', '식품명'])], ignore_index=True), PRICE_FILE)
     print('가격 조사 대상: 기존', len(old), '개 + 새 후보', len(add), '개 →', PRICE_FILE.name)
 else:
-    cand.sort_values(['제품유형명', '식품명']).to_excel(PRICE_FILE, index=False)
+    write_price_file(cand.sort_values(['제품유형명', '식품명']), PRICE_FILE)
     print('가격 조사 대상', len(cand), '개 →', PRICE_FILE.name)
 rec.to_csv(OUT / '추천_군집별.csv', index=False, encoding='utf-8-sig')
 pd.DataFrame(match_rows).to_csv(OUT / '군집x제품유형_매칭.csv', index=False, encoding='utf-8-sig')
