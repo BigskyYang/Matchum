@@ -1,11 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { MAIN_TYPES } from '../data/types.js'
-import { model } from './classify.js'
+import { mainLabels, model } from './classify.js'
 import { encode } from './encode.js'
 import { SAMPLE } from './fixtures.js'
 import { SCORE_AXES, bestPartner, groupScores, hashtags, levelOf, scores } from './profile.js'
 
-const MAINS = Object.keys(MAIN_TYPES)
+const MAINS = mainLabels()
 
 describe('levelOf', () => {
   it('점수를 신호등 단계로 나눈다', () => {

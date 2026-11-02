@@ -5,7 +5,7 @@ Vite + React + Tailwind CSS v4 + react-router-dom
 ```bash
 npm install
 npm run dev      # 개발 서버 (http://localhost:5173)
-npm test         # 응답 변환·유형 판정·결과 계산 테스트
+npm test         # 응답 변환·유형 판정·결과 계산 + 데이터·설문 일치 점검
 npm run build    # dist/ 로 빌드
 npm run preview  # 빌드 결과 미리보기
 ```
@@ -43,7 +43,13 @@ python scripts/export_model.py
 
 - 기본 입력: `Jiyeon/KMeans_Final_MicroClustered.xlsx` (다른 파일이면 경로를 인자로 넘긴다)
 - 단계별 스케일러와 군집 중심을 다시 계산하고, 학습 데이터 전체를 다시 분류해 엑셀 라벨과의 일치율을 출력한다
-- 세부 유형 이름이 바뀌면 `src/data/types.js`도 함께 맞춘다
+- **유형 ID**: K-Means는 다시 돌릴 때마다 군집 번호가 바뀔 수 있다. 스크립트가 이전 `model.json`과 유형별 평균을 비교해
+  같은 유형을 찾아 이전 ID를 물려주고, 무엇이 바뀌었는지 출력한다. `types.js`와 영양소 결과표는 군집 번호가 아니라 이 ID를 쓴다.
+  - `Group_0 ← 이전 Group_1 (ID Group_1, 차이 0.00)`: 번호만 바뀐 같은 유형 → 할 일 없음
+  - `※ 많이 달라짐`: 유형 성격이 바뀜 → `types.js`의 이름·설명 확인
+  - `새 유형` / `사라진 유형 ID`: 군집 수가 바뀜 → `types.js`에 추가·정리
+  - 처음부터 다시 맞추려면 `--reset-ids` (ID = 현재 군집 번호)
+- 군집을 바꾼 뒤에는 영양소 결과표도 같은 엑셀로 다시 만들고 `npm test`로 점검한다
 
 ### 유형별 영양소 결과표 `src/data/nutrientProfiles.json`
 결과 화면의 '내 유형이 챙겨야 할 영양소'와 '건강기능식품 원료'는 이 표에서 내 유형의 값을 찾아 보여준다.
@@ -56,6 +62,13 @@ python scripts/build_nutrient_profiles.py --nutrients <개인별 영양소 CSV>
 - 입력 CSV: `ID`, `year` + 영양소별 열 (`<영양소키>_prob` 예측확률, 또는 `Jaejun/config/targets.json`의 실제 부족 여부 0/1)
 - 군집 결과(`Jiyeon/...xlsx`)와 `ID`·`year`로 합쳐 유형(대분류 4개 + 세부 20개)별 평균을 내고, `Jaejun/config/risk_thresholds.json` 기준으로 Low/Mid/High를 붙인다
 - 가중치를 적용하지 않은 표본 평균이다. 세부 유형 값이 없으면 대분류 값을 쓴다
+
+## 데이터·설문이 바뀌었을 때 점검 (`npm test`의 `src/lib/consistency.test.js`)
+다음이 어긋나면 테스트가 실패하고 무엇이 다른지 보여준다.
+- 군집 모델의 유형 ↔ `types.js`의 유형 이름·설명
+- `src/data/nutrients.js`의 영양소 14종 ↔ `Jaejun/config/targets.json`
+- 영양소 결과표의 유형·영양소·등급
+- 웹 설문 문항 ↔ `Jaejun/config/survey_schema_v3.json` (문항이 추가되거나 보기 개수가 바뀌면 실패)
 
 ## 기타
 - 마스코트 이미지: `public/mascot/` (start.png, thinking.png, happy.png, default.png, hello.gif). 없으면 💊 placeholder로 표시

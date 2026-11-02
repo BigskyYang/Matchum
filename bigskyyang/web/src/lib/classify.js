@@ -20,7 +20,16 @@ export function classify(vector, m = model) {
     path.push(best)
     node = m.children[best]
   }
-  return { main: path[0], leaf: path[path.length - 1], path }
+  const main = path[0]
+  const leaf = path[path.length - 1]
+  return { main, leaf, path, mainId: typeId(main, m), leafId: typeId(leaf, m) }
 }
+
+// 군집 번호(Group_1 …) → 유형 ID. 군집화를 다시 돌려 번호가 바뀌어도 같은 유형은 같은 ID다.
+// 유형 이름(types.js)과 영양소 결과표(nutrientProfiles.json)는 이 ID로 찾는다.
+export const typeId = (label, m = model) => m.typeIds?.[label] ?? label
+
+// 대분류 군집 번호 목록
+export const mainLabels = (m = model) => Object.keys(m.root.centers)
 
 export { model }

@@ -13,7 +13,7 @@ import PartnerCard from '../components/result/PartnerCard.jsx'
 import nutrientProfiles from '../data/nutrientProfiles.json'
 import { BALANCED_FOODS, pickTips } from '../data/tips.js'
 import { LEAF_TYPES, MAIN_TYPES, leafCode } from '../data/types.js'
-import { classify, model } from '../lib/classify.js'
+import { classify, mainLabels, model, typeId } from '../lib/classify.js'
 import { encode, toVector } from '../lib/encode.js'
 import { lookupProfile, rankNutrients, supplementsFor } from '../lib/nutrition.js'
 import { SCORE_AXES, bestPartner, groupScores, hashtags, scores, share } from '../lib/profile.js'
@@ -32,9 +32,10 @@ function useResult() {
     const { answers, done } = loadSurvey()
     if (!done) return null
     const { features, extras } = encode(answers)
-    const { main, leaf } = classify(toVector(features, model.features))
-    const mainType = typeInfo(main)
-    const leafType = LEAF_TYPES[leaf] ?? {}
+    // main·leaf: 군집 번호 (model.json 안의 계산용), mainId·leafId: 유형 ID (이름·영양소 결과표 조회용)
+    const { main, leaf, mainId, leafId } = classify(toVector(features, model.features))
+    const mainType = typeInfo(mainId)
+    const leafType = LEAF_TYPES[leafId] ?? {}
     const tips = pickTips(features, extras)
     const myScores = scores(features)
 
@@ -43,13 +44,13 @@ function useResult() {
     for (const f of [...(leafType.foods ?? mainType.foods ?? []), ...tips.flatMap((t) => t.foods ?? [])]) {
       if (!foods.some((x) => x.label === f.label)) foods.push(f)
     }
-    const partner = bestPartner(model, myScores, main, Object.keys(MAIN_TYPES))
-    const profile = lookupProfile(nutrientProfiles, leaf, main)
+    const partner = bestPartner(model, myScores, main, mainLabels())
+    const profile = lookupProfile(nutrientProfiles, leafId, mainId)
     const ranked = profile ? rankNutrients(profile) : []
     const optional = extras.optional
 
     return {
-      leaf,
+      leafId,
       mainType,
       name: leafType.name ?? mainType.name,
       summary: leafType.summary ?? mainType.summary,
@@ -66,7 +67,7 @@ function useResult() {
       supplements: supplementsFor(ranked),
       optional,
       hasCondition: Boolean(optional && (optional.hypertension || optional.diabetes || optional.dyslipidemia)),
-      partner: { type: typeInfo(partner.label), helps: partner.helps },
+      partner: { type: typeInfo(typeId(partner.label)), helps: partner.helps },
     }
   }, [])
 }
@@ -90,7 +91,7 @@ export default function ResultPage() {
           <span aria-hidden="true">{r.mainType.emoji} </span>
           {r.name}
         </h1>
-        <p className="mt-1 text-xs font-semibold text-ink-faint">세부 유형 {leafCode(r.leaf)}</p>
+        <p className="mt-1 text-xs font-semibold text-ink-faint">세부 유형 {leafCode(r.leafId)}</p>
         {r.tags.length > 0 && (
           <ul className="mt-3 flex flex-wrap justify-center gap-1.5">
             {r.tags.map((tag) => (
