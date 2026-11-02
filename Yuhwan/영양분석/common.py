@@ -99,11 +99,13 @@ def add_status(d):
     """사람마다 본인 성별·연령 KDRI 기준과 비교: below_<영양소> = 1/0, ratio_<영양소> = 섭취/기준."""
     idx = d['age_grp'].cat.codes.values
     male = (d['sex'] == '남자').values
+    new = {}                                  # 열을 모아서 한 번에 붙임 (조각난 프레임 경고 방지)
     for n, (col, basis, m, f, ul, _) in KDRI.items():
         ref = np.where(male, np.array(m)[idx], np.array(f)[idx]).astype(float)
-        d[f'ref_{n}'] = ref
-        d[f'ratio_{n}'] = d[col] / ref
-        d[f'below_{n}'] = (d[col] < ref).astype(int)
+        new[f'ref_{n}'] = ref
+        new[f'ratio_{n}'] = d[col].values / ref
+        new[f'below_{n}'] = (d[col].values < ref).astype(int)
+    d = pd.concat([d, pd.DataFrame(new, index=d.index)], axis=1)
     # 파생변수 2: 부족 영양소 개수 (EAR 기준 11개 중 미만 개수 = 부족 위험 / AI 기준 4개는 참고라 따로)
     ear = [n for n in KDRI if KDRI[n][1] == 'EAR']
     ai = [n for n in KDRI if KDRI[n][1] == 'AI']
