@@ -2,26 +2,26 @@ import { useMemo } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import Mascot from '../components/Mascot.jsx'
 import PrimaryButton, { SecondaryButton } from '../components/PrimaryButton.jsx'
-import Card, { Chips } from '../components/result/Card.jsx'
+import Card from '../components/result/Card.jsx'
 import FoodGrid from '../components/result/FoodGrid.jsx'
 import HabitSignals from '../components/result/HabitSignals.jsx'
 import MetabolicCard from '../components/result/MetabolicCard.jsx'
 import MindCard from '../components/result/MindCard.jsx'
 import MissionList from '../components/result/MissionList.jsx'
-import NutrientSignals from '../components/result/NutrientSignals.jsx'
 import PartnerCard from '../components/result/PartnerCard.jsx'
+import TypeNutrients from '../components/result/TypeNutrients.jsx'
 import nutrientCells from '../data/nutrientCells.json'
-import nutrientProfiles from '../data/nutrientProfiles.json'
 import { BALANCED_FOODS, pickTips } from '../data/tips.js'
 import { LEAF_TYPES, MAIN_TYPES } from '../data/types.js'
 import { MAIN_CODES, classify, mainProfile, toFeatures, typeOf } from '../lib/classify.js'
 import { encode } from '../lib/encode.js'
-import { ageGroup, lookupProfile, nutrientSignals, rankNutrients, supplementsFor } from '../lib/nutrition.js'
+import { ageGroup, typeNutrients } from '../lib/nutrition.js'
 import { SCORE_AXES, bestPartner, groupScores, hashtags, scores } from '../lib/profile.js'
 import { clearSurvey, loadSurvey } from '../lib/storage.js'
 
-// 유형별 영양소 결과표가 아직 없을 때
-const PENDING = '유형별 영양 분석 결과가 준비되면 이곳에 표시돼요.'
+// 서비스 흐름: 유형 화면(여기)은 생활습관과 '부족할 수 있는 영양소'까지만 보여 준다.
+// 개인별 영양 위험 예측과 건강기능식품 안내는 개인화('더 알아보기', 재준님 모델·준혁님 제품 자료)에서 한다.
+const PENDING = '영양 분석 결과가 준비되면 이곳에 표시돼요.'
 const MAX_MISSIONS = 3
 const MAX_FOODS = 6
 const AGE_LABELS = { '19-29': '19~29세', '30-49': '30~49세', '50-64': '50~64세', '65-74': '65~74세', '75+': '75세 이상' }
@@ -40,17 +40,17 @@ function useResult() {
     const tips = pickTips(features, extras)
     const myScores = scores(features)
 
-    // 음식은 이름이 겹치지 않게 모은다
+    // 부족할 수 있는 영양소: 유환님 12유형 결과표 (유형 × 성별 × 연령대)
+    const nutrients = typeNutrients(nutrientCells, leaf, extras.sex, extras.age)
+
+    // 음식: 내 응답에 맞춘 팁 → '내 유형에서 살펴볼 것' 영양소의 대표 음식. 이름이 겹치지 않게 모은다
+    const nutrientFoods = (nutrients?.picks ?? []).map((n) => ({ emoji: n.icon, label: n.foods[0], why: `${n.label} 챙기기` }))
     const foods = []
-    for (const f of [...(leafType.foods ?? mainType.foods ?? []), ...tips.flatMap((t) => t.foods ?? [])]) {
+    for (const f of [...(leafType.foods ?? mainType.foods ?? []), ...tips.flatMap((t) => t.foods ?? []), ...nutrientFoods]) {
       if (!foods.some((x) => x.label === f.label)) foods.push(f)
     }
     const mainScores = Object.fromEntries(MAIN_CODES.map((code) => [code, groupScores(toFeatures(mainProfile(code)))]))
     const partner = bestPartner(myScores, main, mainScores)
-    const profile = lookupProfile(nutrientProfiles, leaf, main)
-    const ranked = profile ? rankNutrients(profile) : []
-    // 영양소 신호등: 유환님 12유형 결과표 (유형 × 성별 × 연령대)
-    const signals = nutrientSignals(nutrientCells, leaf, extras.sex, extras.age)
     const optional = extras.optional
 
     return {
@@ -67,11 +67,9 @@ function useResult() {
         MAX_MISSIONS,
       ),
       foods: (foods.length ? foods : BALANCED_FOODS).slice(0, MAX_FOODS),
-      ranked,
-      signals,
+      nutrients,
       sexLabel: extras.sex === 1 ? '남성' : '여성',
       ageLabel: AGE_LABELS[ageGroup(extras.age)],
-      supplements: supplementsFor(ranked),
       optional,
       hasCondition: Boolean(optional && (optional.hypertension || optional.diabetes || optional.dyslipidemia)),
       partner: { type: MAIN_TYPES[partner.label], helps: partner.helps },
@@ -127,28 +125,16 @@ export default function ResultPage() {
         <MissionList missions={r.missions} />
       </Card>
 
-      <Card title="챙겨 먹으면 좋은 음식" icon="🥗">
-        <FoodGrid foods={r.foods} />
-      </Card>
-
-      <Card title="영양소 신호등" icon="🥄">
-        {r.signals.length ? (
-          <NutrientSignals items={r.signals} sexLabel={r.sexLabel} ageLabel={r.ageLabel} />
+      <Card title="부족할 수 있는 영양소" icon="🥄">
+        {r.nutrients ? (
+          <TypeNutrients common={r.nutrients.common} picks={r.nutrients.picks} sexLabel={r.sexLabel} ageLabel={r.ageLabel} />
         ) : (
           <p className="text-sm text-ink-faint">{PENDING}</p>
         )}
       </Card>
 
-      <Card title="고려해 볼 수 있는 건강기능식품 원료" icon="💊">
-        <Chips
-          items={r.supplements}
-          empty={r.ranked.length ? '‘주의’ 영양소가 없어요. 지금처럼 음식으로 골고루 챙겨 주세요!' : PENDING}
-        />
-        <p className={`mt-3 text-xs leading-relaxed ${r.hasCondition ? 'font-semibold text-primary-shade' : 'text-ink-faint'}`}>
-          {r.hasCondition
-            ? '진단받은 질환이 있으니, 건강기능식품은 꼭 담당 의사·약사와 먼저 상의하세요.'
-            : '질환이 있거나 약을 먹고 있다면 섭취 전에 의사·약사와 상담하세요.'}
-        </p>
+      <Card title="챙겨 먹으면 좋은 음식" icon="🥗">
+        <FoodGrid foods={r.foods} />
       </Card>
 
       {r.optional && (
@@ -165,6 +151,18 @@ export default function ResultPage() {
 
       <Card title="같이 다니면 좋은 유형" icon="🤝">
         <PartnerCard me={r.mainType} partner={r.partner.type} helps={r.partner.helps} />
+      </Card>
+
+      <Card title="더 알아보기" icon="🔍">
+        <p className="text-sm leading-relaxed text-ink-soft">
+          유형 결과는 나와 비슷한 사람들의 경향이에요. 내 응답만으로 영양소별 부족 위험을 따로 예측하고, 그에 맞는 건강기능식품
+          정보를 알려 주는 개인 맞춤 분석은 준비 중이에요.
+        </p>
+        <p className={`mt-3 text-xs leading-relaxed ${r.hasCondition ? 'font-semibold text-primary-shade' : 'text-ink-faint'}`}>
+          {r.hasCondition
+            ? '진단받은 질환이 있으니, 건강기능식품을 고를 때는 꼭 담당 의사·약사와 먼저 상의하세요.'
+            : '질환이 있거나 약을 먹고 있다면 건강기능식품을 먹기 전에 의사·약사와 상담하세요.'}
+        </p>
       </Card>
 
       <footer className="mt-2 flex flex-col gap-3">

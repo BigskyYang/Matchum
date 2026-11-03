@@ -6,8 +6,7 @@ import targets from '../../../../Jaejun/config/targets.json'
 import surveySchema from '../../../../Jaejun/config/survey_schema_v3.json'
 import nutrientCells from '../data/nutrientCells.json'
 import { NUTRIENT_GUIDE } from '../data/nutrientGuide.js'
-import nutrientProfiles from '../data/nutrientProfiles.json'
-import { BANDS, NUTRIENTS } from '../data/nutrients.js'
+import { NUTRIENTS } from '../data/nutrients.js'
 import { QUESTIONS } from '../data/questions.js'
 import { LEAF_TYPES, MAIN_TYPES } from '../data/types.js'
 import { MAIN_CODES, model } from './classify.js'
@@ -38,37 +37,21 @@ describe('군집 모델 ↔ 유형 설명 (types.js) ↔ 마스코트 그림', (
   })
 })
 
-describe('영양소 정의 ↔ 재준 모델 (Jaejun/config/targets.json)', () => {
+describe('개인화용 영양소 정의 (nutrients.js) ↔ 재준 모델 (Jaejun/config/targets.json)', () => {
   it('14개 영양소 키가 같다', () => {
     expect(NUTRIENTS.map((n) => n.key).sort()).toEqual(Object.keys(targets).sort())
   })
 })
 
-describe('유형별 영양소 결과표 (nutrientProfiles.json)', () => {
-  const entries = Object.entries(nutrientProfiles.types)
-
-  it('결과표의 유형은 모두 지금 군집 모델의 유형 ID다', () => {
-    const known = [...mainIds, ...leafIds]
-    expect(entries.map(([id]) => id).filter((id) => !known.includes(id))).toEqual([])
-  })
-
-  it('영양소 키·등급·비율이 올바르다', () => {
-    const keys = NUTRIENTS.map((n) => n.key)
-    for (const [, profile] of entries) {
-      for (const [key, v] of Object.entries(profile.nutrients)) {
-        expect(keys).toContain(key)
-        expect(Object.keys(BANDS)).toContain(v.band)
-        expect(v.rate).toBeGreaterThanOrEqual(0)
-        expect(v.rate).toBeLessThanOrEqual(1)
-      }
-    }
-  })
-})
-
-describe('영양소 신호등 결과표 (nutrientCells.json, 유환님 12유형 결과)', () => {
+describe('부족할 수 있는 영양소 결과표 (nutrientCells.json, 유환님 12유형 결과)', () => {
   it('지금 군집 모델과 같은 유형 ID를 쓴다', () => {
     expect(Object.keys(nutrientCells.types).sort()).toEqual([...leafIds].sort())
     expect(nutrientCells.source_types).toBe(model.version)
+  })
+
+  it('공통 영양소 8개가 모두 영양소 안내(nutrientGuide.js)에 있다', () => {
+    expect(nutrientCells.common).toHaveLength(8)
+    expect(nutrientCells.common.filter((k) => !NUTRIENT_GUIDE.some((n) => n.key === k))).toEqual([])
   })
 
   it('유형마다 성별 2 × 연령대 5칸이 있고, 칸마다 영양소 15개가 모두 있다', () => {

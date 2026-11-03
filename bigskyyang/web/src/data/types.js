@@ -11,7 +11,7 @@
 //   foods       추천 음식 [{ emoji, label, why }]  (선택, 개인 응답 기반 추천 앞에 붙는다)
 // 마스코트 그림은 public/mascot/type_{세부 유형 ID}.png (.webp)
 //
-// 영양소 위험·건강기능식품 원료는 여기 쓰지 않고 유형별 영양소 결과표(nutrientProfiles.json)에서 가져온다.
+// 부족할 수 있는 영양소는 여기 쓰지 않고 유환님 12유형 결과표(nutrientCells.json)에서 가져온다. 건강기능식품은 유형 화면에 쓰지 않는다.
 // ※ 질병 예방·치료 효능 표현 금지 (식품표시광고법 제8조)
 
 export const MAIN_TYPES = {
