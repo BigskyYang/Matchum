@@ -29,19 +29,20 @@ describe('선택 문항 (PHQ-9·대사건강)', () => {
 })
 
 describe('부족할 수 있는 영양소 ((나)안)', () => {
+  // 유환님 결과 형식 예시 (scripts/build_nutrient_cells.py가 만드는 형식)
   const CELLS = {
-    common: ['vitamin_d', 'calcium'],
     types: {
       N2: {
         2: {
           '30-49': {
-            vitamin_d: { p: 0.96, vs: 1.0, tag: '공통주의' },
-            calcium: { p: 0.71, vs: 1.0, tag: '공통주의' },
-            iron: { p: 0.57, vs: 1.35, tag: '유형특이' }, // 0.5 이상 → 보임
-            magnesium: { p: 0.63, vs: 1.19, tag: '식사량영향' }, // 0.5 이상 → 보임
-            protein: { p: 0.34, vs: 1.36, tag: '' }, // 1.2배 이상 + 10명 중 3명 이상 → 보임
-            phosphorus: { p: 0.2, vs: 1.25, tag: '' }, // 1.2배여도 하한 미만 → 안 보임
-            zinc: { p: 0.45, vs: 1.1, tag: '' }, // 0.5 미만 + 1.2배 미만 → 안 보임
+            line1: [
+              { key: 'vitamin_d', of10: 10 },
+              { key: 'calcium', of10: 7 },
+            ],
+            line2: [
+              { key: 'iron', of10: 6, peerOf10: 4, text: '이 유형에서 특히 많아요' },
+              { key: 'zinc', of10: 4, peerOf10: 3, text: '식사량 점검이 먼저예요' },
+            ],
           },
         },
       },
@@ -54,15 +55,17 @@ describe('부족할 수 있는 영양소 ((나)안)', () => {
     ])
   })
 
-  it('1줄은 공통 영양소, 2줄은 하한 이상이면서 (0.5 이상 또는 1.2배 이상)인 것을 부족한 사람이 많은 순으로', () => {
+  it('내 유형·성별·연령대 칸의 1줄·2줄을 순서 그대로 가져오고 영양소 이름·역할을 붙인다', () => {
     const { common, picks } = typeNutrients(CELLS, 'N2', 2, 35)
-    expect(common.map((n) => n.key)).toEqual(['calcium', 'vitamin_d'])
-    expect(picks.map((n) => [n.key, n.of10, n.level.label])).toEqual([
-      ['magnesium', 6, '부족'],
-      ['iron', 6, '부족'],
-      ['protein', 3, '주의'],
+    expect(common.map((n) => [n.label, n.of10])).toEqual([
+      ['비타민 D', 10],
+      ['칼슘', 7],
     ])
-    expect(picks.find((n) => n.key === 'iron')).toMatchObject({ label: '철', tag: '유형특이', peerOf10: 4 })
+    expect(picks.map((n) => [n.label, n.of10, n.peerOf10, n.level.label])).toEqual([
+      ['철', 6, 4, '부족'],
+      ['아연', 4, 3, '주의'],
+    ])
+    expect(picks[0]).toMatchObject({ basis: 'EAR', text: '이 유형에서 특히 많아요', role: expect.any(String) })
   })
 
   it('칸이 없으면 null', () => {

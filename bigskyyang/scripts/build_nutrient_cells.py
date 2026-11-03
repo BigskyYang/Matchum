@@ -1,14 +1,16 @@
 """
-유환님 12유형 부족 영양소 결과표를 웹용으로 줄인다 → web/src/data/nutrientCells.json
+유환님 유형 화면 (나)안 결과를 웹용으로 줄인다 → web/src/data/nutrientCells.json
 
-입력: Yuhwan/영양분석/output/08_유형별_부족영양소_추천.json (08_12유형_부족영양소_추천.py가 만든다)
-  유형(N1~O3) × 성별 × 연령대 칸마다 영양소 15개의 부족 비율 p(같은 조건 사람 중 2025 KDRI 기준 미만인 비율, 조사 가중)
-출력: 결과 화면 '부족할 수 있는 영양소'가 쓰는 값만 남긴다
-  common = 모든 칸에서 '공통주의'인 영양소 (대부분의 사람에게 부족한 8개)
-  types[유형][성별 1·2][연령대][영양소 키] = { p, vs, tag }
-    p   : 부족 비율 (0~1)
-    vs  : 같은 성별·연령대 전체 대비 배수
-    tag : 유형특이 · 식사량영향 · 공통주의 · '' (판정 기준은 bigskyyang/analysis/05_jiyeon_improved.py)
+입력: Yuhwan/영양분석/output/13_유형화면_나안.json (13_유형화면_나안.py가 만든다, 팀 결정 (나)안)
+  유형(N1~O3) × 성별 × 연령대 칸마다
+    line1: 대부분의 사람에게 부족한 공통 영양소 8개
+    line2: 그 밖에 '내 유형에서 살펴볼 것' (부족 비율 ≥ 0.5 또는 같은 성별·나이 대비 1.2배 이상 그리고 ≥ 0.3)
+  어떤 영양소를 고를지는 유환님 코드가 정한다. 웹은 그 결과를 그대로 보여 준다.
+출력: 결과 화면이 쓰는 값만 남긴다 (영양소 이름·역할·음식은 web/src/data/nutrientGuide.js)
+  types[유형][성별 1·2][연령대] = { line1: [{ key, of10 }], line2: [{ key, of10, peerOf10, text }] }
+    of10     : 같은 유형·성별·연령대 10명 중 기준보다 적게 먹는 사람 수
+    peerOf10 : 같은 성별·연령대 전체 10명 중 몇 명
+    text     : 판정 문구 (이 유형에서 특히 많아요 / 식사량 점검이 먼저예요 / 같은 성별·나이대에서 흔해요)
 
 유환님 분석이 바뀌면 다시 실행한다 (bigskyyang 폴더에서)
   python scripts/build_nutrient_cells.py
@@ -19,7 +21,7 @@ from datetime import date
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-SRC = ROOT / 'Yuhwan' / '영양분석' / 'output' / '08_유형별_부족영양소_추천.json'
+SRC = ROOT / 'Yuhwan' / '영양분석' / 'output' / '13_유형화면_나안.json'
 OUT = ROOT / 'bigskyyang' / 'web' / 'src' / 'data' / 'nutrientCells.json'
 
 # 유환님 결과표의 영양소 이름 → 웹 키 (src/data/nutrientGuide.js)
@@ -31,21 +33,23 @@ KEYS = {
 SEX = {'남자': '1', '여자': '2'}   # encode.js extras.sex 값
 
 src = json.loads(SRC.read_text(encoding='utf-8'))
-cells = [rows for t in src['types'].values() for ages in t['cells'].values() for rows in ages.values()]
-commons = {frozenset(KEYS[r['nutrient']] for r in rows if r['tag'] == '공통주의') for rows in cells}
-assert len(commons) == 1, '칸마다 공통주의 영양소가 다르다'
 out = {
     'generated': date.today().isoformat(),
-    'source': 'Yuhwan/영양분석/output/08_유형별_부족영양소_추천.json',
+    'source': 'Yuhwan/영양분석/output/13_유형화면_나안.json',
     'version': src['version'],
     'source_types': src['source_types'],
+    'rule': src['규칙'],
     'note': src['설명'],
-    'common': sorted(next(iter(commons))),
+    'empty_line2_text': src['empty_line2_text'],
     'types': {
         tid: {
             SEX[sex]: {
-                age: {KEYS[r['nutrient']]: {'p': r['p'], 'vs': r['vs_same_sex_age'], 'tag': r['tag']} for r in rows}
-                for age, rows in ages.items()
+                age: {
+                    'line1': [{'key': KEYS[r['nutrient']], 'of10': r['of10']} for r in cell['line1']],
+                    'line2': [{'key': KEYS[r['nutrient']], 'of10': r['of10'], 'peerOf10': r['same_sex_age_of10'],
+                               'text': r['tag_text']} for r in cell['line2']],
+                }
+                for age, cell in ages.items()
             }
             for sex, ages in t['cells'].items()
         }

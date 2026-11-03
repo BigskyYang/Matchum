@@ -43,31 +43,42 @@ describe('개인화용 영양소 정의 (nutrients.js) ↔ 재준 모델 (Jaejun
   })
 })
 
-describe('부족할 수 있는 영양소 결과표 (nutrientCells.json, 유환님 12유형 결과)', () => {
+describe('부족할 수 있는 영양소 결과표 (nutrientCells.json, 유환님 (나)안 결과)', () => {
+  const guideKeys = NUTRIENT_GUIDE.map((n) => n.key)
+  const cells = Object.values(nutrientCells.types).flatMap((sexes) => Object.values(sexes).flatMap((ages) => Object.values(ages)))
+
   it('지금 군집 모델과 같은 유형 ID를 쓴다', () => {
     expect(Object.keys(nutrientCells.types).sort()).toEqual([...leafIds].sort())
     expect(nutrientCells.source_types).toBe(model.version)
   })
 
-  it('공통 영양소 8개가 모두 영양소 안내(nutrientGuide.js)에 있다', () => {
-    expect(nutrientCells.common).toHaveLength(8)
-    expect(nutrientCells.common.filter((k) => !NUTRIENT_GUIDE.some((n) => n.key === k))).toEqual([])
-  })
-
-  it('유형마다 성별 2 × 연령대 5칸이 있고, 칸마다 영양소 15개가 모두 있다', () => {
-    const keys = NUTRIENT_GUIDE.map((n) => n.key).sort()
+  it('유형마다 성별 2 × 연령대 5칸이 있다', () => {
     for (const sexes of Object.values(nutrientCells.types)) {
       expect(Object.keys(sexes).sort()).toEqual(['1', '2'])
       for (const ages of Object.values(sexes)) {
         expect(Object.keys(ages).sort()).toEqual(['19-29', '30-49', '50-64', '65-74', '75+'])
-        for (const cell of Object.values(ages)) {
-          expect(Object.keys(cell).sort()).toEqual(keys)
-          for (const v of Object.values(cell)) {
-            expect(v.p).toBeGreaterThanOrEqual(0)
-            expect(v.p).toBeLessThanOrEqual(1)
-          }
-        }
       }
+    }
+  })
+
+  it('1줄은 모든 칸에서 같은 공통 영양소 8개, 2줄은 1줄과 겹치지 않는다', () => {
+    const common = [...cells[0].line1.map((x) => x.key)].sort()
+    expect(common).toHaveLength(8)
+    for (const cell of cells) {
+      expect(cell.line1.map((x) => x.key).sort()).toEqual(common)
+      expect(cell.line2.filter((x) => common.includes(x.key))).toEqual([])
+    }
+  })
+
+  it('영양소는 모두 영양소 안내(nutrientGuide.js)에 있고, 10명 중 몇 명은 0~10이다', () => {
+    for (const x of cells.flatMap((c) => [...c.line1, ...c.line2])) {
+      expect(guideKeys).toContain(x.key)
+      expect(x.of10).toBeGreaterThanOrEqual(0)
+      expect(x.of10).toBeLessThanOrEqual(10)
+    }
+    for (const x of cells.flatMap((c) => c.line2)) {
+      expect(x.text).toEqual(expect.any(String))
+      expect(x.peerOf10).toBeLessThanOrEqual(10)
     }
   })
 })

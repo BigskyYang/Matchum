@@ -1,28 +1,17 @@
-// 결과 화면 '부족할 수 있는 영양소'의 영양소 15종: 2025 KDRI 기준 (유환님 12유형 결과표 nutrientCells.json과 같은 키)
+// 결과 화면 '부족할 수 있는 영양소'의 영양소 15종: 2025 KDRI 기준 (nutrientCells.json과 같은 키)
 // basis: EAR(평균필요량) 미만 = 부족 위험, AI(충분섭취량) 미만 = 충분섭취량보다 적음(참고)
 // role: 영양소의 일반적인 역할. 질병 예방·치료 효과 표현 금지 (식품표시광고법 제8조)
 // foods: 챙겨 먹으면 좋은 대표 음식 (nutrients.js와 같은 것은 그대로)
 
-// 유형 화면에 보여 주는 규칙 (팀 결정 (나)안, 11/3): 유환님 Yuhwan/팀공유/08_유형화면_추천기준_의견요청.md
-//   1줄: 대부분의 사람에게 부족한 공통 영양소 8개 (nutrientCells.json의 common)
-//   2줄: 그 밖에서 '내 유형에서 살펴볼 것' = 같은 유형·성별·연령대 사람 중 기준보다 적게 먹는 비율 p가
-//        하한(10명 중 3명) 이상이면서, p ≥ 0.5 이거나 같은 성별·연령대 전체보다 1.2배 이상
+// 1줄·2줄에 어떤 영양소를 둘지는 유환님 (나)안 결과(nutrientCells.json)가 정한다 (Yuhwan/영양분석/13_유형화면_나안.py)
 // 개인별 판단·건강기능식품 안내는 유형 화면이 아니라 개인화('더 알아보기')에서 한다
-export const TYPE_RULE = { minP: 0.3, highP: 0.5, ratio: 1.2 }
 
-// 2줄 항목의 테두리 색: 화면에 보이는 '10명 중 N명'(반올림)으로 정한다
-export const NUTRIENT_LEVELS = [
-  { min: 0.5, key: 'low', label: '부족', tone: 'poor' },
-  { min: 0, key: 'mid', label: '주의', tone: 'fair' },
+// 2줄 항목의 테두리 색: 화면에 보이는 '10명 중 N명'으로 정한다
+const NUTRIENT_LEVELS = [
+  { min: 0.5, label: '부족', tone: 'poor' },
+  { min: 0, label: '주의', tone: 'fair' },
 ]
 export const nutrientLevelOf = (p) => NUTRIENT_LEVELS.find((l) => p >= l.min)
-
-// 유환님 결과표의 판정 → 화면 문구
-export const NUTRIENT_TAGS = {
-  유형특이: '이 유형에서 특히 많아요',
-  식사량영향: '식사량 점검이 먼저예요',
-  공통주의: '대부분의 사람에게 부족해요',
-}
 
 export const NUTRIENT_GUIDE = [
   { key: 'protein', label: '단백질', icon: '🥚', basis: 'EAR', role: '근육 같은 몸의 조직을 만들고, 효소·호르몬의 재료가 돼요.', foods: ['달걀', '두부', '생선', '닭가슴살'] },

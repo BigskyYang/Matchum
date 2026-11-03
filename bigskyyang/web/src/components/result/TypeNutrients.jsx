@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { BASIS_TEXT, NUTRIENT_TAGS } from '../../data/nutrientGuide.js'
+import { BASIS_TEXT } from '../../data/nutrientGuide.js'
 
-// 유형 화면의 '부족할 수 있는 영양소' ((나)안)
+// 유형 화면의 '부족할 수 있는 영양소' ((나)안, 데이터는 lib/nutrition.js의 typeNutrients)
 //   1줄: 대부분의 사람에게 부족한 공통 영양소, 2줄: 내 유형에서 살펴볼 것 (테두리 색 = 부족·주의)
 // 영양소를 누르면 아래에 역할·대표 음식 카드를 보여 준다 (처음에는 2줄 첫 항목, 없으면 열지 않음)
 const BORDER = { poor: 'border-primary-strong', fair: 'border-[#f2c14e]', common: 'border-ink-faint/40' }
@@ -22,7 +22,7 @@ function NutrientButton({ n, tone, on, onClick, children }) {
   )
 }
 
-export default function TypeNutrients({ common, picks, sexLabel, ageLabel }) {
+export default function TypeNutrients({ common, picks, emptyText, sexLabel, ageLabel }) {
   const [selected, setSelected] = useState(picks[0]?.key ?? null)
   const toggle = (key) => setSelected((cur) => (cur === key ? null : key))
   const pick = picks.find((n) => n.key === selected)
@@ -51,7 +51,7 @@ export default function TypeNutrients({ common, picks, sexLabel, ageLabel }) {
           ))}
         </ul>
       ) : (
-        <p className="mt-2 text-sm text-ink-soft">공통 영양소 외에 특히 더 부족한 영양소는 없어요 👍</p>
+        <p className="mt-2 text-sm text-ink-soft">{emptyText} 👍</p>
       )}
 
       {current && (
@@ -70,17 +70,11 @@ export default function TypeNutrients({ common, picks, sexLabel, ageLabel }) {
               </span>
             )}
           </div>
-          {pick ? (
-            <p className="mt-3 text-sm leading-relaxed">
-              나와 같은 유형·{sexLabel}·{ageLabel} <b>10명 중 {pick.of10}명</b>이 {BASIS_TEXT[pick.basis]}보다 적게 먹어요
-              {pick.peerOf10 < pick.of10 && ` (같은 성별·나이 전체는 ${pick.peerOf10}명)`}.
-            </p>
-          ) : (
-            <p className="mt-3 text-sm leading-relaxed">유형과 상관없이 대부분의 사람이 {BASIS_TEXT[current.basis]}보다 적게 먹어요.</p>
-          )}
-          {pick && NUTRIENT_TAGS[pick.tag] && (
-            <p className="mt-2 inline-block rounded-full bg-lavender px-2.5 py-1 text-xs font-bold">{NUTRIENT_TAGS[pick.tag]}</p>
-          )}
+          <p className="mt-3 text-sm leading-relaxed">
+            나와 같은 유형·{sexLabel}·{ageLabel} <b>10명 중 {current.of10}명</b>이 {BASIS_TEXT[current.basis]}보다 적게 먹어요
+            {pick ? ` (같은 성별·나이 평균은 10명 중 ${pick.peerOf10}명)` : '. 유형과 상관없이 대부분의 사람에게 부족한 영양소예요'}.
+          </p>
+          {pick?.text && <p className="mt-2 inline-block rounded-full bg-lavender px-2.5 py-1 text-xs font-bold">{pick.text}</p>}
           <p className="mt-3 text-sm leading-relaxed text-ink-soft">
             <b className="text-ink">하는 일</b> {current.role}
           </p>
