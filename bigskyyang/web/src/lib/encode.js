@@ -77,6 +77,3 @@ function optionalAnswers(a) {
     dyslipidemia: a.dx_dyslipidemia === 'yes',
   }
 }
-
-// 모델 변수 순서대로 배열로 만든다
-export const toVector = (features, featureNames) => featureNames.map((name) => features[name])
