@@ -40,7 +40,8 @@ warnings.filterwarnings('ignore')
 plt.rcParams['font.family'] = 'Malgun Gothic'
 plt.rcParams['axes.unicode_minus'] = False
 
-JIYEON = ROOT.parent / 'Matchum' / 'Jiyeon'
+REPO = ROOT.parent if (ROOT.parent / 'Jiyeon').exists() else ROOT.parent / 'Matchum'   # Yuhwan/ 안 또는 로컬 작업 폴더
+JIYEON = REPO / 'Jiyeon'
 sys.path.insert(0, str(JIYEON))
 from kmedoids_final import assign          # 웹에서 구현할 배정 계산과 같은 함수
 
