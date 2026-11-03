@@ -1,0 +1,682 @@
+{
+ "features": [
+  "ML_smoker",
+  "ML_cigarettes_day",
+  "ML_drink_month",
+  "ML_drink_freq_ord",
+  "ML_drink_amount_ord",
+  "ML_aerobic",
+  "ML_strength_days",
+  "ML_sedentary_min",
+  "ML_sleep_hours",
+  "ML_stress",
+  "ML_breakfast_freq_ord",
+  "ML_lunch_freq_ord",
+  "ML_dinner_freq_ord",
+  "ML_eatingout_freq_ord"
+ ],
+ "sleep_year_adjust": {
+  "기준연도": 2024,
+  "by_year": {
+   "2022": {
+    "mean": 6.9679015478305,
+    "std": 1.2615519326369913
+   },
+   "2023": {
+    "mean": 6.816069383079692,
+    "std": 1.2371681312835885
+   },
+   "2024": {
+    "mean": 7.408467150017901,
+    "std": 1.2245929552588906
+   }
+  },
+  "설명": "연도별 z화 후 기준연도 분포로 환원. 웹 입력은 기준연도로 간주하여 변환하지 않음."
+ },
+ "scaler": {
+  "mean": [
+   0.14606293984862567,
+   1.8518789005444165,
+   0.5126809188686762,
+   1.870070375780109,
+   1.7641747443898552,
+   0.4570442172354269,
+   0.9506041694330102,
+   535.2471119373257,
+   7.408467150017902,
+   0.2420661266764042,
+   2.1178462355596865,
+   2.8156951268091888,
+   2.8642942504315494,
+   2.638095870402337
+  ],
+  "std": [
+   0.3531693042315575,
+   5.299755481911065,
+   0.4998391684298521,
+   1.6073693266527411,
+   1.6720647725620938,
+   0.49815138334354025,
+   1.6830453690808282,
+   199.6799833588085,
+   1.2245929552588906,
+   0.42833411840791674,
+   1.197744497939806,
+   0.5841923353128793,
+   0.4545917524457742,
+   1.6604281625576027
+  ]
+ },
+ "weights": [
+  1.0,
+  1.0,
+  1.0,
+  1.0,
+  1.0,
+  1.0,
+  1.0,
+  1.0,
+  1.0,
+  1.0,
+  1.0,
+  1.0,
+  1.0,
+  1.0
+ ],
+ "model_features": [
+  "aerobic",
+  "strength_days",
+  "sedentary_min",
+  "sleep_hours",
+  "stress",
+  "eatingout_freq_ord",
+  "meal_score"
+ ],
+ "projection": {
+  "설명": "model = A @ z + b (z는 표준화된 14변수)",
+  "A": [
+   [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.5584699037728514,
+    0.5584699037728514,
+    0.5584699037728514,
+    0.0
+   ]
+  ],
+  "b": [
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   -1.9443018799006377e-16
+  ]
+ },
+ "pca": {
+  "mean": [
+   8.680113091213547e-17,
+   9.623603644606323e-17,
+   5.66094332035666e-18,
+   -5.859076336569143e-16,
+   -4.05700937958894e-17,
+   -8.963160257231379e-17,
+   8.019669703838602e-18
+  ],
+  "components": [
+   [
+    0.5495951838807736,
+    0.5589460068714831,
+    -0.4198298632627308,
+    0.2699577429990322,
+    -0.27954752334624017,
+    0.1101314741375797,
+    0.2147427269092366
+   ],
+   [
+    0.3896309928090606,
+    0.11468832792982075,
+    0.2088970355405117,
+    -0.04543447586292572,
+    0.49693055455084023,
+    0.5646176976399526,
+    -0.4728624464791937
+   ],
+   [
+    -0.16044803734576465,
+    -0.3931185983867118,
+    -0.41599177258507364,
+    0.7348665700114577,
+    0.04310606623126573,
+    0.11103569379824955,
+    -0.3040544459340959
+   ],
+   [
+    -0.15455930938063736,
+    -0.011642982836232857,
+    0.5662881376983053,
+    0.3484772591271472,
+    -0.3997292615047835,
+    0.5320272275853161,
+    0.3016964574080944
+   ],
+   [
+    0.026211561677438794,
+    -0.3211079805656422,
+    -0.318649977859995,
+    -0.14156543822882225,
+    0.4193452740426579,
+    0.3587604698937559,
+    0.6856125024677505
+   ]
+  ]
+ },
+ "macro": {
+  "space": "pca",
+  "medoids": {
+   "G0_비활동형": [
+    -0.506110879250615,
+    -1.1174264237855451,
+    0.38468387799938786,
+    0.126069156902329,
+    0.05747003747699673
+   ],
+   "G3_좌식외식형": [
+    -0.006566454384229659,
+    0.3868978870199609,
+    -0.020607414931651608,
+    1.2586488053925744,
+    -0.18120864633703018
+   ],
+   "G2_고스트레스형": [
+    -0.609082326132019,
+    1.2878280818211802,
+    -0.055804829731870786,
+    -0.511451224437492,
+    0.35961820269962247
+   ],
+   "G1_운동형": [
+    1.24805699159021,
+    -0.1967459526207048,
+    -0.4407848671503002,
+    -0.2152127939199418,
+    -0.2645125616917393
+   ]
+  }
+ },
+ "sub": {
+  "G0_비활동형": {
+   "features": [
+    "eatingout_freq_ord",
+    "meal_score"
+   ],
+   "scaler": {
+    "mean": [
+     -0.6137134134745573,
+     0.26741567370231145
+    ],
+    "std": [
+     0.7604290725779843,
+     0.8200436313868048
+    ]
+   },
+   "medoids": {
+    "G0_비활동형_0": [
+     -0.49029801858057437,
+     0.5936389684509458
+    ],
+    "G0_비활동형_1": [
+     0.3016947145637997,
+     -1.1121287210343398
+    ],
+    "G0_비활동형_2": [
+     0.3016947145637997,
+     0.5936389684509458
+    ]
+   }
+  },
+  "G3_좌식외식형": {
+   "features": [
+    "strength_days",
+    "meal_score"
+   ],
+   "scaler": {
+    "mean": [
+     -0.14781456055433131,
+     -0.0451973849165132
+    ],
+    "std": [
+     0.7875567790577591,
+     0.8405337618012072
+    ]
+   },
+   "medoids": {
+    "G3_좌식외식형_0": [
+     -0.5294823432346185,
+     -0.7130957060705153
+    ],
+    "G3_좌식외식형_1": [
+     -0.5294823432346185,
+     0.9510895937445102
+    ],
+    "G3_좌식외식형_2": [
+     1.733825129724939,
+     0.39636116047283504
+    ]
+   }
+  },
+  "G2_고스트레스형": {
+   "features": [
+    "aerobic",
+    "strength_days"
+   ],
+   "scaler": {
+    "mean": [
+     0.11887138598059739,
+     -0.2651436360148994
+    ],
+    "std": [
+     1.0031800650986817,
+     0.6913568508706126
+    ]
+   },
+   "medoids": {
+    "G2_고스트레스형_0": [
+     0.9679916704268626,
+     -0.4334495752343761
+    ],
+    "G2_고스트레스형_1": [
+     -1.0330667407076577,
+     -0.4334495752343761
+    ],
+    "G2_고스트레스형_2": [
+     0.9679916704268626,
+     2.1447893489575773
+    ]
+   }
+  },
+  "G1_운동형": {
+   "features": [
+    "strength_days",
+    "meal_score"
+   ],
+   "scaler": {
+    "mean": [
+     0.8561317975725244,
+     0.238952078129772
+    ],
+    "std": [
+     1.2725741673112347,
+     0.8166431421833541
+    ]
+   },
+   "medoids": {
+    "G1_운동형_0": [
+     0.2841008294648939,
+     -1.1105998698987352
+    ],
+    "G1_운동형_1": [
+     -1.1165901394454012,
+     0.6309652581128022
+    ],
+    "G1_운동형_2": [
+     1.2178948087384238,
+     0.6309652581128022
+    ]
+   }
+  }
+ },
+ "types": {
+  "G0_비활동형_0": {
+   "name": "외식낮음·규칙식사높음",
+   "n": 1802,
+   "mean": {
+    "ML_smoker": 0.075,
+    "ML_cigarettes_day": 0.962,
+    "ML_drink_month": 0.279,
+    "ML_drink_freq_ord": 1.071,
+    "ML_drink_amount_ord": 0.861,
+    "ML_aerobic": 0.053,
+    "ML_strength_days": 0.139,
+    "ML_sedentary_min": 537.084,
+    "ML_sleep_hours": 7.485,
+    "ML_stress": 0.12,
+    "ML_breakfast_freq_ord": 2.952,
+    "ML_lunch_freq_ord": 2.991,
+    "ML_dinner_freq_ord": 3.0,
+    "ML_eatingout_freq_ord": 0.609
+   }
+  },
+  "G0_비활동형_1": {
+   "name": "규칙식사낮음·외식높음",
+   "n": 1258,
+   "mean": {
+    "ML_smoker": 0.17,
+    "ML_cigarettes_day": 2.211,
+    "ML_drink_month": 0.458,
+    "ML_drink_freq_ord": 1.72,
+    "ML_drink_amount_ord": 1.597,
+    "ML_aerobic": 0.003,
+    "ML_strength_days": 0.09,
+    "ML_sedentary_min": 494.201,
+    "ML_sleep_hours": 7.642,
+    "ML_stress": 0.02,
+    "ML_breakfast_freq_ord": 1.275,
+    "ML_lunch_freq_ord": 2.457,
+    "ML_dinner_freq_ord": 2.749,
+    "ML_eatingout_freq_ord": 1.83
+   }
+  },
+  "G0_비활동형_2": {
+   "name": "외식높음·규칙식사높음",
+   "n": 1429,
+   "mean": {
+    "ML_smoker": 0.122,
+    "ML_cigarettes_day": 1.683,
+    "ML_drink_month": 0.471,
+    "ML_drink_freq_ord": 1.74,
+    "ML_drink_amount_ord": 1.465,
+    "ML_aerobic": 0.001,
+    "ML_strength_days": 0.117,
+    "ML_sedentary_min": 475.696,
+    "ML_sleep_hours": 7.427,
+    "ML_stress": 0.051,
+    "ML_breakfast_freq_ord": 2.886,
+    "ML_lunch_freq_ord": 3.0,
+    "ML_dinner_freq_ord": 3.0,
+    "ML_eatingout_freq_ord": 2.707
+   }
+  },
+  "G1_운동형_0": {
+   "name": "규칙식사낮음·근력운동높음",
+   "n": 1124,
+   "mean": {
+    "ML_smoker": 0.167,
+    "ML_cigarettes_day": 1.94,
+    "ML_drink_month": 0.586,
+    "ML_drink_freq_ord": 2.113,
+    "ML_drink_amount_ord": 2.175,
+    "ML_aerobic": 0.883,
+    "ML_strength_days": 2.668,
+    "ML_sedentary_min": 439.854,
+    "ML_sleep_hours": 7.55,
+    "ML_stress": 0.042,
+    "ML_breakfast_freq_ord": 1.229,
+    "ML_lunch_freq_ord": 2.553,
+    "ML_dinner_freq_ord": 2.666,
+    "ML_eatingout_freq_ord": 2.436
+   }
+  },
+  "G1_운동형_1": {
+   "name": "근력운동낮음·규칙식사높음",
+   "n": 1542,
+   "mean": {
+    "ML_smoker": 0.093,
+    "ML_cigarettes_day": 1.214,
+    "ML_drink_month": 0.461,
+    "ML_drink_freq_ord": 1.654,
+    "ML_drink_amount_ord": 1.361,
+    "ML_aerobic": 0.994,
+    "ML_strength_days": 0.266,
+    "ML_sedentary_min": 403.094,
+    "ML_sleep_hours": 7.314,
+    "ML_stress": 0.008,
+    "ML_breakfast_freq_ord": 2.739,
+    "ML_lunch_freq_ord": 2.973,
+    "ML_dinner_freq_ord": 3.0,
+    "ML_eatingout_freq_ord": 2.097
+   }
+  },
+  "G1_운동형_2": {
+   "name": "근력운동높음·규칙식사높음",
+   "n": 1505,
+   "mean": {
+    "ML_smoker": 0.094,
+    "ML_cigarettes_day": 1.094,
+    "ML_drink_month": 0.522,
+    "ML_drink_freq_ord": 1.847,
+    "ML_drink_amount_ord": 1.674,
+    "ML_aerobic": 0.68,
+    "ML_strength_days": 4.363,
+    "ML_sedentary_min": 466.848,
+    "ML_sleep_hours": 7.351,
+    "ML_stress": 0.12,
+    "ML_breakfast_freq_ord": 2.925,
+    "ML_lunch_freq_ord": 3.0,
+    "ML_dinner_freq_ord": 3.0,
+    "ML_eatingout_freq_ord": 2.263
+   }
+  },
+  "G2_고스트레스형_0": {
+   "name": "유산소높음·근력운동낮음",
+   "n": 1429,
+   "mean": {
+    "ML_smoker": 0.192,
+    "ML_cigarettes_day": 2.435,
+    "ML_drink_month": 0.593,
+    "ML_drink_freq_ord": 2.171,
+    "ML_drink_amount_ord": 2.152,
+    "ML_aerobic": 1.0,
+    "ML_strength_days": 0.064,
+    "ML_sedentary_min": 526.407,
+    "ML_sleep_hours": 7.098,
+    "ML_stress": 0.816,
+    "ML_breakfast_freq_ord": 1.666,
+    "ML_lunch_freq_ord": 2.668,
+    "ML_dinner_freq_ord": 2.669,
+    "ML_eatingout_freq_ord": 3.126
+   }
+  },
+  "G2_고스트레스형_1": {
+   "name": "유산소낮음·근력운동낮음",
+   "n": 1561,
+   "mean": {
+    "ML_smoker": 0.209,
+    "ML_cigarettes_day": 2.701,
+    "ML_drink_month": 0.541,
+    "ML_drink_freq_ord": 2.031,
+    "ML_drink_amount_ord": 1.99,
+    "ML_aerobic": 0.0,
+    "ML_strength_days": 0.128,
+    "ML_sedentary_min": 601.605,
+    "ML_sleep_hours": 6.986,
+    "ML_stress": 0.914,
+    "ML_breakfast_freq_ord": 1.543,
+    "ML_lunch_freq_ord": 2.632,
+    "ML_dinner_freq_ord": 2.706,
+    "ML_eatingout_freq_ord": 3.078
+   }
+  },
+  "G2_고스트레스형_2": {
+   "name": "근력운동높음·유산소높음",
+   "n": 454,
+   "mean": {
+    "ML_smoker": 0.225,
+    "ML_cigarettes_day": 2.665,
+    "ML_drink_month": 0.672,
+    "ML_drink_freq_ord": 2.419,
+    "ML_drink_amount_ord": 2.54,
+    "ML_aerobic": 0.769,
+    "ML_strength_days": 3.183,
+    "ML_sedentary_min": 583.348,
+    "ML_sleep_hours": 7.057,
+    "ML_stress": 0.974,
+    "ML_breakfast_freq_ord": 1.659,
+    "ML_lunch_freq_ord": 2.707,
+    "ML_dinner_freq_ord": 2.725,
+    "ML_eatingout_freq_ord": 3.535
+   }
+  },
+  "G3_좌식외식형_0": {
+   "name": "규칙식사낮음·근력운동낮음",
+   "n": 1228,
+   "mean": {
+    "ML_smoker": 0.19,
+    "ML_cigarettes_day": 2.459,
+    "ML_drink_month": 0.638,
+    "ML_drink_freq_ord": 2.27,
+    "ML_drink_amount_ord": 2.37,
+    "ML_aerobic": 0.477,
+    "ML_strength_days": 0.137,
+    "ML_sedentary_min": 676.787,
+    "ML_sleep_hours": 7.804,
+    "ML_stress": 0.008,
+    "ML_breakfast_freq_ord": 0.791,
+    "ML_lunch_freq_ord": 2.762,
+    "ML_dinner_freq_ord": 2.782,
+    "ML_eatingout_freq_ord": 3.981
+   }
+  },
+  "G3_좌식외식형_1": {
+   "name": "규칙식사높음·근력운동낮음",
+   "n": 1137,
+   "mean": {
+    "ML_smoker": 0.156,
+    "ML_cigarettes_day": 2.068,
+    "ML_drink_month": 0.56,
+    "ML_drink_freq_ord": 2.036,
+    "ML_drink_amount_ord": 1.901,
+    "ML_aerobic": 0.529,
+    "ML_strength_days": 0.068,
+    "ML_sedentary_min": 674.617,
+    "ML_sleep_hours": 7.568,
+    "ML_stress": 0.024,
+    "ML_breakfast_freq_ord": 2.791,
+    "ML_lunch_freq_ord": 3.0,
+    "ML_dinner_freq_ord": 3.0,
+    "ML_eatingout_freq_ord": 4.264
+   }
+  },
+  "G3_좌식외식형_2": {
+   "name": "근력운동높음·규칙식사높음",
+   "n": 593,
+   "mean": {
+    "ML_smoker": 0.153,
+    "ML_cigarettes_day": 1.68,
+    "ML_drink_month": 0.675,
+    "ML_drink_freq_ord": 2.378,
+    "ML_drink_amount_ord": 2.445,
+    "ML_aerobic": 0.457,
+    "ML_strength_days": 3.088,
+    "ML_sedentary_min": 707.766,
+    "ML_sleep_hours": 7.766,
+    "ML_stress": 0.035,
+    "ML_breakfast_freq_ord": 1.953,
+    "ML_lunch_freq_ord": 2.901,
+    "ML_dinner_freq_ord": 2.953,
+    "ML_eatingout_freq_ord": 4.175
+   }
+  }
+ },
+ "metrics": {
+  "k": 4,
+  "silhouette_macro": 0.163,
+  "n_types": 12,
+  "reassign_match_type": 1.0
+ }
+}
