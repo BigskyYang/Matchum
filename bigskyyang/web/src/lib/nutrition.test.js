@@ -3,7 +3,7 @@ import { NUTRIENTS } from '../data/nutrients.js'
 import { visibleQuestions } from '../data/questions.js'
 import { encode } from './encode.js'
 import { SAMPLE } from './fixtures.js'
-import { lookupProfile, rankNutrients, supplementsFor } from './nutrition.js'
+import { ageGroup, lookupProfile, nutrientSignals, rankNutrients, supplementsFor } from './nutrition.js'
 
 // 결과표 형식 예시 (scripts/build_nutrient_profiles.py가 만드는 형식과 같다)
 const PROFILES = {
@@ -73,5 +73,50 @@ describe('선택 문항 (PHQ-9·대사건강)', () => {
     expect(optional.phqItem9).toBe(1)
     expect(optional.hypertension).toBe(true)
     expect(optional.diabetes).toBe(false)
+  })
+})
+
+describe('영양소 신호등', () => {
+  const CELLS = {
+    types: {
+      N2: {
+        2: {
+          '30-49': {
+            iron: { p: 0.57, vs: 1.35, tag: '유형특이' },
+            protein: { p: 0.34, vs: 1.36, tag: '' },
+            zinc: { p: 0.12, vs: 0.9, tag: '' },
+          },
+        },
+      },
+    },
+  }
+
+  it('나이를 결과표의 연령대로 나눈다', () => {
+    expect([19, 29, 30, 49, 50, 64, 65, 74, 75, 90].map(ageGroup)).toEqual([
+      '19-29', '19-29', '30-49', '30-49', '50-64', '50-64', '65-74', '65-74', '75+', '75+',
+    ])
+  })
+
+  it('내 유형·성별·연령대 칸을 찾아 부족 비율이 높은 순으로, 부족·주의·충분을 붙인다', () => {
+    const items = nutrientSignals(CELLS, 'N2', 2, 35)
+    expect(items.map((n) => [n.key, n.level.label])).toEqual([
+      ['iron', '부족'],
+      ['protein', '주의'],
+      ['zinc', '충분'],
+    ])
+    expect(items[0]).toMatchObject({ label: '철', basis: 'EAR', tag: '유형특이', of10: 6 })
+  })
+
+  it('단계는 화면에 보이는 10명 중 N명(반올림)으로 정한다', () => {
+    const cells = { types: { N2: { 2: { '30-49': { protein: { p: 0.29 }, zinc: { p: 0.24 } } } } } }
+    expect(nutrientSignals(cells, 'N2', 2, 35).map((n) => [n.of10, n.level.label])).toEqual([
+      [3, '주의'],
+      [2, '충분'],
+    ])
+  })
+
+  it('칸이 없으면 빈 목록', () => {
+    expect(nutrientSignals(CELLS, 'N2', 1, 35)).toEqual([])
+    expect(nutrientSignals(CELLS, 'O3', 2, 35)).toEqual([])
   })
 })

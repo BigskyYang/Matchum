@@ -8,14 +8,15 @@ import HabitSignals from '../components/result/HabitSignals.jsx'
 import MetabolicCard from '../components/result/MetabolicCard.jsx'
 import MindCard from '../components/result/MindCard.jsx'
 import MissionList from '../components/result/MissionList.jsx'
-import NutrientRisks from '../components/result/NutrientRisks.jsx'
+import NutrientSignals from '../components/result/NutrientSignals.jsx'
 import PartnerCard from '../components/result/PartnerCard.jsx'
+import nutrientCells from '../data/nutrientCells.json'
 import nutrientProfiles from '../data/nutrientProfiles.json'
 import { BALANCED_FOODS, pickTips } from '../data/tips.js'
 import { LEAF_TYPES, MAIN_TYPES } from '../data/types.js'
 import { MAIN_CODES, classify, mainProfile, toFeatures, typeOf } from '../lib/classify.js'
 import { encode } from '../lib/encode.js'
-import { lookupProfile, rankNutrients, supplementsFor } from '../lib/nutrition.js'
+import { ageGroup, lookupProfile, nutrientSignals, rankNutrients, supplementsFor } from '../lib/nutrition.js'
 import { SCORE_AXES, bestPartner, groupScores, hashtags, scores } from '../lib/profile.js'
 import { clearSurvey, loadSurvey } from '../lib/storage.js'
 
@@ -23,6 +24,7 @@ import { clearSurvey, loadSurvey } from '../lib/storage.js'
 const PENDING = '유형별 영양 분석 결과가 준비되면 이곳에 표시돼요.'
 const MAX_MISSIONS = 3
 const MAX_FOODS = 6
+const AGE_LABELS = { '19-29': '19~29세', '30-49': '30~49세', '50-64': '50~64세', '65-74': '65~74세', '75+': '75세 이상' }
 const SHIFT_MISSION = { icon: '🌙', title: '잠·식사 시간 지키기', detail: '근무가 바뀌어도 잠드는 시간과 식사 시간을 최대한 일정하게!' }
 
 function useResult() {
@@ -47,6 +49,8 @@ function useResult() {
     const partner = bestPartner(myScores, main, mainScores)
     const profile = lookupProfile(nutrientProfiles, leaf, main)
     const ranked = profile ? rankNutrients(profile) : []
+    // 영양소 신호등: 유환님 12유형 결과표 (유형 × 성별 × 연령대)
+    const signals = nutrientSignals(nutrientCells, leaf, extras.sex, extras.age)
     const optional = extras.optional
 
     return {
@@ -64,6 +68,9 @@ function useResult() {
       ),
       foods: (foods.length ? foods : BALANCED_FOODS).slice(0, MAX_FOODS),
       ranked,
+      signals,
+      sexLabel: extras.sex === 1 ? '남성' : '여성',
+      ageLabel: AGE_LABELS[ageGroup(extras.age)],
       supplements: supplementsFor(ranked),
       optional,
       hasCondition: Boolean(optional && (optional.hypertension || optional.diabetes || optional.dyslipidemia)),
@@ -124,8 +131,12 @@ export default function ResultPage() {
         <FoodGrid foods={r.foods} />
       </Card>
 
-      <Card title="내 유형이 챙겨야 할 영양소" icon="🥄">
-        {r.ranked.length ? <NutrientRisks ranked={r.ranked} /> : <p className="text-sm text-ink-faint">{PENDING}</p>}
+      <Card title="영양소 신호등" icon="🥄">
+        {r.signals.length ? (
+          <NutrientSignals items={r.signals} sexLabel={r.sexLabel} ageLabel={r.ageLabel} />
+        ) : (
+          <p className="text-sm text-ink-faint">{PENDING}</p>
+        )}
       </Card>
 
       <Card title="고려해 볼 수 있는 건강기능식품 원료" icon="💊">

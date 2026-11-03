@@ -4,6 +4,8 @@ import { existsSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import targets from '../../../../Jaejun/config/targets.json'
 import surveySchema from '../../../../Jaejun/config/survey_schema_v3.json'
+import nutrientCells from '../data/nutrientCells.json'
+import { NUTRIENT_GUIDE } from '../data/nutrientGuide.js'
 import nutrientProfiles from '../data/nutrientProfiles.json'
 import { BANDS, NUTRIENTS } from '../data/nutrients.js'
 import { QUESTIONS } from '../data/questions.js'
@@ -58,6 +60,30 @@ describe('유형별 영양소 결과표 (nutrientProfiles.json)', () => {
         expect(Object.keys(BANDS)).toContain(v.band)
         expect(v.rate).toBeGreaterThanOrEqual(0)
         expect(v.rate).toBeLessThanOrEqual(1)
+      }
+    }
+  })
+})
+
+describe('영양소 신호등 결과표 (nutrientCells.json, 유환님 12유형 결과)', () => {
+  it('지금 군집 모델과 같은 유형 ID를 쓴다', () => {
+    expect(Object.keys(nutrientCells.types).sort()).toEqual([...leafIds].sort())
+    expect(nutrientCells.source_types).toBe(model.version)
+  })
+
+  it('유형마다 성별 2 × 연령대 5칸이 있고, 칸마다 영양소 15개가 모두 있다', () => {
+    const keys = NUTRIENT_GUIDE.map((n) => n.key).sort()
+    for (const sexes of Object.values(nutrientCells.types)) {
+      expect(Object.keys(sexes).sort()).toEqual(['1', '2'])
+      for (const ages of Object.values(sexes)) {
+        expect(Object.keys(ages).sort()).toEqual(['19-29', '30-49', '50-64', '65-74', '75+'])
+        for (const cell of Object.values(ages)) {
+          expect(Object.keys(cell).sort()).toEqual(keys)
+          for (const v of Object.values(cell)) {
+            expect(v.p).toBeGreaterThanOrEqual(0)
+            expect(v.p).toBeLessThanOrEqual(1)
+          }
+        }
       }
     }
   })

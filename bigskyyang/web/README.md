@@ -49,8 +49,20 @@ python scripts/make_classify_fixtures.py   # 판정 테스트용 예시 응답 �
 - 유형 ID: 대분류 `N`(나무늘보)·`A`(갓생러)·`S`(예민보스)·`O`(워커홀릭) + 세부 번호 → `N1`~`O3`. 이름·설명은 `types.js`
 - 유형 비율·평균은 조사 가중치(wt_tot/3)를 쓴 값이다. 분석 과정과 검증은 `bigskyyang/analysis/군집화_결론.md`
 
+### 영양소 신호등 `src/data/nutrientCells.json`
+결과 화면의 '영양소 신호등'은 유환님 12유형 결과표에서 내 유형 × 성별 × 연령대 칸을 찾아 영양소 15개를 보여준다.
+칸마다 '같은 조건 사람 중 2025 KDRI 기준보다 적게 먹는 비율'로 부족(10명 중 5명 이상)·주의(3~4명)·충분(0~2명)을 나눈다 (기준은 `src/data/nutrientGuide.js`).
+영양소를 누르면 역할·대표 음식 카드가 나온다. 유환님 분석이 바뀌면:
+
+```bash
+python scripts/build_nutrient_cells.py
+```
+
+- 입력: `Yuhwan/영양분석/output/08_유형별_부족영양소_추천.json` (유환님 v8, 아직 작업 중이라 임시로 연결)
+- 영양소 이름·역할·대표 음식: `src/data/nutrientGuide.js` (역할 문구에 질병 예방·치료 효과를 쓰지 않는다)
+
 ### 유형별 영양소 결과표 `src/data/nutrientProfiles.json`
-결과 화면의 '내 유형이 챙겨야 할 영양소'와 '건강기능식품 원료'는 이 표에서 내 유형의 값을 찾아 보여준다.
+결과 화면의 '건강기능식품 원료'는 이 표에서 내 유형의 값을 찾아 보여준다.
 표가 비어 있으면 "결과가 준비되면 표시돼요"가 나온다.
 
 ```bash
@@ -66,7 +78,7 @@ python scripts/build_nutrient_profiles.py --nutrients <개인별 영양소 CSV>
 다음이 어긋나면 테스트가 실패하고 무엇이 다른지 보여준다.
 - 군집 모델의 유형 ↔ `types.js`의 유형 이름·설명 ↔ 유형별 마스코트 그림
 - `src/data/nutrients.js`의 영양소 14종 ↔ `Jaejun/config/targets.json`
-- 영양소 결과표의 유형·영양소·등급
+- 영양소 결과표의 유형·영양소·등급, 영양소 신호등 결과표의 유형·칸·영양소
 - 웹 설문 문항 ↔ `Jaejun/config/survey_schema_v3.json` (문항이 추가되거나 보기 개수가 바뀌면 실패)
 
 ## 이미지 (`bigskyyang` 폴더에서)
