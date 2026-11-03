@@ -1,0 +1,7220 @@
+{
+ "version": "yuhwan-12types-screen-B-v1",
+ "source_types": "nbti-12types-v2",
+ "규칙": {
+  "line1": "공통주의 8개 (전체 부족률 50% 이상) 항상 표시",
+  "line2": "공통 외: 부족 확률 ≥ 0.5 또는 (같은 성별·나이 대비 1.2배 이상 그리고 부족 확률 ≥ 0.3)"
+ },
+ "설명": "같은 유형·성별·연령대 사람 중 2025 KDRI 기준 미만인 비율(조사 가중). 음식만(영양제 미포함), 하루 24시간 회상 기준. 개인 진단이나 영양제 추천이 아니며, 질환이 있으면 전문가와 상담하세요.",
+ "empty_line2_text": "공통 영양소 외에 특히 더 부족한 영양소는 없어요",
+ "검증_2024": {
+  "항목수": 163,
+  "관측기대비": 1.087,
+  "CI": [
+   1.056,
+   1.121
+  ]
+ },
+ "types": {
+  "N1": {
+   "name": "집밥 규칙형",
+   "macro": "비활동형",
+   "cells": {
+    "남자": {
+     "19-29": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 7
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.602,
+        "of10": 6,
+        "same_sex_age_of10": 6,
+        "ratio": 0.93,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "30-49": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 5
+       }
+      ],
+      "line2": []
+     },
+     "50-64": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 6
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 4
+       }
+      ],
+      "line2": []
+     },
+     "65-74": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 6
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 4
+       }
+      ],
+      "line2": []
+     },
+     "75+": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 5
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "단백질",
+        "basis": "EAR",
+        "p": 0.384,
+        "of10": 4,
+        "same_sex_age_of10": 3,
+        "ratio": 1.2,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.521,
+        "of10": 5,
+        "same_sex_age_of10": 5,
+        "ratio": 1.04,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     }
+    },
+    "여자": {
+     "19-29": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 7
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "철",
+        "basis": "EAR",
+        "p": 0.518,
+        "of10": 5,
+        "same_sex_age_of10": 5,
+        "ratio": 1.04,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.543,
+        "of10": 5,
+        "same_sex_age_of10": 5,
+        "ratio": 1.01,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.591,
+        "of10": 6,
+        "same_sex_age_of10": 6,
+        "ratio": 0.91,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "30-49": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 6
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.531,
+        "of10": 5,
+        "same_sex_age_of10": 5,
+        "ratio": 1.0,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "50-64": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 6
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 5
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.558,
+        "of10": 6,
+        "same_sex_age_of10": 5,
+        "ratio": 1.02,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "65-74": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 5
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 5
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.534,
+        "of10": 5,
+        "same_sex_age_of10": 5,
+        "ratio": 1.03,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "75+": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 6
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.51,
+        "of10": 5,
+        "same_sex_age_of10": 5,
+        "ratio": 1.01,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.566,
+        "of10": 6,
+        "same_sex_age_of10": 6,
+        "ratio": 1.01,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     }
+    }
+   }
+  },
+  "N2": {
+   "name": "끼니 거르는 형",
+   "macro": "비활동형",
+   "cells": {
+    "남자": {
+     "19-29": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 7
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "철",
+        "basis": "EAR",
+        "p": 0.577,
+        "of10": 6,
+        "same_sex_age_of10": 3,
+        "ratio": 1.95,
+        "tag": "유형특이",
+        "tag_text": "이 유형에서 특히 많아요"
+       },
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.463,
+        "of10": 5,
+        "same_sex_age_of10": 4,
+        "ratio": 1.22,
+        "tag": "식사량영향",
+        "tag_text": "식사량 점검이 먼저예요"
+       },
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.735,
+        "of10": 7,
+        "same_sex_age_of10": 6,
+        "ratio": 1.14,
+        "tag": "식사량영향",
+        "tag_text": "식사량 점검이 먼저예요"
+       }
+      ]
+     },
+     "30-49": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 6
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "아연",
+        "basis": "EAR",
+        "p": 0.365,
+        "of10": 4,
+        "same_sex_age_of10": 3,
+        "ratio": 1.28,
+        "tag": "식사량영향",
+        "tag_text": "식사량 점검이 먼저예요"
+       },
+       {
+        "nutrient": "철",
+        "basis": "EAR",
+        "p": 0.305,
+        "of10": 3,
+        "same_sex_age_of10": 2,
+        "ratio": 1.27,
+        "tag": "유형특이",
+        "tag_text": "이 유형에서 특히 많아요"
+       },
+       {
+        "nutrient": "리보플라빈",
+        "basis": "EAR",
+        "p": 0.317,
+        "of10": 3,
+        "same_sex_age_of10": 3,
+        "ratio": 1.23,
+        "tag": "식사량영향",
+        "tag_text": "식사량 점검이 먼저예요"
+       },
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.642,
+        "of10": 6,
+        "same_sex_age_of10": 5,
+        "ratio": 1.22,
+        "tag": "식사량영향",
+        "tag_text": "식사량 점검이 먼저예요"
+       },
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.451,
+        "of10": 5,
+        "same_sex_age_of10": 4,
+        "ratio": 1.21,
+        "tag": "식사량영향",
+        "tag_text": "식사량 점검이 먼저예요"
+       }
+      ]
+     },
+     "50-64": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 5
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.545,
+        "of10": 5,
+        "same_sex_age_of10": 4,
+        "ratio": 1.36,
+        "tag": "식사량영향",
+        "tag_text": "식사량 점검이 먼저예요"
+       },
+       {
+        "nutrient": "리보플라빈",
+        "basis": "EAR",
+        "p": 0.355,
+        "of10": 4,
+        "same_sex_age_of10": 3,
+        "ratio": 1.23,
+        "tag": "식사량영향",
+        "tag_text": "식사량 점검이 먼저예요"
+       },
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.478,
+        "of10": 5,
+        "same_sex_age_of10": 4,
+        "ratio": 1.23,
+        "tag": "식사량영향",
+        "tag_text": "식사량 점검이 먼저예요"
+       }
+      ]
+     },
+     "65-74": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 5
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "아연",
+        "basis": "EAR",
+        "p": 0.304,
+        "of10": 3,
+        "same_sex_age_of10": 2,
+        "ratio": 1.61,
+        "tag": "식사량영향",
+        "tag_text": "식사량 점검이 먼저예요"
+       },
+       {
+        "nutrient": "단백질",
+        "basis": "EAR",
+        "p": 0.334,
+        "of10": 3,
+        "same_sex_age_of10": 2,
+        "ratio": 1.55,
+        "tag": "식사량영향",
+        "tag_text": "식사량 점검이 먼저예요"
+       },
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.546,
+        "of10": 5,
+        "same_sex_age_of10": 4,
+        "ratio": 1.46,
+        "tag": "식사량영향",
+        "tag_text": "식사량 점검이 먼저예요"
+       },
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.454,
+        "of10": 5,
+        "same_sex_age_of10": 4,
+        "ratio": 1.26,
+        "tag": "식사량영향",
+        "tag_text": "식사량 점검이 먼저예요"
+       }
+      ]
+     },
+     "75+": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 6
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "아연",
+        "basis": "EAR",
+        "p": 0.341,
+        "of10": 3,
+        "same_sex_age_of10": 2,
+        "ratio": 1.59,
+        "tag": "식사량영향",
+        "tag_text": "식사량 점검이 먼저예요"
+       },
+       {
+        "nutrient": "단백질",
+        "basis": "EAR",
+        "p": 0.448,
+        "of10": 4,
+        "same_sex_age_of10": 3,
+        "ratio": 1.4,
+        "tag": "식사량영향",
+        "tag_text": "식사량 점검이 먼저예요"
+       },
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.666,
+        "of10": 7,
+        "same_sex_age_of10": 5,
+        "ratio": 1.33,
+        "tag": "식사량영향",
+        "tag_text": "식사량 점검이 먼저예요"
+       },
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.487,
+        "of10": 5,
+        "same_sex_age_of10": 4,
+        "ratio": 1.21,
+        "tag": "식사량영향",
+        "tag_text": "식사량 점검이 먼저예요"
+       }
+      ]
+     }
+    },
+    "여자": {
+     "19-29": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 9
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 8
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "철",
+        "basis": "EAR",
+        "p": 0.748,
+        "of10": 7,
+        "same_sex_age_of10": 5,
+        "ratio": 1.51,
+        "tag": "유형특이",
+        "tag_text": "이 유형에서 특히 많아요"
+       },
+       {
+        "nutrient": "단백질",
+        "basis": "EAR",
+        "p": 0.36,
+        "of10": 4,
+        "same_sex_age_of10": 3,
+        "ratio": 1.32,
+        "tag": "식사량영향",
+        "tag_text": "식사량 점검이 먼저예요"
+       },
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.727,
+        "of10": 7,
+        "same_sex_age_of10": 6,
+        "ratio": 1.12,
+        "tag": "식사량영향",
+        "tag_text": "식사량 점검이 먼저예요"
+       },
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.597,
+        "of10": 6,
+        "same_sex_age_of10": 5,
+        "ratio": 1.11,
+        "tag": "식사량영향",
+        "tag_text": "식사량 점검이 먼저예요"
+       }
+      ]
+     },
+     "30-49": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "철",
+        "basis": "EAR",
+        "p": 0.573,
+        "of10": 6,
+        "same_sex_age_of10": 4,
+        "ratio": 1.35,
+        "tag": "유형특이",
+        "tag_text": "이 유형에서 특히 많아요"
+       },
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.632,
+        "of10": 6,
+        "same_sex_age_of10": 5,
+        "ratio": 1.19,
+        "tag": "식사량영향",
+        "tag_text": "식사량 점검이 먼저예요"
+       },
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.585,
+        "of10": 6,
+        "same_sex_age_of10": 5,
+        "ratio": 1.1,
+        "tag": "식사량영향",
+        "tag_text": "식사량 점검이 먼저예요"
+       }
+      ]
+     },
+     "50-64": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 6
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "단백질",
+        "basis": "EAR",
+        "p": 0.346,
+        "of10": 3,
+        "same_sex_age_of10": 2,
+        "ratio": 1.42,
+        "tag": "식사량영향",
+        "tag_text": "식사량 점검이 먼저예요"
+       },
+       {
+        "nutrient": "아연",
+        "basis": "EAR",
+        "p": 0.351,
+        "of10": 4,
+        "same_sex_age_of10": 3,
+        "ratio": 1.33,
+        "tag": "식사량영향",
+        "tag_text": "식사량 점검이 먼저예요"
+       },
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.535,
+        "of10": 5,
+        "same_sex_age_of10": 4,
+        "ratio": 1.32,
+        "tag": "식사량영향",
+        "tag_text": "식사량 점검이 먼저예요"
+       },
+       {
+        "nutrient": "철",
+        "basis": "EAR",
+        "p": 0.327,
+        "of10": 3,
+        "same_sex_age_of10": 3,
+        "ratio": 1.27,
+        "tag": "유형특이",
+        "tag_text": "이 유형에서 특히 많아요"
+       },
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.611,
+        "of10": 6,
+        "same_sex_age_of10": 5,
+        "ratio": 1.11,
+        "tag": "식사량영향",
+        "tag_text": "식사량 점검이 먼저예요"
+       }
+      ]
+     },
+     "65-74": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 6
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "아연",
+        "basis": "EAR",
+        "p": 0.369,
+        "of10": 4,
+        "same_sex_age_of10": 3,
+        "ratio": 1.45,
+        "tag": "식사량영향",
+        "tag_text": "식사량 점검이 먼저예요"
+       },
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.535,
+        "of10": 5,
+        "same_sex_age_of10": 4,
+        "ratio": 1.41,
+        "tag": "식사량영향",
+        "tag_text": "식사량 점검이 먼저예요"
+       },
+       {
+        "nutrient": "단백질",
+        "basis": "EAR",
+        "p": 0.419,
+        "of10": 4,
+        "same_sex_age_of10": 3,
+        "ratio": 1.38,
+        "tag": "식사량영향",
+        "tag_text": "식사량 점검이 먼저예요"
+       },
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.588,
+        "of10": 6,
+        "same_sex_age_of10": 5,
+        "ratio": 1.14,
+        "tag": "식사량영향",
+        "tag_text": "식사량 점검이 먼저예요"
+       }
+      ]
+     },
+     "75+": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 7
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "아연",
+        "basis": "EAR",
+        "p": 0.409,
+        "of10": 4,
+        "same_sex_age_of10": 3,
+        "ratio": 1.42,
+        "tag": "식사량영향",
+        "tag_text": "식사량 점검이 먼저예요"
+       },
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.656,
+        "of10": 7,
+        "same_sex_age_of10": 5,
+        "ratio": 1.3,
+        "tag": "식사량영향",
+        "tag_text": "식사량 점검이 먼저예요"
+       },
+       {
+        "nutrient": "단백질",
+        "basis": "EAR",
+        "p": 0.538,
+        "of10": 5,
+        "same_sex_age_of10": 4,
+        "ratio": 1.26,
+        "tag": "식사량영향",
+        "tag_text": "식사량 점검이 먼저예요"
+       },
+       {
+        "nutrient": "철",
+        "basis": "EAR",
+        "p": 0.335,
+        "of10": 3,
+        "same_sex_age_of10": 3,
+        "ratio": 1.23,
+        "tag": "유형특이",
+        "tag_text": "이 유형에서 특히 많아요"
+       },
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.619,
+        "of10": 6,
+        "same_sex_age_of10": 6,
+        "ratio": 1.1,
+        "tag": "식사량영향",
+        "tag_text": "식사량 점검이 먼저예요"
+       }
+      ]
+     }
+    }
+   }
+  },
+  "N3": {
+   "name": "규칙식사 저활동형",
+   "macro": "비활동형",
+   "cells": {
+    "남자": {
+     "19-29": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 6
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.558,
+        "of10": 6,
+        "same_sex_age_of10": 6,
+        "ratio": 0.87,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "30-49": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 5
+       }
+      ],
+      "line2": []
+     },
+     "50-64": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 6
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 6
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 4
+       }
+      ],
+      "line2": []
+     },
+     "65-74": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 5
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 4
+       }
+      ],
+      "line2": []
+     },
+     "75+": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 6
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 5
+       }
+      ],
+      "line2": []
+     }
+    },
+    "여자": {
+     "19-29": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "철",
+        "basis": "EAR",
+        "p": 0.529,
+        "of10": 5,
+        "same_sex_age_of10": 5,
+        "ratio": 1.07,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.547,
+        "of10": 5,
+        "same_sex_age_of10": 6,
+        "ratio": 0.84,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "30-49": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 6
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 6
+       }
+      ],
+      "line2": []
+     },
+     "50-64": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 5
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 5
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.507,
+        "of10": 5,
+        "same_sex_age_of10": 5,
+        "ratio": 0.92,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "65-74": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 5
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 5
+       }
+      ],
+      "line2": []
+     },
+     "75+": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 6
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 6
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.515,
+        "of10": 5,
+        "same_sex_age_of10": 6,
+        "ratio": 0.92,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     }
+    }
+   }
+  },
+  "A1": {
+   "name": "유산소 활동형",
+   "macro": "운동형",
+   "cells": {
+    "남자": {
+     "19-29": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 6
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.567,
+        "of10": 6,
+        "same_sex_age_of10": 6,
+        "ratio": 0.88,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "30-49": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 6
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 5
+       }
+      ],
+      "line2": []
+     },
+     "50-64": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 6
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 4
+       }
+      ],
+      "line2": []
+     },
+     "65-74": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 5
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 4
+       }
+      ],
+      "line2": []
+     },
+     "75+": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 6
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 5
+       }
+      ],
+      "line2": []
+     }
+    },
+    "여자": {
+     "19-29": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 7
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "철",
+        "basis": "EAR",
+        "p": 0.517,
+        "of10": 5,
+        "same_sex_age_of10": 5,
+        "ratio": 1.04,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.514,
+        "of10": 5,
+        "same_sex_age_of10": 5,
+        "ratio": 0.95,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.556,
+        "of10": 6,
+        "same_sex_age_of10": 6,
+        "ratio": 0.86,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "30-49": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 6
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 6
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.502,
+        "of10": 5,
+        "same_sex_age_of10": 5,
+        "ratio": 0.95,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "50-64": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 5
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 5
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.529,
+        "of10": 5,
+        "same_sex_age_of10": 5,
+        "ratio": 0.96,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "65-74": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 5
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 4
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.505,
+        "of10": 5,
+        "same_sex_age_of10": 5,
+        "ratio": 0.98,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "75+": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 6
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 5
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.538,
+        "of10": 5,
+        "same_sex_age_of10": 6,
+        "ratio": 0.96,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     }
+    }
+   }
+  },
+  "A2": {
+   "name": "운동은 열심, 끼니는 불규칙형",
+   "macro": "운동형",
+   "cells": {
+    "남자": {
+     "19-29": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 7
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.668,
+        "of10": 7,
+        "same_sex_age_of10": 6,
+        "ratio": 1.04,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "30-49": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 6
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.565,
+        "of10": 6,
+        "same_sex_age_of10": 5,
+        "ratio": 1.07,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "50-64": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 6
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 4
+       }
+      ],
+      "line2": []
+     },
+     "65-74": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 6
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 4
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.466,
+        "of10": 5,
+        "same_sex_age_of10": 4,
+        "ratio": 1.24,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "75+": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 6
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "아연",
+        "basis": "EAR",
+        "p": 0.316,
+        "of10": 3,
+        "same_sex_age_of10": 2,
+        "ratio": 1.47,
+        "tag": "식사량영향",
+        "tag_text": "식사량 점검이 먼저예요"
+       },
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.591,
+        "of10": 6,
+        "same_sex_age_of10": 5,
+        "ratio": 1.18,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     }
+    },
+    "여자": {
+     "19-29": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "철",
+        "basis": "EAR",
+        "p": 0.57,
+        "of10": 6,
+        "same_sex_age_of10": 5,
+        "ratio": 1.15,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.659,
+        "of10": 7,
+        "same_sex_age_of10": 6,
+        "ratio": 1.01,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.54,
+        "of10": 5,
+        "same_sex_age_of10": 5,
+        "ratio": 1.0,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "30-49": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 6
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "철",
+        "basis": "EAR",
+        "p": 0.508,
+        "of10": 5,
+        "same_sex_age_of10": 4,
+        "ratio": 1.2,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.555,
+        "of10": 6,
+        "same_sex_age_of10": 5,
+        "ratio": 1.04,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.528,
+        "of10": 5,
+        "same_sex_age_of10": 5,
+        "ratio": 0.99,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "50-64": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 6
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 6
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "아연",
+        "basis": "EAR",
+        "p": 0.326,
+        "of10": 3,
+        "same_sex_age_of10": 3,
+        "ratio": 1.23,
+        "tag": "식사량영향",
+        "tag_text": "식사량 점검이 먼저예요"
+       },
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.555,
+        "of10": 6,
+        "same_sex_age_of10": 5,
+        "ratio": 1.01,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "65-74": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 6
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 5
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "아연",
+        "basis": "EAR",
+        "p": 0.343,
+        "of10": 3,
+        "same_sex_age_of10": 3,
+        "ratio": 1.34,
+        "tag": "식사량영향",
+        "tag_text": "식사량 점검이 먼저예요"
+       },
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.531,
+        "of10": 5,
+        "same_sex_age_of10": 5,
+        "ratio": 1.03,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "75+": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 6
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "아연",
+        "basis": "EAR",
+        "p": 0.382,
+        "of10": 4,
+        "same_sex_age_of10": 3,
+        "ratio": 1.33,
+        "tag": "식사량영향",
+        "tag_text": "식사량 점검이 먼저예요"
+       },
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.581,
+        "of10": 6,
+        "same_sex_age_of10": 5,
+        "ratio": 1.15,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.563,
+        "of10": 6,
+        "same_sex_age_of10": 6,
+        "ratio": 1.0,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     }
+    }
+   }
+  },
+  "A3": {
+   "name": "운동·식사 균형형",
+   "macro": "운동형",
+   "cells": {
+    "남자": {
+     "19-29": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 5
+       }
+      ],
+      "line2": []
+     },
+     "30-49": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 6
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 6
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 6
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 4
+       }
+      ],
+      "line2": []
+     },
+     "50-64": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 6
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 6
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 6
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 5
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 3
+       }
+      ],
+      "line2": []
+     },
+     "65-74": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 6
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 6
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 4
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 3
+       }
+      ],
+      "line2": []
+     },
+     "75+": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 5
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 4
+       }
+      ],
+      "line2": []
+     }
+    },
+    "여자": {
+     "19-29": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 6
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 6
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 6
+       }
+      ],
+      "line2": []
+     },
+     "30-49": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 6
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 6
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 6
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 6
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 5
+       }
+      ],
+      "line2": []
+     },
+     "50-64": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 6
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 6
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 6
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 4
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 4
+       }
+      ],
+      "line2": []
+     },
+     "65-74": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 6
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 6
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 6
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 4
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 4
+       }
+      ],
+      "line2": []
+     },
+     "75+": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 5
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 5
+       }
+      ],
+      "line2": []
+     }
+    }
+   }
+  },
+  "S1": {
+   "name": "스트레스·운동 부족형",
+   "macro": "고스트레스형",
+   "cells": {
+    "남자": {
+     "19-29": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 8
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "철",
+        "basis": "EAR",
+        "p": 0.383,
+        "of10": 4,
+        "same_sex_age_of10": 3,
+        "ratio": 1.29,
+        "tag": "식사량영향",
+        "tag_text": "식사량 점검이 먼저예요"
+       },
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.684,
+        "of10": 7,
+        "same_sex_age_of10": 6,
+        "ratio": 1.06,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "30-49": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 7
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.583,
+        "of10": 6,
+        "same_sex_age_of10": 5,
+        "ratio": 1.11,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "50-64": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 5
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.484,
+        "of10": 5,
+        "same_sex_age_of10": 4,
+        "ratio": 1.21,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "65-74": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 6
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 5
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.484,
+        "of10": 5,
+        "same_sex_age_of10": 4,
+        "ratio": 1.29,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "75+": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 6
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "아연",
+        "basis": "EAR",
+        "p": 0.301,
+        "of10": 3,
+        "same_sex_age_of10": 2,
+        "ratio": 1.4,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.609,
+        "of10": 6,
+        "same_sex_age_of10": 5,
+        "ratio": 1.22,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     }
+    },
+    "여자": {
+     "19-29": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 9
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "철",
+        "basis": "EAR",
+        "p": 0.627,
+        "of10": 6,
+        "same_sex_age_of10": 5,
+        "ratio": 1.26,
+        "tag": "식사량영향",
+        "tag_text": "식사량 점검이 먼저예요"
+       },
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.675,
+        "of10": 7,
+        "same_sex_age_of10": 6,
+        "ratio": 1.04,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.554,
+        "of10": 6,
+        "same_sex_age_of10": 5,
+        "ratio": 1.03,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "30-49": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 7
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "철",
+        "basis": "EAR",
+        "p": 0.524,
+        "of10": 5,
+        "same_sex_age_of10": 4,
+        "ratio": 1.24,
+        "tag": "식사량영향",
+        "tag_text": "식사량 점검이 먼저예요"
+       },
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.572,
+        "of10": 6,
+        "same_sex_age_of10": 5,
+        "ratio": 1.08,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.542,
+        "of10": 5,
+        "same_sex_age_of10": 5,
+        "ratio": 1.02,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "50-64": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 6
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.569,
+        "of10": 6,
+        "same_sex_age_of10": 5,
+        "ratio": 1.03,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "65-74": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 6
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "아연",
+        "basis": "EAR",
+        "p": 0.327,
+        "of10": 3,
+        "same_sex_age_of10": 3,
+        "ratio": 1.28,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.473,
+        "of10": 5,
+        "same_sex_age_of10": 4,
+        "ratio": 1.24,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.545,
+        "of10": 5,
+        "same_sex_age_of10": 5,
+        "ratio": 1.05,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "75+": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 7
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "아연",
+        "basis": "EAR",
+        "p": 0.366,
+        "of10": 4,
+        "same_sex_age_of10": 3,
+        "ratio": 1.27,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.598,
+        "of10": 6,
+        "same_sex_age_of10": 5,
+        "ratio": 1.18,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.577,
+        "of10": 6,
+        "same_sex_age_of10": 6,
+        "ratio": 1.02,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     }
+    }
+   }
+  },
+  "S2": {
+   "name": "스트레스 유산소형",
+   "macro": "고스트레스형",
+   "cells": {
+    "남자": {
+     "19-29": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 7
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.656,
+        "of10": 7,
+        "same_sex_age_of10": 6,
+        "ratio": 1.02,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "30-49": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 6
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.551,
+        "of10": 6,
+        "same_sex_age_of10": 5,
+        "ratio": 1.05,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "50-64": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 6
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 4
+       }
+      ],
+      "line2": []
+     },
+     "65-74": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 6
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 4
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.452,
+        "of10": 5,
+        "same_sex_age_of10": 4,
+        "ratio": 1.21,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "75+": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 5
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.578,
+        "of10": 6,
+        "same_sex_age_of10": 5,
+        "ratio": 1.16,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     }
+    },
+    "여자": {
+     "19-29": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "철",
+        "basis": "EAR",
+        "p": 0.518,
+        "of10": 5,
+        "same_sex_age_of10": 5,
+        "ratio": 1.05,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.55,
+        "of10": 6,
+        "same_sex_age_of10": 5,
+        "ratio": 1.02,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.646,
+        "of10": 6,
+        "same_sex_age_of10": 6,
+        "ratio": 0.99,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "30-49": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 6
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "철",
+        "basis": "EAR",
+        "p": 0.514,
+        "of10": 5,
+        "same_sex_age_of10": 4,
+        "ratio": 1.21,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.541,
+        "of10": 5,
+        "same_sex_age_of10": 5,
+        "ratio": 1.02,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.538,
+        "of10": 5,
+        "same_sex_age_of10": 5,
+        "ratio": 1.01,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "50-64": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 6
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 6
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.565,
+        "of10": 6,
+        "same_sex_age_of10": 5,
+        "ratio": 1.03,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "65-74": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 6
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 5
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "아연",
+        "basis": "EAR",
+        "p": 0.317,
+        "of10": 3,
+        "same_sex_age_of10": 3,
+        "ratio": 1.24,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.541,
+        "of10": 5,
+        "same_sex_age_of10": 5,
+        "ratio": 1.05,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "75+": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 6
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "아연",
+        "basis": "EAR",
+        "p": 0.355,
+        "of10": 4,
+        "same_sex_age_of10": 3,
+        "ratio": 1.23,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.567,
+        "of10": 6,
+        "same_sex_age_of10": 5,
+        "ratio": 1.12,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.573,
+        "of10": 6,
+        "same_sex_age_of10": 6,
+        "ratio": 1.02,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     }
+    }
+   }
+  },
+  "S3": {
+   "name": "스트레스 근력운동형",
+   "macro": "고스트레스형",
+   "cells": {
+    "남자": {
+     "19-29": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.651,
+        "of10": 7,
+        "same_sex_age_of10": 6,
+        "ratio": 1.01,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "30-49": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 6
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.547,
+        "of10": 5,
+        "same_sex_age_of10": 5,
+        "ratio": 1.04,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "50-64": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 5
+       }
+      ],
+      "line2": []
+     },
+     "65-74": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 6
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 5
+       }
+      ],
+      "line2": []
+     },
+     "75+": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 6
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.573,
+        "of10": 6,
+        "same_sex_age_of10": 5,
+        "ratio": 1.15,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     }
+    },
+    "여자": {
+     "19-29": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.553,
+        "of10": 6,
+        "same_sex_age_of10": 5,
+        "ratio": 1.02,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.641,
+        "of10": 6,
+        "same_sex_age_of10": 6,
+        "ratio": 0.99,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "30-49": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 6
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "철",
+        "basis": "EAR",
+        "p": 0.513,
+        "of10": 5,
+        "same_sex_age_of10": 4,
+        "ratio": 1.21,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.541,
+        "of10": 5,
+        "same_sex_age_of10": 5,
+        "ratio": 1.02,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.536,
+        "of10": 5,
+        "same_sex_age_of10": 5,
+        "ratio": 1.01,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "50-64": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 6
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 6
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.568,
+        "of10": 6,
+        "same_sex_age_of10": 5,
+        "ratio": 1.03,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "65-74": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 6
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 5
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "아연",
+        "basis": "EAR",
+        "p": 0.316,
+        "of10": 3,
+        "same_sex_age_of10": 3,
+        "ratio": 1.24,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.544,
+        "of10": 5,
+        "same_sex_age_of10": 5,
+        "ratio": 1.05,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "75+": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 6
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "아연",
+        "basis": "EAR",
+        "p": 0.354,
+        "of10": 4,
+        "same_sex_age_of10": 3,
+        "ratio": 1.23,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.562,
+        "of10": 6,
+        "same_sex_age_of10": 5,
+        "ratio": 1.11,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.576,
+        "of10": 6,
+        "same_sex_age_of10": 6,
+        "ratio": 1.02,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     }
+    }
+   }
+  },
+  "O1": {
+   "name": "외식 잦은 끼니 거름형",
+   "macro": "좌식·외식형",
+   "cells": {
+    "남자": {
+     "19-29": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 8
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.7,
+        "of10": 7,
+        "same_sex_age_of10": 6,
+        "ratio": 1.09,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "30-49": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 7
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.601,
+        "of10": 6,
+        "same_sex_age_of10": 5,
+        "ratio": 1.14,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "50-64": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 5
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.502,
+        "of10": 5,
+        "same_sex_age_of10": 4,
+        "ratio": 1.26,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "65-74": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 5
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.502,
+        "of10": 5,
+        "same_sex_age_of10": 4,
+        "ratio": 1.34,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "75+": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 6
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "아연",
+        "basis": "EAR",
+        "p": 0.304,
+        "of10": 3,
+        "same_sex_age_of10": 2,
+        "ratio": 1.41,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.626,
+        "of10": 6,
+        "same_sex_age_of10": 5,
+        "ratio": 1.25,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     }
+    },
+    "여자": {
+     "19-29": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 9
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 8
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "철",
+        "basis": "EAR",
+        "p": 0.561,
+        "of10": 6,
+        "same_sex_age_of10": 5,
+        "ratio": 1.13,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.69,
+        "of10": 7,
+        "same_sex_age_of10": 6,
+        "ratio": 1.06,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.531,
+        "of10": 5,
+        "same_sex_age_of10": 5,
+        "ratio": 0.98,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "30-49": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "철",
+        "basis": "EAR",
+        "p": 0.549,
+        "of10": 5,
+        "same_sex_age_of10": 4,
+        "ratio": 1.3,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.59,
+        "of10": 6,
+        "same_sex_age_of10": 5,
+        "ratio": 1.11,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.519,
+        "of10": 5,
+        "same_sex_age_of10": 5,
+        "ratio": 0.98,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "50-64": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 7
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.491,
+        "of10": 5,
+        "same_sex_age_of10": 4,
+        "ratio": 1.21,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.546,
+        "of10": 5,
+        "same_sex_age_of10": 5,
+        "ratio": 0.99,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "65-74": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 6
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "아연",
+        "basis": "EAR",
+        "p": 0.33,
+        "of10": 3,
+        "same_sex_age_of10": 3,
+        "ratio": 1.3,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.491,
+        "of10": 5,
+        "same_sex_age_of10": 4,
+        "ratio": 1.29,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.522,
+        "of10": 5,
+        "same_sex_age_of10": 5,
+        "ratio": 1.01,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "75+": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 7
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "아연",
+        "basis": "EAR",
+        "p": 0.369,
+        "of10": 4,
+        "same_sex_age_of10": 3,
+        "ratio": 1.28,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.616,
+        "of10": 6,
+        "same_sex_age_of10": 5,
+        "ratio": 1.22,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.554,
+        "of10": 6,
+        "same_sex_age_of10": 6,
+        "ratio": 0.98,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     }
+    }
+   }
+  },
+  "O2": {
+   "name": "외식 잦은 규칙식사형",
+   "macro": "좌식·외식형",
+   "cells": {
+    "남자": {
+     "19-29": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 6
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.554,
+        "of10": 6,
+        "same_sex_age_of10": 6,
+        "ratio": 0.86,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "30-49": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 6
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 6
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 5
+       }
+      ],
+      "line2": []
+     },
+     "50-64": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 6
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 6
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 6
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 3
+       }
+      ],
+      "line2": []
+     },
+     "65-74": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 6
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 5
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 3
+       }
+      ],
+      "line2": []
+     },
+     "75+": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 6
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 4
+       }
+      ],
+      "line2": []
+     }
+    },
+    "여자": {
+     "19-29": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 7
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.544,
+        "of10": 5,
+        "same_sex_age_of10": 6,
+        "ratio": 0.84,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "30-49": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 6
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 6
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 6
+       }
+      ],
+      "line2": []
+     },
+     "50-64": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 6
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 5
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 5
+       }
+      ],
+      "line2": []
+     },
+     "65-74": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 5
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 4
+       }
+      ],
+      "line2": []
+     },
+     "75+": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 6
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 5
+       }
+      ],
+      "line2": []
+     }
+    }
+   }
+  },
+  "O3": {
+   "name": "외식 잦은 근력운동형",
+   "macro": "좌식·외식형",
+   "cells": {
+    "남자": {
+     "19-29": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 7
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.588,
+        "of10": 6,
+        "same_sex_age_of10": 6,
+        "ratio": 0.91,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "30-49": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 6
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 6
+       }
+      ],
+      "line2": []
+     },
+     "50-64": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 6
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 6
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 4
+       }
+      ],
+      "line2": []
+     },
+     "65-74": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 6
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 4
+       }
+      ],
+      "line2": []
+     },
+     "75+": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 5
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.507,
+        "of10": 5,
+        "same_sex_age_of10": 5,
+        "ratio": 1.01,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     }
+    },
+    "여자": {
+     "19-29": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "철",
+        "basis": "EAR",
+        "p": 0.515,
+        "of10": 5,
+        "same_sex_age_of10": 5,
+        "ratio": 1.04,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       },
+       {
+        "nutrient": "마그네슘",
+        "basis": "EAR",
+        "p": 0.578,
+        "of10": 6,
+        "same_sex_age_of10": 6,
+        "ratio": 0.89,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "30-49": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 6
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 6
+       }
+      ],
+      "line2": []
+     },
+     "50-64": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 6
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 5
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.507,
+        "of10": 5,
+        "same_sex_age_of10": 5,
+        "ratio": 0.92,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     },
+     "65-74": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 6
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 5
+       }
+      ],
+      "line2": []
+     },
+     "75+": {
+      "line1": [
+       {
+        "nutrient": "비타민D",
+        "basis": "AI",
+        "of10": 10
+       },
+       {
+        "nutrient": "비타민E",
+        "basis": "AI",
+        "of10": 9
+       },
+       {
+        "nutrient": "칼륨",
+        "basis": "AI",
+        "of10": 8
+       },
+       {
+        "nutrient": "비타민A",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "칼슘",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "비타민C",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "엽산",
+        "basis": "EAR",
+        "of10": 7
+       },
+       {
+        "nutrient": "식이섬유",
+        "basis": "AI",
+        "of10": 6
+       }
+      ],
+      "line2": [
+       {
+        "nutrient": "티아민",
+        "basis": "EAR",
+        "p": 0.515,
+        "of10": 5,
+        "same_sex_age_of10": 6,
+        "ratio": 0.91,
+        "tag": "흔함",
+        "tag_text": "같은 성별·나이대에서 흔해요"
+       }
+      ]
+     }
+    }
+   }
+  }
+ }
+}
