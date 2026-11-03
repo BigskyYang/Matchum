@@ -123,7 +123,7 @@ def swap_polish(D, med, block=500, max_pass=30):
     return med
 
 
-def kmedoids(D, k, seed=RANDOM_STATE, n_init=10):
+def kmedoids(D, k, seed=RANDOM_STATE, n_init=30):
     """n_init회 서로 다른 초기값에서 시작해 총거리가 최소인 해를 선택."""
     rng = np.random.default_rng(seed)
     best = None
