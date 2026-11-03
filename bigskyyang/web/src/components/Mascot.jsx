@@ -7,7 +7,7 @@ const prefersReducedMotion = () => window.matchMedia?.('(prefers-reduced-motion:
 //   정지 이미지:     {name}.webp → {name}.png
 //   모두 실패:       원형 💊 placeholder
 // WebP는 용량이 훨씬 작아 먼저 쓴다 (bigskyyang/scripts/optimize_mascots.py가 만든다).
-// name:  public/mascot/{name}  ('start' | 'thinking' | 'happy' | 'default')
+// name:  public/mascot/{name}  ('start' | 'thinking' | 'happy' | 'default' | 'type_N1' ~ 'type_O3' 유형별 그림)
 // gif:   public/mascot/{gif}   (선택). '동작 줄이기'를 켠 사용자에게는 정지 이미지를 보여준다.
 // float: 정지 이미지일 때 둥실거리는 애니메이션 (움직이는 이미지는 스스로 움직이므로 적용하지 않음)
 // size:  'md'(176px, 기본) | 'sm'(96px, 설문 화면 등)

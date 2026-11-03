@@ -35,22 +35,19 @@ npm run preview  # 빌드 결과 미리보기
 
 ## 데이터 파일 만들기 (`bigskyyang` 폴더에서)
 
-### 군집 모델 `src/data/model.json`
-군집화를 다시 돌렸다면:
+### 군집 모델 `src/data/nbti12.json`
+생활습관 12개 유형(대분류 4 × 세부 3, 지연님 k-medoids)을 휴대폰에서 판정하는 데 쓴다 (`src/lib/classify.js`).
+`bigskyyang/analysis/output/nbti_12types.json`을 그대로 복사한 파일이다. 군집화를 다시 돌렸다면:
 
 ```bash
-python scripts/export_model.py
+python analysis/05_jiyeon_improved.py 20
+cp analysis/output/nbti_12types.json web/src/data/nbti12.json
+python scripts/make_classify_fixtures.py   # 판정 테스트용 예시 응답 다시 만들기
 ```
 
-- 기본 입력: `Jiyeon/KMeans_Final_MicroClustered.xlsx` (다른 파일이면 경로를 인자로 넘긴다)
-- 단계별 스케일러와 군집 중심을 다시 계산하고, 학습 데이터 전체를 다시 분류해 엑셀 라벨과의 일치율을 출력한다
-- **유형 ID**: K-Means는 다시 돌릴 때마다 군집 번호가 바뀔 수 있다. 스크립트가 이전 `model.json`과 유형별 평균을 비교해
-  같은 유형을 찾아 이전 ID를 물려주고, 무엇이 바뀌었는지 출력한다. `types.js`와 영양소 결과표는 군집 번호가 아니라 이 ID를 쓴다.
-  - `Group_0 ← 이전 Group_1 (ID Group_1, 차이 0.00)`: 번호만 바뀐 같은 유형 → 할 일 없음
-  - `※ 많이 달라짐`: 유형 성격이 바뀜 → `types.js`의 이름·설명 확인
-  - `새 유형` / `사라진 유형 ID`: 군집 수가 바뀜 → `types.js`에 추가·정리
-  - 처음부터 다시 맞추려면 `--reset-ids` (ID = 현재 군집 번호)
-- 군집을 바꾼 뒤에는 영양소 결과표도 같은 엑셀로 다시 만들고 `npm test`로 점검한다
+- 계산: 응답(ML_*) → 7개 점수(상수 + Σ 계수 × 응답) → PCA 5개 → 가장 가까운 대분류 중심 → 그 대분류의 세부 중심
+- 유형 ID: 대분류 `N`(나무늘보)·`A`(갓생러)·`S`(예민보스)·`O`(워커홀릭) + 세부 번호 → `N1`~`O3`. 이름·설명은 `types.js`
+- 유형 비율·평균은 조사 가중치(wt_tot/3)를 쓴 값이다. 분석 과정과 검증은 `bigskyyang/analysis/군집화_결론.md`
 
 ### 유형별 영양소 결과표 `src/data/nutrientProfiles.json`
 결과 화면의 '내 유형이 챙겨야 할 영양소'와 '건강기능식품 원료'는 이 표에서 내 유형의 값을 찾아 보여준다.
@@ -63,16 +60,18 @@ python scripts/build_nutrient_profiles.py --nutrients <개인별 영양소 CSV>
 - 입력 CSV: `ID`, `year` + 영양소별 열 (`<영양소키>_prob` 예측확률, 또는 `Jaejun/config/targets.json`의 실제 부족 여부 0/1)
 - 군집 결과(`Jiyeon/...xlsx`)와 `ID`·`year`로 합쳐 유형(대분류 4개 + 세부 20개)별 평균을 내고, `Jaejun/config/risk_thresholds.json` 기준으로 Low/Mid/High를 붙인다
 - 가중치를 적용하지 않은 표본 평균이다. 세부 유형 값이 없으면 대분류 값을 쓴다
+- ※ 이 스크립트는 예전 군집(대분류 4 + 세부 20)용이라 12개 유형에 맞게 다시 고쳐야 한다. 지금 결과표는 비어 있다
 
 ## 데이터·설문이 바뀌었을 때 점검 (`npm test`의 `src/lib/consistency.test.js`)
 다음이 어긋나면 테스트가 실패하고 무엇이 다른지 보여준다.
-- 군집 모델의 유형 ↔ `types.js`의 유형 이름·설명
+- 군집 모델의 유형 ↔ `types.js`의 유형 이름·설명 ↔ 유형별 마스코트 그림
 - `src/data/nutrients.js`의 영양소 14종 ↔ `Jaejun/config/targets.json`
 - 영양소 결과표의 유형·영양소·등급
 - 웹 설문 문항 ↔ `Jaejun/config/survey_schema_v3.json` (문항이 추가되거나 보기 개수가 바뀌면 실패)
 
 ## 이미지 (`bigskyyang` 폴더에서)
 - 마스코트 원본: `public/mascot/` (start.png, thinking.png, happy.png, default.png, hello.gif)
+- 유형별 마스코트: `public/mascot/type_N1.png` ~ `type_O3.png` (500px, 결과 화면 맨 위)
 - 휴대폰에서 빨리 뜨도록 WebP를 먼저 쓴다 (원본 대비 약 90% 작음). 마스코트를 새로 넣거나 바꿨으면:
   ```bash
   python scripts/optimize_mascots.py

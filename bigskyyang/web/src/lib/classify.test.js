@@ -1,37 +1,40 @@
 import { describe, expect, it } from 'vitest'
-import { encode, toVector } from './encode.js'
-import { classify, model } from './classify.js'
+import { encode } from './encode.js'
+import { MAIN_CODES, classify, mainProfile, model, typeOf } from './classify.js'
 import { SAMPLE } from './fixtures.js'
-import { MAIN_TYPES } from '../data/types.js'
+import CASES from './classify.fixtures.json'
 
-// 각 세부 유형의 중심(원래 단위로 되돌린 값)은 그 유형으로 판정되어야 한다.
-// K-Means 영역은 볼록하므로 소속 데이터 평균인 중심은 항상 자기 영역 안에 있다.
-const parentOf = (leaf) => Object.keys(model.children).find((k) => leaf in model.children[k].centers)
-
+// 예시 응답과 정답은 bigskyyang/scripts/make_classify_fixtures.py가 Python으로 계산한 것이다.
+// 웹 판정이 분석 쪽 계산(분석 결과 15,062명과 100% 일치)과 같은 답을 내는지 확인한다.
 describe('classify', () => {
-  it.each(model.leaves)('%s 중심은 자기 유형으로 판정된다', (leaf) => {
-    const node = model.children[parentOf(leaf)]
-    const raw = node.centers[leaf].map((z, i) => z * node.std[i] + node.mean[i])
-    const result = classify(raw)
-    expect(result.leaf).toBe(leaf)
-    expect(result.path[0]).toBe(result.main)
+  it.each(CASES.map((c) => [c.leaf, c]))('%s 예시 응답이 같은 유형으로 판정된다', (_, c) => {
+    expect(classify(c.features)).toEqual({ main: c.main, leaf: c.leaf })
+  })
+
+  it('예시 응답에 12개 유형이 모두 있다', () => {
+    expect(new Set(CASES.map((c) => c.leaf)).size).toBe(model.types.length)
   })
 
   it('설문 응답 → 변수 변환 → 유형 판정까지 이어진다', () => {
-    const { features } = encode(SAMPLE)
-    const { leaf, mainId } = classify(toVector(features, model.features))
-    expect(model.leaves).toContain(leaf)
-    expect(MAIN_TYPES[mainId]).toBeDefined()
+    const { main, leaf } = classify(encode(SAMPLE).features)
+    expect(MAIN_CODES).toContain(main)
+    expect(leaf[0]).toBe(main)
+    expect(typeOf(leaf)).toBeDefined()
   })
 
-  it('군집 번호가 바뀌어도 유형 ID로 같은 유형을 찾는다', () => {
-    // export_model.py가 번호가 바뀐 것을 찾아 이전 ID를 물려준 상황을 흉내 낸다
-    const swapped = { ...model, typeIds: { ...model.typeIds, Group_0: 'Group_1', Group_1: 'Group_0' } }
-    const leaf = model.leaves.find((l) => l.startsWith('Group_1-'))
-    const node = model.children[parentOf(leaf)]
-    const raw = node.centers[leaf].map((z, i) => z * node.std[i] + node.mean[i])
-    const result = classify(raw, swapped)
-    expect(result.main).toBe('Group_1')
-    expect(result.mainId).toBe('Group_0')
+  it('범위를 벗어난 응답도 학습 자료 범위로 잘라서 판정한다', () => {
+    const base = CASES[0].features
+    expect(classify({ ...base, ML_sedentary_min: 5000 })).toEqual(classify({ ...base, ML_sedentary_min: 1200 }))
+  })
+})
+
+describe('mainProfile', () => {
+  it('대분류 평균은 세부 유형 평균 사이에 있다', () => {
+    for (const code of MAIN_CODES) {
+      const subs = model.types.filter((t) => t.id[0] === code).map((t) => t.profile.sedentary_min)
+      const v = mainProfile(code).sedentary_min
+      expect(v).toBeGreaterThanOrEqual(Math.min(...subs))
+      expect(v).toBeLessThanOrEqual(Math.max(...subs))
+    }
   })
 })

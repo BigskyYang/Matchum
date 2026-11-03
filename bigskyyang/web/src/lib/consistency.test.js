@@ -1,5 +1,6 @@
 // 데이터 파일끼리, 그리고 팀원 설문·모델 정의와 웹이 서로 맞는지 점검한다.
 // 군집화를 다시 돌리거나 설문(Jaejun/config)이 바뀌었는데 웹을 안 맞췄으면 여기서 실패한다.
+import { existsSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import targets from '../../../../Jaejun/config/targets.json'
 import surveySchema from '../../../../Jaejun/config/survey_schema_v3.json'
@@ -7,18 +8,12 @@ import nutrientProfiles from '../data/nutrientProfiles.json'
 import { BANDS, NUTRIENTS } from '../data/nutrients.js'
 import { QUESTIONS } from '../data/questions.js'
 import { LEAF_TYPES, MAIN_TYPES } from '../data/types.js'
-import { mainLabels, model, typeId } from './classify.js'
+import { MAIN_CODES, model } from './classify.js'
 
-const mainIds = mainLabels().map((l) => typeId(l))
-const leafIds = model.leaves.map((l) => typeId(l))
+const mainIds = MAIN_CODES
+const leafIds = model.types.map((t) => t.id)
 
-describe('군집 모델 ↔ 유형 설명 (types.js)', () => {
-  it('모든 군집 번호에 유형 ID가 있고 겹치지 않는다', () => {
-    const labels = [...mainLabels(), ...model.leaves]
-    expect(labels.every((l) => model.typeIds[l])).toBe(true)
-    expect(new Set(labels.map((l) => typeId(l))).size).toBe(labels.length)
-  })
-
+describe('군집 모델 ↔ 유형 설명 (types.js) ↔ 마스코트 그림', () => {
   it('대분류 유형마다 이름·이모지·설명이 있다', () => {
     expect(Object.keys(MAIN_TYPES).sort()).toEqual([...mainIds].sort())
     for (const id of mainIds) {
@@ -26,8 +21,18 @@ describe('군집 모델 ↔ 유형 설명 (types.js)', () => {
     }
   })
 
-  it('세부 유형 설명은 지금 있는 세부 유형에만 붙어 있다', () => {
-    expect(Object.keys(LEAF_TYPES).filter((id) => !leafIds.includes(id))).toEqual([])
+  it('세부 유형마다 이름·설명이 있다', () => {
+    expect(Object.keys(LEAF_TYPES).sort()).toEqual([...leafIds].sort())
+    for (const id of leafIds) {
+      expect(LEAF_TYPES[id]).toMatchObject({ name: expect.any(String), summary: expect.any(String) })
+    }
+  })
+
+  it('세부 유형마다 마스코트 그림(png·webp)이 있다', () => {
+    const missing = leafIds.flatMap((id) =>
+      ['png', 'webp'].map((ext) => `type_${id}.${ext}`).filter((f) => !existsSync(new URL(`../../public/mascot/${f}`, import.meta.url))),
+    )
+    expect(missing).toEqual([])
   })
 })
 

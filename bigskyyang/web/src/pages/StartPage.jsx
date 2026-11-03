@@ -22,7 +22,7 @@ function Title() {
 }
 
 export default function StartPage() {
-  const sampleSize = model.profiles.all.n.toLocaleString('ko-KR')
+  const sampleSize = model.population.n.toLocaleString('ko-KR')
 
   return (
     <main className="flex flex-1 flex-col px-6 pt-5 pb-[max(1.5rem,env(safe-area-inset-bottom))]">

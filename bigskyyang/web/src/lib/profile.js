@@ -35,55 +35,49 @@ export const LEVELS = [
 ]
 export const levelOf = (score) => LEVELS.find((l) => score >= l.min)
 
-// 배열 평균값을 { ML_*: 값 } 형태로
-export const toFeatures = (featureNames, values) => Object.fromEntries(featureNames.map((name, i) => [name, values[i]]))
+// 유형 평균(classify.js의 toFeatures로 ML_* 이름으로 바꾼 값)의 신호등 점수
+export const groupScores = (typeFeatures) => scores(typeFeatures)
 
-export const groupScores = (model, label) => scores(toFeatures(model.features, model.profiles[label].mean))
-
-// 전체 평균 대비 크게 다른 항목(z ≥ 0.5)을 해시태그로. [평균보다 높을 때, 낮을 때]
+// 전체 평균 대비 크게 다른 항목(|z| ≥ 0.5)을 해시태그로. [평균보다 높을 때, 낮을 때]
+// 키는 유형 정보(nbti12.json types[].z)의 변수 이름
 const TAGS = {
-  ML_smoker: ['#흡연러', '#비흡연'],
-  ML_cigarettes_day: ['#흡연량많음', null],
-  ML_drink_month: ['#애주가', '#술안마심'],
-  ML_drink_freq_ord: ['#술자리잦음', '#술안마심'],
-  ML_drink_amount_ord: ['#주량많음', null],
-  ML_aerobic: ['#유산소러', '#운동부족'],
-  ML_strength_days: ['#근력러', '#근력운동0'],
-  ML_sedentary_min: ['#의자붙박이', '#활동파'],
-  ML_sleep_hours: ['#꿀잠러', '#수면부족'],
-  ML_stress: ['#스트레스많음', '#마음평화'],
-  ML_breakfast_freq_ord: ['#아침챙김', '#아침패스'],
-  ML_lunch_freq_ord: [null, '#점심패스'],
-  ML_dinner_freq_ord: [null, '#저녁패스'],
-  ML_eatingout_freq_ord: ['#외식러', '#집밥러'],
+  smoker: ['#흡연러', '#비흡연'],
+  cigarettes: ['#흡연량많음', null],
+  drink_freq: ['#술자리잦음', '#술안마심'],
+  drink_amount: ['#주량많음', null],
+  aerobic: ['#유산소러', '#운동부족'],
+  strength_days: ['#근력러', '#근력운동0'],
+  sedentary_min: ['#의자붙박이', '#활동파'],
+  sleep_hours: ['#꿀잠러', '#수면부족'],
+  stress: ['#스트레스많음', '#마음평화'],
+  meal_score: ['#삼시세끼', '#끼니패스'],
+  breakfast: ['#아침챙김', '#아침패스'],
+  lunch: [null, '#점심패스'],
+  dinner: [null, '#저녁패스'],
+  eating_out: ['#외식러', '#집밥러'],
+  veg: ['#채소러', '#채소부족'],
+  fruit: ['#과일러', '#과일부족'],
 }
 
-export function hashtags(model, label, limit = 4) {
-  const all = model.profiles.all.mean
-  const group = model.profiles[label].mean
-  const std = model.root.std
+export function hashtags(type, limit = 4) {
   const picked = []
-  model.features
-    .map((name, i) => ({ name, z: (group[i] - all[i]) / std[i] }))
-    .filter((t) => Math.abs(t.z) >= 0.5)
-    .sort((a, b) => Math.abs(b.z) - Math.abs(a.z))
-    .forEach(({ name, z }) => {
+  Object.entries(type.z)
+    .filter(([, z]) => Math.abs(z) >= 0.5)
+    .sort((a, b) => Math.abs(b[1]) - Math.abs(a[1]))
+    .forEach(([name, z]) => {
       const tag = TAGS[name]?.[z > 0 ? 0 : 1]
       if (tag && !picked.includes(tag)) picked.push(tag)
     })
   return picked.slice(0, limit)
 }
 
-// 조사 대상자 중 이 유형의 비율(%)
-export const share = (model, label) => (model.profiles[label].n / model.profiles.all.n) * 100
-
 // 같이 다니면 좋은 유형: 내가 약한 영역을 잘 챙기는 대분류 유형.
 // 내 점수보다 그 유형 평균이 높은 만큼을 모두 더해 가장 큰 유형을 고르고, 차이가 큰 영역 2개를 이유로 든다.
-export function bestPartner(model, myScores, myMain, mainLabels) {
-  const ranked = mainLabels
-    .filter((label) => label !== myMain)
-    .map((label) => {
-      const theirs = groupScores(model, label)
+// mainScores: { 대분류 코드: 그 대분류 평균의 신호등 점수 }
+export function bestPartner(myScores, myMain, mainScores) {
+  const ranked = Object.entries(mainScores)
+    .filter(([label]) => label !== myMain)
+    .map(([label, theirs]) => {
       const gains = theirs.map((s, i) => ({ axis: SCORE_AXES[i], gain: s - myScores[i] }))
       const total = gains.reduce((sum, g) => sum + Math.max(0, g.gain), 0)
       return { label, total, gains }

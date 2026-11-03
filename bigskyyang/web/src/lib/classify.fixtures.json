@@ -1,0 +1,722 @@
+[
+ {
+  "features": {
+   "ML_aerobic": 0.0,
+   "ML_strength_days": 4.0,
+   "ML_sedentary_min": 660.0,
+   "ML_sleep_hours": 7.0,
+   "ML_stress": 0.0,
+   "ML_breakfast_freq_ord": 3.0,
+   "ML_lunch_freq_ord": 0.0,
+   "ML_dinner_freq_ord": 2.0,
+   "ML_eatingout_freq_ord": 1.0
+  },
+  "main": "A",
+  "leaf": "A2"
+ },
+ {
+  "features": {
+   "ML_aerobic": 0.0,
+   "ML_strength_days": 3.0,
+   "ML_sedentary_min": 960.0,
+   "ML_sleep_hours": 9.0,
+   "ML_stress": 1.0,
+   "ML_breakfast_freq_ord": 2.0,
+   "ML_lunch_freq_ord": 3.0,
+   "ML_dinner_freq_ord": 2.0,
+   "ML_eatingout_freq_ord": 0.0
+  },
+  "main": "S",
+  "leaf": "S3"
+ },
+ {
+  "features": {
+   "ML_aerobic": 1.0,
+   "ML_strength_days": 2.0,
+   "ML_sedentary_min": 510.0,
+   "ML_sleep_hours": 7.0,
+   "ML_stress": 0.0,
+   "ML_breakfast_freq_ord": 3.0,
+   "ML_lunch_freq_ord": 3.0,
+   "ML_dinner_freq_ord": 2.0,
+   "ML_eatingout_freq_ord": 2.0
+  },
+  "main": "A",
+  "leaf": "A2"
+ },
+ {
+  "features": {
+   "ML_aerobic": 1.0,
+   "ML_strength_days": 3.0,
+   "ML_sedentary_min": 450.0,
+   "ML_sleep_hours": 7.0,
+   "ML_stress": 0.0,
+   "ML_breakfast_freq_ord": 0.0,
+   "ML_lunch_freq_ord": 2.0,
+   "ML_dinner_freq_ord": 3.0,
+   "ML_eatingout_freq_ord": 0.0
+  },
+  "main": "A",
+  "leaf": "A2"
+ },
+ {
+  "features": {
+   "ML_aerobic": 1.0,
+   "ML_strength_days": 4.0,
+   "ML_sedentary_min": 300.0,
+   "ML_sleep_hours": 8.0,
+   "ML_stress": 0.0,
+   "ML_breakfast_freq_ord": 3.0,
+   "ML_lunch_freq_ord": 2.0,
+   "ML_dinner_freq_ord": 1.0,
+   "ML_eatingout_freq_ord": 0.0
+  },
+  "main": "A",
+  "leaf": "A2"
+ },
+ {
+  "features": {
+   "ML_aerobic": 1.0,
+   "ML_strength_days": 2.0,
+   "ML_sedentary_min": 870.0,
+   "ML_sleep_hours": 8.5,
+   "ML_stress": 1.0,
+   "ML_breakfast_freq_ord": 3.0,
+   "ML_lunch_freq_ord": 0.0,
+   "ML_dinner_freq_ord": 1.0,
+   "ML_eatingout_freq_ord": 3.0
+  },
+  "main": "S",
+  "leaf": "S3"
+ },
+ {
+  "features": {
+   "ML_aerobic": 0.0,
+   "ML_strength_days": 0.0,
+   "ML_sedentary_min": 540.0,
+   "ML_sleep_hours": 5.5,
+   "ML_stress": 1.0,
+   "ML_breakfast_freq_ord": 2.0,
+   "ML_lunch_freq_ord": 3.0,
+   "ML_dinner_freq_ord": 2.0,
+   "ML_eatingout_freq_ord": 2.0
+  },
+  "main": "S",
+  "leaf": "S1"
+ },
+ {
+  "features": {
+   "ML_aerobic": 0.0,
+   "ML_strength_days": 0.0,
+   "ML_sedentary_min": 690.0,
+   "ML_sleep_hours": 7.5,
+   "ML_stress": 0.0,
+   "ML_breakfast_freq_ord": 0.0,
+   "ML_lunch_freq_ord": 2.0,
+   "ML_dinner_freq_ord": 2.0,
+   "ML_eatingout_freq_ord": 6.0
+  },
+  "main": "O",
+  "leaf": "O1"
+ },
+ {
+  "features": {
+   "ML_aerobic": 0.0,
+   "ML_strength_days": 0.0,
+   "ML_sedentary_min": 810.0,
+   "ML_sleep_hours": 8.0,
+   "ML_stress": 1.0,
+   "ML_breakfast_freq_ord": 0.0,
+   "ML_lunch_freq_ord": 1.0,
+   "ML_dinner_freq_ord": 3.0,
+   "ML_eatingout_freq_ord": 5.0
+  },
+  "main": "S",
+  "leaf": "S1"
+ },
+ {
+  "features": {
+   "ML_aerobic": 0.0,
+   "ML_strength_days": 4.0,
+   "ML_sedentary_min": 840.0,
+   "ML_sleep_hours": 7.0,
+   "ML_stress": 1.0,
+   "ML_breakfast_freq_ord": 1.0,
+   "ML_lunch_freq_ord": 0.0,
+   "ML_dinner_freq_ord": 2.0,
+   "ML_eatingout_freq_ord": 4.0
+  },
+  "main": "S",
+  "leaf": "S3"
+ },
+ {
+  "features": {
+   "ML_aerobic": 0.0,
+   "ML_strength_days": 4.0,
+   "ML_sedentary_min": 240.0,
+   "ML_sleep_hours": 9.0,
+   "ML_stress": 0.0,
+   "ML_breakfast_freq_ord": 3.0,
+   "ML_lunch_freq_ord": 3.0,
+   "ML_dinner_freq_ord": 3.0,
+   "ML_eatingout_freq_ord": 4.0
+  },
+  "main": "A",
+  "leaf": "A3"
+ },
+ {
+  "features": {
+   "ML_aerobic": 0.0,
+   "ML_strength_days": 4.0,
+   "ML_sedentary_min": 300.0,
+   "ML_sleep_hours": 9.0,
+   "ML_stress": 1.0,
+   "ML_breakfast_freq_ord": 1.0,
+   "ML_lunch_freq_ord": 2.0,
+   "ML_dinner_freq_ord": 2.0,
+   "ML_eatingout_freq_ord": 0.0
+  },
+  "main": "S",
+  "leaf": "S3"
+ },
+ {
+  "features": {
+   "ML_aerobic": 0.0,
+   "ML_strength_days": 1.0,
+   "ML_sedentary_min": 150.0,
+   "ML_sleep_hours": 7.0,
+   "ML_stress": 1.0,
+   "ML_breakfast_freq_ord": 2.0,
+   "ML_lunch_freq_ord": 1.0,
+   "ML_dinner_freq_ord": 3.0,
+   "ML_eatingout_freq_ord": 3.0
+  },
+  "main": "S",
+  "leaf": "S1"
+ },
+ {
+  "features": {
+   "ML_aerobic": 0.0,
+   "ML_strength_days": 2.0,
+   "ML_sedentary_min": 660.0,
+   "ML_sleep_hours": 5.5,
+   "ML_stress": 1.0,
+   "ML_breakfast_freq_ord": 2.0,
+   "ML_lunch_freq_ord": 3.0,
+   "ML_dinner_freq_ord": 3.0,
+   "ML_eatingout_freq_ord": 4.0
+  },
+  "main": "S",
+  "leaf": "S1"
+ },
+ {
+  "features": {
+   "ML_aerobic": 0.0,
+   "ML_strength_days": 4.0,
+   "ML_sedentary_min": 720.0,
+   "ML_sleep_hours": 8.5,
+   "ML_stress": 0.0,
+   "ML_breakfast_freq_ord": 2.0,
+   "ML_lunch_freq_ord": 0.0,
+   "ML_dinner_freq_ord": 3.0,
+   "ML_eatingout_freq_ord": 3.0
+  },
+  "main": "O",
+  "leaf": "O3"
+ },
+ {
+  "features": {
+   "ML_aerobic": 1.0,
+   "ML_strength_days": 0.0,
+   "ML_sedentary_min": 510.0,
+   "ML_sleep_hours": 8.5,
+   "ML_stress": 0.0,
+   "ML_breakfast_freq_ord": 1.0,
+   "ML_lunch_freq_ord": 0.0,
+   "ML_dinner_freq_ord": 1.0,
+   "ML_eatingout_freq_ord": 1.0
+  },
+  "main": "S",
+  "leaf": "S2"
+ },
+ {
+  "features": {
+   "ML_aerobic": 0.0,
+   "ML_strength_days": 5.0,
+   "ML_sedentary_min": 390.0,
+   "ML_sleep_hours": 9.5,
+   "ML_stress": 0.0,
+   "ML_breakfast_freq_ord": 2.0,
+   "ML_lunch_freq_ord": 1.0,
+   "ML_dinner_freq_ord": 1.0,
+   "ML_eatingout_freq_ord": 5.0
+  },
+  "main": "O",
+  "leaf": "O3"
+ },
+ {
+  "features": {
+   "ML_aerobic": 1.0,
+   "ML_strength_days": 1.0,
+   "ML_sedentary_min": 780.0,
+   "ML_sleep_hours": 6.0,
+   "ML_stress": 1.0,
+   "ML_breakfast_freq_ord": 3.0,
+   "ML_lunch_freq_ord": 1.0,
+   "ML_dinner_freq_ord": 2.0,
+   "ML_eatingout_freq_ord": 1.0
+  },
+  "main": "S",
+  "leaf": "S2"
+ },
+ {
+  "features": {
+   "ML_aerobic": 0.0,
+   "ML_strength_days": 4.0,
+   "ML_sedentary_min": 570.0,
+   "ML_sleep_hours": 8.0,
+   "ML_stress": 0.0,
+   "ML_breakfast_freq_ord": 1.0,
+   "ML_lunch_freq_ord": 3.0,
+   "ML_dinner_freq_ord": 0.0,
+   "ML_eatingout_freq_ord": 5.0
+  },
+  "main": "O",
+  "leaf": "O1"
+ },
+ {
+  "features": {
+   "ML_aerobic": 0.0,
+   "ML_strength_days": 0.0,
+   "ML_sedentary_min": 180.0,
+   "ML_sleep_hours": 10.0,
+   "ML_stress": 0.0,
+   "ML_breakfast_freq_ord": 1.0,
+   "ML_lunch_freq_ord": 1.0,
+   "ML_dinner_freq_ord": 3.0,
+   "ML_eatingout_freq_ord": 0.0
+  },
+  "main": "N",
+  "leaf": "N2"
+ },
+ {
+  "features": {
+   "ML_aerobic": 1.0,
+   "ML_strength_days": 1.0,
+   "ML_sedentary_min": 270.0,
+   "ML_sleep_hours": 5.0,
+   "ML_stress": 0.0,
+   "ML_breakfast_freq_ord": 2.0,
+   "ML_lunch_freq_ord": 2.0,
+   "ML_dinner_freq_ord": 1.0,
+   "ML_eatingout_freq_ord": 2.0
+  },
+  "main": "S",
+  "leaf": "S2"
+ },
+ {
+  "features": {
+   "ML_aerobic": 1.0,
+   "ML_strength_days": 2.0,
+   "ML_sedentary_min": 810.0,
+   "ML_sleep_hours": 10.0,
+   "ML_stress": 0.0,
+   "ML_breakfast_freq_ord": 0.0,
+   "ML_lunch_freq_ord": 3.0,
+   "ML_dinner_freq_ord": 2.0,
+   "ML_eatingout_freq_ord": 2.0
+  },
+  "main": "O",
+  "leaf": "O1"
+ },
+ {
+  "features": {
+   "ML_aerobic": 0.0,
+   "ML_strength_days": 4.0,
+   "ML_sedentary_min": 960.0,
+   "ML_sleep_hours": 5.5,
+   "ML_stress": 0.0,
+   "ML_breakfast_freq_ord": 2.0,
+   "ML_lunch_freq_ord": 3.0,
+   "ML_dinner_freq_ord": 2.0,
+   "ML_eatingout_freq_ord": 5.0
+  },
+  "main": "O",
+  "leaf": "O3"
+ },
+ {
+  "features": {
+   "ML_aerobic": 1.0,
+   "ML_strength_days": 0.0,
+   "ML_sedentary_min": 450.0,
+   "ML_sleep_hours": 5.5,
+   "ML_stress": 1.0,
+   "ML_breakfast_freq_ord": 3.0,
+   "ML_lunch_freq_ord": 0.0,
+   "ML_dinner_freq_ord": 1.0,
+   "ML_eatingout_freq_ord": 6.0
+  },
+  "main": "S",
+  "leaf": "S2"
+ },
+ {
+  "features": {
+   "ML_aerobic": 0.0,
+   "ML_strength_days": 5.0,
+   "ML_sedentary_min": 720.0,
+   "ML_sleep_hours": 9.0,
+   "ML_stress": 0.0,
+   "ML_breakfast_freq_ord": 1.0,
+   "ML_lunch_freq_ord": 2.0,
+   "ML_dinner_freq_ord": 3.0,
+   "ML_eatingout_freq_ord": 5.0
+  },
+  "main": "O",
+  "leaf": "O3"
+ },
+ {
+  "features": {
+   "ML_aerobic": 0.0,
+   "ML_strength_days": 0.0,
+   "ML_sedentary_min": 390.0,
+   "ML_sleep_hours": 10.0,
+   "ML_stress": 0.0,
+   "ML_breakfast_freq_ord": 0.0,
+   "ML_lunch_freq_ord": 2.0,
+   "ML_dinner_freq_ord": 3.0,
+   "ML_eatingout_freq_ord": 6.0
+  },
+  "main": "O",
+  "leaf": "O1"
+ },
+ {
+  "features": {
+   "ML_aerobic": 0.0,
+   "ML_strength_days": 0.0,
+   "ML_sedentary_min": 300.0,
+   "ML_sleep_hours": 8.0,
+   "ML_stress": 0.0,
+   "ML_breakfast_freq_ord": 1.0,
+   "ML_lunch_freq_ord": 0.0,
+   "ML_dinner_freq_ord": 2.0,
+   "ML_eatingout_freq_ord": 0.0
+  },
+  "main": "N",
+  "leaf": "N2"
+ },
+ {
+  "features": {
+   "ML_aerobic": 0.0,
+   "ML_strength_days": 1.0,
+   "ML_sedentary_min": 180.0,
+   "ML_sleep_hours": 10.0,
+   "ML_stress": 0.0,
+   "ML_breakfast_freq_ord": 0.0,
+   "ML_lunch_freq_ord": 3.0,
+   "ML_dinner_freq_ord": 2.0,
+   "ML_eatingout_freq_ord": 3.0
+  },
+  "main": "N",
+  "leaf": "N2"
+ },
+ {
+  "features": {
+   "ML_aerobic": 1.0,
+   "ML_strength_days": 2.0,
+   "ML_sedentary_min": 150.0,
+   "ML_sleep_hours": 9.0,
+   "ML_stress": 0.0,
+   "ML_breakfast_freq_ord": 2.0,
+   "ML_lunch_freq_ord": 3.0,
+   "ML_dinner_freq_ord": 3.0,
+   "ML_eatingout_freq_ord": 2.0
+  },
+  "main": "A",
+  "leaf": "A1"
+ },
+ {
+  "features": {
+   "ML_aerobic": 0.0,
+   "ML_strength_days": 0.0,
+   "ML_sedentary_min": 150.0,
+   "ML_sleep_hours": 5.0,
+   "ML_stress": 0.0,
+   "ML_breakfast_freq_ord": 3.0,
+   "ML_lunch_freq_ord": 3.0,
+   "ML_dinner_freq_ord": 3.0,
+   "ML_eatingout_freq_ord": 0.0
+  },
+  "main": "N",
+  "leaf": "N1"
+ },
+ {
+  "features": {
+   "ML_aerobic": 0.0,
+   "ML_strength_days": 0.0,
+   "ML_sedentary_min": 360.0,
+   "ML_sleep_hours": 9.5,
+   "ML_stress": 0.0,
+   "ML_breakfast_freq_ord": 1.0,
+   "ML_lunch_freq_ord": 0.0,
+   "ML_dinner_freq_ord": 2.0,
+   "ML_eatingout_freq_ord": 1.0
+  },
+  "main": "N",
+  "leaf": "N2"
+ },
+ {
+  "features": {
+   "ML_aerobic": 0.0,
+   "ML_strength_days": 0.0,
+   "ML_sedentary_min": 780.0,
+   "ML_sleep_hours": 9.5,
+   "ML_stress": 1.0,
+   "ML_breakfast_freq_ord": 3.0,
+   "ML_lunch_freq_ord": 3.0,
+   "ML_dinner_freq_ord": 3.0,
+   "ML_eatingout_freq_ord": 3.0
+  },
+  "main": "O",
+  "leaf": "O2"
+ },
+ {
+  "features": {
+   "ML_aerobic": 0.0,
+   "ML_strength_days": 1.0,
+   "ML_sedentary_min": 330.0,
+   "ML_sleep_hours": 9.0,
+   "ML_stress": 0.0,
+   "ML_breakfast_freq_ord": 3.0,
+   "ML_lunch_freq_ord": 3.0,
+   "ML_dinner_freq_ord": 3.0,
+   "ML_eatingout_freq_ord": 0.0
+  },
+  "main": "N",
+  "leaf": "N1"
+ },
+ {
+  "features": {
+   "ML_aerobic": 1.0,
+   "ML_strength_days": 0.0,
+   "ML_sedentary_min": 300.0,
+   "ML_sleep_hours": 6.5,
+   "ML_stress": 0.0,
+   "ML_breakfast_freq_ord": 2.0,
+   "ML_lunch_freq_ord": 3.0,
+   "ML_dinner_freq_ord": 3.0,
+   "ML_eatingout_freq_ord": 5.0
+  },
+  "main": "A",
+  "leaf": "A1"
+ },
+ {
+  "features": {
+   "ML_aerobic": 1.0,
+   "ML_strength_days": 3.0,
+   "ML_sedentary_min": 390.0,
+   "ML_sleep_hours": 7.0,
+   "ML_stress": 0.0,
+   "ML_breakfast_freq_ord": 3.0,
+   "ML_lunch_freq_ord": 3.0,
+   "ML_dinner_freq_ord": 3.0,
+   "ML_eatingout_freq_ord": 2.0
+  },
+  "main": "A",
+  "leaf": "A3"
+ },
+ {
+  "features": {
+   "ML_aerobic": 0.0,
+   "ML_strength_days": 2.0,
+   "ML_sedentary_min": 60.0,
+   "ML_sleep_hours": 5.0,
+   "ML_stress": 0.0,
+   "ML_breakfast_freq_ord": 2.0,
+   "ML_lunch_freq_ord": 3.0,
+   "ML_dinner_freq_ord": 3.0,
+   "ML_eatingout_freq_ord": 4.0
+  },
+  "main": "A",
+  "leaf": "A1"
+ },
+ {
+  "features": {
+   "ML_aerobic": 0.0,
+   "ML_strength_days": 2.0,
+   "ML_sedentary_min": 570.0,
+   "ML_sleep_hours": 9.0,
+   "ML_stress": 1.0,
+   "ML_breakfast_freq_ord": 2.0,
+   "ML_lunch_freq_ord": 3.0,
+   "ML_dinner_freq_ord": 3.0,
+   "ML_eatingout_freq_ord": 0.0
+  },
+  "main": "N",
+  "leaf": "N1"
+ },
+ {
+  "features": {
+   "ML_aerobic": 1.0,
+   "ML_strength_days": 1.0,
+   "ML_sedentary_min": 240.0,
+   "ML_sleep_hours": 9.0,
+   "ML_stress": 0.0,
+   "ML_breakfast_freq_ord": 3.0,
+   "ML_lunch_freq_ord": 3.0,
+   "ML_dinner_freq_ord": 3.0,
+   "ML_eatingout_freq_ord": 4.0
+  },
+  "main": "A",
+  "leaf": "A1"
+ },
+ {
+  "features": {
+   "ML_aerobic": 0.0,
+   "ML_strength_days": 1.0,
+   "ML_sedentary_min": 810.0,
+   "ML_sleep_hours": 10.0,
+   "ML_stress": 0.0,
+   "ML_breakfast_freq_ord": 3.0,
+   "ML_lunch_freq_ord": 3.0,
+   "ML_dinner_freq_ord": 3.0,
+   "ML_eatingout_freq_ord": 0.0
+  },
+  "main": "N",
+  "leaf": "N1"
+ },
+ {
+  "features": {
+   "ML_aerobic": 0.0,
+   "ML_strength_days": 3.0,
+   "ML_sedentary_min": 150.0,
+   "ML_sleep_hours": 7.0,
+   "ML_stress": 0.0,
+   "ML_breakfast_freq_ord": 2.0,
+   "ML_lunch_freq_ord": 3.0,
+   "ML_dinner_freq_ord": 3.0,
+   "ML_eatingout_freq_ord": 3.0
+  },
+  "main": "A",
+  "leaf": "A3"
+ },
+ {
+  "features": {
+   "ML_aerobic": 0.0,
+   "ML_strength_days": 5.0,
+   "ML_sedentary_min": 540.0,
+   "ML_sleep_hours": 5.5,
+   "ML_stress": 0.0,
+   "ML_breakfast_freq_ord": 3.0,
+   "ML_lunch_freq_ord": 3.0,
+   "ML_dinner_freq_ord": 3.0,
+   "ML_eatingout_freq_ord": 0.0
+  },
+  "main": "A",
+  "leaf": "A3"
+ },
+ {
+  "features": {
+   "ML_aerobic": 0.0,
+   "ML_strength_days": 3.0,
+   "ML_sedentary_min": 510.0,
+   "ML_sleep_hours": 9.5,
+   "ML_stress": 0.0,
+   "ML_breakfast_freq_ord": 3.0,
+   "ML_lunch_freq_ord": 3.0,
+   "ML_dinner_freq_ord": 3.0,
+   "ML_eatingout_freq_ord": 2.0
+  },
+  "main": "N",
+  "leaf": "N3"
+ },
+ {
+  "features": {
+   "ML_aerobic": 0.0,
+   "ML_strength_days": 2.0,
+   "ML_sedentary_min": 90.0,
+   "ML_sleep_hours": 10.0,
+   "ML_stress": 0.0,
+   "ML_breakfast_freq_ord": 3.0,
+   "ML_lunch_freq_ord": 3.0,
+   "ML_dinner_freq_ord": 3.0,
+   "ML_eatingout_freq_ord": 3.0
+  },
+  "main": "N",
+  "leaf": "N3"
+ },
+ {
+  "features": {
+   "ML_aerobic": 0.0,
+   "ML_strength_days": 1.0,
+   "ML_sedentary_min": 720.0,
+   "ML_sleep_hours": 6.5,
+   "ML_stress": 0.0,
+   "ML_breakfast_freq_ord": 2.0,
+   "ML_lunch_freq_ord": 3.0,
+   "ML_dinner_freq_ord": 3.0,
+   "ML_eatingout_freq_ord": 4.0
+  },
+  "main": "O",
+  "leaf": "O2"
+ },
+ {
+  "features": {
+   "ML_aerobic": 0.0,
+   "ML_strength_days": 0.0,
+   "ML_sedentary_min": 300.0,
+   "ML_sleep_hours": 10.0,
+   "ML_stress": 0.0,
+   "ML_breakfast_freq_ord": 2.0,
+   "ML_lunch_freq_ord": 3.0,
+   "ML_dinner_freq_ord": 3.0,
+   "ML_eatingout_freq_ord": 2.0
+  },
+  "main": "N",
+  "leaf": "N3"
+ },
+ {
+  "features": {
+   "ML_aerobic": 0.0,
+   "ML_strength_days": 0.0,
+   "ML_sedentary_min": 690.0,
+   "ML_sleep_hours": 7.0,
+   "ML_stress": 0.0,
+   "ML_breakfast_freq_ord": 3.0,
+   "ML_lunch_freq_ord": 3.0,
+   "ML_dinner_freq_ord": 3.0,
+   "ML_eatingout_freq_ord": 5.0
+  },
+  "main": "O",
+  "leaf": "O2"
+ },
+ {
+  "features": {
+   "ML_aerobic": 1.0,
+   "ML_strength_days": 1.0,
+   "ML_sedentary_min": 870.0,
+   "ML_sleep_hours": 5.0,
+   "ML_stress": 0.0,
+   "ML_breakfast_freq_ord": 2.0,
+   "ML_lunch_freq_ord": 3.0,
+   "ML_dinner_freq_ord": 3.0,
+   "ML_eatingout_freq_ord": 4.0
+  },
+  "main": "O",
+  "leaf": "O2"
+ },
+ {
+  "features": {
+   "ML_aerobic": 0.0,
+   "ML_strength_days": 2.0,
+   "ML_sedentary_min": 480.0,
+   "ML_sleep_hours": 6.0,
+   "ML_stress": 0.0,
+   "ML_breakfast_freq_ord": 2.0,
+   "ML_lunch_freq_ord": 3.0,
+   "ML_dinner_freq_ord": 3.0,
+   "ML_eatingout_freq_ord": 3.0
+  },
+  "main": "N",
+  "leaf": "N3"
+ }
+]

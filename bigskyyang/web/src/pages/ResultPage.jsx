@@ -12,11 +12,11 @@ import NutrientRisks from '../components/result/NutrientRisks.jsx'
 import PartnerCard from '../components/result/PartnerCard.jsx'
 import nutrientProfiles from '../data/nutrientProfiles.json'
 import { BALANCED_FOODS, pickTips } from '../data/tips.js'
-import { LEAF_TYPES, MAIN_TYPES, leafCode } from '../data/types.js'
-import { classify, mainLabels, model, typeId } from '../lib/classify.js'
-import { encode, toVector } from '../lib/encode.js'
+import { LEAF_TYPES, MAIN_TYPES } from '../data/types.js'
+import { MAIN_CODES, classify, mainProfile, toFeatures, typeOf } from '../lib/classify.js'
+import { encode } from '../lib/encode.js'
 import { lookupProfile, rankNutrients, supplementsFor } from '../lib/nutrition.js'
-import { SCORE_AXES, bestPartner, groupScores, hashtags, scores, share } from '../lib/profile.js'
+import { SCORE_AXES, bestPartner, groupScores, hashtags, scores } from '../lib/profile.js'
 import { clearSurvey, loadSurvey } from '../lib/storage.js'
 
 // 유형별 영양소 결과표가 아직 없을 때
@@ -25,17 +25,16 @@ const MAX_MISSIONS = 3
 const MAX_FOODS = 6
 const SHIFT_MISSION = { icon: '🌙', title: '잠·식사 시간 지키기', detail: '근무가 바뀌어도 잠드는 시간과 식사 시간을 최대한 일정하게!' }
 
-const typeInfo = (label) => MAIN_TYPES[label] ?? { name: label, emoji: '💊', summary: '' }
-
 function useResult() {
   return useMemo(() => {
     const { answers, done } = loadSurvey()
     if (!done) return null
     const { features, extras } = encode(answers)
-    // main·leaf: 군집 번호 (model.json 안의 계산용), mainId·leafId: 유형 ID (이름·영양소 결과표 조회용)
-    const { main, leaf, mainId, leafId } = classify(toVector(features, model.features))
-    const mainType = typeInfo(mainId)
-    const leafType = LEAF_TYPES[leafId] ?? {}
+    // main: 대분류 코드 (N·A·S·O), leaf: 세부 유형 ID (N1~O3). 이름(types.js)·영양소 결과표도 이 ID로 찾는다
+    const { main, leaf } = classify(features)
+    const mainType = MAIN_TYPES[main]
+    const leafType = LEAF_TYPES[leaf]
+    const type = typeOf(leaf)
     const tips = pickTips(features, extras)
     const myScores = scores(features)
 
@@ -44,20 +43,21 @@ function useResult() {
     for (const f of [...(leafType.foods ?? mainType.foods ?? []), ...tips.flatMap((t) => t.foods ?? [])]) {
       if (!foods.some((x) => x.label === f.label)) foods.push(f)
     }
-    const partner = bestPartner(model, myScores, main, mainLabels())
-    const profile = lookupProfile(nutrientProfiles, leafId, mainId)
+    const mainScores = Object.fromEntries(MAIN_CODES.map((code) => [code, groupScores(toFeatures(mainProfile(code)))]))
+    const partner = bestPartner(myScores, main, mainScores)
+    const profile = lookupProfile(nutrientProfiles, leaf, main)
     const ranked = profile ? rankNutrients(profile) : []
     const optional = extras.optional
 
     return {
-      leafId,
+      leafId: leaf,
       mainType,
-      name: leafType.name ?? mainType.name,
-      summary: leafType.summary ?? mainType.summary,
-      tags: hashtags(model, leaf),
-      sharePct: share(model, leaf),
+      name: leafType.name,
+      summary: leafType.summary,
+      tags: hashtags(type),
+      sharePct: type.share * 100,
       myScores,
-      typeScores: groupScores(model, leaf),
+      typeScores: groupScores(toFeatures(type.profile)),
       missions: [...(extras.shiftWork ? [SHIFT_MISSION] : []), ...tips.flatMap((t) => (t.mission ? [t.mission] : []))].slice(
         0,
         MAX_MISSIONS,
@@ -67,7 +67,7 @@ function useResult() {
       supplements: supplementsFor(ranked),
       optional,
       hasCondition: Boolean(optional && (optional.hypertension || optional.diabetes || optional.dyslipidemia)),
-      partner: { type: typeInfo(typeId(partner.label)), helps: partner.helps },
+      partner: { type: MAIN_TYPES[partner.label], helps: partner.helps },
     }
   }, [])
 }
@@ -86,12 +86,12 @@ export default function ResultPage() {
     <main className="flex flex-1 flex-col gap-4 px-5 pt-8 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
       <header className="flex flex-col items-center text-center">
         <p className="text-sm font-semibold text-ink-soft">나의 NBTI 유형은</p>
-        <Mascot name="happy" className="mt-3" />
-        <h1 className="mt-3 text-[1.75rem] leading-tight font-extrabold">
+        <Mascot name={`type_${r.leafId}`} className="mt-3" />
+        <p className="mt-3 text-sm font-bold text-ink-soft">
           <span aria-hidden="true">{r.mainType.emoji} </span>
-          {r.name}
-        </h1>
-        <p className="mt-1 text-xs font-semibold text-ink-faint">세부 유형 {leafCode(r.leafId)}</p>
+          {r.mainType.name}
+        </p>
+        <h1 className="mt-1 text-[1.75rem] leading-tight font-extrabold">{r.name}</h1>
         {r.tags.length > 0 && (
           <ul className="mt-3 flex flex-wrap justify-center gap-1.5">
             {r.tags.map((tag) => (
