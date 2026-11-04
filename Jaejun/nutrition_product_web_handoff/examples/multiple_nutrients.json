@@ -1,0 +1,1630 @@
+{
+  "example_kind": "connection_demo_only_not_model_prediction",
+  "request": {
+    "selectedNutrientIds": [
+      "calcium",
+      "magnesium",
+      "vitamin_b1",
+      "vitamin_b2",
+      "sodium_excess"
+    ],
+    "pageSize": 20
+  },
+  "response": {
+    "bridge_version": "1.0.0",
+    "catalog_version": "nutrition-products-2026-11-04-final-stage9",
+    "selection_status": "provided_by_web",
+    "target": "일반",
+    "groups": [
+      {
+        "category_id": "magnesium",
+        "label": "마그네슘",
+        "target": "일반",
+        "connection_kind": "model_nutrient",
+        "linked_nutrient_ids": [
+          "magnesium"
+        ],
+        "unfiltered_count": 272,
+        "total_count": 272,
+        "available_forms": [
+          "분말",
+          "액상",
+          "정",
+          "캡슐"
+        ],
+        "page": 1,
+        "page_size": 20,
+        "page_count": 14,
+        "has_previous": false,
+        "has_next": true,
+        "items": [
+          {
+            "product_id": "20220010222177",
+            "product_name": "마시는 젖산마그네슘 이뮨샷",
+            "manufacturer": "(주)한미양행 선유공장",
+            "form": "액상",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1포 (하루 1포)",
+            "ingredient_count": 9,
+            "caution_ingredient_label": null,
+            "functionality_text": "[마그네슘]\n(가) 에너지 이용에 필요\n(나) 신경과 근육 기능 유지에 필요\n[아연]\n(가) 정상적인 면역기능에 필요\n(나) 정상적인 세포분열에 필요",
+            "cautions_text": "알레르기 체질이신 경우 성분을 확인 한 후 섭취하시기 바랍니다.",
+            "source_product_type": "단일",
+            "daily_amount": 165,
+            "daily_unit": "mg",
+            "daily_reference_percent": 52,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "magnesium"
+            ],
+            "connection_label": "마그네슘 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1포 (하루 1포)",
+              "액상"
+            ]
+          },
+          {
+            "product_id": "202100136826",
+            "product_name": "하루한포 액상 글루콘산 마그네슘 160",
+            "manufacturer": "(주)케이씨엔바이오텍",
+            "form": "액상",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1포 (하루 1포)",
+            "ingredient_count": 10,
+            "caution_ingredient_label": null,
+            "functionality_text": "1. 마그네슘\n1) 에너지 이용에 필요\n2) 신경과 근육 기능 유지에 필요",
+            "cautions_text": "1) 특히 6세 이하는 과잉섭취하지 않도록 주의하십시오.\n2) 질병으로 인하여 치료 중인 분은 섭취 전 전문가와 상담이 필요합니다.\n3) 이상사례가 발생시 섭취를 중단하고 전문가와 상담하십시오.\n4) 특이체질, 알레르기 체질이 있으신 분은 반드시 원료(성분)를 확인하고 섭취하시기 바랍니다.\n5) 제품이 변형, 팽창, 변질되었을 경우 음용하지 마십시오.\n6) 스틱파우치 끝면과 절취면이 날카로우니 베이지 않도록 조심하시기 바랍니다.\n7) 개봉후에는 가급적 빨리 드십시오.\n8) 침전물(마그네슘)이 있을 수 있으니 흔들어 섭취하십시오.",
+            "source_product_type": "단일",
+            "daily_amount": 160,
+            "daily_unit": "mg",
+            "daily_reference_percent": 51,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "magnesium"
+            ],
+            "connection_label": "마그네슘 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1포 (하루 1포)",
+              "액상"
+            ]
+          },
+          {
+            "product_id": "20130015151135",
+            "product_name": "글루콘산 마그네슘 액상스틱",
+            "manufacturer": "주식회사웰파인",
+            "form": "액상",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1포 (하루 1포)",
+            "ingredient_count": 10,
+            "caution_ingredient_label": null,
+            "functionality_text": "마그네슘 - 에너지 이용에 필요, 신경과 근육 기능 유지에 필요\n비타민B6 - 단백질 및 아미노산 이용에 필요, 혈액의 호모시스테인 수준을 정상으로 유지하는데 필요",
+            "cautions_text": "(비타민B6) 손발 따끔거림, 작열감 또는 저림 등의 이상사례 발생 시 섭취를 중단하고 전문가와 상담하십시오.\n- 특정 성분에 알레르기 체질이신 분은 섭취 전 제품의 원료 성분을 확인 후 섭취하십시오.\n- 과량 섭취에 주의하시고, 질병치료나 약물투여 중인 분들은 섭취 전 전문가와 상의하십시오.\n- 원료 성분에 의해 간혹 침전물이 생길 수 있으나 변질이 아니오니 안심하고 흔들어 드십시오.\n- 제품 개봉 또는 섭취 시 포장재에 의해 상처를 입을 수 있으니 주의하시기 바랍니다.\n- 제품 개봉 시 내용물이 흘러나올 수 있으므로 주의하십시오.\n- 개봉 후에는 냉장보관하거나 가급적 빨리 드시기 바랍니다.",
+            "source_product_type": "단일",
+            "daily_amount": 160,
+            "daily_unit": "mg",
+            "daily_reference_percent": 51,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "magnesium"
+            ],
+            "connection_label": "마그네슘 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1포 (하루 1포)",
+              "액상"
+            ]
+          },
+          {
+            "product_id": "200400170212014",
+            "product_name": "제로스톤",
+            "manufacturer": "(주)비오팜",
+            "form": "분말",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1포 (하루 1포)",
+            "ingredient_count": 10,
+            "caution_ingredient_label": null,
+            "functionality_text": "[칼륨] 체내 물과 전해질 균형에 필요\n[마그네슘] (1) 에너지 이용에 필요 (2) 신경과 근육 기능 유지에 필요\n[비타민B6] (1) 단백질 및 아미노산 이용에 필요 (2) 혈액의 호모시스테인 수준을 정상으로 유지하는데 필요",
+            "cautions_text": "- 신장질환 위장관질환 등이 있는 경우 섭취 전 전문가와 상담할 것\n- 손발 따끔거림, 작열감 또는 저림 등의 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것\n- 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것",
+            "source_product_type": "목적형 (피로·활력+간)",
+            "daily_amount": 160,
+            "daily_unit": "mg",
+            "daily_reference_percent": 51,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "magnesium"
+            ],
+            "connection_label": "마그네슘 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1포 (하루 1포)",
+              "분말"
+            ]
+          },
+          {
+            "product_id": "200400150832451",
+            "product_name": "에너지 업 산화 마그네슘",
+            "manufacturer": "주식회사한미양행",
+            "form": "정",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1정 (하루 1정)",
+            "ingredient_count": 8,
+            "caution_ingredient_label": null,
+            "functionality_text": "[마그네슘]\n(가) 에너지 이용에 필요\n(나) 신경과 근육 기능 유지에 필요",
+            "cautions_text": "알레르기 체질이신 경우 성분을 확인 한 후 섭취하시기 바랍니다.",
+            "source_product_type": "단일",
+            "daily_amount": 315,
+            "daily_unit": "mg",
+            "daily_reference_percent": 100,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "magnesium"
+            ],
+            "connection_label": "마그네슘 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1정 (하루 1정)",
+              "정"
+            ]
+          },
+          {
+            "product_id": "200400200062074",
+            "product_name": "셀파렉스 마그네슘",
+            "manufacturer": "(주)서흥",
+            "form": "정",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1정 (하루 1정)",
+            "ingredient_count": 8,
+            "caution_ingredient_label": null,
+            "functionality_text": "마그네슘 : (1) 에너지 이용에 필요 (2) 신경과 근육 기능 유지에 필요",
+            "cautions_text": "(1) 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것",
+            "source_product_type": "단일",
+            "daily_amount": 315,
+            "daily_unit": "mg",
+            "daily_reference_percent": 100,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "magnesium"
+            ],
+            "connection_label": "마그네슘 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1정 (하루 1정)",
+              "정"
+            ]
+          },
+          {
+            "product_id": "2020001626816",
+            "product_name": "마그네슘",
+            "manufacturer": "(주)한국코스모",
+            "form": "정",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1정 (하루 1정)",
+            "ingredient_count": 8,
+            "caution_ingredient_label": null,
+            "functionality_text": "마그네슘 : (1) 에너지 이용에 필요 (2) 신경과 근육 기능 유지에 필요\n비타민D : (1) 칼슘과 인이 흡수되고 이용되는데 필요 (2) 뼈의 형성과 유지에 필요 (3) 골다공증발생 위험 감소에 도움을 줌",
+            "cautions_text": "(1) 고칼슘혈증이 있거나 의약품 복용 시 전문가와 상담할 것\n(2) 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것",
+            "source_product_type": "단일",
+            "daily_amount": 315,
+            "daily_unit": "mg",
+            "daily_reference_percent": 100,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "magnesium"
+            ],
+            "connection_label": "마그네슘 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1정 (하루 1정)",
+              "정"
+            ]
+          },
+          {
+            "product_id": "200400200082759",
+            "product_name": "데일리코어 마그네슘",
+            "manufacturer": "주식회사 노바렉스",
+            "form": "정",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1정 (하루 1정)",
+            "ingredient_count": 9,
+            "caution_ingredient_label": null,
+            "functionality_text": "[마그네슘]①에너지 이용에 필요②신경과 근육 기능 유지에 필요",
+            "cautions_text": "특정질환, 특이체질, 알레르기체질, 임산부의 경우에는 간혹 개인에 따라 과민반응이 나타날 수 있으므로 원료를 확인하시고, 섭취전에 전문가와 상담하시기 바랍니다.\n이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것",
+            "source_product_type": "단일",
+            "daily_amount": 315,
+            "daily_unit": "mg",
+            "daily_reference_percent": 100,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "magnesium"
+            ],
+            "connection_label": "마그네슘 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1정 (하루 1정)",
+              "정"
+            ]
+          },
+          {
+            "product_id": "200700170353108",
+            "product_name": "마그네슘 비타민B",
+            "manufacturer": "코스맥스엔비티(주)",
+            "form": "정",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1정 (하루 1정)",
+            "ingredient_count": 9,
+            "caution_ingredient_label": null,
+            "functionality_text": "[비타민 B1]\n탄수화물과 에너지 대사에 필요\n\n[마그네슘]\n에너지 이용에 필요\n신경과 근육 기능 유지에 필요",
+            "cautions_text": "[비타민 B1]\n이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것",
+            "source_product_type": "목적형 (피로·활력)",
+            "daily_amount": 315,
+            "daily_unit": "mg",
+            "daily_reference_percent": 100,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "magnesium"
+            ],
+            "connection_label": "마그네슘 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1정 (하루 1정)",
+              "정"
+            ]
+          },
+          {
+            "product_id": "2022002000267",
+            "product_name": "마그네슘",
+            "manufacturer": "이앤에스(주)",
+            "form": "정",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1정 (하루 1정)",
+            "ingredient_count": 9,
+            "caution_ingredient_label": null,
+            "functionality_text": "[마그네슘]\t에너지 이용에 필요\n\t\t신경과 근육 기능 유지에 필요\n\n[비타민 D]\t칼슘과 인이 흡수되고 이용되는데 필요\n\t\t뼈의 형성과 유지에 필요\n\t\t골다공증발생 위험 감소에 도움을 줌",
+            "cautions_text": "1) 고칼슘혈증이 있거나 의약품 복용 시 전문가와 상담하십시오.\n2) 이상사례 발생 시 섭취를 중단하고 전문가와 상담하십시오.\n3) 특이체질, 알레르기체질인 경우 개인에 따라 과민반응을 나타낼 수 있으므로 원료를 확인 후 섭취하십시오.",
+            "source_product_type": "단일",
+            "daily_amount": 315,
+            "daily_unit": "mg",
+            "daily_reference_percent": 100,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "magnesium"
+            ],
+            "connection_label": "마그네슘 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1정 (하루 1정)",
+              "정"
+            ]
+          },
+          {
+            "product_id": "20240028080625",
+            "product_name": "바르통 마이크로 마그쉐이프",
+            "manufacturer": "콜마비앤에이치(주)세종3공장",
+            "form": "분말",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1포 (하루 1포)",
+            "ingredient_count": 10,
+            "caution_ingredient_label": null,
+            "functionality_text": "- 마그네슘 : 에너지 이용에 필요, 신경과 근육 기능 유지에 필요",
+            "cautions_text": "1) 특이체질, 알레르기 체질의 경우에는 간혹 개인에 따라 과민반응을 나타낼 수 있으므로 원료를 확인한 후 섭취할 것",
+            "source_product_type": "단일",
+            "daily_amount": 315,
+            "daily_unit": "mg",
+            "daily_reference_percent": 100,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "magnesium"
+            ],
+            "connection_label": "마그네슘 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1포 (하루 1포)",
+              "분말"
+            ]
+          },
+          {
+            "product_id": "200700170353121",
+            "product_name": "마그네슘",
+            "manufacturer": "코스맥스엔비티(주)",
+            "form": "정",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1정 (하루 1정)",
+            "ingredient_count": 10,
+            "caution_ingredient_label": null,
+            "functionality_text": "[비타민 D]\n칼슘과 인이 흡수되고 이용되는데 필요\n뼈의 형성과 유지에 필요\n골다공증발생 위험 감소에 도움을 줌\n\n[마그네슘]\n에너지 이용에 필요\n신경과 근육 기능 유지에 필요",
+            "cautions_text": "[비타민 D]\n고칼슘혈증이 있거나 의약품 복용 시 전문가와 상담할 것\n이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것",
+            "source_product_type": "단일",
+            "daily_amount": 315,
+            "daily_unit": "mg",
+            "daily_reference_percent": 100,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "magnesium"
+            ],
+            "connection_label": "마그네슘 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1정 (하루 1정)",
+              "정"
+            ]
+          },
+          {
+            "product_id": "2025000496712",
+            "product_name": "마그네슘",
+            "manufacturer": "(주)대웅제약 1공장",
+            "form": "정",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1정 (하루 1정)",
+            "ingredient_count": 10,
+            "caution_ingredient_label": null,
+            "functionality_text": "[마그네슘]\n(1) 에너지 이용에 필요\n(2) 신경과 근육 기능 유지에 필요\n\n[비타민 D]\n(1) 칼슘과 인이 흡수되고 이용되는데 필요\n(2) 뼈의 형성과 유지에 필요\n(3) 골다공증발생 위험 감소에 도움을 줌",
+            "cautions_text": "[비타민D]\n(가) 고칼슘혈증이 있거나 의약품 복용 시 전문가와 상담할 것\n(나) 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것",
+            "source_product_type": "단일",
+            "daily_amount": 315,
+            "daily_unit": "mg",
+            "daily_reference_percent": 100,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "magnesium"
+            ],
+            "connection_label": "마그네슘 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1정 (하루 1정)",
+              "정"
+            ]
+          },
+          {
+            "product_id": "200400200023869",
+            "product_name": "하루엔진 마그네슘DK",
+            "manufacturer": "코스맥스바이오(주)",
+            "form": "정",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1정 (하루 1정)",
+            "ingredient_count": 10,
+            "caution_ingredient_label": null,
+            "functionality_text": "1) 비타민D : 칼슘과 인이 흡수되고 이용되는데 필요, 뼈의 형성과 유지에 필요, 골다공증발생 위험 감소에 도움을 줌.\n2) 비타민K : 정상적인 혈액응고에 필요, 뼈의 구성에 필요.\n3) 마그네슘 : 에너지 이용에 필요, 신경과 근육 기능 유지에 필요.",
+            "cautions_text": "섭취 시 목에 걸릴 수 있으므로 반드시 물과 함께 섭취하십시오. \n섭취 시 위장장애, 소화불량의 증상이 있을 경우 섭취를 중단하십시오.\n개인의 신체 상태에 따라 이상 증상이 생길 경우 섭취를 중단하십시오.\n섭취 전 제품에 이상이 있는 경우 섭취를 금하십시오.\n특정 원료 성분에 알레르기 체질은 원료 성분을 확인 후 섭취하십시오. \n고칼슘혈증이 있거나 의약품 복용 시 전문가와 상담하십시오.\n이상사례 발생 시 섭취를 중단하고 전문가와 상담하십시오.\n항응고제 등 복용 시 전문가와 상담하십시오.",
+            "source_product_type": "목적형 (뼈)",
+            "daily_amount": 315,
+            "daily_unit": "mg",
+            "daily_reference_percent": 100,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "magnesium"
+            ],
+            "connection_label": "마그네슘 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1정 (하루 1정)",
+              "정"
+            ]
+          },
+          {
+            "product_id": "200400200201605",
+            "product_name": "GC녹십자웰빙 마그네슘 B6",
+            "manufacturer": "엠에스바이오텍(주)",
+            "form": "정",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1정 (하루 1정)",
+            "ingredient_count": 10,
+            "caution_ingredient_label": null,
+            "functionality_text": "* 마그네슘\n①에너지 이용에 필요\n②신경과 근육 기능 유지에 필요\n\n* 비타민 B6\n①단백질 및 아미노산 이용에 필요\n②혈액의 호모시스테인 수준을 정상으로 유지하는데 필요\n\n* 비타민 D\n①칼슘과 인이 흡수되고 이용되는데 필요\n②뼈의 형성과 유지에 필요\n③골다공증발생 위험 감소에 도움을 줌",
+            "cautions_text": "* 비타민 B6\n① 손발 따끔거림, 작열감 또는 저림 등의 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것\n\n* 비타민 D\n① 고칼슘혈증이 있거나 의약품 복용 시 전문가와 상담할 것\n② 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것",
+            "source_product_type": "목적형 (뼈)",
+            "daily_amount": 315,
+            "daily_unit": "mg",
+            "daily_reference_percent": 100,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "magnesium"
+            ],
+            "connection_label": "마그네슘 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1정 (하루 1정)",
+              "정"
+            ]
+          },
+          {
+            "product_id": "20040015104417",
+            "product_name": "마그네슘 플러스",
+            "manufacturer": "주식회사 네추럴웨이",
+            "form": "정",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1정 (하루 1정)",
+            "ingredient_count": 10,
+            "caution_ingredient_label": null,
+            "functionality_text": "[마그네슘] 1) 에너지 이용에 필요 2) 신경과 근육 기능 유지에 필요\n[비타민 B6] 1) 단백질 및 아미노산 이용에 필요 2) 혈액의 호모시스테인 수준을 정상으로 유지하는데 필요\n[비타민 B1] 탄수화물과 에너지 대사에 필요\n[비타민 B2] 체내 에너지 생성에 필요",
+            "cautions_text": "- 손발 따끔거림, 작열감 또는 저림 등의 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것  \n- 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것",
+            "source_product_type": "단일",
+            "daily_amount": 330,
+            "daily_unit": "mg",
+            "daily_reference_percent": 105,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "magnesium"
+            ],
+            "connection_label": "마그네슘 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1정 (하루 1정)",
+              "정"
+            ]
+          },
+          {
+            "product_id": "20172880193168",
+            "product_name": "푸름웰니스 프리미엄 마그네슘 1000mg × 180정",
+            "manufacturer": "대원헬스케어 주식회사 2공장",
+            "form": "정",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1정 (하루 1정)",
+            "ingredient_count": 7,
+            "caution_ingredient_label": null,
+            "functionality_text": "①에너지 이용에 필요②신경과 근육 기능 유지에 필요",
+            "cautions_text": "1. 소비기한이 경과된 제품은 섭취하지 마십시오. \n2. 내용물의 손상이나 변형시에는 섭취하지 마십시오.\n3. 임산부, 수유부, 특이체질, 알레르기 체질의 경우 개인에 따라 과민반응을 나타낼 수 있으므로 원료를 확인 후 섭취하십시오.",
+            "source_product_type": "단일",
+            "daily_amount": 350,
+            "daily_unit": "mg",
+            "daily_reference_percent": 111,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "magnesium"
+            ],
+            "connection_label": "마그네슘 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1정 (하루 1정)",
+              "정"
+            ]
+          },
+          {
+            "product_id": "200400200082974",
+            "product_name": "마그파워 350",
+            "manufacturer": "주식회사 노바렉스",
+            "form": "정",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1정 (하루 1정)",
+            "ingredient_count": 8,
+            "caution_ingredient_label": null,
+            "functionality_text": "[마그네슘] 에너지 이용에 필요, 신경과 근육 기능 유지에 필요",
+            "cautions_text": "특정질환, 특이체질, 알레르기체질, 임산부의 경우에는 간혹 개인에 따라 과민반응이 나타날 수 있으므로 원료를 확인하시고, 섭취전에 전문가와 상담하시기 바랍니다.\n이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것",
+            "source_product_type": "단일",
+            "daily_amount": 350,
+            "daily_unit": "mg",
+            "daily_reference_percent": 111,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "magnesium"
+            ],
+            "connection_label": "마그네슘 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1정 (하루 1정)",
+              "정"
+            ]
+          },
+          {
+            "product_id": "20200016052412",
+            "product_name": "마그비책 마그네슘350 플러스 B6",
+            "manufacturer": "주식회사 상상바이오",
+            "form": "정",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1정 (하루 1정)",
+            "ingredient_count": 9,
+            "caution_ingredient_label": null,
+            "functionality_text": "[마그네슘] ① 에너지 이용에 필요 ② 신경과 근육 기능 유지에 필요\n[비타민B6] ① 단백질 및 아미노산 이용에 필요 ② 혈액의 호모시스테인 수준을 정상으로 유지하는데 필요",
+            "cautions_text": "[비타민B6] ① 손발 따끔거림, 작열감 또는 저림 등의 이상사레 발생 시 섭취를 중단하고 전문가와 상담하십시오.",
+            "source_product_type": "단일",
+            "daily_amount": 350,
+            "daily_unit": "mg",
+            "daily_reference_percent": 111,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "magnesium"
+            ],
+            "connection_label": "마그네슘 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1정 (하루 1정)",
+              "정"
+            ]
+          },
+          {
+            "product_id": "20240028080498",
+            "product_name": "마그네슘 350 위드 비타민 B6",
+            "manufacturer": "콜마비앤에이치(주)세종3공장",
+            "form": "정",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1정 (하루 1정)",
+            "ingredient_count": 9,
+            "caution_ingredient_label": null,
+            "functionality_text": "- 비타민 B6 : 단백질 및 아미노산 이용에 필요, 혈액의 호모시스테인 수준을 정상으로 유지하는데 필요\n- 마그네슘 : 에너지 이용에 필요, 신경과 근육 기능 유지에 필요",
+            "cautions_text": "- 특이체질, 알레르기 체질의 경우에는 간혹 개인에 따라 과민반응을 나타낼 수 있으므로 원료를 확인한 후 섭취할 것\n- 손발 따끔거림, 작열감 또는 저림 등의 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것",
+            "source_product_type": "목적형 (피로·활력+간)",
+            "daily_amount": 350,
+            "daily_unit": "mg",
+            "daily_reference_percent": 111,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "magnesium"
+            ],
+            "connection_label": "마그네슘 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1정 (하루 1정)",
+              "정"
+            ]
+          }
+        ]
+      },
+      {
+        "category_id": "vitamin_b",
+        "label": "비타민 B군",
+        "target": "일반",
+        "connection_kind": "model_nutrient",
+        "linked_nutrient_ids": [
+          "vitamin_b1",
+          "vitamin_b2"
+        ],
+        "unfiltered_count": 475,
+        "total_count": 475,
+        "available_forms": [
+          "과립",
+          "기타(당류 포함)",
+          "분말",
+          "액상",
+          "정",
+          "젤리",
+          "캡슐"
+        ],
+        "page": 1,
+        "page_size": 20,
+        "page_count": 24,
+        "has_previous": false,
+        "has_next": true,
+        "items": [
+          {
+            "product_id": "200400200072823",
+            "product_name": "유기농비오틴업",
+            "manufacturer": "(주)한국씨엔에스팜",
+            "form": "정",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1정 (하루 1정)",
+            "ingredient_count": 5,
+            "caution_ingredient_label": null,
+            "functionality_text": "[비타민B12] 정상적인 엽산 대사에 필요  \n[비오틴] 지방, 탄수화물, 단백질 대사와 에너지 생성에 필요",
+            "cautions_text": "① 특이체질, 알레르기 체질의 경우 성분을 확인하시고 섭취하여 주시기 바랍니다.\n② 유통기한을 확인하시기 바라며, 섭취량 및 섭취방법을 준수하시기 바랍니다.\n③ 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것",
+            "source_product_type": "단일",
+            "daily_amount": null,
+            "daily_unit": null,
+            "daily_reference_percent": 100,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "vitamin_b1",
+              "vitamin_b2"
+            ],
+            "connection_label": "비타민 B군 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1정 (하루 1정)",
+              "정"
+            ]
+          },
+          {
+            "product_id": "2014002007329",
+            "product_name": "맥주효모 비타민B1(Brewer’s Yeast Vitamin B1)",
+            "manufacturer": "주식회사 셀로닉스",
+            "form": "정",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1포 (하루 1포)",
+            "ingredient_count": 6,
+            "caution_ingredient_label": null,
+            "functionality_text": "[비타민B1] 탄수화물과 에너지 대사에 필요",
+            "cautions_text": "ㆍ이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것",
+            "source_product_type": "단일",
+            "daily_amount": null,
+            "daily_unit": null,
+            "daily_reference_percent": 100,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "vitamin_b1",
+              "vitamin_b2"
+            ],
+            "connection_label": "비타민 B군 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1포 (하루 1포)",
+              "정"
+            ]
+          },
+          {
+            "product_id": "20200016052296",
+            "product_name": "케이헬씨 비오틴",
+            "manufacturer": "주식회사 상상바이오",
+            "form": "정",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1정 (하루 1정)",
+            "ingredient_count": 6,
+            "caution_ingredient_label": null,
+            "functionality_text": "[비오틴] ① 지방, 탄수화물, 단백질 대사와 에너지 생성에 필요",
+            "cautions_text": "[비오틴] ① 이상사례 발생 시 섭취를 중단하고 전문가와 상담하십시오.",
+            "source_product_type": "단일",
+            "daily_amount": null,
+            "daily_unit": null,
+            "daily_reference_percent": 100,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "vitamin_b1",
+              "vitamin_b2"
+            ],
+            "connection_label": "비타민 B군 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1정 (하루 1정)",
+              "정"
+            ]
+          },
+          {
+            "product_id": "20200016052317",
+            "product_name": "케이헬씨 판토텐산",
+            "manufacturer": "주식회사 상상바이오",
+            "form": "정",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1정 (하루 1정)",
+            "ingredient_count": 7,
+            "caution_ingredient_label": null,
+            "functionality_text": "[판토텐산] ① 지방, 탄수화물, 단백질 대사와 에너지 생성에 필요",
+            "cautions_text": "[판토텐산] ① 이상사례 발생 시 섭취를 중단하고 전문가와 상담하십시오.",
+            "source_product_type": "단일",
+            "daily_amount": null,
+            "daily_unit": null,
+            "daily_reference_percent": 100,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "vitamin_b1",
+              "vitamin_b2"
+            ],
+            "connection_label": "비타민 B군 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1정 (하루 1정)",
+              "정"
+            ]
+          },
+          {
+            "product_id": "20200016052404",
+            "product_name": "판토텐산",
+            "manufacturer": "주식회사 상상바이오",
+            "form": "정",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1정 (하루 1정)",
+            "ingredient_count": 8,
+            "caution_ingredient_label": null,
+            "functionality_text": "[판토텐산] ① 지방, 탄수화물, 단백질 대사와 에너지 생성에 필요",
+            "cautions_text": "[판토텐산] ① 이상사례 발생 시 섭취를 중단하고 전문가와 상담하십시오.",
+            "source_product_type": "단일",
+            "daily_amount": null,
+            "daily_unit": null,
+            "daily_reference_percent": 100,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "vitamin_b1",
+              "vitamin_b2"
+            ],
+            "connection_label": "비타민 B군 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1정 (하루 1정)",
+              "정"
+            ]
+          },
+          {
+            "product_id": "20040020004443",
+            "product_name": "유니베라 활력엔 비타민B",
+            "manufacturer": "(주)네이처텍",
+            "form": "액상",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1병 (하루 1병)",
+            "ingredient_count": 10,
+            "caution_ingredient_label": null,
+            "functionality_text": "(1) 탄수화물과 에너지 대사에 필요\n\n①체내 에너지 생성에 필요\n\n①단백질 및 아미노산 이용에 필요②혈액의 호모시스테인 수준을 정상으로 유지하는데 필요",
+            "cautions_text": "(1) 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것",
+            "source_product_type": "단일",
+            "daily_amount": null,
+            "daily_unit": null,
+            "daily_reference_percent": 100,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "vitamin_b1",
+              "vitamin_b2"
+            ],
+            "connection_label": "비타민 B군 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1병 (하루 1병)",
+              "액상"
+            ]
+          },
+          {
+            "product_id": "200400200201603",
+            "product_name": "GC녹십자웰빙 비오틴",
+            "manufacturer": "엠에스바이오텍(주)",
+            "form": "정",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1정 (하루 1정)",
+            "ingredient_count": 10,
+            "caution_ingredient_label": null,
+            "functionality_text": "* 비오틴\n① 지방, 탄수화물, 단백질 대사와 에너지 생성에 필요\n\n* 판토텐산\n① 지방, 탄수화물, 단백질 대사와 에너지 생성에 필요",
+            "cautions_text": "* 비오틴\n① 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것\n\n* 판토텐산\n① 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것",
+            "source_product_type": "단일",
+            "daily_amount": null,
+            "daily_unit": null,
+            "daily_reference_percent": 100,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "vitamin_b1",
+              "vitamin_b2"
+            ],
+            "connection_label": "비타민 B군 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1정 (하루 1정)",
+              "정"
+            ]
+          },
+          {
+            "product_id": "20040016020264",
+            "product_name": "식물성 비타민B컴플렉스",
+            "manufacturer": "(주)케이지앤에프",
+            "form": "캡슐",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1캡슐 (하루 1캡슐)",
+            "ingredient_count": 10,
+            "caution_ingredient_label": null,
+            "functionality_text": "1.비타민B1: 탄수화물과 에너지 대사에 필요\n2.비타민B2: 체내 에너지 생성에 필요\n3.판토텐산: 지방, 탄수화물, 단백질 대사와 에너지 생성에 필요\n4.나이아신: 체내 에너지 생성에 필요\n5.비타민B6: 단백질 및 아미노산 이용에 필요\n                 혈액의 호모시스테인 수준을 정상으로 유지하는데 필요\n6.엽산: 세포와 혈액생성에 필요\n           태아 신경관의 정상 발달에 필요\n           혈액의 호모시스테인 수준을 정상으로 유지하는데 필요\n7.비오틴: 지방, 탄수화물, 단백질 대사와 에너지 생성에 필요",
+            "cautions_text": "비타민B1,비타민B2,판토텐산,비오틴: 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것",
+            "source_product_type": "단일",
+            "daily_amount": null,
+            "daily_unit": null,
+            "daily_reference_percent": 100,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "vitamin_b1",
+              "vitamin_b2"
+            ],
+            "connection_label": "비타민 B군 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1캡슐 (하루 1캡슐)",
+              "캡슐"
+            ]
+          },
+          {
+            "product_id": "20172880193169",
+            "product_name": "푸름웰니스 프리미엄 비타민B B1 B2 B6 B12 500mg x 180정",
+            "manufacturer": "대원헬스케어 주식회사 2공장",
+            "form": "정",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1정 (하루 1정)",
+            "ingredient_count": 10,
+            "caution_ingredient_label": null,
+            "functionality_text": "비타민B1- (1) 탄수화물과 에너지 대사에 필요\n\n비타민B2 - (1) 체내 에너지 생성에 필요\n\n비타민B6- ①단백질 및 아미노산 이용에 필요 ②혈액의 호모시스테인 수준을 정상으로 유지하는데 필요\n\n비타민B12- (1) 정상적인 엽산 대사에 필요",
+            "cautions_text": "비타민B1- (1) 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것\n비타민B2- (1) 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것\n비타민B12- (1) 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것",
+            "source_product_type": "단일",
+            "daily_amount": null,
+            "daily_unit": null,
+            "daily_reference_percent": 110,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "vitamin_b1",
+              "vitamin_b2"
+            ],
+            "connection_label": "비타민 B군 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1정 (하루 1정)",
+              "정"
+            ]
+          },
+          {
+            "product_id": "2019001407164",
+            "product_name": "더빌더 케이(K)",
+            "manufacturer": "주식회사 프롬바이오 익산공장",
+            "form": "액상",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1포 (하루 1포)",
+            "ingredient_count": 3,
+            "caution_ingredient_label": null,
+            "functionality_text": "(1) 탄수화물과 에너지 대사에 필요",
+            "cautions_text": "(1) 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것",
+            "source_product_type": "단일",
+            "daily_amount": null,
+            "daily_unit": null,
+            "daily_reference_percent": 117,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "vitamin_b1",
+              "vitamin_b2"
+            ],
+            "connection_label": "비타민 B군 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1포 (하루 1포)",
+              "액상"
+            ]
+          },
+          {
+            "product_id": "20180003915101",
+            "product_name": "나이아신",
+            "manufacturer": "(주)팜투팜2공장",
+            "form": "캡슐",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1캡슐 (하루 1캡슐)",
+            "ingredient_count": 8,
+            "caution_ingredient_label": null,
+            "functionality_text": "[나이아신] ①체내 에너지 생성에 필요",
+            "cautions_text": "① 질환이 있거나 의약품 복용 시 전문가와 상담 하십시오.\n② 알레르기 체질 등은 개인에 따라 과민반응을 나타낼 수 있습니다.\n③ 어린이가 함부로 섭취하지 않도록 일일섭취량 방법을 지도하십시오.\n④ 이상 사례 발생 시 섭취를 중단하고 전문가와 상담 하십시오.",
+            "source_product_type": "단일",
+            "daily_amount": null,
+            "daily_unit": null,
+            "daily_reference_percent": 133,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "vitamin_b1",
+              "vitamin_b2"
+            ],
+            "connection_label": "비타민 B군 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1캡슐 (하루 1캡슐)",
+              "캡슐"
+            ]
+          },
+          {
+            "product_id": "200400170211235",
+            "product_name": "비오틴 플러스",
+            "manufacturer": "(주)비오팜",
+            "form": "정",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1정 (하루 1정)",
+            "ingredient_count": 9,
+            "caution_ingredient_label": null,
+            "functionality_text": "[비오틴] (1) 지방, 탄수화물, 단백질 대사와 에너지 생성에 필요\n\n[아연] ①정상적인 면역기능에 필요②정상적인 세포분열에 필요",
+            "cautions_text": "(1) 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것",
+            "source_product_type": "단일",
+            "daily_amount": null,
+            "daily_unit": null,
+            "daily_reference_percent": 133,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "vitamin_b1",
+              "vitamin_b2"
+            ],
+            "connection_label": "비타민 B군 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1정 (하루 1정)",
+              "정"
+            ]
+          },
+          {
+            "product_id": "2023000462469",
+            "product_name": "레몬맛 비타C",
+            "manufacturer": "바이오디피씨(주)",
+            "form": "분말",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1포 (하루 1포)",
+            "ingredient_count": 10,
+            "caution_ingredient_label": null,
+            "functionality_text": "(1) 결합조직 형성과 기능유지에 필요\n(2) 철의 흡수에 필요\n(3) 항산화 작용을 하여 유해산소로부터 세포를 보호하는데 필요\n\n(1) 체내 에너지 생성에 필요\n\n(1) 단백질 및 아미노산 이용에 필요\n(2) 혈액의 호모시스테인 수준을 정상으로 유지하는데 필요",
+            "cautions_text": "(1) 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것\n- 특이체질, 알레르기 체질이신 경우 원료 성분을 확인하신 후 섭취하시기 바랍니다. \n - 소비기한을 확인 후 섭취하시기 바라며, 섭취량 및 섭취방법을 준수하시기 바랍니다. \n - 제품 개봉 또는 섭취 시 포장재에 의해 상처를 입을 수 있으니 주의하십시오.",
+            "source_product_type": "목적형 (피로·활력+간)",
+            "daily_amount": null,
+            "daily_unit": null,
+            "daily_reference_percent": 143,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "vitamin_b1",
+              "vitamin_b2"
+            ],
+            "connection_label": "비타민 B군 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1포 (하루 1포)",
+              "분말"
+            ]
+          },
+          {
+            "product_id": "2023000229640",
+            "product_name": "텔로케어",
+            "manufacturer": "(주)신비바이오",
+            "form": "정",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1정 (하루 1정)",
+            "ingredient_count": 10,
+            "caution_ingredient_label": null,
+            "functionality_text": "1) [나이아신] 체내 에너지 생성에 필요\n2) [비타민C] 결합조직 형성과 기능유지에 필요, 철의 흡수에 필요, 항산화 작용을 하여 유해산소로부터 세포를 보호하는데 필요",
+            "cautions_text": "1) 특이체질, 알레르기 체질의 경우 성분을 확인하신 후 섭취하십시오. \n2) 소비기한을 확인 후 섭취하시기 바라며, 섭취량 및 방법을 준수하시기 바랍니\n다. \n3) 이상사례 발생 시 섭취를 중단하고 전문가와 상담하시기 바랍니다. \n4) 제품 개봉 또는 섭취 시 포장재에 의해 상처를 입을 수 있으니 주의하십시오.",
+            "source_product_type": "목적형 (피로·활력+간)",
+            "daily_amount": null,
+            "daily_unit": null,
+            "daily_reference_percent": 200,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "vitamin_b1",
+              "vitamin_b2"
+            ],
+            "connection_label": "비타민 B군 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1정 (하루 1정)",
+              "정"
+            ]
+          },
+          {
+            "product_id": "200400151101066",
+            "product_name": "아이에스업(ISUP)분말",
+            "manufacturer": "주)팜크로스",
+            "form": "분말",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1포 (하루 1포)",
+            "ingredient_count": 9,
+            "caution_ingredient_label": null,
+            "functionality_text": "①체내 에너지 생성에 필요\n\n(1) 탄수화물과 에너지 대사에 필요\n\n①뼈 형성에 필요②에너지 이용에 필요③유해산소로부터 세포를 보호하는데 필요",
+            "cautions_text": "(1) 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것",
+            "source_product_type": "단일",
+            "daily_amount": null,
+            "daily_unit": null,
+            "daily_reference_percent": 227,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "vitamin_b1",
+              "vitamin_b2"
+            ],
+            "connection_label": "비타민 B군 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1포 (하루 1포)",
+              "분말"
+            ]
+          },
+          {
+            "product_id": "200400151071258",
+            "product_name": "바이리브리포좀비콤씨",
+            "manufacturer": "(주)유유헬스케어",
+            "form": "정",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1정 (하루 1정)",
+            "ingredient_count": 9,
+            "caution_ingredient_label": null,
+            "functionality_text": "비타민B1 : 탄수화물과 에너지 대사에 필요\n비타민B2 : 체내 에너지 생성에 필요\n비타민b6 : 단백질 및 아미노산 이용에 필요, 혈액의 호모시스테인 수준을 정상으로 유지하는데 필요\n나이아신:  체내 에너지 생성에 필요\n판토텐산: 지방, 탄수화물, 단백질 대사와 에너지 생성에 필요\n엽산: 세포와 혈액생성에 필요, 태아 신경관의 정상 발달에 필요, 혈액의 호모시스테인 수준을 정상으로 유지하는데 필요\n비타민B12 : 정상적인 엽산 대사에 필요\n비오틴: 지방, 탄수화물, 단백질 대사와 에너지 생성에 필요\n비타민C: 결합조직 형성과 기능유지에 필요, 철의 흡수에 필요, 항산화 작용을 하여 유해산소로부터 세포를 보호하는데 필요",
+            "cautions_text": "1. 손발 따끔거림, 작열감 또는 저림 등의 이상사례 발생 시 섭취를 중단하고 전문가와 상담하십시오\n2. 과량 섭취하지 않도록 주의하십시오\n3. 신장질환이 있는 경우 섭취 전 전문가와 상담하십시오.\n4. 이상사례 발생 시 섭취를 중단하고 전문가와 상담하십시오.",
+            "source_product_type": "목적형 (피로·활력)",
+            "daily_amount": null,
+            "daily_unit": null,
+            "daily_reference_percent": 100,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "vitamin_b1",
+              "vitamin_b2"
+            ],
+            "connection_label": "비타민 B군 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1정 (하루 1정)",
+              "정"
+            ]
+          },
+          {
+            "product_id": "20190009483701",
+            "product_name": "하루틴 온 리포좀 멀티B컴플렉스",
+            "manufacturer": "우리바이오(주)",
+            "form": "정",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1정 (하루 1정)",
+            "ingredient_count": 10,
+            "caution_ingredient_label": null,
+            "functionality_text": "[비타민 B1]\n(가) 탄수화물과 에너지 대사에 필요\n[비타민 B2]\n(가) 체내 에너지 생성에 필요\n[비타민 B6]\n(가) 단백질 및 아미노산 이용에 필요\n(나) 혈액의 호모시스테인 수준을 정상으로 유지하는데 필요\n[나이아신]\n(가) 체내 에너지 생성에 필요\n[판토텐산]\n(가) 지방, 탄수화물, 단백질 대사와 에너지 생성에 필요\n[엽산]\n(가) 세포와 혈액생성에 필요\n(나) 태아 신경관의 정상 발달에 필요\n(다) 혈액의 호모시스테인 수준을 정상으로 유지하는데 필요\n[비타민 B12]\n(가) 정상적인 엽산 대사에 필요\n[비오틴]\n(가) 지방, 탄수화물, 단백질 대사와 에너지 생성에 필요",
+            "cautions_text": "1) 특이체질, 알레르기 체질의 경우에는 간혹 개인에 따라 과민반응을 나타낼 수 있으므로 원료를 확인한 후 섭취하십시오.\n2) 소비기한을 확인하시기 바라며, 섭취량 및 섭취방법을 준수하시기 바랍니다.  \n3) 이상사례 발생 시 섭취를 중단하고 전문가와 상담하십시오.\n[비타민 B2]\n(가) 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것\n[판토텐산]\n(가) 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것\n[엽산]\n(가) 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것\n[비오틴]\n(가) 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것",
+            "source_product_type": "단일",
+            "daily_amount": null,
+            "daily_unit": null,
+            "daily_reference_percent": 100,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "vitamin_b1",
+              "vitamin_b2"
+            ],
+            "connection_label": "비타민 B군 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1정 (하루 1정)",
+              "정"
+            ]
+          },
+          {
+            "product_id": "20190009483947",
+            "product_name": "하루틴 리포좀 비타민B 컴플렉스 데일리",
+            "manufacturer": "우리바이오(주)",
+            "form": "정",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1정 (하루 1정)",
+            "ingredient_count": 10,
+            "caution_ingredient_label": null,
+            "functionality_text": "[비타민 B1]\n(가) 탄수화물과 에너지 대사에 필요\n\n[비타민 B2]\n(가) 체내 에너지 생성에 필요\n\n[비타민 B6]\n(가) 단백질 및 아미노산 이용에 필요\n(나) 혈액의 호모시스테인 수준을 정상으로 유지하는데 필요\n\n[나이아신]\n(가) 체내 에너지 생성에 필요\n\n[판토텐산]\n(가) 지방, 탄수화물, 단백질 대사와 에너지 생성에 필요\n\n[엽산]\n(가) 세포와 혈액생성에 필요\n(나) 태아 신경관의 정상 발달에 필요\n(다) 혈액의 호모시스테인 수준을 정상으로 유지하는데 필요\n\n[비타민 B12]\n(가) 정상적인 엽산 대사에 필요\n\n[비오틴]\n(가) 지방, 탄수화물, 단백질 대사와 에너지 생성에 필요",
+            "cautions_text": "[비타민 B1]\n(1) 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것\n\n[비타민 B2]\n(1) 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것\n\n[비타민 B6]\n(1) 손발 따끔거림, 작열감 또는 저림 등의 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것\n\n[판토텐산]\n(1) 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것\n\n[비타민 B12]\n(1) 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것\n\n[비오틴]\n(1) 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것",
+            "source_product_type": "단일",
+            "daily_amount": null,
+            "daily_unit": null,
+            "daily_reference_percent": 100,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "vitamin_b1",
+              "vitamin_b2"
+            ],
+            "connection_label": "비타민 B군 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1정 (하루 1정)",
+              "정"
+            ]
+          },
+          {
+            "product_id": "200400151071300",
+            "product_name": "바이리브 리포좀 비콤씨디",
+            "manufacturer": "(주)유유헬스케어",
+            "form": "정",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1정 (하루 1정)",
+            "ingredient_count": 10,
+            "caution_ingredient_label": null,
+            "functionality_text": "비타민B1 : 탄수화물과 에너지 대사에 필요\n비타민B2 : 체내 에너지 생성에 필요\n비타민B6 : 단백질 및 아미노산 이용에 필요, 혈액의 호모시스테인 수준을 정상으로 유지하는데 필요\n나이아신:  체내 에너지 생성에 필요\n판토텐산: 지방, 탄수화물, 단백질 대사와 에너지 생성에 필요\n엽산: 세포와 혈액생성에 필요, 태아 신경관의 정상 발달에 필요, 혈액의 호모시스테인 수준을 정상으로 유지하는데 필요\n비타민B12 : 정상적인 엽산 대사에 필요\n비오틴: 지방, 탄수화물, 단백질 대사와 에너지 생성에 필요\n비타민C: 결합조직 형성과 기능유지에 필요, 철의 흡수에 필요, 항산화 작용을 하여 유해산소로부터 세포를 보호하는데 필요\n비타민D : 칼슘과 인이 흡수되고 이용되는데 필요,  뼈의 형성과 유지에 필요, 골다공증발생 위험 감소에 도움을 줌",
+            "cautions_text": "1. 이상사례 발생 시 섭취를 중단하고 전문가와 상담하십시오.\n2. 고칼슘혈증이 있거나 의약품 복용 시 전문가와 상담할 것\n3. 과량 섭취하지 않도록 주의할 것\n4. 신장질환이 있는 경우 섭취 전 전문가와 상담할 것\n5. 손발 따끔거림, 작열감 또는 저림 등의 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것",
+            "source_product_type": "목적형 (피로·활력)",
+            "daily_amount": null,
+            "daily_unit": null,
+            "daily_reference_percent": 100,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "vitamin_b1",
+              "vitamin_b2"
+            ],
+            "connection_label": "비타민 B군 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1정 (하루 1정)",
+              "정"
+            ]
+          },
+          {
+            "product_id": "200400151071296",
+            "product_name": "뉴웰라리포좀ABCD비타민",
+            "manufacturer": "(주)유유헬스케어",
+            "form": "정",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1정 (하루 1정)",
+            "ingredient_count": 10,
+            "caution_ingredient_label": null,
+            "functionality_text": "비타민A : 어두운 곳에서 시각 적응을 위해 필요, 피부와 점막을 형성하고 기능을 유지하는데 필요, 상피세포의 성장과 발달에 필요\n비타민B1 : 탄수화물과 에너지 대사에 필요\n비타민B2 : 체내 에너지 생성에 필요\n비타민b6 : 단백질 및 아미노산 이용에 필요, 혈액의 호모시스테인 수준을 정상으로 유지하는데 필요\n나이아신:  체내 에너지 생성에 필요\n판토텐산: 지방, 탄수화물, 단백질 대사와 에너지 생성에 필요\n엽산: 세포와 혈액생성에 필요, 태아 신경관의 정상 발달에 필요, 혈액의 호모시스테인 수준을 정상으로 유지하는데 필요\n비타민B12 : 정상적인 엽산 대사에 필요\n비오틴: 지방, 탄수화물, 단백질 대사와 에너지 생성에 필요\n비타민C: 결합조직 형성과 기능유지에 필요, 철의 흡수에 필요, 항산화 작용을 하여 유해산소로부터 세포를 보호하는데 필요\n비타민D : 칼슘과 인이 흡수되고 이용되는데 필요,  뼈의 형성과 유지에 필요, 골다공증발생 위험 감소에 도움을 줌",
+            "cautions_text": "(가) 고칼슘혈증이 있거나 의약품 복용 시 전문가와 상담할 것\n(나) 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것",
+            "source_product_type": "목적형 (피로·활력)",
+            "daily_amount": null,
+            "daily_unit": null,
+            "daily_reference_percent": 100,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "vitamin_b1",
+              "vitamin_b2"
+            ],
+            "connection_label": "비타민 B군 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1정 (하루 1정)",
+              "정"
+            ]
+          }
+        ]
+      },
+      {
+        "category_id": "calcium",
+        "label": "칼슘",
+        "target": "일반",
+        "connection_kind": "model_nutrient",
+        "linked_nutrient_ids": [
+          "calcium"
+        ],
+        "unfiltered_count": 334,
+        "total_count": 334,
+        "available_forms": [
+          "분말",
+          "액상",
+          "정",
+          "젤리",
+          "캡슐"
+        ],
+        "page": 1,
+        "page_size": 20,
+        "page_count": 17,
+        "has_previous": false,
+        "has_next": true,
+        "items": [
+          {
+            "product_id": "200700170353236",
+            "product_name": "라케어 액상 칼슘(Lacare Liquid Calcium)",
+            "manufacturer": "코스맥스엔비티(주)",
+            "form": "액상",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1포 (하루 1포)",
+            "ingredient_count": 10,
+            "caution_ingredient_label": null,
+            "functionality_text": "[비타민 D]\n칼슘과 인이 흡수되고 이용되는데 필요\n뼈의 형성과 유지에 필요\n골다공증발생 위험 감소에 도움을 줌\n\n[비타민 K]\n정상적인 혈액응고에 필요\n뼈의 구성에 필요\n\n[칼슘]\n뼈와 치아 형성에 필요\n신경과 근육 기능 유지에 필요\n정상적인 혈액응고에 필요\n골다공증발생 위험 감소에 도움을 줌",
+            "cautions_text": "[비타민 D]\n고칼슘혈증이 있거나 의약품 복용 시 전문가와 상담할 것\n이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것\n\n[비타민 K]\n항응고제 등 복용 시 전문가와 상담할 것\n이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것\n\n1. 소비기한을 확인 후 섭취하시기 바라며, 섭취량 및 섭취방법을 준수하시기 바랍니다.\n2. 임산부, 수유부, 특이체질, 알레르기 체질이신 경우 성분을 확인 후 섭취하십시오.\n3. 침전물이 생기는 경우가 있으나 제품의 품질 및 기능에는 이상이 없으니, 섭취 전 충분히 흔들어 섭취 바랍니다.\n4. 제품 개봉 후에는 변질될 수 있으니 가급적 빨리 섭취하시기 바랍니다.\n5. 제품 개봉 및 섭취 시 절단면에 상해를 입을 수 있으니 주의하십시오.",
+            "source_product_type": "목적형 (뼈)",
+            "daily_amount": 600,
+            "daily_unit": "mg",
+            "daily_reference_percent": 86,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "calcium"
+            ],
+            "connection_label": "칼슘 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1포 (하루 1포)",
+              "액상"
+            ]
+          },
+          {
+            "product_id": "200700170352891",
+            "product_name": "D-Cal Peachy Sachets Liquid Calcium 2",
+            "manufacturer": "코스맥스엔비티(주)",
+            "form": "액상",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1포 (하루 1포)",
+            "ingredient_count": 10,
+            "caution_ingredient_label": null,
+            "functionality_text": "[비타민 D]\n칼슘과 인이 흡수되고 이용되는데 필요\n뼈의 형성과 유지에 필요\n골다공증발생 위험 감소에 도움을 줌\n\n[칼슘]\n뼈와 치아 형성에 필요\n신경과 근육 기능 유지에 필요\n정상적인 혈액응고에 필요\n골다공증발생 위험 감소에 도움을 줌",
+            "cautions_text": "[비타민 D]\n고칼슘혈증이 있거나 의약품 복용 시 전문가와 상담할 것\n이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것\n\n\n 1. 권장섭취량 및 섭취방법을 확인 후 섭취하여 주십시오.\n 2. 특이체질, 알레르기 등의 체질이신 경우 성분을 확인 후 섭취하십시오.\n 3. 이상사례 발생 시 즉시 섭취를 중단하시고, 전문가와 상담하십시오.\n 4. 과즙에 의한 갈변현상이 발생할 수 있습니다. 품질에는 이상이 없으니 안심하고 섭취하십시오.\n 5. 충분히 흔들어서 섭취하십시오.\n 6. 전자레인지에 포를 데우지 않도록 주의하십시오.\n 7. 개봉 후, 즉시 섭취하시기 바랍니다.",
+            "source_product_type": "단일",
+            "daily_amount": 500,
+            "daily_unit": "mg",
+            "daily_reference_percent": 71,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "calcium"
+            ],
+            "connection_label": "칼슘 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1포 (하루 1포)",
+              "액상"
+            ]
+          },
+          {
+            "product_id": "2021001622928",
+            "product_name": "마시는 액상 칼슘 500mg 아연 비타민D",
+            "manufacturer": "엔피케이바이오 주식회사 2공장",
+            "form": "액상",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1포 (하루 1포)",
+            "ingredient_count": 10,
+            "caution_ingredient_label": null,
+            "functionality_text": "[비타민D]①칼슘과 인이 흡수되고 이용되는데 필요②뼈의 형성과 유지에 필요③골다공증발생 위험 감소에 도움을 줌\n[칼슘]①뼈와 치아 형성에 필요②신경과 근육 기능 유지에 필요③정상적인 혈액응고에 필요④골다공증발생 위험 감소에 도움을 줌\n[아연]①정상적인 면역기능에 필요②정상적인 세포분열에 필요",
+            "cautions_text": "1) 과량섭취 시 부작용이 있을 수 있음.\n2) 특정원료에 알레르기가 있거나 질병치료 약물투여 중인 분은 섭취 전 전문가와 상의하십시오.\n3) 소비기한이 경과된 제품은 섭취하지 마십시오.\n[비타민D]\n1) 고칼슘혈증이 있거나 의약품 복용 시 전문가와 상담할 것\n2) 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것",
+            "source_product_type": "목적형 (뼈)",
+            "daily_amount": 500,
+            "daily_unit": "mg",
+            "daily_reference_percent": 71,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "calcium"
+            ],
+            "connection_label": "칼슘 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1포 (하루 1포)",
+              "액상"
+            ]
+          },
+          {
+            "product_id": "200400151071288",
+            "product_name": "뉴트맘스칼마디칼슘마그네슘비타민D",
+            "manufacturer": "(주)유유헬스케어",
+            "form": "정",
+            "target": "일반",
+            "intake_label": "1일 2회, 1회 1정 (하루 2정)",
+            "ingredient_count": 10,
+            "caution_ingredient_label": null,
+            "functionality_text": "(1) 뼈와 치아 형성에 필요\n(2) 신경과 근육 기능 유지에 필요\n(3) 정상적인 혈액응고에 필요\n(4) 골다공증발생 위험 감소에 도움을 줌\n\n(1) 에너지 이용에 필요\n(2) 신경과 근육 기능 유지에 필요\n\n(1) 칼슘과 인이 흡수되고 이용되는데 필요\n(2) 뼈의 형성과 유지에 필요\n(3) 골다공증발생 위험 감소에 도움을 줌",
+            "cautions_text": "(가) 고칼슘혈증이 있거나 의약품 복용 시 전문가와 상담할 것\n(나) 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것",
+            "source_product_type": "목적형 (뼈)",
+            "daily_amount": 700,
+            "daily_unit": "mg",
+            "daily_reference_percent": 100,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "calcium"
+            ],
+            "connection_label": "칼슘 관련 제품 목록",
+            "feature_labels": [
+              "1일 2회, 1회 1정 (하루 2정)",
+              "정"
+            ]
+          },
+          {
+            "product_id": "2021001609030",
+            "product_name": "본이너스 미네랄 하모니",
+            "manufacturer": "데이앤바이오(주)",
+            "form": "분말",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1포 (하루 1포)",
+            "ingredient_count": 6,
+            "caution_ingredient_label": null,
+            "functionality_text": "[칼슘]\n(1) 뼈와 치아 형성에 필요\n(2) 신경과 근육 기능 유지에 필요\n(3) 정상적인 혈액응고에 필요\n(4) 골다공증발생 위험 감소에 도움을 줌\n\n[마그네슘]\n(1) 에너지 이용에 필요\n(2) 신경과 근육 기능 유지에 필요\n\n[폴리감마글루탐산]\n(1) 체내 칼슘흡수 촉진에 도움을 줄 수 있음\n\n[비타민 K]\n(1) 정상적인 혈액응고에 필요\n(2) 뼈의 구성에 필요\n\n[비타민 D]\n(1) 칼슘과 인이 흡수되고 이용되는데 필요\n(2) 뼈의 형성과 유지에 필요\n(3) 골다공증발생 위험 감소에 도움을 줌",
+            "cautions_text": "1. 특이체질 및 과다 섭취 시 알레르기 등 발생 우려가 있으니 성분 및 섭취량을 확인하시고 섭취하시기 바랍니다.\n2. 질환 보유자 또는 약물 복용 중이신 분은 섭취 전에 의사, 약사 등 전문가와 상담 하십시오.\n3. 소비기한이 경과된 제품은 섭취하지 마십시오.\n4. 흡습의 우려가 있으니 개봉한 제품은 바로 섭취하십시오.\n5. 고칼슘혈증이 있거나 의약품 복용 시 전문가와 상담하시기 바랍니다.\n6. 항응고제 등 복용 시 전문가와 상담하시기 바랍니다.\n7. 이상사례 발생 시 섭취를 중단하고 전문가와 상담하시기 바랍니다.",
+            "source_product_type": "목적형 (뼈)",
+            "daily_amount": 393,
+            "daily_unit": "mg",
+            "daily_reference_percent": 56,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "calcium"
+            ],
+            "connection_label": "칼슘 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1포 (하루 1포)",
+              "분말"
+            ]
+          },
+          {
+            "product_id": "2016000600567",
+            "product_name": "뼈건강 칼마디 칼슘·마그네슘·비타민D",
+            "manufacturer": "고려은단 헬스케어(주)",
+            "form": "정",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1정 (하루 1정)",
+            "ingredient_count": 3,
+            "caution_ingredient_label": null,
+            "functionality_text": "[칼슘]\n①뼈와 치아 형성에 필요\n②신경과 근육 기능 유지에 필요\n③정상적인 혈액응고에 필요\n④골다공증발생 위험 감소에 도움을 줌\n\n[마그네슘]\n①에너지 이용에 필요\n②신경과 근육 기능 유지에 필요\n\n[비타민D]\n①칼슘과 인이 흡수되고 이용되는데 필요\n②뼈의 형성과 유지에 필요\n③골다공증발생 위험 감소에 도움을 줌",
+            "cautions_text": "(가) 고칼슘혈증이 있거나 의약품 복용 시 전문가와 상담할 것\n(나) 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것",
+            "source_product_type": "목적형 (뼈)",
+            "daily_amount": 350,
+            "daily_unit": "mg",
+            "daily_reference_percent": 50,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "calcium"
+            ],
+            "connection_label": "칼슘 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1정 (하루 1정)",
+              "정"
+            ]
+          },
+          {
+            "product_id": "2016000600581",
+            "product_name": "뼈건강 칼마디+K2 칼슘·마그네슘·비타민D·비타민K",
+            "manufacturer": "고려은단 헬스케어(주)",
+            "form": "정",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1정 (하루 1정)",
+            "ingredient_count": 3,
+            "caution_ingredient_label": null,
+            "functionality_text": "[비타민D] ①칼슘과 인이 흡수되고 이용되는데 필요 ②뼈의 형성과 유지에 필요 ③골다공증발생 위험 감소에 도움을 줌\n[비타민K] ①정상적인 혈액응고에 필요 ②뼈의 구성에 필요\n[칼슘] ①뼈와 치아 형성에 필요 ②신경과 근육 기능 유지에 필요 ③정상적인 혈액응고에 필요 ④골다공증발생 위험 감소에 도움을 줌\n[마그네슘] ①에너지 이용에 필요 ②신경과 근육 기능 유지에 필요",
+            "cautions_text": "고칼슘혈증이 있거나 의약품 복용 시 전문가와 상담할 것\n항응고제 등 복용 시 전문가와 상담할 것\n이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것",
+            "source_product_type": "목적형 (뼈)",
+            "daily_amount": 350,
+            "daily_unit": "mg",
+            "daily_reference_percent": 50,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "calcium"
+            ],
+            "connection_label": "칼슘 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1정 (하루 1정)",
+              "정"
+            ]
+          },
+          {
+            "product_id": "2004001701389",
+            "product_name": "다다오 칼슘",
+            "manufacturer": "(주)녹십초알로에",
+            "form": "분말",
+            "target": "일반",
+            "intake_label": "1일 2회, 1회 1포 (하루 2포)",
+            "ingredient_count": 14,
+            "caution_ingredient_label": null,
+            "functionality_text": "〔칼슘〕①뼈와 치아 형성에 필요②신경과 근육 기능 유지에 필요③정상적인 혈액응고에 필요④골다공증발생 위험 감소에 도움을 줌\n\n〔마그네슘〕①에너지 이용에 필요②신경과 근육 기능 유지에 필요\n\n〔망간〕①뼈 형성에 필요②에너지 이용에 필요③유해산소로부터 세포를 보호하는데 필요\n\n〔비타민 D〕①칼슘과 인이 흡수되고 이용되는데 필요②뼈의 형성과 유지에 필요③골다공증발생 위험 감소에 도움을 줌",
+            "cautions_text": "(가) 고칼슘혈증이 있거나 의약품 복용 시 전문가와 상담할 것\n(나) 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것",
+            "source_product_type": "목적형 (뼈)",
+            "daily_amount": 700,
+            "daily_unit": "mg",
+            "daily_reference_percent": 100,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "calcium"
+            ],
+            "connection_label": "칼슘 관련 제품 목록",
+            "feature_labels": [
+              "1일 2회, 1회 1포 (하루 2포)",
+              "분말"
+            ]
+          },
+          {
+            "product_id": "200400200062172",
+            "product_name": "BYHEALTH Liquid Calcium DK Softgels",
+            "manufacturer": "(주)서흥",
+            "form": "캡슐",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 2캡슐 (하루 2캡슐)",
+            "ingredient_count": 10,
+            "caution_ingredient_label": null,
+            "functionality_text": "칼슘 : (1) 뼈와 치아 형성에 필요 (2) 신경과 근육 기능 유지에 필요 (3) 정상적인 혈액응고에 필요 (4) 골다공증발생 위험 감소에 도움을 줌\n비타민K : (1) 정상적인 혈액응고에 필요 (2) 뼈의 구성에 필요\n비타민D : (1) 칼슘과 인이 흡수되고 이용되는데 필요 (2) 뼈의 형성과 유지에 필요 (3) 골다공증발생 위험 감소에 도움을 줌",
+            "cautions_text": "(1) 항응고제 등 복용 시 전문가와 상담할 것\n(2) 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것\n(3) 고칼슘혈증이 있거나 의약품 복용 시 전문가와 상담할 것",
+            "source_product_type": "목적형 (뼈)",
+            "daily_amount": 604,
+            "daily_unit": "mg",
+            "daily_reference_percent": 86,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "calcium"
+            ],
+            "connection_label": "칼슘 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 2캡슐 (하루 2캡슐)",
+              "캡슐"
+            ]
+          },
+          {
+            "product_id": "200400151071228",
+            "product_name": "칼슘마그네슘비타민DK2",
+            "manufacturer": "(주)유유헬스케어",
+            "form": "정",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 2정 (하루 2정)",
+            "ingredient_count": 10,
+            "caution_ingredient_label": null,
+            "functionality_text": "①칼슘과 인이 흡수되고 이용되는데 필요②뼈의 형성과 유지에 필요③골다공증발생 위험 감소에 도움을 줌\n\n①뼈와 치아 형성에 필요②신경과 근육 기능 유지에 필요③정상적인 혈액응고에 필요④골다공증발생 위험 감소에 도움을 줌\n\n①에너지 이용에 필요②신경과 근육 기능 유지에 필요\n\n①뼈 형성에 필요②에너지 이용에 필요③유해산소로부터 세포를 보호하는데 필요\n\n(1) 정상적인 혈액응고에 필요\n(2) 뼈의 구성에 필요",
+            "cautions_text": "(1) 고칼슘혈증이 있거나 의약품 복용 시 전문가와 상담할 것\n(2) 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것\n(3) 항응고제 등 복용 시 전문가와 상담할 것\n(4) 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것",
+            "source_product_type": "목적형 (뼈)",
+            "daily_amount": 600,
+            "daily_unit": "mg",
+            "daily_reference_percent": 86,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "calcium"
+            ],
+            "connection_label": "칼슘 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 2정 (하루 2정)",
+              "정"
+            ]
+          },
+          {
+            "product_id": "20240028080296",
+            "product_name": "센트룸 칼슘+D 미니",
+            "manufacturer": "콜마비앤에이치(주)세종3공장",
+            "form": "정",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 2정 (하루 2정)",
+            "ingredient_count": 10,
+            "caution_ingredient_label": null,
+            "functionality_text": "- 비타민 D : 칼슘과 인이 흡수되고 이용되는데 필요, 뼈의 형성과 유지에 필요, 골다공증발생 위험 감소에 도움을 줌\n- 칼슘 : 뼈와 치아 형성에 필요, 신경과 근육 기능 유지에 필요, 정상적인 혈액응고에 필요, 골다공증발생 위험 감소에 도움을 줌\n- 마그네슘 : 에너지 이용에 필요, 신경과 근육 기능 유지에 필요\n- 아연 : 정상적인 면역기능에 필요, 정상적인 세포분열에 필요\n- 구리 : 철의 운반과 이용에 필요, 유해산소로부터 세포를 보호하는데 필요\n- 망간 : 뼈 형성에 필요, 에너지 이용에 필요, 유해산소로부터 세포를 보호하는데 필요",
+            "cautions_text": "- 고칼슘혈증이 있거나 의약품 복용 시 전문가와 상담할 것\n- 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것",
+            "source_product_type": "목적형 (뼈)",
+            "daily_amount": 600,
+            "daily_unit": "mg",
+            "daily_reference_percent": 86,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "calcium"
+            ],
+            "connection_label": "칼슘 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 2정 (하루 2정)",
+              "정"
+            ]
+          },
+          {
+            "product_id": "200400170211795",
+            "product_name": "이신화 칼슘 M3",
+            "manufacturer": "(주)비오팜",
+            "form": "분말",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 2포 (하루 2포)",
+            "ingredient_count": 5,
+            "caution_ingredient_label": null,
+            "functionality_text": "[칼슘] ①뼈와 치아 형성에 필요 ②신경과 근육 기능 유지에 필요 ③정상적인 혈액응고에 필요 ④골다공증발생 위험 감소에 도움을 줌\n[비타민 D] ①칼슘과 인이 흡수되고 이용되는데 필요 ②뼈의 형성과 유지에 필요 ③골다공증발생 위험 감소에 도움을 줌\n[마그네슘] ①에너지 이용에 필요 ②신경과 근육 기능 유지에 필요\n[아연] ①정상적인 면역기능에 필요 ②정상적인 세포분열에 필요",
+            "cautions_text": "(가) 고칼슘혈증이 있거나 의약품 복용 시 전문가와 상담할 것\n(나) 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것",
+            "source_product_type": "목적형 (뼈)",
+            "daily_amount": 568,
+            "daily_unit": "mg",
+            "daily_reference_percent": 81,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "calcium"
+            ],
+            "connection_label": "칼슘 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 2포 (하루 2포)",
+              "분말"
+            ]
+          },
+          {
+            "product_id": "201000190041338",
+            "product_name": "오시어스 오리진(OSSEOUS ORIGIN)",
+            "manufacturer": "엔피케이바이오 주식회사",
+            "form": "분말",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1포 (하루 1포)",
+            "ingredient_count": 13,
+            "caution_ingredient_label": null,
+            "functionality_text": "[비타민D]①칼슘과 인이 흡수되고 이용되는데 필요②뼈의 형성과 유지에 필요③골다공증발생 위험 감소에 도움을 줌\n[비타민K]①정상적인 혈액응고에 필요②뼈의 구성에 필요\n[칼슘]①뼈와 치아 형성에 필요②신경과 근육 기능 유지에 필요③정상적인 혈액응고에 필요④골다공증발생 위험 감소에 도움을 줌\n[마그네슘]①에너지 이용에 필요②신경과 근육 기능 유지에 필요",
+            "cautions_text": "1) 과량섭취 시 부작용이 있을 수 있음.\n2) 특정원료에 알레르기가 있거나 질병치료 약물투여 중인 분은 섭취 전 전문가와 상의하십시오.\n3) 소비기한이 경과된 제품은 섭취하지 마십시오.\n[비타민D]\n 1) 고칼슘혈증이 있거나 의약품 복용 시 전문가와 상담할 것\n 2) 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것\n[비타민K]\n 1) 항응고제 등 복용 시 전문가와 상담할 것\n 2) 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것",
+            "source_product_type": "목적형 (뼈)",
+            "daily_amount": 600,
+            "daily_unit": "mg",
+            "daily_reference_percent": 86,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "calcium"
+            ],
+            "connection_label": "칼슘 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1포 (하루 1포)",
+              "분말"
+            ]
+          },
+          {
+            "product_id": "20210016229117",
+            "product_name": "닥터스드림 액상 칼슘 500",
+            "manufacturer": "엔피케이바이오 주식회사 2공장",
+            "form": "액상",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1포 (하루 1포)",
+            "ingredient_count": 11,
+            "caution_ingredient_label": null,
+            "functionality_text": "[비타민D]①칼슘과 인이 흡수되고 이용되는데 필요②뼈의 형성과 유지에 필요③골다공증발생 위험감소에 도움을 줌\n[칼슘]①뼈와 치아 형성에 필요②신경과 근육 기능 유지에 필요③정상적인 혈액응고에 필요④골다공증발생 위험 감소에 도움을 줌",
+            "cautions_text": "1) 과량섭취 시 부작용이 있을 수 있음.\n2) 특정원료에 알레르기가 있거나 질병치료 약물투여 중인 분은 섭취 전 전문가와 상의하십시오.\n3) 소비기한이 경과된 제품은 섭취하지 마십시오.\n[비타민D]\n(가) 고칼슘혈증이 있거나 의약품 복용 시 전문가와 상담할 것\n(나) 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것",
+            "source_product_type": "단일",
+            "daily_amount": 500,
+            "daily_unit": "mg",
+            "daily_reference_percent": 71,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "calcium"
+            ],
+            "connection_label": "칼슘 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1포 (하루 1포)",
+              "액상"
+            ]
+          },
+          {
+            "product_id": "202200102225",
+            "product_name": "마싯슘",
+            "manufacturer": "(주)한미양행 선유공장",
+            "form": "액상",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1포 (하루 1포)",
+            "ingredient_count": 16,
+            "caution_ingredient_label": null,
+            "functionality_text": "①뼈와 치아 형성에 필요②신경과 근육 기능 유지에 필요③정상적인 혈액응고에 필요④골다공증발생 위험 감소에 도움을 줌\n\n①정상적인 면역기능에 필요②정상적인 세포분열에 필요\n\n①칼슘과 인이 흡수되고 이용되는데 필요②뼈의 형성과 유지에 필요③골다공증발생 위험 감소에 도움을 줌",
+            "cautions_text": "(가) 고칼슘혈증이 있거나 의약품 복용 시 전문가와 상담할 것\n(나) 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것\n알레르기 체질이신 경우 성분을 확인 한 후 섭취하시기 바랍니다.",
+            "source_product_type": "목적형 (뼈+면역)",
+            "daily_amount": 500,
+            "daily_unit": "mg",
+            "daily_reference_percent": 71,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "calcium"
+            ],
+            "connection_label": "칼슘 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1포 (하루 1포)",
+              "액상"
+            ]
+          },
+          {
+            "product_id": "200700170353065",
+            "product_name": "허발란스 칼슘 HerBalance Calcium",
+            "manufacturer": "코스맥스엔비티(주)",
+            "form": "정",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1정 (하루 1정)",
+            "ingredient_count": 13,
+            "caution_ingredient_label": null,
+            "functionality_text": "[비타민 D]\n칼슘과 인이 흡수되고 이용되는데 필요\n뼈의 형성과 유지에 필요\n골다공증발생 위험 감소에 도움을 줌\n\n[비타민 K]\n정상적인 혈액응고에 필요\n뼈의 구성에 필요\n\n[칼슘]\n뼈와 치아 형성에 필요\n신경과 근육 기능 유지에 필요\n정상적인 혈액응고에 필요\n골다공증발생 위험 감소에 도움을 줌\n\n[마그네슘]\n에너지 이용에 필요\n신경과 근육 기능 유지에 필요",
+            "cautions_text": "[비타민 D]\n고칼슘혈증이 있거나 의약품 복용 시 전문가와 상담할 것\n이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것\n\n[비타민 K]\n항응고제 등 복용 시 전문가와 상담할 것\n이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것",
+            "source_product_type": "목적형 (뼈)",
+            "daily_amount": 400,
+            "daily_unit": "mg",
+            "daily_reference_percent": 57,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "calcium"
+            ],
+            "connection_label": "칼슘 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1정 (하루 1정)",
+              "정"
+            ]
+          },
+          {
+            "product_id": "200700170353334",
+            "product_name": "칼슘 플러스",
+            "manufacturer": "코스맥스엔비티(주)",
+            "form": "액상",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1포 (하루 1포)",
+            "ingredient_count": 18,
+            "caution_ingredient_label": null,
+            "functionality_text": "[비타민 D]\n칼슘과 인이 흡수되고 이용되는데 필요\n뼈의 형성과 유지에 필요\n골다공증발생 위험 감소에 도움을 줌\n\n[비타민 K]\n정상적인 혈액응고에 필요\n뼈의 구성에 필요\n\n[칼슘]\n뼈와 치아 형성에 필요\n신경과 근육 기능 유지에 필요\n정상적인 혈액응고에 필요\n골다공증발생 위험 감소에 도움을 줌\n\n[아연]\n정상적인 면역기능에 필요\n정상적인 세포분열에 필요",
+            "cautions_text": "[비타민 D]\n고칼슘혈증이 있거나 의약품 복용 시 전문가와 상담할 것\n이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것\n\n[비타민 K]\n항응고제 등 복용 시 전문가와 상담할 것\n이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것\n\n1. 섭취량 및 섭취방법을 확인 후 섭취하여 주십시오.\n2. 특이체질, 알레르기 등의 체질이신 경우 성분을 확인 후 섭취하십시오.\n3. 이상사례 발생 시 즉시 섭취를 중단하시고, 전문가와 상담하십시오.\n4. 충분히 흔들어서 섭취하십시오.\n5. 전자레인지에 포를 데우지 않도록 주의하십시오.\n6. 개봉 후, 즉시 섭취하시기 바랍니다.",
+            "source_product_type": "목적형 (뼈)",
+            "daily_amount": 400,
+            "daily_unit": "mg",
+            "daily_reference_percent": 57,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "calcium"
+            ],
+            "connection_label": "칼슘 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1포 (하루 1포)",
+              "액상"
+            ]
+          },
+          {
+            "product_id": "20240028080225",
+            "product_name": "스노우 칼마디K2",
+            "manufacturer": "콜마비앤에이치(주)세종3공장",
+            "form": "분말",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1포 (하루 1포)",
+            "ingredient_count": 15,
+            "caution_ingredient_label": null,
+            "functionality_text": "- 비타민 D : 칼슘과 인이 흡수되고 이용되는데 필요, 뼈의 형성과 유지에 필요, 골다공증발생 위험 감소에 도움을 줌\n- 비타민K : 정상적인 혈액응고에 필요, 뼈의 구성에 필요\n- 칼슘 : 뼈와 치아 형성에 필요, 신경과 근육 기능 유지에 필요, 정상적인 혈액응고에 필요, 골다공증발생 위험 감소에 도움을 줌\n- 마그네슘 : 에너지 이용에 필요, 신경과 근육 기능 유지에 필요",
+            "cautions_text": "1) 특이체질, 알레르기 체질의 경우에는 간혹 개인에 따라 과민반응을 나타낼 수 있으므로 원료를 확인한 후 섭취하십시오.\n2) 고칼슘혈증이 있거나 의약품 복용 시 전문가와 상담할 것\n3) 항응고제 등 복용 시 전문가와 상담할 것\n4) 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것",
+            "source_product_type": "목적형 (뼈)",
+            "daily_amount": 350,
+            "daily_unit": "mg",
+            "daily_reference_percent": 50,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "calcium"
+            ],
+            "connection_label": "칼슘 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1포 (하루 1포)",
+              "분말"
+            ]
+          },
+          {
+            "product_id": "200700170352331",
+            "product_name": "칼슘 본케어",
+            "manufacturer": "코스맥스엔비티(주)",
+            "form": "분말",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1포 (하루 1포)",
+            "ingredient_count": 18,
+            "caution_ingredient_label": null,
+            "functionality_text": "[칼슘]\n① 뼈와 치아 형성에 필요\n② 신경과 근육 기능 유지에 필요\n③ 정상적인 혈액응고에 필요\n④ 골다공증발생 위험 감소에 도움을 줌\n\n[폴리감마글루탐산]\n체내 칼슘흡수 촉진에 도움을 줄 수 있음\n\n[비타민D]\n① 칼슘과 인이 흡수되고 이용되는데 필요\n② 뼈의 형성과 유지에 필요\n③ 골다공증발생 위험 감소에 도움을 줌",
+            "cautions_text": "(가) 고칼슘혈증이 있거나 의약품 복용 시 전문가와 상담할 것\n(나) 이상사례 발생 시 섭취를 중단하고 전문가와 상담할 것",
+            "source_product_type": "단일",
+            "daily_amount": 350,
+            "daily_unit": "mg",
+            "daily_reference_percent": 50,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "calcium"
+            ],
+            "connection_label": "칼슘 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1포 (하루 1포)",
+              "분말"
+            ]
+          },
+          {
+            "product_id": "20172880236353",
+            "product_name": "덴티칼슘 플러스",
+            "manufacturer": "주식회사 코스팜",
+            "form": "정",
+            "target": "일반",
+            "intake_label": "1일 1회, 1회 1정 (하루 1정)",
+            "ingredient_count": 18,
+            "caution_ingredient_label": null,
+            "functionality_text": "[칼슘] \n1) 뼈와 치아 형성에 필요\n2) 신경과 근육 기능 유지에 필요\n3) 정상적인 혈액응고에 필요\n4) 골다공증발생 위험 감소에 도움을 줌\n\n[망간] \n1) 뼈 형성에 필요\n2) 에너지 이용에 필요\n3) 유해산소로부터 세포를 보호하는데 필요\n\n[비타민D]\n1) 칼슘과 인이 흡수되고 이용되는데 필요\n2) 뼈의 형성과 유지에 필요\n3) 골다공증발생 위험 감소에 도움을 줌",
+            "cautions_text": "1) 고칼슘혈증이 있거나 의약품 복용 시 전문가와 상담하시기 바랍니다.\n2) 이상사례 발생 시 섭취를 중단하고 전문가와 상담하시기 바랍니다.",
+            "source_product_type": "목적형 (뼈)",
+            "daily_amount": 350,
+            "daily_unit": "mg",
+            "daily_reference_percent": 50,
+            "connection_kind": "model_nutrient",
+            "linked_nutrient_ids": [
+              "calcium"
+            ],
+            "connection_label": "칼슘 관련 제품 목록",
+            "feature_labels": [
+              "1일 1회, 1회 1정 (하루 1정)",
+              "정"
+            ]
+          }
+        ]
+      }
+    ],
+    "food_only_nutrient_ids": [
+      "sodium_excess"
+    ],
+    "unique_candidate_product_count": 954,
+    "unique_visible_product_count": 60,
+    "display_policy": {
+      "show_scores": false,
+      "show_product_grades": false,
+      "order": "source_category_order_then_source_order_within_target",
+      "product_limit": null,
+      "default_page_size": 20
+    }
+  }
+}

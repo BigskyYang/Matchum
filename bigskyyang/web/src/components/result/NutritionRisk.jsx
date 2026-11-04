@@ -1,86 +1,148 @@
-// 개인 결과의 '나의 영양소 부족 위험' (데이터는 lib/result.js의 buildPersonalResult → nutrition)
+import { useCallback, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { PRODUCT_NUTRIENTS } from '../../data/supplementInfo.js'
+import BottomSheet from '../BottomSheet.jsx'
+
+// 개인 결과의 '내가 챙겨야 할 영양소' (데이터는 lib/result.js의 buildPersonalResult → nutrition)
 //   재준님 화면 규칙 (Jaejun/nutrition_final_feedback_applied/config/display_policy.json)
 //   - 영양소마다 등급 하나: 평소 식사 기준이 있으면 그것, 없으면 생활습관 기준 (두 확률은 평균하지 않는다)
-//   - 확률 숫자는 보여 주지 않고 '높은 편·보통·낮은 편'만
-//   - 두 기준이 다르면 생활습관 기준 등급을 작게 같이 적는다
-//   살펴볼 영양소(최대 5개)만 펼쳐 두고, 나머지는 접어 둔다
-const BAND = {
-  High: { label: '높은 편', cls: 'bg-primary-soft text-primary-shade' },
-  Mid: { label: '보통', cls: 'bg-butter text-ink' },
-  Low: { label: '낮은 편', cls: 'bg-mint text-ink' },
+//   - 확률 숫자는 보여 주지 않고 세 단계만. 재준님 등급(High·Mid·Low = 부족 위험 높은 편·보통·낮은 편)을
+//     판정처럼 보이지 않게 경향으로 쓴다: 부족하기 쉬워요 · 보통 · 잘 챙기는 편 (나트륨은 많이 먹을 위험이라 따로)
+//   화면에는 '높은 편' 영양소 칩만 두고, 누르면 아래에서 올라오는 창에 기준·음식·건강기능식품 안내를 보여 준다
+//   근거·정확도·진단 아님 안내는 화면 맨 아래 '어떻게 만들었나요?'(AboutLink)에 모았다
+const BAND_CLS = { High: 'bg-primary-soft text-primary-shade', Mid: 'bg-butter text-ink', Low: 'bg-mint text-ink' }
+const LABELS = {
+  lack: { High: '부족하기 쉬워요', Mid: '보통', Low: '잘 챙기는 편' },
+  excess: { High: '많이 먹기 쉬워요', Mid: '보통', Low: '잘 조절하는 편' },
 }
-const SOURCE = { habitual: '평소 식사 기준', lifestyle: '생활습관 기준' }
+const bandLabel = (n, band) => LABELS[n.excess ? 'excess' : 'lack'][band]
+const SOURCE = { habitual: '평소 식사 응답으로 예측했어요', lifestyle: '생활습관 응답으로 예측했어요' }
 
-function Row({ n, showSource, detail = false }) {
+function Badge({ n }) {
+  return <span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-bold ${BAND_CLS[n.band]}`}>{bandLabel(n, n.band)}</span>
+}
+
+// 영양소 하나의 자세한 내용
+function RiskSheet({ n, onClose }) {
   return (
-    <li className={`rounded-card px-3.5 py-3 ${detail ? 'border-2 border-primary bg-white' : 'bg-cream'}`}>
-      <div className="flex items-center gap-2">
-        <span className="flex min-w-0 flex-1 items-center gap-2 font-bold">
-          <span aria-hidden="true" className="text-xl">
-            {n.icon}
-          </span>
+    <BottomSheet
+      title={
+        <>
+          <span aria-hidden="true">{n.icon}</span>
           {n.label}
-        </span>
-        <span className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-bold ${BAND[n.band].cls}`}>{BAND[n.band].label}</span>
-      </div>
-      {showSource && (
-        <p className="mt-1 text-[0.7rem] text-ink-faint">
-          {SOURCE[n.source]}
-          {n.differ && ` · 생활습관 기준으로는 '${BAND[n.lifestyle].label}'`}
+        </>
+      }
+      aside={<Badge n={n} />}
+      onClose={onClose}
+    >
+      <p className="text-sm text-ink-soft">
+        {SOURCE[n.source]}
+        {n.differ && ` (생활습관 응답으로는 '${bandLabel(n, n.lifestyle)}')`}
+      </p>
+      {n.role && <p className="mt-3 leading-relaxed">{n.role}</p>}
+      {n.foods?.length > 0 && (
+        <div className="mt-4">
+          <p className="text-sm font-bold">이런 음식에 많아요</p>
+          <ul className="mt-2 grid grid-cols-3 gap-2">
+            {n.foods.map((f) => (
+              <li key={f} className="rounded-card bg-cream px-2 py-3 text-center text-sm font-bold">
+                {f}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+      {n.tip && <p className="mt-4 rounded-card bg-cream px-4 py-3 text-sm leading-relaxed">{n.tip}</p>}
+      {n.supplement === 'product' && (
+        <Link
+          to={`/supplements?n=${PRODUCT_NUTRIENTS.find((x) => x.from.includes(n.key)).key}`}
+          className="mt-4 flex items-center justify-between rounded-card bg-lavender/60 px-4 py-3 text-sm font-bold"
+        >
+          💊 도움이 될 수 있는 건강기능식품 보기
+          <span aria-hidden="true">›</span>
+        </Link>
+      )}
+      {n.supplement === 'food' && (
+        <p className="mt-4 rounded-card bg-lavender/60 px-4 py-3 text-sm leading-relaxed">
+          🍽️ 건강기능식품보다 음식으로 챙기는 영양소예요.
         </p>
       )}
-      {detail && <p className="mt-1.5 text-xs leading-relaxed text-ink-soft">{n.guide}</p>}
-    </li>
+    </BottomSheet>
+  )
+}
+
+// 나머지 영양소 (보통·잘 챙기는 편, 또는 5개를 넘은 부족하기 쉬운 영양소)
+function RestSheet({ rest, onPick, onClose }) {
+  return (
+    <BottomSheet title="나머지 영양소" onClose={onClose}>
+      <ul className="grid grid-cols-2 gap-1.5">
+        {rest.map((n) => (
+          <li key={n.key}>
+            <button
+              type="button"
+              onClick={() => onPick(n)}
+              className="flex h-full w-full flex-col items-start gap-1.5 rounded-card bg-cream px-3 py-2.5 text-left active:scale-[0.98]"
+            >
+              <span className="flex items-start gap-1.5 text-sm leading-tight font-bold">
+                <span aria-hidden="true">{n.icon}</span>
+                {n.label}
+              </span>
+              <Badge n={n} />
+            </button>
+          </li>
+        ))}
+      </ul>
+    </BottomSheet>
   )
 }
 
 export default function NutritionRisk({ nutrition, ffqAsked }) {
+  const [open, setOpen] = useState(null) // 영양소 또는 'rest'
+  const close = useCallback(() => setOpen(null), [])
   if (!nutrition) return <p className="text-sm text-ink-soft">계산하고 있어요…</p>
   const { watch, rest, habitualAvailable } = nutrition
 
   return (
     <div>
-      <p className="text-sm leading-relaxed text-ink-soft">
-        내 응답으로 영양소마다 섭취가 부족할 위험을 예측했어요. 국민건강영양조사 참여자들과 비교해 높은 편인지 낮은 편인지예요.
-      </p>
-
-      <h3 className="mt-4 text-sm font-bold">🔺 살펴볼 영양소</h3>
       {watch.length ? (
-        <ul className="mt-2 space-y-2">
-          {watch.map((n) => (
-            <Row key={n.key} n={n} showSource={habitualAvailable} detail />
-          ))}
-        </ul>
+        <>
+          <p className="text-sm text-ink-soft">
+            지금 응답으로 보면 특히 챙겨야 할 영양소예요
+          </p>
+          <ul className="mt-3 flex flex-wrap gap-2">
+            {watch.map((n) => (
+              <li key={n.key}>
+                <button
+                  type="button"
+                  onClick={() => setOpen(n)}
+                  className="flex items-center gap-1.5 rounded-full bg-primary-soft px-3.5 py-2.5 font-bold text-primary-shade active:scale-95"
+                >
+                  <span aria-hidden="true">{n.icon}</span>
+                  {n.label}
+                  <span aria-hidden="true">›</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </>
       ) : (
-        <p className="mt-2 text-sm text-ink-soft">부족 위험이 높은 편인 영양소는 없어요 👍</p>
+        <p className="text-sm text-ink-soft">특히 부족하기 쉬운 영양소는 없어요 👍</p>
       )}
 
       {rest.length > 0 && (
-        <details className="mt-3">
-          <summary className="cursor-pointer text-sm font-semibold text-ink-soft">나머지 영양소 {rest.length}개 보기</summary>
-          <ul className="mt-2 space-y-1.5">
-            {rest.map((n) => (
-              <Row key={n.key} n={n} showSource={habitualAvailable} />
-            ))}
-          </ul>
-        </details>
+        <button type="button" onClick={() => setOpen('rest')} className="mt-2 py-3 text-sm font-semibold text-ink-soft">
+          나머지 영양소 {rest.length}개 보기 ›
+        </button>
       )}
 
-      <ul className="mt-4 space-y-1 text-[0.7rem] leading-relaxed text-ink-faint">
-        {habitualAvailable ? (
-          <li>
-            · 평소 식사 기준(고기·생선·달걀·콩·유제품을 먹는 횟수)이 있는 영양소는 그 결과를 보여 줘요. 생활습관 기준보다 정확한
-            편이에요.
-          </li>
-        ) : (
-          <li>
-            · 평소 식사 기준은 19~64세에서만 검증돼
-            {ffqAsked ? ' 이번에는 계산하지 않았어요.' : ', 65세 이상은 생활습관 기준으로만 알려 드려요.'}
-          </li>
-        )}
-        <li>· 생활습관 기준은 운동·수면·식사 습관 응답만으로 예측해 정확도가 높지 않아요. 참고로만 봐 주세요.</li>
-        <li>· 기준 자료 안에서의 상대 등급이에요. 부족을 진단한 결과가 아니고, 필요한 양을 알려 주지 않아요.</li>
-      </ul>
+      {!habitualAvailable && (
+        <p className="text-xs text-ink-faint">
+          {ffqAsked ? '평소 식사 응답이 부족해 생활습관 응답으로만 예측했어요.' : '65세 이상은 생활습관 응답으로만 예측했어요.'}
+        </p>
+      )}
+
+      {open === 'rest' && <RestSheet rest={rest} onPick={setOpen} onClose={close} />}
+      {open && open !== 'rest' && <RiskSheet n={open} onClose={close} />}
     </div>
   )
 }

@@ -37,13 +37,19 @@ describe('buildTypeResult (1단계 유형 결과)', () => {
   it('부족할 수 있는 영양소: 공통 8개 + 2줄 (판정 코드 포함), 성별·연령대 표시', () => {
     expect(r.nutrients.common).toHaveLength(8)
     for (const n of r.nutrients.picks) expect(['유형특이', '식사량영향', '흔함']).toContain(n.tag)
-    expect(r.nutrientsEmptyText).toEqual(expect.any(String))
     expect(r.sexLabel).toBe('여성')
     expect(r.ageLabel).toMatch(/세/)
   })
 
-  it('짝꿍은 다른 대분류', () => {
-    expect(r.partner.type.name).not.toBe(r.mainType.name)
+  it('짝꿍 유형 2개: 내 유형이 아니고 서로 다르며, 마스코트용 세부 유형 ID와 이름이 있다', () => {
+    const { fill, together } = r.partners
+    expect([fill.id, together.id]).not.toContain(r.leafId)
+    expect(fill.id).not.toBe(together.id)
+    for (const p of [fill, together]) {
+      expect(p.name).toBe(LEAF_TYPES[p.id].name)
+      expect(p.main.emoji).toEqual(expect.any(String))
+      expect(p.axes.length).toBeLessThanOrEqual(2)
+    }
   })
 })
 
@@ -75,10 +81,14 @@ describe('buildPersonalResult 건강기능식품 정보', () => {
     expect(buildPersonalResult(SAMPLE).supplements).toBeNull()
   })
 
-  it('제품은 보여 주지 않고 영양소만', () => {
-    const { supplements } = buildPersonalResult(SAMPLE, models)
+  it('제품 목록 영양소마다 어떤 모델 영양소에서 왔는지 (추천 이유)', () => {
+    const { supplements, nutrition } = buildPersonalResult(SAMPLE, models)
     expect(Object.keys(supplements).sort()).toEqual(['foodOnly', 'nutrients'])
-    for (const n of supplements.nutrients) expect(Object.keys(n).sort()).toEqual(['icon', 'key', 'label'])
+    const watch = nutrition.watch.map((n) => n.key)
+    for (const n of supplements.nutrients) {
+      expect(Object.keys(n).sort()).toEqual(['from', 'icon', 'key', 'label'])
+      for (const k of n.from) expect(watch).toContain(k)
+    }
   })
 })
 

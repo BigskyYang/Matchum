@@ -1,0 +1,42 @@
+{
+  "example_kind": "connection_demo_only_not_model_prediction",
+  "selected_nutrient_ids": [
+    "calcium",
+    "magnesium",
+    "vitamin_b1",
+    "vitamin_b2",
+    "sodium_excess"
+  ],
+  "options": [
+    {
+      "value": "magnesium",
+      "label": "마그네슘",
+      "count": 272,
+      "disabled": false,
+      "linked_nutrient_ids": [
+        "magnesium"
+      ]
+    },
+    {
+      "value": "vitamin_b",
+      "label": "비타민 B군",
+      "count": 475,
+      "disabled": false,
+      "linked_nutrient_ids": [
+        "vitamin_b1",
+        "vitamin_b2"
+      ]
+    },
+    {
+      "value": "calcium",
+      "label": "칼슘",
+      "count": 334,
+      "disabled": false,
+      "linked_nutrient_ids": [
+        "calcium"
+      ]
+    }
+  ],
+  "selected_category_id": "magnesium",
+  "note": "비타민 D는 별도 일반 정보 영역에 분리함"
+}

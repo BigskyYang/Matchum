@@ -27,9 +27,32 @@ export function saveSurvey(state) {
   }
 }
 
+// 건강기능식품 화면: 고른 제품(신고번호)과 '임신·질환·복용약' 확인 답 ('ok' | 'consult' | null)
+const PICKS_KEY = 'nbti-picks-v1'
+const NO_PICKS = { ids: [], gate: null }
+
+export function loadPicks() {
+  try {
+    const saved = JSON.parse(sessionStorage.getItem(PICKS_KEY))
+    if (Array.isArray(saved?.ids)) return { ...NO_PICKS, ...saved }
+  } catch {
+    // 저장소 접근 불가 또는 손상된 값
+  }
+  return NO_PICKS
+}
+
+export function savePicks(picks) {
+  try {
+    sessionStorage.setItem(PICKS_KEY, JSON.stringify(picks))
+  } catch {
+    // 저장 실패해도 화면은 계속
+  }
+}
+
 export function clearSurvey() {
   try {
     sessionStorage.removeItem(KEY)
+    sessionStorage.removeItem(PICKS_KEY)
   } catch {
     // 무시
   }
