@@ -1,25 +1,20 @@
 import { describe, expect, it } from 'vitest'
-import supplementProducts from '../data/supplementProducts.json'
-import { PRODUCT_NUTRIENTS, TARGETS } from '../data/supplementInfo.js'
-import { supplementInfo, supplementTargets, targetsFor } from './supplements.js'
+import catalog from '../data/supplementCatalog.json'
+import { PRODUCT_NUTRIENTS } from '../data/supplementInfo.js'
+import { dailyTotals, formsOf, productCount, productSections, productTexts, supplementTargets, targetsFor } from './supplements.js'
 
-// 테스트용 가짜 제품 목록 (실제 제품 아님)
-const item = (name, target = '일반') => ({ name, maker: '테스트제조', reportNo: name, target, function: '테스트 문구' })
-const DATA = {
-  source: '테스트',
-  nutrients: {
-    vitamin_c: [item('C1'), item('C2', '여성'), item('C3', '남성'), item('C4'), item('C5'), item('C6', '시니어')],
-    vitamin_b: [item('B1')],
-    calcium: [],
-  },
-  multivitamin: { balanced: [item('M1'), item('M2', '남성')], fatigue: [] },
-}
-const WOMAN_30 = { sex: 2, age: 30 }
+describe('제품 대상 칸 (targetsFor)', () => {
+  it('내게 맞춘 칸 먼저, 50세 이상은 시니어, 일반은 마지막', () => {
+    expect(targetsFor(2, 30)).toEqual(['여성', '일반'])
+    expect(targetsFor(1, 55)).toEqual(['남성', '시니어', '일반'])
+  })
+})
 
-describe('준혁님 제품 분류로 넘기는 영양소 (supplementTargets)', () => {
-  it('제품 분류 영양소만, 순서대로 (B1·B2는 비타민 B군 하나, 나트륨·비타민 A는 빠짐)', () => {
+describe('재준님 결과 → 제품 목록 영양소 (supplementTargets)', () => {
+  it('B1·B2는 비타민 B군 하나로, 나트륨·비타민 A는 빠지고, 단백질은 음식으로', () => {
     const t = supplementTargets(['sodium_excess', 'zinc', 'vitamin_b2', 'vitamin_a', 'vitamin_b1', 'protein'])
-    expect(t.nutrients.map((n) => n.key)).toEqual(['zinc', 'vitamin_b'])
+    expect(t.nutrients.map((n) => n.key)).toEqual(['vitamin_b', 'zinc'])
+    expect(t.nutrients[0].from).toEqual(['vitamin_b1', 'vitamin_b2'])
     expect(t.foodOnly).toEqual(['단백질'])
   })
 
@@ -28,60 +23,78 @@ describe('준혁님 제품 분류로 넘기는 영양소 (supplementTargets)', (
   })
 })
 
-// 아래는 제품 표시를 다시 붙일 때 쓰는 부분 (지금 화면에서는 쓰지 않는다)
-describe('건강기능식품 제품 정보 (supplementInfo)', () => {
-  it('성별·나이에 맞는 대상만 (어린이·임산부 대상은 목록에 없다)', () => {
-    expect(targetsFor(2, 30)).toEqual(['일반', '여성'])
-    expect(targetsFor(1, 55)).toEqual(['일반', '남성', '시니어'])
+describe('제품 목록 (준혁님 9단계 후보 전체)', () => {
+  it('재준님 인수 확인: 칼슘 일반 대상 334개 (자르지 않는다)', () => {
+    const [general] = productSections(catalog, 'calcium', ['일반'])
+    expect(general.items).toHaveLength(334)
   })
 
-  it('영양소마다 내 대상 제품을 앞에서부터 3개까지', () => {
-    const { nutrients } = supplementInfo(DATA, ['vitamin_c'], WOMAN_30)
-    expect(nutrients[0].products.map((p) => p.name)).toEqual(['C1', 'C2', 'C4'])
-    const man = supplementInfo(DATA, ['vitamin_c'], { sex: 1, age: 60 }).nutrients[0]
-    expect(man.products.map((p) => p.name)).toEqual(['C1', 'C3', 'C4'])
+  it('대상 칸을 섞지 않고, 원본 순서를 그대로 쓴다', () => {
+    const sections = productSections(catalog, 'zinc', ['여성', '일반'])
+    expect(sections.map((s) => s.target)).toEqual(['여성', '일반'])
+    expect(sections[1].items.map((p) => p.id)).toEqual(catalog.lists.zinc['일반'].map(([id]) => id))
   })
 
-  it('비타민 B1·B2는 비타민 B군 하나로, 부족 영양소 순서대로', () => {
-    const { nutrients } = supplementInfo(DATA, ['vitamin_b2', 'calcium', 'vitamin_b1', 'vitamin_c'], WOMAN_30)
-    expect(nutrients.map((n) => n.key)).toEqual(['vitamin_b', 'calcium', 'vitamin_c'])
-    expect(nutrients[1].products).toEqual([])
+  it('제형으로 거르면 그 제형만, 순서는 그대로', () => {
+    const [all] = productSections(catalog, 'calcium', ['일반'])
+    const [tablets] = productSections(catalog, 'calcium', ['일반'], ['정'])
+    expect(tablets.items.every((p) => p.form === '정')).toBe(true)
+    expect(tablets.items.map((p) => p.id)).toEqual(all.items.filter((p) => p.form === '정').map((p) => p.id))
+    expect(formsOf(catalog, 'calcium', ['일반']).reduce((s, f) => s + f.count, 0)).toBe(334)
   })
 
-  it('비타민 A·E는 제품 정보 없음, 단백질·칼륨·인은 음식으로만', () => {
-    const info = supplementInfo(DATA, ['vitamin_a', 'vitamin_e', 'protein', 'potassium', 'vitamin_c'], WOMAN_30)
-    expect(info.nutrients.map((n) => n.key)).toEqual(['vitamin_c'])
-    expect(info.foodOnly).toEqual(['단백질', '칼륨'])
+  it('제품 수는 같은 제품을 한 번만 센다', () => {
+    const ids = ['남성', '시니어', '일반'].flatMap((t) => (catalog.lists.zinc[t] ?? []).map(([id]) => id))
+    expect(productCount(catalog, 'zinc', ['남성', '시니어', '일반'])).toBe(new Set(ids).size)
   })
 
-  it('종합비타민은 균형형만, 내 대상에 맞게', () => {
-    expect(supplementInfo(DATA, [], WOMAN_30).multivitamins.map((p) => p.name)).toEqual(['M1'])
-  })
-
-  it('제품 목록이 비어 있으면 ready = false', () => {
-    expect(supplementInfo(DATA, [], WOMAN_30).ready).toBe(true)
-    expect(supplementInfo({ nutrients: {}, multivitamin: { balanced: [] } }, ['vitamin_c'], WOMAN_30).ready).toBe(false)
+  it('기능성·주의사항 원문을 찾을 수 있다', () => {
+    const [{ items }] = productSections(catalog, 'magnesium', ['일반'])
+    const t = productTexts(catalog, items[0])
+    expect(t.function.length).toBeGreaterThan(0)
+    expect(t.caution.length).toBeGreaterThan(0)
   })
 })
 
-// 제품 목록 파일(scripts/build_supplement_products.py가 만든다) 형식 점검
-describe('제품 목록 supplementProducts.json', () => {
-  const keys = PRODUCT_NUTRIENTS.map((n) => n.key)
-  const all = [...Object.values(supplementProducts.nutrients).flat(), ...Object.values(supplementProducts.multivitamin).flat()]
+describe('함께 먹을 때 하루 합계와 상한 (dailyTotals)', () => {
+  const vitC = Object.entries(catalog.products).filter(([, p]) => p.daily.vitamin_c >= 1000).map(([id]) => id)
 
-  it('영양소 키는 supplementInfo.js에 있는 것만', () => {
-    for (const k of Object.keys(supplementProducts.nutrients)) expect(keys).toContain(k)
+  it('하루 함량을 더하고 상한을 넘으면 표시한다', () => {
+    const two = vitC.slice(0, 3)
+    const row = dailyTotals(catalog, two, 2).find((x) => x.key === 'vitamin_c')
+    const sum = two.reduce((s, id) => s + catalog.products[id].daily.vitamin_c, 0)
+    expect(row.total).toBeCloseTo(sum, 2)
+    expect(row.over).toBe(sum > 2000)
   })
 
-  it('제품마다 이름·제조사·신고번호·기능성 원문이 있고, 대상은 일반·남성·여성·시니어', () => {
-    for (const p of all) {
-      for (const f of ['name', 'maker', 'reportNo', 'function']) expect(p[f]).toEqual(expect.any(String))
-      expect(TARGETS).toContain(p.target)
+  it('남성은 칼슘 상한 2,500mg', () => {
+    const id = Object.keys(catalog.products).find((k) => catalog.products[k].daily.calcium)
+    expect(dailyTotals(catalog, [id], 1).find((x) => x.key === 'calcium').ul).toBe(2500)
+    expect(dailyTotals(catalog, [id], 2).find((x) => x.key === 'calcium').ul).toBe(2000)
+  })
+
+  it('아무것도 고르지 않으면 빈 목록', () => {
+    expect(dailyTotals(catalog, [], 2)).toEqual([])
+  })
+})
+
+describe('제품 목록 파일 supplementCatalog.json 형식', () => {
+  it('웹이 연결하는 영양소는 모두 목록에 있다', () => {
+    const keys = catalog.categories.map((c) => c.key)
+    for (const n of PRODUCT_NUTRIENTS) expect(keys).toContain(n.key)
+  })
+
+  it('목록의 모든 제품이 제품 정보에 있고, 대상은 일반·남성·여성·시니어', () => {
+    for (const byTarget of Object.values(catalog.lists)) {
+      for (const [t, rows] of Object.entries(byTarget)) {
+        expect(catalog.targets).toContain(t)
+        for (const [id] of rows) expect(catalog.products[id]).toBeDefined()
+      }
     }
   })
 
-  it('가격·판매처·점수·순위는 넣지 않는다 (준혁님 기준 v3 6절)', () => {
-    const allowed = ['name', 'maker', 'reportNo', 'target', 'perDay', 'amount', 'dvPct', 'function', 'caution']
-    for (const p of all) for (const f of Object.keys(p)) expect(allowed).toContain(f)
+  it('점수·등급·순위·가격·판매처는 넣지 않는다', () => {
+    const allowed = ['name', 'maker', 'form', 'intake', 'function', 'caution', 'daily']
+    for (const p of Object.values(catalog.products)) expect(Object.keys(p).sort()).toEqual([...allowed].sort())
   })
 })

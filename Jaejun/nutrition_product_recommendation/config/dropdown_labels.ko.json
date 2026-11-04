@@ -1,0 +1,218 @@
+{
+  "version": "1.0.1",
+  "locale": "ko-KR",
+  "personal_nutrient_dropdown": {
+    "title": "살펴볼 영양소",
+    "placeholder": "영양소를 선택해 주세요",
+    "source": "getNutrientDropdownOptions(result)",
+    "scope": "only_existing_web_selected_nutrients",
+    "include_all_option": false,
+    "merge": {
+      "vitamin_b": [
+        "vitamin_b1",
+        "vitamin_b2"
+      ]
+    },
+    "exclude_information_only": true
+  },
+  "nutrient_labels": {
+    "magnesium": "마그네슘",
+    "vitamin_b": "비타민 B군",
+    "vitamin_c": "비타민 C",
+    "vitamin_d": "비타민 D",
+    "fiber": "식이섬유",
+    "zinc": "아연",
+    "folate": "엽산",
+    "multi_balance": "종합비타민 (균형형)",
+    "multi_energy": "종합비타민 (피로·활력형)",
+    "iron": "철",
+    "calcium": "칼슘"
+  },
+  "filters": {
+    "product_type": {
+      "title": "제품 구성",
+      "field": "source_product_type",
+      "options": [
+        {
+          "value": "all",
+          "label": "전체"
+        },
+        {
+          "value": "single",
+          "label": "단일 영양소 중심",
+          "match": {
+            "operator": "equals",
+            "value": "단일"
+          }
+        },
+        {
+          "value": "purpose",
+          "label": "목적형 복합",
+          "match": {
+            "operator": "starts_with",
+            "value": "목적형"
+          }
+        },
+        {
+          "value": "multi",
+          "label": "종합비타민",
+          "match": {
+            "operator": "equals",
+            "value": "종합비타민"
+          }
+        }
+      ]
+    },
+    "form": {
+      "title": "제형",
+      "field": "form",
+      "options": [
+        {
+          "value": "all",
+          "label": "전체"
+        },
+        {
+          "value": "정",
+          "label": "정제"
+        },
+        {
+          "value": "캡슐",
+          "label": "캡슐"
+        },
+        {
+          "value": "분말",
+          "label": "분말"
+        },
+        {
+          "value": "액상",
+          "label": "액상"
+        },
+        {
+          "value": "젤리",
+          "label": "젤리"
+        },
+        {
+          "value": "과립",
+          "label": "과립"
+        },
+        {
+          "value": "환",
+          "label": "환"
+        },
+        {
+          "value": "겔",
+          "label": "겔"
+        },
+        {
+          "value": "바",
+          "label": "바"
+        },
+        {
+          "value": "기타(당류 포함)",
+          "label": "기타"
+        }
+      ]
+    },
+    "daily_count": {
+      "title": "하루 섭취 개수",
+      "field": null,
+      "derive_from": "intake_label",
+      "implemented_in_bridge": false,
+      "options": [
+        {
+          "value": "all",
+          "label": "전체"
+        },
+        {
+          "value": "1",
+          "label": "1개"
+        },
+        {
+          "value": "2",
+          "label": "2개"
+        },
+        {
+          "value": "3",
+          "label": "3개"
+        },
+        {
+          "value": "4plus",
+          "label": "4개 이상"
+        }
+      ],
+      "unknown_policy": "retain_in_all_only",
+      "mass_or_volume_is_not_a_count": true
+    },
+    "target": {
+      "title": "제품 대상 표시",
+      "field": "target",
+      "scope": "within_existing_web_target_policy",
+      "options": [
+        {
+          "value": "all",
+          "label": "전체"
+        },
+        {
+          "value": "일반",
+          "label": "일반"
+        },
+        {
+          "value": "남성",
+          "label": "남성"
+        },
+        {
+          "value": "여성",
+          "label": "여성"
+        },
+        {
+          "value": "시니어",
+          "label": "시니어"
+        }
+      ]
+    },
+    "multi_type": {
+      "title": "종합비타민 유형",
+      "field": "category_id",
+      "scope": "separate_information_area_only",
+      "options": [
+        {
+          "value": "all",
+          "label": "전체"
+        },
+        {
+          "value": "multi_balance",
+          "label": "균형형"
+        },
+        {
+          "value": "multi_energy",
+          "label": "피로·활력형"
+        }
+      ]
+    },
+    "daily_amount": {
+      "title": "1일 섭취량당 함량",
+      "field": "daily_amount",
+      "unit_field": "daily_unit",
+      "minimum_placeholder": "최소",
+      "maximum_placeholder": "최대",
+      "compare_within_same_nutrient_and_unit": true,
+      "null_policy": "do_not_convert_to_zero"
+    }
+  },
+  "ui": {
+    "section_title": "관련 제품 살펴보기",
+    "description": "결과에 연결된 영양소를 선택하고 제품별 특징을 비교해 보세요.",
+    "search_placeholder": "제품명 검색",
+    "reset_button": "필터 초기화",
+    "apply_button": "제품 {count}개 보기",
+    "details_button": "성분·기능성·주의사항 보기",
+    "empty_filter": "선택한 조건에 해당하는 제품이 없습니다. 필터를 변경해 주세요.",
+    "empty_selection": "이번 결과에 연결된 제품 목록이 없습니다. 식품 안내를 확인해 주세요.",
+    "empty_target": "해당 대상에 등록된 제품이 없습니다."
+  },
+  "implementation_notes": [
+    "선택지 전체는 마스터 목록이며, 개인 영양소 선택지에 전부 표시하지 않음.",
+    "옵션은 현재 목록의 전체 후보에서 생성하며 현재 페이지에서만 계산하지 않음.",
+    "추가 필터 UI 및 실행은 웹 개발자가 구현함. 현재 연결 모듈은 제형 필터를 지원함."
+  ]
+}

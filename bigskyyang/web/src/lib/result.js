@@ -50,7 +50,6 @@ export function buildTypeResult(answers) {
     missions: missionsOf(pickTips(features, extras)),
     // 부족할 수 있는 영양소: 유환님 (나)안 결과 (유형 × 성별 × 연령대)
     nutrients: typeNutrients(nutrientCells, leaf, extras.sex, extras.age),
-    nutrientsEmptyText: nutrientCells.empty_line2_text,
     sexLabel: extras.sex === 1 ? '남성' : '여성',
     ageLabel: AGE_LABELS[ageGroup(extras.age)],
     // 같이 다니면 좋은 유형: 내 약점을 채워 주는 유형, 나와 같은 약점이 있어 같이 바꿔 보기 좋은 유형
@@ -132,6 +131,8 @@ export function buildPersonalResult(answers, models = null) {
     missions: missionsOf(tips),
     foods: (foods.length ? foods : BALANCED_FOODS).slice(0, MAX_FOODS),
     ffqAsked: extras.ffq !== null,
+    sex: extras.sex,
+    age: extras.age,
     // 개인 영양 위험 (재준님 생활습관·평소 식사 모델)
     nutrition,
     // 건강기능식품 정보: 재준님 모델의 '살펴볼 영양소' 중 준혁님 제품 분류에 있는 영양소만 (모델을 불러오기 전에는 null)
