@@ -97,7 +97,7 @@ CRITERIA = [
     ("0", "데이터", "원재료·섭취방법·기준규격은 메인.csv(C003 원본)에서 붙임", "2절"),
     ("1", "기본 거르기", "2022년 이후 신고 제품만 (프로젝트 수집 범위 제한, 판매 중이라는 뜻 아님)", "2절"),
     ("1", "기본 거르기", "제품명에 '수출' 또는 괄호 안 해외 국가명(우즈베키스탄·베트남 등)이 있으면 제외", "2절"),
-    ("1", "기본 거르기", "대상 판별: 제품명 키워드 (어린이에 '우리 아이·앙팡·Kid's' 추가). '일반'만 다음 단계로, 나머지는 보관", "2절, 3-4절"),
+    ("1", "기본 거르기", "대상 판별: 제품명 키워드 (어린이에 '우리 아이·앙팡·Kid's' 추가). 일반·남성·여성·시니어는 다음 단계로, 어린이는 보관 (11-04 팀 결정)", "2절, 3-4절"),
     ("1", "기본 거르기", "임산부·수유부 대상 제품은 제외 (11-04 결정, 보관하지 않음)", "5-4절"),
     ("1", "기본 거르기", "제품명이 질환을 대상으로 하는 제품(당뇨·혈당·혈압·콜레스테롤·골다공증·전립선·갑상선 등)은 제외 (11-04 결정)", "5-4절, 10절"),
     ("1", "기본 거르기", "일반·전문 의약품 없음 확인", "2절"),
@@ -193,7 +193,7 @@ def new_book(summary_lines):
     return wb
 
 
-def add_sheet(wb, name, df, widths=None):
+def add_sheet(wb, name, df, widths=None, freeze="C2"):
     ws = wb.create_sheet(name)
     ws.append(list(df.columns))
     for c in ws[1]:
@@ -202,15 +202,14 @@ def add_sheet(wb, name, df, widths=None):
         ws.append([_clean(x) for x in row])
     for i in range(len(df.columns)):
         ws.column_dimensions[get_column_letter(i + 1)].width = widths[i] if widths and i < len(widths) else 18
-    ws.freeze_panes = "C2"
+    ws.freeze_panes = freeze      # 틀 고정은 한 번만 설정 (두 번 바꾸면 엑셀이 복구 메시지를 띄움)
     ws.auto_filter.ref = ws.dimensions
     return ws
 
 
 def add_criteria_sheet(wb, done):
     df = criteria_table(done)
-    ws = add_sheet(wb, "기준·고려사항", df, [7, 12, 95, 14, 30])
-    ws.freeze_panes = "A2"
+    ws = add_sheet(wb, "기준·고려사항", df, [7, 12, 95, 14, 30], freeze="A2")
     for r in ws.iter_rows(min_row=2):
         for c in r:
             c.alignment = Alignment(wrap_text=True, vertical="top")

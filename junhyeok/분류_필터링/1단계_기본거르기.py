@@ -7,12 +7,12 @@
   ① 임산부·수유부 대상 제품 제외
   ② 제품명이 질환을 대상으로 하는 제품 제외 (혈당·혈압·전립선·콜레스테롤·골다공증·갑상선·당뇨 등)
      - 기능성의 "골다공증발생 위험 감소에 도움"은 식약처 인정 문구라 제외 이유가 아님 (제품명만 봄)
-  ③ 남은 제품 중 대상 '일반'만 다음 단계로
-  ④ 어린이·여성·남성·시니어 제품은 빼지 않고 '보관' (나중에 대상 맞춤에 사용)
+  ③ 남은 제품 중 대상 '일반·남성·여성·시니어'는 다음 단계로 (11-04 팀 결정: 웹에서 성별·나이로 대상 맞춤)
+  ④ 어린이 제품은 웹 대상이 아니라서 빼지 않고 '보관'만 함
   (수출·해외, 2021년 이전 제품은 최종본을 만들 때 이미 빠짐)
 
 입력  성분별_영양제_제품목록(최종).xlsx 의 '제품 목록' 시트
-출력  1단계_기본거르기.xlsx, 1단계_결과.pkl (일반, 다음 단계 입력), 1단계_보관.pkl (다른 대상)
+출력  1단계_기본거르기.xlsx, 1단계_결과.pkl (일반·남성·여성·시니어, 다음 단계 입력), 1단계_보관.pkl (어린이)
 """
 import pandas as pd
 from 공통 import out, load_final, new_book, add_sheet, add_criteria_sheet
@@ -37,21 +37,22 @@ def main():
 
     removed = p[p["빠진 이유"] != ""].copy()
     rest = p[p["빠진 이유"] == ""].drop(columns="빠진 이유")
-    keep = rest[rest["대상"] == "일반"].reset_index(drop=True)
-    hold = rest[rest["대상"] != "일반"].reset_index(drop=True)
+    WEB_TARGETS = ["일반", "남성", "여성", "시니어"]
+    keep = rest[rest["대상"].isin(WEB_TARGETS)].reset_index(drop=True)
+    hold = rest[~rest["대상"].isin(WEB_TARGETS)].reset_index(drop=True)
     keep.to_pickle(out("1단계_결과.pkl"))
     hold.to_pickle(out("1단계_보관.pkl"))
 
     # ── 결과 엑셀
     print("[3/3] 결과 엑셀 저장 중... (1~2분, 아무 키도 누르지 마세요)")
     dis_cnt = removed.loc[removed["빠진 이유"].str.startswith("질환"), "질환 대상 단어"].str.replace(" ", "").value_counts()
-    hold_cnt = " / ".join(f"{k} {v:,}" for k, v in hold["대상"].value_counts().items())
+    keep_cnt = " / ".join(f"{k} {v:,}" for k, v in keep["대상"].value_counts().items())
     lines = [
         ("1단계: 기본 거르기", True), ("", False),
         ("결과", True),
         (f"· 시작 {n0:,}개 → 빠진 제품 {len(removed):,}개 → 남은 제품 {len(rest):,}개", False),
-        (f"· 다음 단계로 (대상 '일반'): {len(keep):,}개", False),
-        (f"· 보관 (다른 대상, 나중에 대상 맞춤에 사용): {len(hold):,}개 ({hold_cnt})", False),
+        (f"· 다음 단계로 (일반·남성·여성·시니어): {len(keep):,}개 ({keep_cnt})", False),
+        (f"· 보관 (어린이, 웹 대상 아님): {len(hold):,}개", False),
         ("", False), ("빠진 이유", True),
         (f"· 임산부·수유부 대상: {n_preg:,}개", False),
         (f"· 질환 대상 제품명: {n_dis:,}개 ({' / '.join(f'{k} {v:,}' for k, v in dis_cnt.items())})", False),
@@ -67,18 +68,18 @@ def main():
         "원재료·섭취방법·기준규격은": "적용 완료 (최종본)",
         "2022년 이후 신고": "적용 완료 (최종본)",
         "제품명에 '수출'": "적용 완료 (최종본 제외 목록)",
-        "대상 판별": f"적용 완료 (일반 {len(keep):,} / 보관 {len(hold):,})",
+        "대상 판별": f"적용 완료 (일반·남성·여성·시니어 {len(keep):,} / 어린이 보관 {len(hold):,})",
         "임산부·수유부": f"적용 완료 ({n_preg:,}개 뺌)",
         "제품명이 질환을": f"적용 완료 ({n_dis:,}개 뺌)",
         "일반·전문 의약품": "적용 완료 (C003은 건강기능식품 신고 자료, 의약품 0개)",
     })
     w = [18, 32, 20, 11, 10, 8, 8, 10, 8, 30, 60, 40, 30, 40, 40]
-    add_sheet(wb, f"남은 제품 일반 ({len(keep):,})", keep, w)
-    add_sheet(wb, f"보관 다른 대상 ({len(hold):,})", hold, w)
+    add_sheet(wb, f"남은 제품 ({len(keep):,})", keep, w)
+    add_sheet(wb, f"보관 어린이 ({len(hold):,})", hold, w)
     cols = ["빠진 이유", "품목제조신고번호", "제품명", "업체명", "신고일자", "대상", "함께 든 가이드 성분", "기능성"]
     add_sheet(wb, f"빠진 제품 ({len(removed):,})", removed[cols].sort_values("빠진 이유"), [30, 18, 40, 20, 11, 10, 30, 60])
     wb.save(out("1단계_기본거르기.xlsx"))
-    print(f"1단계 완료: {n0:,} → 빠짐 {len(removed):,} (임산부 {n_preg} · 질환 {n_dis}) → 일반 {len(keep):,} (다음 단계) / 보관 {len(hold):,}")
+    print(f"1단계 완료: {n0:,} → 빠짐 {len(removed):,} (임산부 {n_preg} · 질환 {n_dis}) → 다음 단계 {len(keep):,} ({keep_cnt}) / 어린이 보관 {len(hold):,}")
 
 
 if __name__ == "__main__":
