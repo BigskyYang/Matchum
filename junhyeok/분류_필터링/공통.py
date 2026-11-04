@@ -16,8 +16,12 @@ warnings.filterwarnings("ignore")
 # 이 파일이 있는 폴더(HERE)에 결과 엑셀을 저장해요.
 # 원본 데이터(메인.csv, 기존 제품목록)는 아래 순서로 찾아요.
 #   ① 이 폴더 ② 바로 위 폴더 (깃허브의 junhyeok 폴더) ③ 바탕화면\영양제품 자료
+#   ④ 바탕화면\분류 및 필터링 작업에 필요한 최종 파일들
 HERE = os.path.dirname(os.path.abspath(__file__))
-SEARCH = [HERE, os.path.dirname(HERE), os.path.join(os.path.expanduser("~"), "Desktop", "영양제품 자료")]
+_DESK = os.path.join(os.path.expanduser("~"), "Desktop")
+SEARCH = [HERE, os.path.dirname(HERE),
+          os.path.join(_DESK, "영양제품 자료"),
+          os.path.join(_DESK, "분류 및 필터링 작업에 필요한 최종 파일들")]
 
 
 def find(name):
@@ -38,6 +42,14 @@ MAIN_CSV = "메인.csv"                                       # 식약처 C003 �
 def out(name):
     """결과 파일 경로 (이 폴더 안)"""
     return os.path.join(HERE, name)
+
+
+def load_final():
+    """최종본 엑셀의 '제품 목록' 시트 (제품당 한 줄) 읽기"""
+    book = pd.ExcelFile(find(FINAL_XLSX))
+    sheet = [s for s in book.sheet_names if s.startswith("제품 목록")][0]
+    d = pd.read_excel(book, sheet_name=sheet, dtype=str).fillna("")
+    return d
 
 
 def nf(t):
