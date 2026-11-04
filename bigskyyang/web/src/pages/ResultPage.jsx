@@ -14,7 +14,7 @@ import { clearSurvey, loadSurvey } from '../lib/storage.js'
 
 // 1단계 유형 결과 (공유용). 보여 줄 값은 lib/result.js의 buildTypeResult가 계산한다
 // 첫 화면은 유형 카드만 (마스코트·이름·해시태그·한 줄 설명·비율), 내리면 생활습관 신호등·이번 주 해볼 것 → 부족할 수 있는 영양소 → 짝꿍 유형
-// '공유'와 '나에게 맞는 결과'는 화면 아래에 고정해 어디까지 내려도 보이게 한다
+// '공유'와 '나에게 맞는 결과'는 맨 아래 (다시 검사하기 위)
 const PENDING = '영양 분석 결과가 준비되면 이곳에 표시돼요.'
 
 function useResult() {
@@ -36,8 +36,8 @@ export default function ResultPage() {
   }
 
   return (
-    <main className="flex flex-1 flex-col gap-4 px-5 pt-8 pb-32">
-      <header className="flex min-h-[calc(100dvh-9rem)] flex-col items-center justify-center text-center">
+    <main className="flex flex-1 flex-col gap-4 px-5 pt-8 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+      <header className="flex min-h-[calc(100dvh-4rem)] flex-col items-center justify-center text-center">
         <p className="mt-auto text-sm font-semibold text-ink-soft">나의 NBTI 유형은</p>
         <Mascot name={`type_${r.leafId}`} className="mt-3" />
         <p className="mt-3 text-sm font-bold text-ink-soft">
@@ -58,9 +58,14 @@ export default function ResultPage() {
         <p className="mt-3 text-sm text-ink-soft">
           성인 100명 중 <b className="text-primary-shade">{Math.round(r.sharePct)}명</b>이 이 유형이에요
         </p>
-        <p aria-hidden="true" className="mt-auto animate-bounce pt-6 text-sm font-semibold text-ink-faint motion-reduce:animate-none">
-          ⌄ 내려서 자세히 보기
-        </p>
+        {/* 누르면 첫 카드(생활습관 신호등)로 내려간다 */}
+        <button
+          type="button"
+          onClick={(e) => e.currentTarget.closest('header').nextElementSibling?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+          className="mt-auto animate-bounce px-4 pt-6 pb-2 text-sm font-semibold text-ink-faint motion-reduce:animate-none"
+        >
+          자세히 보기 ⌄
+        </button>
       </header>
 
       <Card title="나의 생활습관 신호등" icon="🚦">
@@ -87,19 +92,16 @@ export default function ResultPage() {
       </Card>
 
       <footer className="mt-2 flex flex-col gap-3">
-        <SecondaryButton onClick={retry}>처음부터 다시 검사하기</SecondaryButton>
-        <AboutLink />
-      </footer>
-
-      {/* 하단 고정: 공유 + 2단계 개인 결과 */}
-      <div className="fixed inset-x-0 bottom-0 z-10">
-        <div className="relative mx-auto flex max-w-app gap-2 border-t border-ink/10 bg-cream/95 px-5 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur">
+        {/* 공유 + 2단계 개인 결과 (화면 맨 아래, 고정하지 않음) */}
+        <div className="relative flex gap-2">
           <ShareButton typeName={r.name} />
           <PrimaryButton to={r.personalDone ? '/result2' : '/survey2'} size="sm" className="flex-1">
             {r.personalDone ? '나에게 맞는 결과' : '나에게 맞는 결과 (2분)'}
           </PrimaryButton>
         </div>
-      </div>
+        <SecondaryButton onClick={retry}>처음부터 다시 검사하기</SecondaryButton>
+        <AboutLink />
+      </footer>
     </main>
   )
 }
