@@ -7,6 +7,7 @@
 //   진단·처방처럼 보일 수 있는 안내(우울 점수, 질환별 식사 조언)는 하지 않는다
 import nutrientCells from '../data/nutrientCells.json'
 import { NUTRIENT_GUIDE } from '../data/nutrientGuide.js'
+import { FOOD_ONLY, PRODUCT_NUTRIENTS } from '../data/supplementInfo.js'
 import { BALANCED_FOODS, pickTips } from '../data/tips.js'
 import { LEAF_TYPES, MAIN_TYPES } from '../data/types.js'
 import { classify, model, toFeatures, typeOf } from './classify.js'
@@ -22,7 +23,7 @@ const AGE_LABELS = { '19-29': '19~29세', '30-49': '30~49세', '50-64': '50~64�
 
 // 세부 유형 12개 평균의 신호등 점수 (짝꿍 유형 고르기)
 const LEAF_SCORES = Object.fromEntries(model.types.map((t) => [t.id, groupScores(toFeatures(t.profile), TYPE_AXES)]))
-const partnerOf = ({ id, axes }) => ({ id, name: LEAF_TYPES[id].name, main: MAIN_TYPES[id[0]], axes })
+const partnerOf = ({ id, axes }) => ({ id, name: LEAF_TYPES[id].name, summary: LEAF_TYPES[id].summary, main: MAIN_TYPES[id[0]], axes })
 
 const missionsOf = (tips) => tips.flatMap((t) => (t.mission ? [t.mission] : [])).slice(0, MAX_MISSIONS)
 
@@ -58,9 +59,28 @@ export function buildTypeResult(answers) {
 }
 
 // 개인 영양 위험 화면에 쓰는 영양소 이름·음식 (나트륨은 '많이 먹을 위험')
+//   supplement: 'product' 건강기능식품 정보가 있는 영양소 (준혁님 제품 분류), 'food' 음식으로만 챙기는 영양소, null 해당 없음
+const PRODUCT_KEYS = PRODUCT_NUTRIENTS.flatMap((n) => n.from)
 const GUIDE = {
-  ...Object.fromEntries(NUTRIENT_GUIDE.map((n) => [n.key, { label: n.label, icon: n.icon, guide: `이런 음식에 많아요: ${n.foods.join(' · ')}` }])),
-  sodium_excess: { label: '나트륨 (많이 먹을 위험)', icon: '🧂', guide: '국물·소스·가공식품의 영양표시를 살펴보세요.' },
+  ...Object.fromEntries(
+    NUTRIENT_GUIDE.map((n) => [
+      n.key,
+      {
+        label: n.label,
+        icon: n.icon,
+        role: n.role,
+        foods: n.foods,
+        supplement: PRODUCT_KEYS.includes(n.key) ? 'product' : FOOD_ONLY.includes(n.key) ? 'food' : null,
+      },
+    ]),
+  ),
+  sodium_excess: {
+    label: '나트륨 (많이 먹을 위험)',
+    icon: '🧂',
+    role: '국물·소스·가공식품에 많이 들어 있어요.',
+    tip: '국물은 덜 먹고, 가공식품은 영양표시의 나트륨 양을 살펴보세요.',
+    supplement: null,
+  },
 }
 const RANK = { Low: 0, Mid: 1, High: 2 }
 const MAX_WATCH = 5

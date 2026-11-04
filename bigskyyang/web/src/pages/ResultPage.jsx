@@ -5,6 +5,7 @@ import PrimaryButton, { SecondaryButton } from '../components/PrimaryButton.jsx'
 import Card from '../components/result/Card.jsx'
 import HabitSignals from '../components/result/HabitSignals.jsx'
 import MissionList from '../components/result/MissionList.jsx'
+import AboutLink from '../components/result/AboutLink.jsx'
 import PartnerCard from '../components/result/PartnerCard.jsx'
 import TypeNutrients from '../components/result/TypeNutrients.jsx'
 import { buildTypeResult } from '../lib/result.js'
@@ -82,9 +83,7 @@ export default function ResultPage() {
 
       <section className="rounded-card bg-primary-soft p-5 text-center">
         <h2 className="text-xl font-bold">🔍 나에게 맞는 결과도 볼까요?</h2>
-        <p className="mt-2 text-sm leading-relaxed text-ink-soft">
-          흡연·음주·식습관 질문 몇 개만 더 답하면 나에게 맞춘 결과를 보여 드려요. 지금까지 답한 내용은 그대로 이어서 써요.
-        </p>
+        <p className="mt-2 text-sm text-ink-soft">흡연·음주·식사 질문 몇 개만 더 답하면 돼요</p>
         <PrimaryButton to={r.personalDone ? '/result2' : '/survey2'} className="mt-4">
           {r.personalDone ? '나에게 맞는 결과 다시 보기' : '나에게 맞는 결과 보기 (약 2분)'}
         </PrimaryButton>
@@ -92,9 +91,7 @@ export default function ResultPage() {
 
       <footer className="mt-2 flex flex-col gap-3">
         <SecondaryButton onClick={retry}>처음부터 다시 검사하기</SecondaryButton>
-        <p className="mt-2 text-center text-xs leading-relaxed text-ink-faint">
-          추천 결과는 국민건강영양조사 자료를 바탕으로 한 참고용이며 의료적 진단이나 처방을 대체하지 않습니다.
-        </p>
+        <AboutLink />
       </footer>
     </main>
   )

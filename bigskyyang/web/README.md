@@ -102,7 +102,7 @@ python scripts/export_nutrition_models.py
 준혁님 제품 분류 11종에 있는 영양소, 곧 준혁님 5단계가 받는 값만 보여 주고 "제품 정보는 준비하고 있어요"로 안내한다 (`supplementTargets`, `src/lib/supplements.js`).
 비타민 B1·B2는 비타민 B군 하나로, 단백질·칼륨·인은 음식으로 챙기는 영양소로, 나트륨·비타민 A는 뺀다.
 
-**제품을 다시 붙일 때:** 아래 제품 목록 `src/data/supplementProducts.json`과 `supplementInfo`를 쓴다. 화면 코드(제품 카드·펼치기 전 확인)는 커밋 `f8d25a9`의 `SupplementInfo.jsx`에 있다.
+**제품을 다시 붙일 때:** 아래 제품 목록 `src/data/supplementProducts.json`과 `supplementInfo`를 쓴다. 화면 코드(제품 카드·펼치기 전 확인)는 커밋 `f8d25a9`의 `src/components/result/SupplementInfo.jsx`에 있다. 지금은 영양소 상세 창(`NutritionRisk.jsx`) 안에 '정보 준비 중'만 보여 준다.
 준혁님 분류·필터링 기준 v3(`junhyeok/영양제_분류_필터링_기준(피드백).pdf`)으로 고르고 점수 순으로 정렬한 표를 받아 만든다.
 원본·전체 목록은 구글 드라이브에 두고 저장소에 올리지 않는다.
 

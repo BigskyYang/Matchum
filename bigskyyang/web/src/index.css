@@ -53,6 +53,28 @@
     }
   }
 
+  /* 바텀시트 (components/BottomSheet.jsx): 아래에서 올라오고, 뒤가 어두워진다 */
+  --animate-sheet-up: sheet-up 0.25s ease-out both;
+  --animate-fade-in: fade-in 0.2s ease-out both;
+
+  @keyframes sheet-up {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
   /* 한 줄 안내 넘기기 (RotatingNotes): 아래에서 올라오고, 위로 사라진다 */
   --animate-note-in: note-in 0.5s ease-out both;
   --animate-note-out: note-out 0.5s ease-in both;
