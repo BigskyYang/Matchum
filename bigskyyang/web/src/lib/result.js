@@ -3,10 +3,9 @@
 // 서비스 흐름 (두 단계)
 //   1단계 유형 결과: 유형·비율, 생활습관 신호등(유형을 만든 영역)과 이번 주 해볼 것, 부족할 수 있는 영양소, 짝꿍 유형
 //   2단계 개인 결과: 흡연·음주 신호, 개인 영양 위험 예측(재준님 모델 v1.4), 식습관에 맞춘 음식,
-//                    건강기능식품 정보(준혁님 제품 분류, 참고용)
+//                    건강기능식품 정보(재준님 결과 중 준혁님 제품 분류로 넘기는 영양소. 제품 표시는 팀 합의 후)
 //   진단·처방처럼 보일 수 있는 안내(우울 점수, 질환별 식사 조언)는 하지 않는다
 import nutrientCells from '../data/nutrientCells.json'
-import supplementProducts from '../data/supplementProducts.json'
 import { NUTRIENT_GUIDE } from '../data/nutrientGuide.js'
 import { BALANCED_FOODS, pickTips } from '../data/tips.js'
 import { LEAF_TYPES, MAIN_TYPES } from '../data/types.js'
@@ -15,7 +14,7 @@ import { encode } from './encode.js'
 import { ageGroup, typeNutrients } from './nutrition.js'
 import { habitualFeatures, lifestyleFeatures, predictNutrition } from './nutritionRisk.js'
 import { PERSONAL_AXES, TYPE_AXES, bestPartner, groupScores, hashtags, scores } from './profile.js'
-import { supplementInfo } from './supplements.js'
+import { supplementTargets } from './supplements.js'
 
 const MAX_MISSIONS = 3
 const MAX_FOODS = 6
@@ -85,16 +84,6 @@ function personalNutrition(pred) {
   }
 }
 
-// 건강기능식품 정보를 찾아볼 영양소
-//   개인 예측이 있으면: 부족 위험 '높은 편' 영양소 + 개인 모델이 예측하지 않는 영양소(비타민 D·E)는 유형 결과의 '내 유형에서 살펴볼 것'
-//   아직 없으면: 유형 결과의 부족할 수 있는 영양소 (내 유형 것 → 공통)
-function supplementKeysOf(leaf, extras, nutrition, modeled) {
-  const n = typeNutrients(nutrientCells, leaf, extras.sex, extras.age)
-  if (!nutrition) return n ? [...n.picks, ...n.common].map((x) => x.key) : []
-  const typeOnly = (n?.picks ?? []).map((x) => x.key).filter((k) => !modeled.includes(k))
-  return [...nutrition.watch.map((x) => x.key), ...typeOnly]
-}
-
 // 1·2단계 응답으로 개인 결과. models: data/nutritionModels.json (화면에서 나중에 불러온다, 없으면 영양 위험은 null)
 export function buildPersonalResult(answers, models = null) {
   const { features, extras } = encode(answers)
@@ -120,10 +109,7 @@ export function buildPersonalResult(answers, models = null) {
     ffqAsked: extras.ffq !== null,
     // 개인 영양 위험 (재준님 생활습관·평소 식사 모델)
     nutrition,
-    supplements: supplementInfo(
-      supplementProducts,
-      supplementKeysOf(leaf, extras, nutrition, models ? Object.keys(models.lifestyle.models) : []),
-      extras,
-    ),
+    // 건강기능식품 정보: 재준님 모델의 '살펴볼 영양소' 중 준혁님 제품 분류에 있는 영양소만 (모델을 불러오기 전에는 null)
+    supplements: nutrition ? supplementTargets(nutrition.watch.map((n) => n.key)) : null,
   }
 }

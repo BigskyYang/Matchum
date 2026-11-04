@@ -13,7 +13,7 @@ import { clearSurvey, loadSurvey } from '../lib/storage.js'
 // 2단계 개인 결과 (나만 보기). 보여 줄 값은 lib/result.js의 buildPersonalResult가 계산한다
 // 개인 영양 위험은 재준님 모델(data/nutritionModels.json, 약 1.3MB)을 이 화면에서만 불러와 휴대폰에서 계산한다
 // 우울 점수·질환별 조언은 하지 않는다
-// 건강기능식품 정보는 음식 다음에, 접어 두고 참고용으로 (components/result/SupplementInfo.jsx)
+// 건강기능식품 정보는 음식 다음에, 재준님 결과 중 준혁님 제품 분류로 넘기는 영양소만 (제품 표시는 팀 합의 후, components/result/SupplementInfo.jsx)
 
 function useModels() {
   const [models, setModels] = useState(null)

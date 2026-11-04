@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import supplementProducts from '../data/supplementProducts.json'
 import { PRODUCT_NUTRIENTS, TARGETS } from '../data/supplementInfo.js'
-import { supplementInfo, targetsFor } from './supplements.js'
+import { supplementInfo, supplementTargets, targetsFor } from './supplements.js'
 
 // 테스트용 가짜 제품 목록 (실제 제품 아님)
 const item = (name, target = '일반') => ({ name, maker: '테스트제조', reportNo: name, target, function: '테스트 문구' })
@@ -16,7 +16,20 @@ const DATA = {
 }
 const WOMAN_30 = { sex: 2, age: 30 }
 
-describe('건강기능식품 정보 (supplementInfo)', () => {
+describe('준혁님 제품 분류로 넘기는 영양소 (supplementTargets)', () => {
+  it('제품 분류 영양소만, 순서대로 (B1·B2는 비타민 B군 하나, 나트륨·비타민 A는 빠짐)', () => {
+    const t = supplementTargets(['sodium_excess', 'zinc', 'vitamin_b2', 'vitamin_a', 'vitamin_b1', 'protein'])
+    expect(t.nutrients.map((n) => n.key)).toEqual(['zinc', 'vitamin_b'])
+    expect(t.foodOnly).toEqual(['단백질'])
+  })
+
+  it('살펴볼 영양소가 없으면 빈 목록', () => {
+    expect(supplementTargets([])).toEqual({ nutrients: [], foodOnly: [] })
+  })
+})
+
+// 아래는 제품 표시를 다시 붙일 때 쓰는 부분 (지금 화면에서는 쓰지 않는다)
+describe('건강기능식품 제품 정보 (supplementInfo)', () => {
   it('성별·나이에 맞는 대상만 (어린이·임산부 대상은 목록에 없다)', () => {
     expect(targetsFor(2, 30)).toEqual(['일반', '여성'])
     expect(targetsFor(1, 55)).toEqual(['일반', '남성', '시니어'])

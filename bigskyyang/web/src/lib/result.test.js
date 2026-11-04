@@ -71,14 +71,14 @@ describe('buildPersonalResult (2단계 개인 결과)', () => {
 })
 
 describe('buildPersonalResult 건강기능식품 정보', () => {
-  const { supplements } = buildPersonalResult(SAMPLE)
+  it('재준님 모델을 불러오기 전에는 null (유형 결과 영양소는 쓰지 않는다)', () => {
+    expect(buildPersonalResult(SAMPLE).supplements).toBeNull()
+  })
 
-  it('유형 결과의 부족할 수 있는 영양소 중 제품 정보가 있는 영양소만 (비타민 A·E 없음)', () => {
-    const keys = supplements.nutrients.map((n) => n.key)
-    expect(keys.length).toBeGreaterThan(0)
-    expect(keys).not.toContain('vitamin_a')
-    expect(keys).not.toContain('vitamin_e')
-    expect(new Set(keys).size).toBe(keys.length)
+  it('제품은 보여 주지 않고 영양소만', () => {
+    const { supplements } = buildPersonalResult(SAMPLE, models)
+    expect(Object.keys(supplements).sort()).toEqual(['foodOnly', 'nutrients'])
+    for (const n of supplements.nutrients) expect(Object.keys(n).sort()).toEqual(['icon', 'key', 'label'])
   })
 })
 
@@ -108,11 +108,14 @@ describe('buildPersonalResult 개인 영양 위험 (재준님 모델)', () => {
     for (const n of [...o.watch, ...o.rest]) expect([n.habitual, n.source, n.band]).toEqual([null, 'lifestyle', n.lifestyle])
   })
 
-  it('건강기능식품 정보는 부족 위험이 높은 편인 영양소로 (나트륨 제외)', () => {
+  it('건강기능식품 정보는 재준님 모델의 살펴볼 영양소에서만 (나트륨·비타민 A 제외)', () => {
     const high = r.nutrition.watch.map((n) => n.key)
     for (const n of r.supplements.nutrients) {
       const from = { vitamin_b: ['vitamin_b1', 'vitamin_b2'] }[n.key] ?? [n.key]
-      expect(from.some((k) => high.includes(k)) || ['vitamin_d', 'vitamin_e'].includes(n.key)).toBe(true)
+      expect(from.some((k) => high.includes(k))).toBe(true)
     }
+    const productKeys = ['vitamin_b1', 'vitamin_b2', 'vitamin_c', 'calcium', 'magnesium', 'zinc', 'iron', 'folate', 'fiber']
+    const expected = new Set(high.filter((k) => productKeys.includes(k)).map((k) => (k.startsWith('vitamin_b') ? 'vitamin_b' : k)))
+    expect(new Set(r.supplements.nutrients.map((n) => n.key))).toEqual(expected)
   })
 })
