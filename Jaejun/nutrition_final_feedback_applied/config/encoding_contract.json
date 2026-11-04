@@ -1,0 +1,93 @@
+{
+  "version": "v1.4-web-retrained",
+  "raw_answer_type": "Korean label strings",
+  "encoded_training_features": {
+    "설명_sex": {
+      "남성": 1,
+      "여성": 2
+    },
+    "ML_breakfast_freq_ord": {
+      "주 5~7회": 3,
+      "주 3~4회": 2,
+      "주 1~2회": 1,
+      "주 0회": 0
+    },
+    "ML_lunch_freq_ord": {
+      "주 5~7회": 3,
+      "주 3~4회": 2,
+      "주 1~2회": 1,
+      "주 0회": 0
+    },
+    "ML_dinner_freq_ord": {
+      "주 5~7회": 3,
+      "주 3~4회": 2,
+      "주 1~2회": 1,
+      "주 0회": 0
+    },
+    "ML_eatingout_freq_ord": {
+      "하루 2회 이상": 6,
+      "하루 1회": 5,
+      "주 5~6회": 4,
+      "주 3~4회": 3,
+      "주 1~2회": 2,
+      "월 1~3회": 1,
+      "거의 안 함": 0
+    },
+    "ML_drink_freq_ord": {
+      "최근 1년간 마시지 않음": 0,
+      "월 1회 미만": 1,
+      "월 1회 정도": 2,
+      "월 2~4회": 3,
+      "주 2~3회": 4,
+      "주 4회 이상": 5
+    },
+    "ML_drink_amount_ord": {
+      "1~2잔": 1,
+      "3~4잔": 2,
+      "5~6잔": 3,
+      "7~9잔": 4,
+      "10잔 이상": 5
+    },
+    "식습관_LS_FRUIT": {
+      "하루 3회 이상": 1,
+      "하루 2회": 2,
+      "하루 1회": 3,
+      "주 5~6회": 4,
+      "주 2~4회": 5,
+      "주 1회": 6,
+      "월 2~3회": 7,
+      "월 1회": 8,
+      "거의 안 함": 9
+    },
+    "식습관_LS_VEG2": {
+      "하루 3회 이상": 1,
+      "하루 2회": 2,
+      "하루 1회": 3,
+      "주 5~6회": 4,
+      "주 2~4회": 5,
+      "주 1회": 6,
+      "월 2~3회": 7,
+      "월 1회": 8,
+      "거의 안 함": 9
+    }
+  },
+  "derived": {
+    "ML_drink_month": "int(ML_drink_freq_ord >= 2)",
+    "ML_aerobic": "int(weekly_moderate_minutes + 2*weekly_vigorous_minutes >= 150)",
+    "ML_sleep_hours": "(workday_sleep*5 + restday_sleep*2)/7"
+  },
+  "mini_ffq_frequency": {
+    "거의 먹지 않음": 0,
+    "월 1~3회": 1,
+    "주 1~2회": 2,
+    "주 3~4회": 3,
+    "주 5~6회": 4,
+    "하루 1회": 5,
+    "하루 2회": 6,
+    "하루 3회 이상": 7
+  },
+  "unknown_codes": [
+    99
+  ],
+  "unknown_policy": "reject_web_input; clean_training_data_before_retraining"
+}

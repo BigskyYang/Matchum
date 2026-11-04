@@ -1,0 +1,50 @@
+[
+  {
+    "path": "models/mini_ffq/potassium.joblib",
+    "sha256": "734ee9c3c6b77b18a605aea112b2a98d6f976ee3520db6626200049496a6e4c2"
+  },
+  {
+    "path": "models/mini_ffq/phosphorus.joblib",
+    "sha256": "c983f054fd1f6d401f07016dc80a8c5514c0753adadecf44247ba828e7ef3aef"
+  },
+  {
+    "path": "models/mini_ffq/protein.joblib",
+    "sha256": "2dc2aaae816ae68c538845b98c455dda5c6314bf07fef53a804bec19cf09c28f"
+  },
+  {
+    "path": "models/mini_ffq/vitamin_b1.joblib",
+    "sha256": "3f0c1ed7f20ed577a0f0058314c066d6812a135c385446c837d8c1fb0bedde2a"
+  },
+  {
+    "path": "models/mini_ffq/vitamin_c.joblib",
+    "sha256": "e40b3b820e4bf7d5f31dfd933c3b0313ea34da93ac7c49c1b761240b2bfabb3b"
+  },
+  {
+    "path": "models/mini_ffq/vitamin_b2.joblib",
+    "sha256": "4a562d648ace99f93e548d35ccd7eadd7e984f7ba35d04c20c74e50a60dfa09f"
+  },
+  {
+    "path": "models/mini_ffq/fiber.joblib",
+    "sha256": "f1af1caf88910ef6b124bf489f63a83f143cf5d2867ec236266ec6e592ec5d15"
+  },
+  {
+    "path": "models/mini_ffq/sodium_excess.joblib",
+    "sha256": "0e31270164df5dac46245065cbffc672ac355873a0863bcfb707009750a84fe4"
+  },
+  {
+    "path": "models/mini_ffq/calcium.joblib",
+    "sha256": "f907f5c6f26dd099a50eb632b8933b12cad98bf0907023e54138d477642ca894"
+  },
+  {
+    "path": "models/mini_ffq/iron.joblib",
+    "sha256": "fde14a5d40cff3f408f2ed5260b286eac9a5d6ca1223b4a97308226394d4a58b"
+  },
+  {
+    "path": "config/mini_ffq_risk_thresholds.json",
+    "sha256": "c7de3eb8e25e691381f68cf6e01bd59e984f0e284c66bc5b41788a79c3262069"
+  },
+  {
+    "path": "config/service_risk_thresholds.json",
+    "sha256": "0f64ca5ee8e351159e69359204e81207a951092f397cc4cfb1597b16523da79c"
+  }
+]

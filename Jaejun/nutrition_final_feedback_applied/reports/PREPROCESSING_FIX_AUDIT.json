@@ -1,0 +1,411 @@
+{
+  "source_feature_agreement": [
+    {
+      "raw": "L_BR_FQ",
+      "feature": "ML_breakfast_freq_ord",
+      "compared_rows": 16586,
+      "mismatches": 0
+    },
+    {
+      "raw": "L_LN_FQ",
+      "feature": "ML_lunch_freq_ord",
+      "compared_rows": 16586,
+      "mismatches": 0
+    },
+    {
+      "raw": "L_DN_FQ",
+      "feature": "ML_dinner_freq_ord",
+      "compared_rows": 16586,
+      "mismatches": 0
+    },
+    {
+      "raw": "L_OUT_FQ",
+      "feature": "ML_eatingout_freq_ord",
+      "compared_rows": 16586,
+      "mismatches": 0
+    },
+    {
+      "raw": "BD1_11",
+      "feature": "ML_drink_month",
+      "compared_rows": 16310,
+      "mismatches": 0
+    }
+  ],
+  "unknown_codes": {
+    "식습관_LS_FRUIT": {
+      "master_99": 3,
+      "completecase_training_2022_2023_99": 2
+    },
+    "식습관_LS_VEG2": {
+      "master_99": 3,
+      "completecase_training_2022_2023_99": 2
+    }
+  },
+  "model_bin_audit": [
+    {
+      "nutrient": "calcium",
+      "estimator": "HistGradientBoostingClassifier",
+      "feature_indices_with_54_bin": [
+        16,
+        17
+      ],
+      "tree_splits_at_54": 0
+    },
+    {
+      "nutrient": "fiber",
+      "estimator": "HistGradientBoostingClassifier",
+      "feature_indices_with_54_bin": [
+        16,
+        17
+      ],
+      "tree_splits_at_54": 0
+    },
+    {
+      "nutrient": "folate",
+      "estimator": "HistGradientBoostingClassifier",
+      "feature_indices_with_54_bin": [
+        16,
+        17
+      ],
+      "tree_splits_at_54": 0
+    },
+    {
+      "nutrient": "iron",
+      "estimator": "HistGradientBoostingClassifier",
+      "feature_indices_with_54_bin": [
+        16,
+        17
+      ],
+      "tree_splits_at_54": 0
+    },
+    {
+      "nutrient": "magnesium",
+      "estimator": "HistGradientBoostingClassifier",
+      "feature_indices_with_54_bin": [
+        16,
+        17
+      ],
+      "tree_splits_at_54": 0
+    },
+    {
+      "nutrient": "phosphorus",
+      "estimator": "HistGradientBoostingClassifier",
+      "feature_indices_with_54_bin": [
+        16,
+        17
+      ],
+      "tree_splits_at_54": 0
+    },
+    {
+      "nutrient": "potassium",
+      "estimator": "HistGradientBoostingClassifier",
+      "feature_indices_with_54_bin": [
+        16,
+        17
+      ],
+      "tree_splits_at_54": 0
+    },
+    {
+      "nutrient": "protein",
+      "estimator": "HistGradientBoostingClassifier",
+      "feature_indices_with_54_bin": [
+        16,
+        17
+      ],
+      "tree_splits_at_54": 0
+    },
+    {
+      "nutrient": "sodium_excess",
+      "estimator": "HistGradientBoostingClassifier",
+      "feature_indices_with_54_bin": [
+        16,
+        17
+      ],
+      "tree_splits_at_54": 0
+    },
+    {
+      "nutrient": "vitamin_a",
+      "estimator": "HistGradientBoostingClassifier",
+      "feature_indices_with_54_bin": [
+        16,
+        17
+      ],
+      "tree_splits_at_54": 0
+    },
+    {
+      "nutrient": "vitamin_b1",
+      "estimator": "HistGradientBoostingClassifier",
+      "feature_indices_with_54_bin": [
+        16,
+        17
+      ],
+      "tree_splits_at_54": 0
+    },
+    {
+      "nutrient": "vitamin_b2",
+      "estimator": "HistGradientBoostingClassifier",
+      "feature_indices_with_54_bin": [
+        16,
+        17
+      ],
+      "tree_splits_at_54": 0
+    },
+    {
+      "nutrient": "vitamin_c",
+      "estimator": "Pipeline",
+      "feature_indices_with_54_bin": [],
+      "tree_splits_at_54": 0
+    },
+    {
+      "nutrient": "zinc",
+      "estimator": "HistGradientBoostingClassifier",
+      "feature_indices_with_54_bin": [
+        16,
+        17
+      ],
+      "tree_splits_at_54": 0
+    }
+  ],
+  "synthetic_example": {
+    "age": 35,
+    "sex": "여성",
+    "meal": "세 끼 주 5~7회",
+    "eatingout": "주 1~2회",
+    "ever_drink": false,
+    "changed_bands": 9,
+    "comparison": [
+      {
+        "nutrient": "calcium",
+        "old_probability": 0.6774400433127747,
+        "old_band": "Low",
+        "corrected_probability": 0.6584771106794702,
+        "corrected_band": "Low"
+      },
+      {
+        "nutrient": "fiber",
+        "old_probability": 0.8099066916573887,
+        "old_band": "High",
+        "corrected_probability": 0.6022144223107725,
+        "corrected_band": "Mid"
+      },
+      {
+        "nutrient": "folate",
+        "old_probability": 0.7349652543411266,
+        "old_band": "High",
+        "corrected_probability": 0.711409239767839,
+        "corrected_band": "High"
+      },
+      {
+        "nutrient": "iron",
+        "old_probability": 0.649013369448799,
+        "old_band": "High",
+        "corrected_probability": 0.33373984675550855,
+        "corrected_band": "High"
+      },
+      {
+        "nutrient": "magnesium",
+        "old_probability": 0.7962179259685727,
+        "old_band": "High",
+        "corrected_probability": 0.5004201299066153,
+        "corrected_band": "Mid"
+      },
+      {
+        "nutrient": "phosphorus",
+        "old_probability": 0.23372131833583806,
+        "old_band": "High",
+        "corrected_probability": 0.08103109820025417,
+        "corrected_band": "Mid"
+      },
+      {
+        "nutrient": "potassium",
+        "old_probability": 0.9628790151176959,
+        "old_band": "High",
+        "corrected_probability": 0.9017140157618301,
+        "corrected_band": "High"
+      },
+      {
+        "nutrient": "protein",
+        "old_probability": 0.30275905575848955,
+        "old_band": "High",
+        "corrected_probability": 0.18711930140360333,
+        "corrected_band": "Mid"
+      },
+      {
+        "nutrient": "sodium_excess",
+        "old_probability": 0.5733216698237377,
+        "old_band": "Low",
+        "corrected_probability": 0.6433545115508539,
+        "corrected_band": "Mid"
+      },
+      {
+        "nutrient": "vitamin_a",
+        "old_probability": 0.8382454381036795,
+        "old_band": "High",
+        "corrected_probability": 0.7045060119514627,
+        "corrected_band": "Low"
+      },
+      {
+        "nutrient": "vitamin_b1",
+        "old_probability": 0.7035756579497587,
+        "old_band": "High",
+        "corrected_probability": 0.46756935603922617,
+        "corrected_band": "Mid"
+      },
+      {
+        "nutrient": "vitamin_b2",
+        "old_probability": 0.41723098386928803,
+        "old_band": "High",
+        "corrected_probability": 0.22173900698366936,
+        "corrected_band": "Low"
+      },
+      {
+        "nutrient": "vitamin_c",
+        "old_probability": 0.8579311875569536,
+        "old_band": "High",
+        "corrected_probability": 0.7748724134992027,
+        "corrected_band": "High"
+      },
+      {
+        "nutrient": "zinc",
+        "old_probability": 0.5175326270988114,
+        "old_band": "High",
+        "corrected_probability": 0.3016760549356647,
+        "corrected_band": "Mid"
+      }
+    ]
+  },
+  "unchanged_artifacts": [
+    {
+      "path": "models/mini_ffq/potassium.joblib",
+      "sha256": "734ee9c3c6b77b18a605aea112b2a98d6f976ee3520db6626200049496a6e4c2",
+      "unchanged_from_v1_2": true
+    },
+    {
+      "path": "models/mini_ffq/phosphorus.joblib",
+      "sha256": "c983f054fd1f6d401f07016dc80a8c5514c0753adadecf44247ba828e7ef3aef",
+      "unchanged_from_v1_2": true
+    },
+    {
+      "path": "models/mini_ffq/protein.joblib",
+      "sha256": "2dc2aaae816ae68c538845b98c455dda5c6314bf07fef53a804bec19cf09c28f",
+      "unchanged_from_v1_2": true
+    },
+    {
+      "path": "models/mini_ffq/vitamin_b1.joblib",
+      "sha256": "3f0c1ed7f20ed577a0f0058314c066d6812a135c385446c837d8c1fb0bedde2a",
+      "unchanged_from_v1_2": true
+    },
+    {
+      "path": "models/mini_ffq/vitamin_c.joblib",
+      "sha256": "e40b3b820e4bf7d5f31dfd933c3b0313ea34da93ac7c49c1b761240b2bfabb3b",
+      "unchanged_from_v1_2": true
+    },
+    {
+      "path": "models/mini_ffq/vitamin_b2.joblib",
+      "sha256": "4a562d648ace99f93e548d35ccd7eadd7e984f7ba35d04c20c74e50a60dfa09f",
+      "unchanged_from_v1_2": true
+    },
+    {
+      "path": "models/mini_ffq/fiber.joblib",
+      "sha256": "f1af1caf88910ef6b124bf489f63a83f143cf5d2867ec236266ec6e592ec5d15",
+      "unchanged_from_v1_2": true
+    },
+    {
+      "path": "models/mini_ffq/sodium_excess.joblib",
+      "sha256": "0e31270164df5dac46245065cbffc672ac355873a0863bcfb707009750a84fe4",
+      "unchanged_from_v1_2": true
+    },
+    {
+      "path": "models/mini_ffq/calcium.joblib",
+      "sha256": "f907f5c6f26dd099a50eb632b8933b12cad98bf0907023e54138d477642ca894",
+      "unchanged_from_v1_2": true
+    },
+    {
+      "path": "models/mini_ffq/iron.joblib",
+      "sha256": "fde14a5d40cff3f408f2ed5260b286eac9a5d6ca1223b4a97308226394d4a58b",
+      "unchanged_from_v1_2": true
+    },
+    {
+      "path": "models/service/potassium.joblib",
+      "sha256": "ca177458605b6db7797bb009964b9e95fcd446433e4ef8bbe7bf395461f33b9f",
+      "unchanged_from_v1_2": true
+    },
+    {
+      "path": "models/service/phosphorus.joblib",
+      "sha256": "e77be22d383ce4a555f0bb6a092a5ab5c9d6dca724223aa9473bc7fa8506fdf6",
+      "unchanged_from_v1_2": true
+    },
+    {
+      "path": "models/service/protein.joblib",
+      "sha256": "23282f4b6a4ab05b0180393d5ab22fc22ce6979928ceb91333c7a042d8cdca28",
+      "unchanged_from_v1_2": true
+    },
+    {
+      "path": "models/service/folate.joblib",
+      "sha256": "154f1da40631bed956a5459855dc427d0f852f997c2e97fb0bf1c8c9f1f032c1",
+      "unchanged_from_v1_2": true
+    },
+    {
+      "path": "models/service/vitamin_b1.joblib",
+      "sha256": "9529f2bbd2f89dfc35a46593fc422d7039559dfbf508f1e24611d4901beb13ea",
+      "unchanged_from_v1_2": true
+    },
+    {
+      "path": "models/service/vitamin_c.joblib",
+      "sha256": "defe680f2a19406eaeb417214a24a4d795f0239be861e0ce2f35fd1897b17919",
+      "unchanged_from_v1_2": true
+    },
+    {
+      "path": "models/service/vitamin_b2.joblib",
+      "sha256": "37de41fc4eadf3f5167022ee36a9a4844e2447b87ca7b7903e490f564c3849c5",
+      "unchanged_from_v1_2": true
+    },
+    {
+      "path": "models/service/vitamin_a.joblib",
+      "sha256": "61cdcdafa81846a18653bce265b046a0aa57ae5bfcc4a7d748c9a5300b3b4a9e",
+      "unchanged_from_v1_2": true
+    },
+    {
+      "path": "models/service/fiber.joblib",
+      "sha256": "b5e69d323b3d75f9890fba89811e83af1768e63e3ff4df412044f58172a434a1",
+      "unchanged_from_v1_2": true
+    },
+    {
+      "path": "models/service/sodium_excess.joblib",
+      "sha256": "e135d275ef9aaf24f5d100d0e1abed22ec0dd6372e61af430450702b47482ab6",
+      "unchanged_from_v1_2": true
+    },
+    {
+      "path": "models/service/calcium.joblib",
+      "sha256": "f4d21abbfe2b35382a0adf8c1c539269a5589c4c0ba6e4d8b93ab08d7aeeb97e",
+      "unchanged_from_v1_2": true
+    },
+    {
+      "path": "models/service/iron.joblib",
+      "sha256": "d16aadce4624e62c63679fe0f375752ec1893a7aae3899c847d00c87b2d3318c",
+      "unchanged_from_v1_2": true
+    },
+    {
+      "path": "models/service/magnesium.joblib",
+      "sha256": "94b3f6b8c748d03f20c14cee40738939e29115ef010559c1fdf346d8bc0772d1",
+      "unchanged_from_v1_2": true
+    },
+    {
+      "path": "models/service/zinc.joblib",
+      "sha256": "4a2c2d4d4b95a5eb7f6c6e1f47ce20f87f24216f5c0bd230e7f92b54d52b93c1",
+      "unchanged_from_v1_2": true
+    },
+    {
+      "path": "config/mini_ffq_risk_thresholds.json",
+      "sha256": "c7de3eb8e25e691381f68cf6e01bd59e984f0e284c66bc5b41788a79c3262069",
+      "unchanged_from_v1_2": true
+    },
+    {
+      "path": "config/service_risk_thresholds.json",
+      "sha256": "0f64ca5ee8e351159e69359204e81207a951092f397cc4cfb1597b16523da79c",
+      "unchanged_from_v1_2": true
+    }
+  ],
+  "models_retrained": false,
+  "version_scope": "historical_v1.3_before_retraining"
+}

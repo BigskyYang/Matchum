@@ -1,0 +1,286 @@
+{
+  "version": "v1.4-web-retrained",
+  "nutrition": {
+    "lifestyle_risk": {
+      "potassium": {
+        "probability": 0.8985832286583894,
+        "risk_band": "High"
+      },
+      "phosphorus": {
+        "probability": 0.08523245387855366,
+        "risk_band": "Mid"
+      },
+      "protein": {
+        "probability": 0.15423841917419917,
+        "risk_band": "Low"
+      },
+      "folate": {
+        "probability": 0.6850724361466811,
+        "risk_band": "High"
+      },
+      "vitamin_b1": {
+        "probability": 0.5118716565318903,
+        "risk_band": "Mid"
+      },
+      "vitamin_c": {
+        "probability": 0.7823293408344907,
+        "risk_band": "High"
+      },
+      "vitamin_b2": {
+        "probability": 0.2425776964046959,
+        "risk_band": "Low"
+      },
+      "vitamin_a": {
+        "probability": 0.7251821988451146,
+        "risk_band": "Mid"
+      },
+      "fiber": {
+        "probability": 0.623514218176374,
+        "risk_band": "Mid"
+      },
+      "sodium_excess": {
+        "probability": 0.6607529447551874,
+        "risk_band": "Mid"
+      },
+      "calcium": {
+        "probability": 0.5957198720759767,
+        "risk_band": "Low"
+      },
+      "iron": {
+        "probability": 0.36977814111555357,
+        "risk_band": "High"
+      },
+      "magnesium": {
+        "probability": 0.47413119245119345,
+        "risk_band": "Mid"
+      },
+      "zinc": {
+        "probability": 0.3103039525473898,
+        "risk_band": "Mid"
+      }
+    },
+    "habitual_diet_risk": {
+      "protein": {
+        "probability": 0.025376233441019195,
+        "risk_band": "Low"
+      },
+      "calcium": {
+        "probability": 0.39248047604393665,
+        "risk_band": "Low"
+      },
+      "iron": {
+        "probability": 0.009459243354374106,
+        "risk_band": "Mid"
+      },
+      "phosphorus": {
+        "probability": 0.007590681923889436,
+        "risk_band": "Low"
+      },
+      "vitamin_b1": {
+        "probability": 0.006381518402399025,
+        "risk_band": "Low"
+      },
+      "vitamin_b2": {
+        "probability": 0.05736342958643958,
+        "risk_band": "Low"
+      },
+      "vitamin_c": {
+        "probability": 0.20655554992149622,
+        "risk_band": "Low"
+      },
+      "fiber": {
+        "probability": 0.5088485017917224,
+        "risk_band": "Low"
+      },
+      "potassium": {
+        "probability": 0.7357310700330124,
+        "risk_band": "Low"
+      },
+      "sodium_excess": {
+        "probability": 0.8767417792470275,
+        "risk_band": "High"
+      }
+    },
+    "habitual_diet_available": true,
+    "habitual_diet_fallback_reason": null,
+    "combination_policy": "separate_signals_no_probability_averaging"
+  },
+  "food_guidance": [
+    {
+      "nutrient_id": "potassium",
+      "nutrient_name": "칼륨",
+      "target": "below_AI",
+      "display_state": "different_signals",
+      "food_examples": [
+        "채소",
+        "과일",
+        "콩류"
+      ],
+      "message": "칼륨을 제공하는 일반적인 식품 예시입니다. 개인의 필요 섭취량이나 추가 섭취 필요를 확정한 결과는 아닙니다."
+    },
+    {
+      "nutrient_id": "phosphorus",
+      "nutrient_name": "인",
+      "target": "below_EAR",
+      "display_state": "general_information",
+      "food_examples": [
+        "유제품",
+        "콩류",
+        "생선",
+        "달걀"
+      ],
+      "message": "인을 제공하는 일반적인 식품 예시입니다. 개인의 필요 섭취량이나 추가 섭취 필요를 확정한 결과는 아닙니다."
+    },
+    {
+      "nutrient_id": "protein",
+      "nutrient_name": "단백질",
+      "target": "below_EAR",
+      "display_state": "general_information",
+      "food_examples": [
+        "콩·두부",
+        "달걀",
+        "생선",
+        "육류"
+      ],
+      "message": "단백질을 제공하는 일반적인 식품 예시입니다. 개인의 필요 섭취량이나 추가 섭취 필요를 확정한 결과는 아닙니다."
+    },
+    {
+      "nutrient_id": "folate",
+      "nutrient_name": "엽산",
+      "target": "below_EAR",
+      "display_state": "review_food_sources",
+      "food_examples": [
+        "녹색 잎채소",
+        "콩류"
+      ],
+      "message": "엽산을 제공하는 일반적인 식품 예시입니다. 개인의 필요 섭취량이나 추가 섭취 필요를 확정한 결과는 아닙니다."
+    },
+    {
+      "nutrient_id": "vitamin_b1",
+      "nutrient_name": "비타민 B1",
+      "target": "below_EAR",
+      "display_state": "general_information",
+      "food_examples": [
+        "돼지고기",
+        "콩류",
+        "통곡물"
+      ],
+      "message": "비타민 B1을 제공하는 일반적인 식품 예시입니다. 개인의 필요 섭취량이나 추가 섭취 필요를 확정한 결과는 아닙니다."
+    },
+    {
+      "nutrient_id": "vitamin_c",
+      "nutrient_name": "비타민 C",
+      "target": "below_EAR",
+      "display_state": "different_signals",
+      "food_examples": [
+        "과일",
+        "파프리카",
+        "브로콜리"
+      ],
+      "message": "비타민 C을 제공하는 일반적인 식품 예시입니다. 개인의 필요 섭취량이나 추가 섭취 필요를 확정한 결과는 아닙니다."
+    },
+    {
+      "nutrient_id": "vitamin_b2",
+      "nutrient_name": "비타민 B2",
+      "target": "below_EAR",
+      "display_state": "general_information",
+      "food_examples": [
+        "우유·요구르트",
+        "달걀",
+        "콩류"
+      ],
+      "message": "비타민 B2을 제공하는 일반적인 식품 예시입니다. 개인의 필요 섭취량이나 추가 섭취 필요를 확정한 결과는 아닙니다."
+    },
+    {
+      "nutrient_id": "vitamin_a",
+      "nutrient_name": "비타민 A",
+      "target": "below_EAR",
+      "display_state": "general_information",
+      "food_examples": [
+        "당근",
+        "단호박",
+        "녹색 잎채소"
+      ],
+      "message": "비타민 A을 제공하는 일반적인 식품 예시입니다. 개인의 필요 섭취량이나 추가 섭취 필요를 확정한 결과는 아닙니다."
+    },
+    {
+      "nutrient_id": "fiber",
+      "nutrient_name": "식이섬유",
+      "target": "below_AI",
+      "display_state": "general_information",
+      "food_examples": [
+        "통곡물",
+        "콩류",
+        "채소",
+        "과일"
+      ],
+      "message": "식이섬유을 제공하는 일반적인 식품 예시입니다. 개인의 필요 섭취량이나 추가 섭취 필요를 확정한 결과는 아닙니다."
+    },
+    {
+      "nutrient_id": "sodium_excess",
+      "nutrient_name": "나트륨",
+      "target": "above_CDRR",
+      "display_state": "review_food_sources",
+      "food_examples": [],
+      "message": "나트륨 섭취를 점검할 때는 국물·소스·가공식품의 영양표시를 살펴볼 수 있습니다."
+    },
+    {
+      "nutrient_id": "calcium",
+      "nutrient_name": "칼슘",
+      "target": "below_EAR",
+      "display_state": "general_information",
+      "food_examples": [
+        "우유·요구르트",
+        "칼슘 강화 식품",
+        "칼슘 함유 두부"
+      ],
+      "message": "칼슘을 제공하는 일반적인 식품 예시입니다. 개인의 필요 섭취량이나 추가 섭취 필요를 확정한 결과는 아닙니다."
+    },
+    {
+      "nutrient_id": "iron",
+      "nutrient_name": "철",
+      "target": "below_EAR",
+      "display_state": "review_food_sources",
+      "food_examples": [
+        "육류",
+        "콩류",
+        "철 강화 식품"
+      ],
+      "message": "철을 제공하는 일반적인 식품 예시입니다. 개인의 필요 섭취량이나 추가 섭취 필요를 확정한 결과는 아닙니다."
+    },
+    {
+      "nutrient_id": "magnesium",
+      "nutrient_name": "마그네슘",
+      "target": "below_EAR",
+      "display_state": "general_information",
+      "food_examples": [
+        "콩류",
+        "견과류",
+        "통곡물"
+      ],
+      "message": "마그네슘을 제공하는 일반적인 식품 예시입니다. 개인의 필요 섭취량이나 추가 섭취 필요를 확정한 결과는 아닙니다."
+    },
+    {
+      "nutrient_id": "zinc",
+      "nutrient_name": "아연",
+      "target": "below_EAR",
+      "display_state": "general_information",
+      "food_examples": [
+        "육류",
+        "해산물",
+        "콩류"
+      ],
+      "message": "아연을 제공하는 일반적인 식품 예시입니다. 개인의 필요 섭취량이나 추가 섭취 필요를 확정한 결과는 아닙니다."
+    }
+  ],
+  "lifestyle_cluster": {
+    "status": "awaiting_web_cluster",
+    "cluster_id": null,
+    "source": "bigskyyang/web/src/data/nbti12.json"
+  },
+  "model_data_quality": {
+    "status": "invalid_training_codes_removed",
+    "reference": "reports/TRAINING_DATA_QUALITY.md",
+    "weights_retrained": true
+  }
+}

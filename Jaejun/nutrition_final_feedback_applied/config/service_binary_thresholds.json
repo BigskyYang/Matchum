@@ -1,0 +1,72 @@
+{
+  "protein": {
+    "threshold": 0.23606342653659534,
+    "selection": "Youden J on clean training predictions only",
+    "n": 9740
+  },
+  "calcium": {
+    "threshold": 0.690041674948091,
+    "selection": "Youden J on clean training predictions only",
+    "n": 9740
+  },
+  "magnesium": {
+    "threshold": 0.5152401004148164,
+    "selection": "Youden J on clean training predictions only",
+    "n": 9740
+  },
+  "iron": {
+    "threshold": 0.24535733707831817,
+    "selection": "Youden J on clean training predictions only",
+    "n": 9740
+  },
+  "zinc": {
+    "threshold": 0.3186966292451329,
+    "selection": "Youden J on clean training predictions only",
+    "n": 9740
+  },
+  "phosphorus": {
+    "threshold": 0.1403439052863826,
+    "selection": "Youden J on clean training predictions only",
+    "n": 9740
+  },
+  "vitamin_a": {
+    "threshold": 0.733284573491872,
+    "selection": "Youden J on clean training predictions only",
+    "n": 9740
+  },
+  "vitamin_b1": {
+    "threshold": 0.48261948709975927,
+    "selection": "Youden J on clean training predictions only",
+    "n": 9740
+  },
+  "vitamin_b2": {
+    "threshold": 0.3063213325435869,
+    "selection": "Youden J on clean training predictions only",
+    "n": 9740
+  },
+  "folate": {
+    "threshold": 0.5874419582546849,
+    "selection": "Youden J on clean training predictions only",
+    "n": 9740
+  },
+  "vitamin_c": {
+    "threshold": 0.7174350660499357,
+    "selection": "Youden J on clean training predictions only",
+    "n": 9740
+  },
+  "fiber": {
+    "threshold": 0.6007849114100423,
+    "selection": "Youden J on clean training predictions only",
+    "n": 9740
+  },
+  "potassium": {
+    "threshold": 0.7683123184877492,
+    "selection": "Youden J on clean training predictions only",
+    "n": 9740
+  },
+  "sodium_excess": {
+    "threshold": 0.6285533506556449,
+    "selection": "Youden J on clean training predictions only",
+    "n": 9740
+  }
+}

@@ -1,0 +1,518 @@
+{
+  "version": "v1.4-web-retrained",
+  "training_years": [
+    2022,
+    2023
+  ],
+  "evaluation_year": 2024,
+  "n_training_original": 9742,
+  "n_training_clean": 9740,
+  "n_training_removed": 2,
+  "n_evaluation": 5320,
+  "cleaning_policy": "drop training rows with fruit/vegetable codes outside 1..9; no imputation; same untouched 2024 cohort",
+  "relative_band_policy": "retain original v1.2 fixed JSON thresholds, do not re-estimate from 2024",
+  "binary_cutoff_policy": "training predictions only, Youden J, used for diagnostic metrics; not used for Low/Mid/High display",
+  "python": "3.12.14",
+  "sklearn": "1.8.0",
+  "sources": [
+    {
+      "name": "KNHANES_2022_2024_ANALYSIS_BASE(4).csv",
+      "sha256": "919602e8a290b279d344edc8807362ea4ab87b57648f4dbe6ce8be4376cafbdb"
+    },
+    {
+      "name": "KNHANES_2022_2024_ML_CLUSTER_COMPLETECASE(4).csv",
+      "sha256": "016191d9eae107a8186b7f9ab8fa0c4e72e50a98fed4832664eacd23e3559782"
+    },
+    {
+      "name": "Step6_전체영양성분_TargetMatrix.csv",
+      "sha256": "963bba0930c821f9bf358b025b283ec61cef1ac8cd3525d6a8f19f732ed9ad7e"
+    }
+  ],
+  "nutrients": [
+    {
+      "nutrient": "protein",
+      "target": "Protein_below_EAR",
+      "baseline_reproduction_max_abs_error": 0.0,
+      "n_train": 9740,
+      "n_test": 5320,
+      "baseline": {
+        "auc": 0.6720933622891154,
+        "pr_auc": 0.36987662297789287,
+        "brier": 0.16542149856936086,
+        "accuracy": 0.6729323308270677,
+        "sensitivity": 0.4933884297520661,
+        "specificity": 0.7257907542579075,
+        "precision": 0.3462877030162413,
+        "f1": 0.4069529652351738
+      },
+      "cleaned": {
+        "auc": 0.6729047274335929,
+        "pr_auc": 0.36733264332746585,
+        "brier": 0.1656615990142926,
+        "accuracy": 0.6357142857142857,
+        "sensitivity": 0.5892561983471074,
+        "specificity": 0.6493917274939173,
+        "precision": 0.3310120705663881,
+        "f1": 0.4239001189060642
+      },
+      "auc_delta": 0.0008113651444774383,
+      "brier_delta": 0.00024010044493172344,
+      "mean_abs_probability_change": 0.01728046742135745,
+      "changed_relative_bands": 581,
+      "baseline_binary_cutoff": 0.261430485884158,
+      "cleaned_binary_cutoff": 0.23606342653659534
+    },
+    {
+      "nutrient": "calcium",
+      "target": "Calcium_mg_below_EAR",
+      "baseline_reproduction_max_abs_error": 0.0,
+      "n_train": 9740,
+      "n_test": 5320,
+      "baseline": {
+        "auc": 0.6014541966351261,
+        "pr_auc": 0.7754888868504521,
+        "brier": 0.20175748598338877,
+        "accuracy": 0.5922932330827068,
+        "sensitivity": 0.6194010071561092,
+        "specificity": 0.5261797026502909,
+        "precision": 0.7612377850162867,
+        "f1": 0.6830337571240684
+      },
+      "cleaned": {
+        "auc": 0.6025110201066297,
+        "pr_auc": 0.7767163008543452,
+        "brier": 0.20163234277646205,
+        "accuracy": 0.6152255639097745,
+        "sensitivity": 0.6753246753246753,
+        "specificity": 0.46864899806076277,
+        "precision": 0.7560830860534125,
+        "f1": 0.7134257314853703
+      },
+      "auc_delta": 0.0010568234715035985,
+      "brier_delta": -0.00012514320692671999,
+      "mean_abs_probability_change": 0.018120015261623226,
+      "changed_relative_bands": 632,
+      "baseline_binary_cutoff": 0.7045281144639759,
+      "cleaned_binary_cutoff": 0.690041674948091
+    },
+    {
+      "nutrient": "magnesium",
+      "target": "Magnesium_mg_below_EAR",
+      "baseline_reproduction_max_abs_error": 0.0,
+      "n_train": 9740,
+      "n_test": 5320,
+      "baseline": {
+        "auc": 0.66321754079351,
+        "pr_auc": 0.6146185906393785,
+        "brier": 0.22935478536609158,
+        "accuracy": 0.6278195488721805,
+        "sensitivity": 0.595034595034595,
+        "specificity": 0.6559552916521132,
+        "precision": 0.5974662852472415,
+        "f1": 0.5962479608482871
+      },
+      "cleaned": {
+        "auc": 0.6640525100182803,
+        "pr_auc": 0.6185178102539173,
+        "brier": 0.22895273904824776,
+        "accuracy": 0.6285714285714286,
+        "sensitivity": 0.5352055352055352,
+        "specificity": 0.7086971707998603,
+        "precision": 0.6119125174499768,
+        "f1": 0.5709943551888841
+      },
+      "auc_delta": 0.0008349692247702212,
+      "brier_delta": -0.00040204631784382383,
+      "mean_abs_probability_change": 0.018534158610493734,
+      "changed_relative_bands": 430,
+      "baseline_binary_cutoff": 0.48899669318157035,
+      "cleaned_binary_cutoff": 0.5152401004148164
+    },
+    {
+      "nutrient": "iron",
+      "target": "Iron_mg_below_EAR",
+      "baseline_reproduction_max_abs_error": 0.0,
+      "n_train": 9740,
+      "n_test": 5320,
+      "baseline": {
+        "auc": 0.7284453512717123,
+        "pr_auc": 0.4750173463771077,
+        "brier": 0.16535657997905492,
+        "accuracy": 0.6642857142857143,
+        "sensitivity": 0.6804733727810651,
+        "specificity": 0.6587701612903226,
+        "precision": 0.4045734388742304,
+        "f1": 0.507446221731936
+      },
+      "cleaned": {
+        "auc": 0.727307643843052,
+        "pr_auc": 0.47537956039682194,
+        "brier": 0.16546253419108417,
+        "accuracy": 0.6725563909774436,
+        "sensitivity": 0.6678994082840237,
+        "specificity": 0.6741431451612904,
+        "precision": 0.41120218579234974,
+        "f1": 0.5090191657271702
+      },
+      "auc_delta": -0.0011377074286602618,
+      "brier_delta": 0.00010595421202924671,
+      "mean_abs_probability_change": 0.017193753019936416,
+      "changed_relative_bands": 388,
+      "baseline_binary_cutoff": 0.2399730736587846,
+      "cleaned_binary_cutoff": 0.24535733707831817
+    },
+    {
+      "nutrient": "zinc",
+      "target": "Zinc_mg_below_EAR",
+      "baseline_reproduction_max_abs_error": 0.0,
+      "n_train": 9740,
+      "n_test": 5320,
+      "baseline": {
+        "auc": 0.6641944258115513,
+        "pr_auc": 0.42414868025654606,
+        "brier": 0.1900650191157527,
+        "accuracy": 0.6609022556390978,
+        "sensitivity": 0.5159151193633952,
+        "specificity": 0.7182581322140609,
+        "precision": 0.4200863930885529,
+        "f1": 0.4630952380952381
+      },
+      "cleaned": {
+        "auc": 0.6641637221283619,
+        "pr_auc": 0.4282389627430435,
+        "brier": 0.18967441997471418,
+        "accuracy": 0.6580827067669173,
+        "sensitivity": 0.5444297082228117,
+        "specificity": 0.7030430220356768,
+        "precision": 0.420378904249872,
+        "f1": 0.47442935567754985
+      },
+      "auc_delta": -3.070368318935923e-05,
+      "brier_delta": -0.0003905991410385057,
+      "mean_abs_probability_change": 0.018405159586691196,
+      "changed_relative_bands": 506,
+      "baseline_binary_cutoff": 0.3253972309359995,
+      "cleaned_binary_cutoff": 0.3186966292451329
+    },
+    {
+      "nutrient": "phosphorus",
+      "target": "Phosphorus_below_EAR",
+      "baseline_reproduction_max_abs_error": 0.0,
+      "n_train": 9740,
+      "n_test": 5320,
+      "baseline": {
+        "auc": 0.7259118303068735,
+        "pr_auc": 0.2553973466143719,
+        "brier": 0.09327242217710542,
+        "accuracy": 0.7223684210526315,
+        "sensitivity": 0.5611390284757118,
+        "specificity": 0.7427482532288799,
+        "precision": 0.2161290322580645,
+        "f1": 0.312063344201211
+      },
+      "cleaned": {
+        "auc": 0.7260776321440643,
+        "pr_auc": 0.25409685126063364,
+        "brier": 0.09314559249361029,
+        "accuracy": 0.7464285714285714,
+        "sensitivity": 0.5293132328308208,
+        "specificity": 0.7738725386406945,
+        "precision": 0.22832369942196531,
+        "f1": 0.3190307925290257
+      },
+      "auc_delta": 0.00016580183719083763,
+      "brier_delta": -0.00012682968349513046,
+      "mean_abs_probability_change": 0.012953463980956315,
+      "changed_relative_bands": 563,
+      "baseline_binary_cutoff": 0.13082527365227323,
+      "cleaned_binary_cutoff": 0.1403439052863826
+    },
+    {
+      "nutrient": "vitamin_a",
+      "target": "VitaminA_below_EAR",
+      "baseline_reproduction_max_abs_error": 0.0,
+      "n_train": 9740,
+      "n_test": 5320,
+      "baseline": {
+        "auc": 0.6073355458841224,
+        "pr_auc": 0.7865734527252464,
+        "brier": 0.19739155594537433,
+        "accuracy": 0.6065789473684211,
+        "sensitivity": 0.6419624217118998,
+        "specificity": 0.5154569892473119,
+        "precision": 0.7733417164413706,
+        "f1": 0.7015542563810067
+      },
+      "cleaned": {
+        "auc": 0.606605540917458,
+        "pr_auc": 0.7859619925263485,
+        "brier": 0.19756407429120107,
+        "accuracy": 0.6022556390977444,
+        "sensitivity": 0.6289144050104384,
+        "specificity": 0.5336021505376344,
+        "precision": 0.7764175257731959,
+        "f1": 0.6949250288350635
+      },
+      "auc_delta": -0.0007300049666644215,
+      "brier_delta": 0.00017251834582673875,
+      "mean_abs_probability_change": 0.01577823389273422,
+      "changed_relative_bands": 627,
+      "baseline_binary_cutoff": 0.730471095697232,
+      "cleaned_binary_cutoff": 0.733284573491872
+    },
+    {
+      "nutrient": "vitamin_b1",
+      "target": "B1_below_EAR",
+      "baseline_reproduction_max_abs_error": 0.0,
+      "n_train": 9740,
+      "n_test": 5320,
+      "baseline": {
+        "auc": 0.629013872332603,
+        "pr_auc": 0.5827774760941471,
+        "brier": 0.23668702578863313,
+        "accuracy": 0.5977443609022557,
+        "sensitivity": 0.6055083029566626,
+        "specificity": 0.5910206944931603,
+        "precision": 0.5618188650883127,
+        "f1": 0.5828460038986355
+      },
+      "cleaned": {
+        "auc": 0.626016622250597,
+        "pr_auc": 0.5791862071157947,
+        "brier": 0.2374870445763563,
+        "accuracy": 0.5960526315789474,
+        "sensitivity": 0.5844471445929527,
+        "specificity": 0.6061031217116801,
+        "precision": 0.5623538581449727,
+        "f1": 0.5731876861966236
+      },
+      "auc_delta": -0.00299725008200602,
+      "brier_delta": 0.0008000187877231779,
+      "mean_abs_probability_change": 0.018220779141803773,
+      "changed_relative_bands": 556,
+      "baseline_binary_cutoff": 0.47817542516005607,
+      "cleaned_binary_cutoff": 0.48261948709975927
+    },
+    {
+      "nutrient": "vitamin_b2",
+      "target": "B2_mg_below_EAR",
+      "baseline_reproduction_max_abs_error": 0.0,
+      "n_train": 9740,
+      "n_test": 5320,
+      "baseline": {
+        "auc": 0.6149590323002377,
+        "pr_auc": 0.413446218194411,
+        "brier": 0.19976960510600467,
+        "accuracy": 0.6270676691729323,
+        "sensitivity": 0.4929667519181586,
+        "specificity": 0.6829073482428115,
+        "precision": 0.3929663608562691,
+        "f1": 0.43732274532047644
+      },
+      "cleaned": {
+        "auc": 0.6138721098246216,
+        "pr_auc": 0.4121016224002766,
+        "brier": 0.2000444408409531,
+        "accuracy": 0.5962406015037593,
+        "sensitivity": 0.5396419437340153,
+        "specificity": 0.6198083067092651,
+        "precision": 0.3714788732394366,
+        "f1": 0.44004171011470283
+      },
+      "auc_delta": -0.0010869224756161477,
+      "brier_delta": 0.0002748357349484365,
+      "mean_abs_probability_change": 0.01737818783148059,
+      "changed_relative_bands": 659,
+      "baseline_binary_cutoff": 0.3204268358368382,
+      "cleaned_binary_cutoff": 0.3063213325435869
+    },
+    {
+      "nutrient": "folate",
+      "target": "Folate_ug_below_EAR",
+      "baseline_reproduction_max_abs_error": 0.0,
+      "n_train": 9740,
+      "n_test": 5320,
+      "baseline": {
+        "auc": 0.6905778134504412,
+        "pr_auc": 0.7415829561990862,
+        "brier": 0.21878208142070904,
+        "accuracy": 0.6387218045112782,
+        "sensitivity": 0.668310322156476,
+        "specificity": 0.5992098331870062,
+        "precision": 0.6900882552613713,
+        "f1": 0.6790247160988644
+      },
+      "cleaned": {
+        "auc": 0.6895758907054239,
+        "pr_auc": 0.740913512711384,
+        "brier": 0.21902168375408831,
+        "accuracy": 0.6319548872180452,
+        "sensitivity": 0.6170282708744247,
+        "specificity": 0.6518876207199298,
+        "precision": 0.702996254681648,
+        "f1": 0.6572128851540616
+      },
+      "auc_delta": -0.001001922745017314,
+      "brier_delta": 0.00023960233337927406,
+      "mean_abs_probability_change": 0.01813065127572469,
+      "changed_relative_bands": 360,
+      "baseline_binary_cutoff": 0.5653914133525118,
+      "cleaned_binary_cutoff": 0.5874419582546849
+    },
+    {
+      "nutrient": "vitamin_c",
+      "target": "VitaminC_mg_below_EAR",
+      "baseline_reproduction_max_abs_error": 0.0,
+      "n_train": 9740,
+      "n_test": 5320,
+      "baseline": {
+        "auc": 0.6541786215685004,
+        "pr_auc": 0.80885732225916,
+        "brier": 0.19219795561105135,
+        "accuracy": 0.6105263157894737,
+        "sensitivity": 0.5960474308300395,
+        "specificity": 0.6465573770491804,
+        "precision": 0.8075687254551945,
+        "f1": 0.6858702243784112
+      },
+      "cleaned": {
+        "auc": 0.6562294649992441,
+        "pr_auc": 0.8103965142389769,
+        "brier": 0.1918238831751469,
+        "accuracy": 0.6165413533834586,
+        "sensitivity": 0.6063241106719368,
+        "specificity": 0.6419672131147541,
+        "precision": 0.8082191780821918,
+        "f1": 0.6928635953026197
+      },
+      "auc_delta": 0.0020508434307436874,
+      "brier_delta": -0.0003740724359044545,
+      "mean_abs_probability_change": 0.009582394459706095,
+      "changed_relative_bands": 322,
+      "baseline_binary_cutoff": 0.7190239493559802,
+      "cleaned_binary_cutoff": 0.7174350660499357
+    },
+    {
+      "nutrient": "fiber",
+      "target": "Fiber_below_AI",
+      "baseline_reproduction_max_abs_error": 0.0,
+      "n_train": 9740,
+      "n_test": 5320,
+      "baseline": {
+        "auc": 0.6761862685241716,
+        "pr_auc": 0.7539907558624999,
+        "brier": 0.2173928054721286,
+        "accuracy": 0.6306390977443609,
+        "sensitivity": 0.6365891472868217,
+        "specificity": 0.6214797136038186,
+        "precision": 0.7213633169360506,
+        "f1": 0.6763300938889804
+      },
+      "cleaned": {
+        "auc": 0.6749353758487354,
+        "pr_auc": 0.7514663092141114,
+        "brier": 0.2176828040831777,
+        "accuracy": 0.6302631578947369,
+        "sensitivity": 0.6393798449612403,
+        "specificity": 0.6162291169451074,
+        "precision": 0.7194696441032798,
+        "f1": 0.6770645214250534
+      },
+      "auc_delta": -0.0012508926754362104,
+      "brier_delta": 0.000289998611049086,
+      "mean_abs_probability_change": 0.018822062461285104,
+      "changed_relative_bands": 440,
+      "baseline_binary_cutoff": 0.603382831909448,
+      "cleaned_binary_cutoff": 0.6007849114100423
+    },
+    {
+      "nutrient": "potassium",
+      "target": "Potassium_below_AI",
+      "baseline_reproduction_max_abs_error": 0.0,
+      "n_train": 9740,
+      "n_test": 5320,
+      "baseline": {
+        "auc": 0.6823425536089566,
+        "pr_auc": 0.8647321867744583,
+        "brier": 0.16587753253130957,
+        "accuracy": 0.6554511278195488,
+        "sensitivity": 0.6826215022091311,
+        "specificity": 0.5666131621187801,
+        "precision": 0.8373983739837398,
+        "f1": 0.752129817444219
+      },
+      "cleaned": {
+        "auc": 0.6801111618051598,
+        "pr_auc": 0.8640170468278,
+        "brier": 0.16610728469394673,
+        "accuracy": 0.6481203007518797,
+        "sensitivity": 0.6659302896416298,
+        "specificity": 0.5898876404494382,
+        "precision": 0.841501240694789,
+        "f1": 0.7434913674979446
+      },
+      "auc_delta": -0.002231391803796723,
+      "brier_delta": 0.00022975216263715348,
+      "mean_abs_probability_change": 0.016308755408415795,
+      "changed_relative_bands": 502,
+      "baseline_binary_cutoff": 0.7628046496016714,
+      "cleaned_binary_cutoff": 0.7683123184877492
+    },
+    {
+      "nutrient": "sodium_excess",
+      "target": "Sodium_above_CDRR",
+      "baseline_reproduction_max_abs_error": 0.0,
+      "n_train": 9740,
+      "n_test": 5320,
+      "baseline": {
+        "auc": 0.6933785697158583,
+        "pr_auc": 0.8199990785718994,
+        "brier": 0.19511957356420667,
+        "accuracy": 0.6631578947368421,
+        "sensitivity": 0.709075952837949,
+        "specificity": 0.5630603705917513,
+        "precision": 0.7796201386795297,
+        "f1": 0.742676622630672
+      },
+      "cleaned": {
+        "auc": 0.697105892044014,
+        "pr_auc": 0.8222477561851214,
+        "brier": 0.19411929512587148,
+        "accuracy": 0.6573308270676692,
+        "sensitivity": 0.6860433232794078,
+        "specificity": 0.5947399880454274,
+        "precision": 0.7867924528301887,
+        "f1": 0.7329720228504467
+      },
+      "auc_delta": 0.0037273223281556467,
+      "brier_delta": -0.0010002784383351948,
+      "mean_abs_probability_change": 0.01722442412423203,
+      "changed_relative_bands": 362,
+      "baseline_binary_cutoff": 0.6177364587461434,
+      "cleaned_binary_cutoff": 0.6285533506556449
+    }
+  ],
+  "baseline_macro": {
+    "auc": 0.6645206417494842,
+    "pr_auc": 0.6204647800283326,
+    "brier": 0.19060328047358374,
+    "accuracy": 0.6407491944146079,
+    "sensitivity": 0.6070309560335773,
+    "specificity": 0.6295719845590997,
+    "precision": 0.5935675993001753,
+    "f1": 0.5876138548055129
+  },
+  "cleaned_macro": {
+    "auc": 0.6643906652906597,
+    "pr_auc": 0.6204695064325744,
+    "brier": 0.19059855271708237,
+    "accuracy": 0.6382384532760472,
+    "sensitivity": 0.6077955779272157,
+    "specificity": 0.6308586971732456,
+    "precision": 0.5948672493631192,
+    "f1": 0.5873255954921843
+  },
+  "macro_auc_delta": -0.00012997645882451003,
+  "macro_brier_delta": -4.727756501371472e-06,
+  "average_changed_band_rate": 0.09301825993555315
+}

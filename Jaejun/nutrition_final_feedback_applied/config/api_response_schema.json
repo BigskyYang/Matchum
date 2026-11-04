@@ -1,0 +1,200 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "prediction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "probability",
+        "risk_band"
+      ],
+      "properties": {
+        "probability": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "risk_band": {
+          "enum": [
+            "Low",
+            "Mid",
+            "High"
+          ]
+        }
+      }
+    }
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "nutrition",
+    "food_guidance",
+    "lifestyle_cluster",
+    "model_data_quality"
+  ],
+  "properties": {
+    "version": {
+      "const": "v1.4-web-retrained"
+    },
+    "nutrition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "lifestyle_risk",
+        "habitual_diet_risk",
+        "habitual_diet_available",
+        "habitual_diet_fallback_reason",
+        "combination_policy"
+      ],
+      "properties": {
+        "lifestyle_risk": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "protein",
+            "calcium",
+            "magnesium",
+            "iron",
+            "zinc",
+            "phosphorus",
+            "vitamin_a",
+            "vitamin_b1",
+            "vitamin_b2",
+            "folate",
+            "vitamin_c",
+            "fiber",
+            "potassium",
+            "sodium_excess"
+          ],
+          "properties": {
+            "protein": {
+              "$ref": "#/$defs/prediction"
+            },
+            "calcium": {
+              "$ref": "#/$defs/prediction"
+            },
+            "magnesium": {
+              "$ref": "#/$defs/prediction"
+            },
+            "iron": {
+              "$ref": "#/$defs/prediction"
+            },
+            "zinc": {
+              "$ref": "#/$defs/prediction"
+            },
+            "phosphorus": {
+              "$ref": "#/$defs/prediction"
+            },
+            "vitamin_a": {
+              "$ref": "#/$defs/prediction"
+            },
+            "vitamin_b1": {
+              "$ref": "#/$defs/prediction"
+            },
+            "vitamin_b2": {
+              "$ref": "#/$defs/prediction"
+            },
+            "folate": {
+              "$ref": "#/$defs/prediction"
+            },
+            "vitamin_c": {
+              "$ref": "#/$defs/prediction"
+            },
+            "fiber": {
+              "$ref": "#/$defs/prediction"
+            },
+            "potassium": {
+              "$ref": "#/$defs/prediction"
+            },
+            "sodium_excess": {
+              "$ref": "#/$defs/prediction"
+            }
+          }
+        },
+        "habitual_diet_risk": {
+          "anyOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "protein",
+                "calcium",
+                "iron",
+                "phosphorus",
+                "vitamin_b1",
+                "vitamin_b2",
+                "vitamin_c",
+                "fiber",
+                "potassium",
+                "sodium_excess"
+              ],
+              "properties": {
+                "protein": {
+                  "$ref": "#/$defs/prediction"
+                },
+                "calcium": {
+                  "$ref": "#/$defs/prediction"
+                },
+                "iron": {
+                  "$ref": "#/$defs/prediction"
+                },
+                "phosphorus": {
+                  "$ref": "#/$defs/prediction"
+                },
+                "vitamin_b1": {
+                  "$ref": "#/$defs/prediction"
+                },
+                "vitamin_b2": {
+                  "$ref": "#/$defs/prediction"
+                },
+                "vitamin_c": {
+                  "$ref": "#/$defs/prediction"
+                },
+                "fiber": {
+                  "$ref": "#/$defs/prediction"
+                },
+                "potassium": {
+                  "$ref": "#/$defs/prediction"
+                },
+                "sodium_excess": {
+                  "$ref": "#/$defs/prediction"
+                }
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "habitual_diet_available": {
+          "type": "boolean"
+        },
+        "habitual_diet_fallback_reason": {
+          "enum": [
+            null,
+            "mini_ffq_validated_for_age_19_64_only",
+            "mini_ffq_incomplete"
+          ]
+        },
+        "combination_policy": {
+          "const": "separate_signals_no_probability_averaging"
+        }
+      }
+    },
+    "food_guidance": {
+      "type": "array",
+      "minItems": 14,
+      "maxItems": 14,
+      "items": {
+        "type": "object"
+      }
+    },
+    "lifestyle_cluster": {
+      "type": "object"
+    },
+    "model_data_quality": {
+      "type": "object"
+    }
+  }
+}

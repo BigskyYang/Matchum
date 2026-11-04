@@ -1,0 +1,58 @@
+{
+  "protein": {
+    "target_column": "Protein_below_EAR",
+    "model_path": "models/service/protein.joblib"
+  },
+  "calcium": {
+    "target_column": "Calcium_mg_below_EAR",
+    "model_path": "models/service/calcium.joblib"
+  },
+  "magnesium": {
+    "target_column": "Magnesium_mg_below_EAR",
+    "model_path": "models/service/magnesium.joblib"
+  },
+  "iron": {
+    "target_column": "Iron_mg_below_EAR",
+    "model_path": "models/service/iron.joblib"
+  },
+  "zinc": {
+    "target_column": "Zinc_mg_below_EAR",
+    "model_path": "models/service/zinc.joblib"
+  },
+  "phosphorus": {
+    "target_column": "Phosphorus_below_EAR",
+    "model_path": "models/service/phosphorus.joblib"
+  },
+  "vitamin_a": {
+    "target_column": "VitaminA_below_EAR",
+    "model_path": "models/service/vitamin_a.joblib"
+  },
+  "vitamin_b1": {
+    "target_column": "B1_below_EAR",
+    "model_path": "models/service/vitamin_b1.joblib"
+  },
+  "vitamin_b2": {
+    "target_column": "B2_mg_below_EAR",
+    "model_path": "models/service/vitamin_b2.joblib"
+  },
+  "folate": {
+    "target_column": "Folate_ug_below_EAR",
+    "model_path": "models/service/folate.joblib"
+  },
+  "vitamin_c": {
+    "target_column": "VitaminC_mg_below_EAR",
+    "model_path": "models/service/vitamin_c.joblib"
+  },
+  "fiber": {
+    "target_column": "Fiber_below_AI",
+    "model_path": "models/service/fiber.joblib"
+  },
+  "potassium": {
+    "target_column": "Potassium_below_AI",
+    "model_path": "models/service/potassium.joblib"
+  },
+  "sodium_excess": {
+    "target_column": "Sodium_above_CDRR",
+    "model_path": "models/service/sodium_excess.joblib"
+  }
+}

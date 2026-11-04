@@ -1,0 +1,233 @@
+{
+  "version": "v1.4-web-retrained",
+  "age_min": 19,
+  "age_max": 64,
+  "questions": [
+    {
+      "id": "meat_frequency",
+      "label": "평소 육류 섭취빈도",
+      "type": "select",
+      "required": false,
+      "enabled_age": {
+        "minimum": 19,
+        "maximum": 64
+      },
+      "required_when_applicable": true,
+      "options": [
+        {
+          "value": "거의 먹지 않음",
+          "label": "거의 먹지 않음"
+        },
+        {
+          "value": "월 1~3회",
+          "label": "월 1~3회"
+        },
+        {
+          "value": "주 1~2회",
+          "label": "주 1~2회"
+        },
+        {
+          "value": "주 3~4회",
+          "label": "주 3~4회"
+        },
+        {
+          "value": "주 5~6회",
+          "label": "주 5~6회"
+        },
+        {
+          "value": "하루 1회",
+          "label": "하루 1회"
+        },
+        {
+          "value": "하루 2회",
+          "label": "하루 2회"
+        },
+        {
+          "value": "하루 3회 이상",
+          "label": "하루 3회 이상"
+        }
+      ]
+    },
+    {
+      "id": "fish_frequency",
+      "label": "평소 생선·해산물 섭취빈도",
+      "type": "select",
+      "required": false,
+      "enabled_age": {
+        "minimum": 19,
+        "maximum": 64
+      },
+      "required_when_applicable": true,
+      "options": [
+        {
+          "value": "거의 먹지 않음",
+          "label": "거의 먹지 않음"
+        },
+        {
+          "value": "월 1~3회",
+          "label": "월 1~3회"
+        },
+        {
+          "value": "주 1~2회",
+          "label": "주 1~2회"
+        },
+        {
+          "value": "주 3~4회",
+          "label": "주 3~4회"
+        },
+        {
+          "value": "주 5~6회",
+          "label": "주 5~6회"
+        },
+        {
+          "value": "하루 1회",
+          "label": "하루 1회"
+        },
+        {
+          "value": "하루 2회",
+          "label": "하루 2회"
+        },
+        {
+          "value": "하루 3회 이상",
+          "label": "하루 3회 이상"
+        }
+      ]
+    },
+    {
+      "id": "egg_frequency",
+      "label": "평소 달걀 섭취빈도",
+      "type": "select",
+      "required": false,
+      "enabled_age": {
+        "minimum": 19,
+        "maximum": 64
+      },
+      "required_when_applicable": true,
+      "options": [
+        {
+          "value": "거의 먹지 않음",
+          "label": "거의 먹지 않음"
+        },
+        {
+          "value": "월 1~3회",
+          "label": "월 1~3회"
+        },
+        {
+          "value": "주 1~2회",
+          "label": "주 1~2회"
+        },
+        {
+          "value": "주 3~4회",
+          "label": "주 3~4회"
+        },
+        {
+          "value": "주 5~6회",
+          "label": "주 5~6회"
+        },
+        {
+          "value": "하루 1회",
+          "label": "하루 1회"
+        },
+        {
+          "value": "하루 2회",
+          "label": "하루 2회"
+        },
+        {
+          "value": "하루 3회 이상",
+          "label": "하루 3회 이상"
+        }
+      ]
+    },
+    {
+      "id": "legume_frequency",
+      "label": "평소 콩·두부·콩제품 섭취빈도",
+      "type": "select",
+      "required": false,
+      "enabled_age": {
+        "minimum": 19,
+        "maximum": 64
+      },
+      "required_when_applicable": true,
+      "options": [
+        {
+          "value": "거의 먹지 않음",
+          "label": "거의 먹지 않음"
+        },
+        {
+          "value": "월 1~3회",
+          "label": "월 1~3회"
+        },
+        {
+          "value": "주 1~2회",
+          "label": "주 1~2회"
+        },
+        {
+          "value": "주 3~4회",
+          "label": "주 3~4회"
+        },
+        {
+          "value": "주 5~6회",
+          "label": "주 5~6회"
+        },
+        {
+          "value": "하루 1회",
+          "label": "하루 1회"
+        },
+        {
+          "value": "하루 2회",
+          "label": "하루 2회"
+        },
+        {
+          "value": "하루 3회 이상",
+          "label": "하루 3회 이상"
+        }
+      ]
+    },
+    {
+      "id": "dairy_frequency",
+      "label": "평소 우유·유제품 섭취빈도",
+      "type": "select",
+      "required": false,
+      "enabled_age": {
+        "minimum": 19,
+        "maximum": 64
+      },
+      "required_when_applicable": true,
+      "options": [
+        {
+          "value": "거의 먹지 않음",
+          "label": "거의 먹지 않음"
+        },
+        {
+          "value": "월 1~3회",
+          "label": "월 1~3회"
+        },
+        {
+          "value": "주 1~2회",
+          "label": "주 1~2회"
+        },
+        {
+          "value": "주 3~4회",
+          "label": "주 3~4회"
+        },
+        {
+          "value": "주 5~6회",
+          "label": "주 5~6회"
+        },
+        {
+          "value": "하루 1회",
+          "label": "하루 1회"
+        },
+        {
+          "value": "하루 2회",
+          "label": "하루 2회"
+        },
+        {
+          "value": "하루 3회 이상",
+          "label": "하루 3회 이상"
+        }
+      ]
+    }
+  ],
+  "safety_questions": []
+}
