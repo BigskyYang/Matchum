@@ -44,7 +44,7 @@ export default function ResultPage() {
         {r.tags.length > 0 && (
           <ul className="mt-3 flex flex-wrap justify-center gap-1.5">
             {r.tags.map((tag) => (
-              <li key={tag} className="rounded-full bg-white px-3 py-1 text-sm font-bold text-primary-strong shadow-soft">
+              <li key={tag} className="rounded-full bg-white px-3 py-1 text-sm font-bold text-primary-shade shadow-soft">
                 {tag}
               </li>
             ))}
@@ -52,7 +52,7 @@ export default function ResultPage() {
         )}
         <p className="mt-4 max-w-80 leading-relaxed whitespace-pre-line text-ink-soft">{r.summary}</p>
         <p className="mt-3 text-sm text-ink-soft">
-          조사 대상 성인 중 <b className="text-primary-strong">{r.sharePct.toFixed(1)}%</b>가 이 유형이에요
+          조사 대상 성인 중 <b className="text-primary-shade">{r.sharePct.toFixed(1)}%</b>가 이 유형이에요
         </p>
       </header>
 
@@ -81,7 +81,7 @@ export default function ResultPage() {
       </Card>
 
       <section className="rounded-card bg-primary-soft p-5 text-center">
-        <h2 className="text-lg font-bold">🔍 나에게 맞는 결과도 볼까요?</h2>
+        <h2 className="text-xl font-bold">🔍 나에게 맞는 결과도 볼까요?</h2>
         <p className="mt-2 text-sm leading-relaxed text-ink-soft">
           흡연·음주·식습관 질문 몇 개만 더 답하면 나에게 맞춘 결과를 보여 드려요. 지금까지 답한 내용은 그대로 이어서 써요.
         </p>

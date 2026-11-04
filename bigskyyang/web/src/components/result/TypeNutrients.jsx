@@ -20,7 +20,7 @@ function CommonTile({ n, onOpen }) {
         <span aria-hidden="true" className="text-2xl">
           {n.icon}
         </span>
-        <span className="text-[0.75rem] leading-tight font-bold">{n.label}</span>
+        <span className="text-xs leading-tight font-bold">{n.label}</span>
       </button>
     </li>
   )
@@ -159,7 +159,7 @@ export default function TypeNutrients({ common, picks, emptyText, sexLabel, ageL
         </>
       )}
 
-      <p className="mt-3 text-[0.7rem] leading-relaxed text-ink-faint">
+      <p className="mt-3 text-xs leading-relaxed text-ink-faint">
         영양소를 누르면 하는 일과 음식을 볼 수 있어요. 국민건강영양조사 2022–2024의 하루 식사 기록(음식만, 영양제 제외)을 2025
         한국인 영양소 섭취기준과 비교한, 나와 비슷한 사람들의 경향이에요. 나의 영양 상태를 진단한 결과가 아니에요.
       </p>

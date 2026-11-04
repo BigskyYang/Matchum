@@ -22,7 +22,7 @@ function WatchRow({ n, showSource }) {
       <div className="min-w-0 flex-1">
         <p className="flex flex-wrap items-baseline gap-x-2">
           <b>{n.label}</b>
-          {showSource && <span className="text-[0.7rem] text-ink-faint">{sourceText(n)}</span>}
+          {showSource && <span className="text-xs text-ink-faint">{sourceText(n)}</span>}
         </p>
         <p className="mt-0.5 text-xs leading-relaxed text-ink-soft">{n.guide}</p>
       </div>
@@ -38,8 +38,8 @@ function RestItem({ n, showSource }) {
         <span className="min-w-0 flex-1">{n.label}</span>
       </p>
       <p className="mt-1 flex items-center gap-1.5">
-        <span className={`rounded-full px-2 py-0.5 text-[0.7rem] font-bold ${BAND[n.band].cls}`}>{BAND[n.band].label}</span>
-        {showSource && <span className="text-[0.65rem] text-ink-faint">{n.source === 'habitual' ? '평소 식사' : '생활습관'}</span>}
+        <span className={`rounded-full px-2 py-0.5 text-xs font-bold ${BAND[n.band].cls}`}>{BAND[n.band].label}</span>
+        {showSource && <span className="text-xs text-ink-faint">{n.source === 'habitual' ? '평소 식사' : '생활습관'}</span>}
       </p>
     </li>
   )
@@ -59,7 +59,7 @@ export default function NutritionRisk({ nutrition, ffqAsked }) {
         <>
           <h3 className="mt-4 flex items-center gap-2 text-sm font-bold">
             🔺 살펴볼 영양소
-            <span className={`rounded-full px-2 py-0.5 text-[0.7rem] ${BAND.High.cls}`}>부족 위험 높은 편 {watch.length}개</span>
+            <span className={`rounded-full px-2 py-0.5 text-xs ${BAND.High.cls}`}>부족 위험 높은 편 {watch.length}개</span>
           </h3>
           <ul className="mt-2 divide-y-2 divide-cream overflow-hidden rounded-card border-2 border-primary-soft bg-white">
             {watch.map((n) => (
@@ -82,7 +82,7 @@ export default function NutritionRisk({ nutrition, ffqAsked }) {
         </details>
       )}
 
-      <ul className="mt-4 space-y-1 text-[0.7rem] leading-relaxed text-ink-faint">
+      <ul className="mt-4 space-y-1 text-xs leading-relaxed text-ink-faint">
         {habitualAvailable ? (
           <li>
             · 평소 식사 기준(고기·생선·달걀·콩·유제품을 먹는 횟수)이 있는 영양소는 그 결과를 보여 줘요. 생활습관 기준보다 정확한

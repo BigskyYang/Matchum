@@ -125,10 +125,10 @@ export default function SurveyPage({ stage = 1 }) {
         <div className="flex-1">
           <div className="mb-1.5 flex justify-between text-xs font-semibold text-ink-soft">
             <span>
-              {stage === 2 && <b className="mr-1.5 text-primary-strong">2단계</b>}
+              {stage === 2 && <b className="mr-1.5 text-primary-shade">2단계</b>}
               {SECTIONS[q.section]}
             </span>
-            <span className="text-primary-strong">{percent}%</span>
+            <span className="text-primary-shade">{percent}%</span>
           </div>
           <ProgressBar percent={percent} />
         </div>

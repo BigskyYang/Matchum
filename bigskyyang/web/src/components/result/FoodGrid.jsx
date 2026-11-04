@@ -8,7 +8,7 @@ export default function FoodGrid({ foods }) {
             {f.emoji}
           </span>
           <span className="mt-1.5 text-sm leading-tight font-bold">{f.label}</span>
-          <span className="mt-0.5 text-[0.7rem] text-ink-soft">{f.why}</span>
+          <span className="mt-0.5 text-xs text-ink-soft">{f.why}</span>
         </li>
       ))}
     </ul>

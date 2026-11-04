@@ -6,9 +6,9 @@ import Mascot from '../Mascot.jsx'
 function Partner({ caption, p, text }) {
   return (
     <li className="flex flex-col items-center rounded-card bg-cream px-2 pt-3 pb-4 text-center">
-      <span className="rounded-full bg-white px-2.5 py-0.5 text-[0.7rem] font-bold text-primary-strong">{caption}</span>
+      <span className="rounded-full bg-white px-2.5 py-0.5 text-xs font-bold text-primary-shade">{caption}</span>
       <Mascot name={`type_${p.id}`} size="sm" className="mt-2" />
-      <p className="mt-1 text-[0.7rem] font-semibold text-ink-soft">
+      <p className="mt-1 text-xs font-semibold text-ink-soft">
         <span aria-hidden="true">{p.main.emoji} </span>
         {p.main.name}
       </p>
@@ -16,7 +16,7 @@ function Partner({ caption, p, text }) {
       {p.axes.length > 0 && (
         <ul className="mt-2 flex flex-wrap justify-center gap-1">
           {p.axes.map((a) => (
-            <li key={a.key} className="rounded-full bg-white px-2 py-0.5 text-[0.7rem] font-bold">
+            <li key={a.key} className="rounded-full bg-white px-2 py-0.5 text-xs font-bold">
               <span aria-hidden="true">{a.icon} </span>
               {a.label}
             </li>

@@ -2,7 +2,7 @@
 export default function Card({ title, icon, children }) {
   return (
     <section className="rounded-card bg-white p-5 shadow-soft">
-      <h2 className="flex items-center gap-2 text-lg font-bold">
+      <h2 className="flex items-center gap-2 text-xl font-bold">
         {icon && <span aria-hidden="true">{icon}</span>}
         {title}
       </h2>

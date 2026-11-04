@@ -20,7 +20,7 @@ export default function HabitSignals({ habits }) {
               {h.icon}
             </span>
             <span className="min-w-0 flex-1 text-sm leading-tight font-bold">{h.label}</span>
-            <span className={`shrink-0 rounded-full px-2 py-0.5 text-[0.7rem] font-bold ${tone.chip}`}>{level.label}</span>
+            <span className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-bold ${tone.chip}`}>{level.label}</span>
           </li>
         )
       })}

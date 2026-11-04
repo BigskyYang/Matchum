@@ -48,7 +48,7 @@ export default function SupplementInfo({ info }) {
       <p className="mt-4 rounded-card bg-butter/60 px-4 py-3 text-sm leading-relaxed">
         제품 정보는 준비하고 있어요. 그전까지는 위의 음식으로 먼저 챙겨 보세요.
       </p>
-      <p className="mt-3 text-[0.7rem] leading-relaxed text-ink-faint">
+      <p className="mt-3 text-xs leading-relaxed text-ink-faint">
         · 건강기능식품은 질병의 예방 및 치료를 위한 의약품이 아닙니다. 임신·수유 중이거나 질환·복용약이 있으면 의사·약사와
         먼저 상의하세요.
       </p>

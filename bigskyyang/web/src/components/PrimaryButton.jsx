@@ -2,9 +2,9 @@ import { Link } from 'react-router-dom'
 
 // 화면 하단의 큰 버튼. to가 있으면 링크, 없으면 버튼으로 그린다
 const BASE =
-  'block w-full rounded-button py-5 text-center text-lg font-bold select-none transition-[translate,box-shadow,background-color] duration-100'
+  'block w-full rounded-button py-5 text-center text-xl font-bold select-none transition-[translate,box-shadow,background-color] duration-100'
 const ENABLED = 'bg-primary-strong text-white shadow-button active:translate-y-1 active:shadow-button-pressed'
-const DISABLED = 'bg-primary-soft text-primary-shade/60 cursor-not-allowed'
+const DISABLED = 'bg-primary-soft text-primary-shade/70 cursor-not-allowed'
 
 export default function PrimaryButton({ to, disabled = false, className = '', children, ...props }) {
   const cls = `${BASE} ${disabled ? DISABLED : ENABLED} ${className}`
