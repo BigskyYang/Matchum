@@ -18,7 +18,9 @@ MATCHUM = HERE.parents[1] / 'Matchum'
 OUT8 = HERE.parent / '영양분석' / 'output'
 S = json.load(open(FIG / 'stats.json', encoding='utf-8'))
 
-NAVY, BLUE, INK, INK2 = '1A1A1A', '404040', '1A1A1A', '595959'   # 강조색 없이 검정·회색만 사용
+# 보고서 색: 짙은 청록(주색) + 연한 청록 + 황토(강조). 본문 글자는 검정
+NAVY, BLUE, INK, INK2 = '1F4F4C', '2C6E6A', '1A1A1A', '595959'
+TEAL_M, TEAL_L, TEAL_XL, OCHRE = '8BB5B0', 'DCEBE8', 'EEF5F3', '9C5B26'
 FONT = '맑은 고딕'
 doc = Document()
 
@@ -30,7 +32,7 @@ st = doc.styles['Normal']
 st.font.name = FONT; st.font.size = Pt(10); st.font.color.rgb = RGBColor.from_string(INK)
 st.element.rPr.rFonts.set(qn('w:eastAsia'), FONT)
 st.paragraph_format.line_spacing = 1.35; st.paragraph_format.space_after = Pt(4)
-for name, size, color, before, after in [('Heading 1', 15, INK, 18, 8), ('Heading 2', 12, INK, 14, 5), ('Heading 3', 10.5, INK, 10, 3)]:
+for name, size, color, before, after in [('Heading 1', 15, NAVY, 18, 8), ('Heading 2', 12, NAVY, 14, 5), ('Heading 3', 10.5, BLUE, 10, 3)]:
     h = doc.styles[name]
     h.font.name = FONT; h.font.size = Pt(size); h.font.bold = True; h.font.color.rgb = RGBColor.from_string(color)
     h.element.rPr.rFonts.set(qn('w:eastAsia'), FONT)
@@ -38,7 +40,7 @@ for name, size, color, before, after in [('Heading 1', 15, INK, 18, 8), ('Headin
     h.paragraph_format.keep_with_next = True
 # 1단계 제목 아래에 가는 선
 pBdr = OxmlElement('w:pBdr'); bt = OxmlElement('w:bottom')
-for k, v in dict(val='single', sz='6', space='3', color='1A1A1A').items():
+for k, v in dict(val='single', sz='6', space='3', color='2C6E6A').items():
     bt.set(qn(f'w:{k}'), v)
 pBdr.append(bt); doc.styles['Heading 1'].element.get_or_add_pPr().append(pBdr)
 for name in ['List Bullet', 'List Number']:
@@ -57,7 +59,7 @@ def shade(cell, hex_):
 def borders(table):
     tblPr = table._tbl.tblPr
     b = OxmlElement('w:tblBorders')
-    for edge, sz, color in [('top', 12, '1A1A1A'), ('bottom', 12, '1A1A1A'), ('insideH', 4, 'BFBFBF'),
+    for edge, sz, color in [('top', 12, BLUE), ('bottom', 12, BLUE), ('insideH', 4, 'C5DCD8'),
                             ('left', 0, 'auto'), ('right', 0, 'auto'), ('insideV', 0, 'auto')]:
         e = OxmlElement(f'w:{edge}'); e.set(qn('w:val'), 'single' if sz else 'nil')
         if sz:
@@ -169,12 +171,12 @@ def T(rows, cap=None, widths=None, size=8.5, first_col_bold=False, align_num=Tru
             c.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
             margins(c, 50, 50, 90, 90)
             p = c.paragraphs[0]; p.paragraph_format.space_after = Pt(0); p.paragraph_format.line_spacing = 1.15
-            rich(p, str(val), size, None, True if i == 0 or (first_col_bold and j == 0) else None)
+            rich(p, str(val), size, NAVY if i == 0 else None, True if i == 0 or (first_col_bold and j == 0) else None)
             if i == 0:
-                shade(c, 'EDEDED'); cell_border(c, 'bottom', '1A1A1A', 6); p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                shade(c, TEAL_L); cell_border(c, 'bottom', BLUE, 6); p.alignment = WD_ALIGN_PARAGRAPH.CENTER
             else:
                 if i in hl_rows:
-                    shade(c, 'F2F2F2')
+                    shade(c, TEAL_XL)
                 if align_num and re.fullmatch(r'[\s+\-−0-9.,%~×≤≥()\[\]배명개/✓]+', str(val) or 'x'):
                     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
     # 머리글 반복, 행이 쪽 경계에서 갈라지지 않게. 18행 이하 표는 통째로 한 쪽에 묶는다
@@ -205,8 +207,8 @@ def callout(title, lines, *_):
     t = doc.add_table(rows=1, cols=1); t.alignment = WD_TABLE_ALIGNMENT.CENTER; no_borders(t); nosplit(t)
     c = t.cell(0, 0); margins(c, 120, 120, 200, 200)
     for e in ['top', 'left', 'bottom', 'right']:
-        cell_border(c, e, '8C8C8C', 6)
-    p = c.paragraphs[0]; rich(p, title, 10, INK, True); p.paragraph_format.space_after = Pt(3)
+        cell_border(c, e, TEAL_M, 6)
+    p = c.paragraphs[0]; rich(p, title, 10, NAVY, True); p.paragraph_format.space_after = Pt(3)
     for ln in lines:
         q = c.add_paragraph(); q.paragraph_format.space_after = Pt(2); q.paragraph_format.line_spacing = 1.3
         rich(q, ('•  ' if not ln.startswith('→') else '') + ln, 9.5)
@@ -240,9 +242,9 @@ def screen_card(title, common, rows, empty=None):
     t = doc.add_table(rows=1, cols=1); t.alignment = WD_TABLE_ALIGNMENT.CENTER; no_borders(t); nosplit(t)
     c = t.cell(0, 0); shade(c, 'FFFFFF'); margins(c, 140, 140, 220, 220)
     for e in ['top', 'left', 'bottom', 'right']:
-        cell_border(c, e, 'C9D6E8', 8)
+        cell_border(c, e, TEAL_M, 8)
     p = c.paragraphs[0]; rich(p, title, 10, NAVY, True)
-    q = c.add_paragraph(); rich(q, '많은 사람에게 부족하기 쉬워요', 9, INK, True); q.paragraph_format.space_after = Pt(1)
+    q = c.add_paragraph(); rich(q, '많은 사람에게 부족하기 쉬워요', 9, OCHRE, True); q.paragraph_format.space_after = Pt(1)
     q = c.add_paragraph(); rich(q, common, 9, INK2)
     q = c.add_paragraph(); rich(q, '내 유형에서 살펴볼 것', 9, BLUE, True); q.paragraph_format.space_after = Pt(1); q.paragraph_format.space_before = Pt(4)
     if rows:
@@ -299,7 +301,7 @@ sec.different_first_page_header_footer = True
 for _ in range(6):
     doc.add_paragraph()
 P('머신러닝 팀 프로젝트 최종 결과 보고서', 11, INK2, WD_ALIGN_PARAGRAPH.CENTER, 14)
-P('생활습관으로 찾는 나의 부족 영양소', 24, INK, WD_ALIGN_PARAGRAPH.CENTER, 8, bold=True)
+P('생활습관으로 찾는 나의 부족 영양소', 24, NAVY, WD_ALIGN_PARAGRAPH.CENTER, 8, bold=True)
 P('국민건강영양조사 기반 생활습관 고객 군집화와 유형별 부족 영양소 안내 모델', 11.5, INK2, WD_ALIGN_PARAGRAPH.CENTER, 0)
 for _ in range(7):
     doc.add_paragraph()
@@ -310,11 +312,11 @@ t = doc.add_table(rows=len(meta), cols=2); no_borders(t); t.alignment = WD_TABLE
 for i, (k, v) in enumerate(meta):
     a_, b_ = t.cell(i, 0), t.cell(i, 1); a_.width, b_.width = Cm(3), Cm(9)
     if i == 0:
-        cell_border(a_, 'top', '1A1A1A', 12); cell_border(b_, 'top', '1A1A1A', 12)
+        cell_border(a_, 'top', BLUE, 12); cell_border(b_, 'top', BLUE, 12)
     if i == len(meta) - 1:
-        cell_border(a_, 'bottom', '1A1A1A', 12); cell_border(b_, 'bottom', '1A1A1A', 12)
+        cell_border(a_, 'bottom', BLUE, 12); cell_border(b_, 'bottom', BLUE, 12)
     margins(a_, 60, 60, 100, 100); margins(b_, 60, 60, 100, 100)
-    rich(a_.paragraphs[0], k, 9.5, INK, True); rich(b_.paragraphs[0], v, 9.5)
+    rich(a_.paragraphs[0], k, 9.5, NAVY, True); rich(b_.paragraphs[0], v, 9.5)
 page_break()
 
 # 머리글·바닥글 (본문)
@@ -705,7 +707,7 @@ ins = [('영양 부족은 "누구나"의 문제입니다', '비타민D·E, 칼�
        ('같은 유형 안에서도 사람마다 다릅니다', '유형은 부족 비율을 바꿀 뿐 모두를 부족하게 만들지 않음. 그래서 "당신은 철이 부족합니다"가 아니라 "10명 중 6명"처럼 비율로 말함.'),
        ('유형은 설명, 정확도는 개인 분석이 맡습니다', '개인 응답을 더 사용하면 AUC가 더 오름(+0.030). 유형은 사용자가 자기 생활을 이해하는 입구이고, 정밀한 판단은 개인 맞춤 분석의 몫임.')]
 for i, (t_, d_) in enumerate(ins, 1):
-    P(f'({i}) {t_}', 10.5, INK, after=2, bold=True)
+    P(f'({i}) {t_}', 10.5, NAVY, after=2, bold=True)
     B([d_])
 H('9.2 비즈니스 제언', 2)
 T([['제언', '근거', '기대 효과'],

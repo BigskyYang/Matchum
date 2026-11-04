@@ -20,8 +20,10 @@ plt.rcParams.update({'font.family': 'Malgun Gothic', 'axes.unicode_minus': False
                      'axes.edgecolor': '#8a8984', 'axes.labelcolor': '#0b0b0b', 'xtick.color': '#52514e',
                      'ytick.color': '#52514e', 'figure.facecolor': '#fcfcfb', 'axes.facecolor': '#fcfcfb',
                      'savefig.facecolor': '#fcfcfb', 'grid.color': '#e4e3df', 'grid.linewidth': 0.8})
-BLUE, ORANGE, AQUA, GRAY, INK, INK2 = '#2a78d6', '#eb6834', '#1baf7a', '#b9b8b2', '#0b0b0b', '#52514e'
-DIV = LinearSegmentedColormap.from_list('div', ['#1c5cab', '#86b6ef', '#f0efec', '#f19a8f', '#c23431'])
+# 보고서 색: 짙은 청록(주색) + 연한 청록 + 황토(강조), 나머지는 회색
+BLUE, ORANGE, AQUA, GRAY, INK, INK2 = '#2c6e6a', '#b9773a', '#8bb5b0', '#c4c2bb', '#0b0b0b', '#52514e'
+TEAL_L = '#dcebe8'
+DIV = LinearSegmentedColormap.from_list('div', ['#1f4f4c', '#8bb5b0', '#f4f1ea', '#d9a86c', '#9c5b26'])
 NAMES = {'N1': '집밥좋아 나무늘보', 'N2': '배고픈 나무늘보', 'N3': '배부른 나무늘보', 'A1': '뚜벅이 갓생러',
          'A2': '파워 갓생러', 'A3': '밸런스 갓생러', 'S1': '쉬고 싶은 예민보스', 'S2': '산책하는 예민보스',
          'S3': '쇠질하는 예민보스', 'O1': '아침패스 워커홀릭', 'O2': '삼시세끼 워커홀릭', 'O3': '운동하는 현대인'}
@@ -211,14 +213,14 @@ save(fig, 'f08_2024검증.png')
 
 # 그림 2. 전체 분석 흐름 (도식)
 fig, ax = plt.subplots(figsize=(10, 2.5)); ax.axis('off'); ax.set_xlim(0, 10); ax.set_ylim(0, 2.5)
-steps = [('데이터 준비', 'KNHANES 2022–24\n성인 15,062명\nKDRI 2025 기준', '#f2f2f2'),
-         ('고객 군집화', '생활습관 7개 지표\nPCA → 2단계 k-medoids\n4 대분류 × 3 = 12유형', '#f2f2f2'),
-         ('부족 확률 예측', '유형+성별+연령대\n→ 영양소 15개\n가중 로지스틱 회귀', '#f2f2f2'),
-         ('검증', '2022–23 학습\n→ 2024 평가\n민감도 분석', '#f2f2f2'),
-         ('서비스 표시', '공통 영양소 +\n유형 영양소 2단 표시\n웹 JSON 120조합', '#f2f2f2')]
+steps = [('데이터 준비', 'KNHANES 2022–24\n성인 15,062명\nKDRI 2025 기준', TEAL_L),
+         ('고객 군집화', '생활습관 7개 지표\nPCA → 2단계 k-medoids\n4 대분류 × 3 = 12유형', TEAL_L),
+         ('부족 확률 예측', '유형+성별+연령대\n→ 영양소 15개\n가중 로지스틱 회귀', TEAL_L),
+         ('검증', '2022–23 학습\n→ 2024 평가\n민감도 분석', TEAL_L),
+         ('서비스 표시', '공통 영양소 +\n유형 영양소 2단 표시\n웹 JSON 120조합', TEAL_L)]
 for i, (t, b, c) in enumerate(steps):
     x = 0.1 + i * 2
-    ax.add_patch(FancyBboxPatch((x, 0.3), 1.75, 2.05, boxstyle='square,pad=0.02', fc=c, ec='#8c8c8c', lw=0.8))
+    ax.add_patch(FancyBboxPatch((x, 0.3), 1.75, 2.05, boxstyle='square,pad=0.02', fc=c, ec=AQUA, lw=0.8))
     ax.text(x + 0.875, 2.0, t, ha='center', va='center', fontsize=11, weight='bold', color=INK)
     ax.text(x + 0.875, 1.12, b, ha='center', va='center', fontsize=8.8, color=INK2, linespacing=1.5)
     if i < 4:
@@ -235,7 +237,7 @@ for c, fn in [('sex', 't_유형x성별.csv'), ('age_grp', 't_유형x연령대.cs
     (ct.div(ct.sum(axis=1), axis=0) * 100).round(1).to_csv(FIG / fn, encoding='utf-8-sig')
 
 # 그림 9. 유형별 단백질·철 섭취량, 그림 10. 유형별 좌식 시간 (박스플롯, 비가중·보정 전)
-TC = {'N': '#86b6ef', 'A': '#1baf7a', 'S': '#f19a8f', 'O': '#b9b8b2'}
+TC = {'N': AQUA, 'A': AQUA, 'S': AQUA, 'O': AQUA}
 
 
 def box(ax, col, ylab, ref=None):
@@ -246,6 +248,8 @@ def box(ax, col, ylab, ref=None):
     ax.scatter(range(1, 13), [np.average(d.loc[d['cluster'] == k, col], weights=d.loc[d['cluster'] == k, 'w']) for k in IDS],
                marker='D', s=18, color=INK, zorder=3, label='가중 평균')
     ax.set_xticks(range(1, 13)); ax.set_xticklabels(IDS); ax.set_ylabel(ylab); ax.grid(axis='y'); ax.set_axisbelow(True)
+    for xv in (3.5, 6.5, 9.5):      # 대분류(N·A·S·O) 경계
+        ax.axvline(xv, color=GRAY, lw=0.8)
     if ref:
         ax.axhline(ref[0], color=ORANGE, lw=1, ls='--'); ax.text(12.6, ref[0], ref[1], color=ORANGE, fontsize=8, va='center')
 
