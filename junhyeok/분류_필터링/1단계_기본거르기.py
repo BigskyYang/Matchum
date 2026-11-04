@@ -9,19 +9,26 @@
      - 기능성의 "골다공증발생 위험 감소에 도움"은 식약처 인정 문구라 제외 이유가 아님 (제품명만 봄)
   ③ 남은 제품 중 대상 '일반·남성·여성·시니어'는 다음 단계로 (11-04 팀 결정: 웹에서 성별·나이로 대상 맞춤)
   ④ 어린이 제품은 웹 대상이 아니라서 빼지 않고 '보관'만 함
+     - 대상은 공통.py의 키워드로 여기서 다시 판별 (11-04 어린이 키워드 보완: 성장·쑥쑥·키튼.
+       '아이' 한 글자는 아이오딘(요오드)·아이언(철)·아이케어(눈)·브랜드명과 겹쳐서 쓰지 않음)
   (수출·해외, 2021년 이전 제품은 최종본을 만들 때 이미 빠짐)
 
 입력  성분별_영양제_제품목록(최종).xlsx 의 '제품 목록' 시트
 출력  1단계_기본거르기.xlsx, 1단계_결과.pkl (일반·남성·여성·시니어, 다음 단계 입력), 1단계_보관.pkl (어린이)
 """
 import pandas as pd
-from 공통 import out, load_final, new_book, add_sheet, add_criteria_sheet
+from 공통 import out, load_final, target_of, new_book, add_sheet, add_criteria_sheet
 
 
 def main():
     print("[1/3] 최종본 엑셀 읽는 중... (1분 정도)")
     p = load_final()
     n0 = len(p)
+    before = p["대상"].copy()
+    p["대상"] = p["제품명"].map(target_of)          # 공통.py 키워드로 다시 판별 (키워드를 고치면 바로 반영)
+    p["임산부·수유부"] = p["임산부·수유부"].where(p["대상"] != "임산부·수유부", "예")
+    n_new_kid = int(((before != "어린이") & (p["대상"] == "어린이")).sum())
+    print(f"   어린이 키워드 보완으로 새로 어린이가 된 제품: {n_new_kid:,}개")
     p["빠진 이유"] = ""
 
     def drop(mask, reason):
@@ -52,7 +59,7 @@ def main():
         ("결과", True),
         (f"· 시작 {n0:,}개 → 빠진 제품 {len(removed):,}개 → 남은 제품 {len(rest):,}개", False),
         (f"· 다음 단계로 (일반·남성·여성·시니어): {len(keep):,}개 ({keep_cnt})", False),
-        (f"· 보관 (어린이, 웹 대상 아님): {len(hold):,}개", False),
+        (f"· 보관 (어린이, 웹 대상 아님): {len(hold):,}개 (11-04 어린이 키워드 보완으로 {n_new_kid:,}개 추가)", False),
         ("", False), ("빠진 이유", True),
         (f"· 임산부·수유부 대상: {n_preg:,}개", False),
         (f"· 질환 대상 제품명: {n_dis:,}개 ({' / '.join(f'{k} {v:,}' for k, v in dis_cnt.items())})", False),
