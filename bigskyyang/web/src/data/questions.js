@@ -16,6 +16,9 @@
 //   date     : 생년월일 'YYYY-MM-DD' 휠 (년·월·일) { minYear, maxYear, initial }
 // layout (choice): 'list' 한 줄에 하나 | 'grid' 2열 | 'row' 한 줄에 모두 (짧은 숫자 보기)
 // initial: 처음 화면에 맞춰져 있는 값 (많이 고르는 값을 기준으로)
+// 문구: 제목은 짧은 말투로, 꼭 필요한 조건은 note 한 줄로, 예시·자세한 기준은 info로 (ⓘ 자세히 → 아래에서 올라오는 창)
+//   note: 제목 아래 한 줄 안내, info: ['도움말 줄', ...], period: 응답 기간 ('최근 1년' 등, 제목 위 작은 표시)
+//   모델 입력의 뜻(기간·포함·제외 기준)은 그대로 두고 표현만 줄였다
 // showIf(answers): false면 해당 문항을 건너뛴다
 // check(value): 다음으로 넘어갈 수 없는 값이면 안내 문구, 괜찮으면 null
 //
@@ -75,7 +78,7 @@ const STAGE_1 = [
   {
     id: 'sex',
     section: 'basic',
-    title: '성별을 선택해주세요.',
+    title: '성별을 알려 주세요',
     type: 'choice',
     options: [
       { label: '남성', value: 1 },
@@ -86,8 +89,8 @@ const STAGE_1 = [
   {
     id: 'birth_date',
     section: 'basic',
-    title: '생년월일을 선택해주세요.',
-    help: ['만 나이로 계산해요.'],
+    title: '생년월일을 알려 주세요',
+    note: '만 나이로 계산해요',
     type: 'date',
     minYear: 1930,
     maxYear: THIS_YEAR - ADULT,
@@ -100,7 +103,9 @@ const STAGE_1 = [
     id: 'activity',
     section: 'activity',
     title: '일주일에 운동을 얼마나 하시나요?',
-    help: ['숨이 찰 정도의 운동이에요. 천천히 걷기, 숨쉬기 운동은 빼 주세요.'],
+    note: '숨이 찰 정도의 운동만 세요',
+    info: ['빠르게 걷기, 자전거, 계단 오르기, 달리기·등산, 몸을 쓰는 일도 모두 합쳐 주세요.', '천천히 걷기, 숨쉬기 운동은 빼 주세요.'],
+    period: '최근 1주일',
     type: 'choice',
     // 값 3 = 주 150분 이상 → ML_aerobic 1
     options: [
@@ -113,7 +118,9 @@ const STAGE_1 = [
   {
     id: 'strength_days',
     section: 'activity',
-    title: '최근 1주일 동안 팔굽혀펴기, 윗몸일으키기, 아령, 역기, 철봉 등의 근력운동을 한 날은 며칠입니까?',
+    title: '근력운동은 일주일에 며칠 하나요?',
+    note: '팔굽혀펴기·윗몸일으키기·아령·역기·철봉 등',
+    period: '최근 1주일',
     type: 'choice',
     layout: 'row',
     options: [
@@ -129,47 +136,50 @@ const STAGE_1 = [
   {
     id: 'sedentary_min',
     section: 'sedentary',
-    title: '평소 하루에 앉아 있거나 누워 있는 시간은 총 얼마나 됩니까?',
-    help: ['잠자는 시간은 빼 주세요.', '책상·이동·TV·게임·인터넷 등 하루 전체를 생각해 주세요.'],
+    title: '하루에 앉아 있거나 누워 있는 시간은요?',
+    note: '잠자는 시간은 빼 주세요',
+    info: ['책상·이동·TV·게임·인터넷 등 하루 전체를 생각해 주세요.'],
     type: 'duration',
     per: '하루',
     maxHours: 20,
     initial: 8 * 60,
   },
   // 수면: 취침·기상 시각 (주말도 비슷하면 주중만). 팀 합의로 '날마다 들쭉날쭉' 보기는 두지 않는다
-  { id: 'weekday_bed', section: 'sleep', title: '평소 주중(또는 주로 일하는 날)에 잠자리에 드는 시각은 언제입니까?', type: 'time', initial: '22:00', hourStart: 18 },
-  { id: 'weekday_wake', section: 'sleep', title: '평소 주중(또는 주로 일하는 날)에 일어나는 시각은 언제입니까?', type: 'time', initial: '07:00', hourStart: 3 },
+  { id: 'weekday_bed', section: 'sleep', title: '평일에는 몇 시에 잠자리에 드나요?', note: '주로 일하는 날 기준', type: 'time', initial: '22:00', hourStart: 18 },
+  { id: 'weekday_wake', section: 'sleep', title: '평일에는 몇 시에 일어나나요?', note: '주로 일하는 날 기준', type: 'time', initial: '07:00', hourStart: 3 },
   {
     id: 'weekend_same',
     section: 'sleep',
-    title: '주말(또는 쉬는 날)에도 비슷한 시각에 자고 일어나나요?',
+    title: '주말에도 비슷한 시각에 자고 일어나나요?',
+    note: '쉬는 날 기준',
     type: 'choice',
     options: [
       { label: '네, 비슷해요', value: 'yes' },
       { label: '아니요, 달라요', value: 'no' },
     ],
   },
-  { id: 'weekend_bed', section: 'sleep', title: '주말(또는 쉬는 날)에 잠자리에 드는 시각은 언제입니까?', type: 'time', initial: '22:00', hourStart: 18, showIf: weekendDiffers },
-  { id: 'weekend_wake', section: 'sleep', title: '주말(또는 쉬는 날)에 일어나는 시각은 언제입니까?', type: 'time', initial: '07:00', hourStart: 3, showIf: weekendDiffers },
+  { id: 'weekend_bed', section: 'sleep', title: '주말에는 몇 시에 잠자리에 드나요?', note: '쉬는 날 기준', type: 'time', initial: '22:00', hourStart: 18, showIf: weekendDiffers },
+  { id: 'weekend_wake', section: 'sleep', title: '주말에는 몇 시에 일어나나요?', note: '쉬는 날 기준', type: 'time', initial: '07:00', hourStart: 3, showIf: weekendDiffers },
   // 7. 스트레스
   {
     id: 'stress',
     section: 'stress',
-    title: '평소 일상생활 중에 스트레스를 어느 정도 느끼고 있습니까?',
+    title: '평소 스트레스를 얼마나 느끼나요?',
     type: 'choice',
     // 값 = KNHANES BP1 (1·2 → 스트레스 높음)
     options: [
-      { label: '대단히 많이 느낀다', value: 1 },
-      { label: '많이 느끼는 편이다', value: 2 },
-      { label: '조금 느끼는 편이다', value: 3 },
-      { label: '거의 느끼지 않는다', value: 4 },
+      { label: '아주 많이 느껴요', value: 1 },
+      { label: '많이 느끼는 편이에요', value: 2 },
+      { label: '조금 느끼는 편이에요', value: 3 },
+      { label: '거의 느끼지 않아요', value: 4 },
     ],
   },
   // 8. 식사습관 (값 = ML_*_freq_ord). 세 끼를 한 화면에서 고른다
   {
     id: 'meals',
     section: 'meal',
-    title: '최근 1년 동안 아침·점심·저녁을 한 주에 몇 번 정도 드셨나요?',
+    title: '아침·점심·저녁은 일주일에 몇 번 먹나요?',
+    period: '최근 1년',
     type: 'rows',
     rows: [
       { id: 'breakfast', label: '아침' },
@@ -186,8 +196,10 @@ const STAGE_1 = [
   {
     id: 'eating_out',
     section: 'meal',
-    title: '최근 1년 동안 평균적으로 외식을 얼마나 자주 하셨습니까?',
-    help: ['집에서 만든 음식이 아니면 외식이에요. 음식점 식사, 배달·포장 음식, 회사·학교 급식도 포함해요.'],
+    title: '외식은 얼마나 자주 하나요?',
+    note: '배달·포장 음식, 급식도 포함',
+    info: ['집에서 만든 음식이 아니면 외식이에요. 음식점 식사, 배달·포장 음식, 회사·학교 급식도 포함해요.'],
+    period: '최근 1년',
     type: 'choice',
     // 값 = ML_eatingout_freq_ord
     options: [
@@ -218,8 +230,9 @@ const STAGE_2 = [
   {
     id: 'smoke_now',
     section: 'smoke',
-    title: '요즘 담배를 피우시나요?',
-    help: ['일반 담배와 전자담배를 똑같이 봐요. 가끔 피워도 \'네\'예요.', '끊었으면 \'아니요\'를 골라 주세요.'],
+    title: '요즘 담배를 피우나요?',
+    note: '전자담배도 포함, 가끔 피워도 \'네\'',
+    info: ['일반 담배와 전자담배를 똑같이 봐요.', '끊었으면 \'아니요\'를 골라 주세요.'],
     type: 'choice',
     options: [
       { label: '네, 피워요', value: 'yes' },
@@ -229,8 +242,8 @@ const STAGE_2 = [
   {
     id: 'cigarettes',
     section: 'smoke',
-    title: '담배를 피우는 날에는 하루 평균 몇 개비 정도 피우시나요?',
-    help: ['전자담배는 담배 1개비를 피우는 정도를 1개비로 세어 주세요.'],
+    title: '피우는 날에는 하루 몇 개비 정도 피우나요?',
+    note: '전자담배는 1개비를 피우는 정도를 1개비로',
     type: 'number',
     unit: '개비',
     min: 1,
@@ -242,7 +255,8 @@ const STAGE_2 = [
   {
     id: 'drink_freq',
     section: 'drink',
-    title: '최근 1년 동안 술을 얼마나 자주 마셨나요?',
+    title: '술은 얼마나 자주 마시나요?',
+    period: '최근 1년',
     type: 'choice',
     options: [
       { label: '최근 1년 안 마셨어요', value: 0 },
@@ -256,8 +270,9 @@ const STAGE_2 = [
   {
     id: 'drink_amount',
     section: 'drink',
-    title: '마시는 날에는 한 번에 보통 얼마나 마시나요?',
-    help: ['술 종류와 상관없이 그 술의 잔 기준이에요. 맥주 1캔은 약 1.5잔, 소주 1병은 약 7잔이에요.'],
+    title: '마시는 날에는 한 번에 몇 잔 정도 마시나요?',
+    note: '그 술의 잔으로 세어 주세요',
+    info: ['술 종류와 상관없이 그 술의 잔 기준이에요.', '맥주 1캔은 약 1.5잔, 소주 1병은 약 7잔이에요.'],
     type: 'choice',
     layout: 'list',
     options: [
@@ -274,18 +289,21 @@ const STAGE_2 = [
   {
     id: 'veg',
     section: 'veg',
-    title: '최근 1년 동안 평균적으로 채소류, 버섯류, 해조류를 얼마나 자주 드셨습니까?',
-    help: ['김치·장아찌류는 빼 주세요.', '반찬, 국, 찌개 등에 들어간 채소는 포함합니다.'],
+    title: '채소·버섯·해조류는 얼마나 자주 먹나요?',
+    note: '김치·장아찌는 빼 주세요',
+    info: ['김치·장아찌류는 빼 주세요.', '반찬, 국, 찌개 등에 들어간 채소는 포함해요.'],
+    period: '최근 1년',
     type: 'choice',
     options: INTAKE_9,
   },
-  { id: 'fruit', section: 'veg', title: '최근 1년 동안 평균적으로 과일을 얼마나 자주 드셨습니까?', type: 'choice', options: INTAKE_9 },
+  { id: 'fruit', section: 'veg', title: '과일은 얼마나 자주 먹나요?', period: '최근 1년', type: 'choice', options: INTAKE_9 },
   // 평소 식사 mini-FFQ 5문항 (재준님 mini-FFQ 모델 입력, 65세 이상은 생략)
   ...FFQ_ITEMS.map(({ id, name, help }) => ({
     id,
     section: 'food',
-    title: `최근 1년 동안 ${name} 얼마나 자주 드셨나요?`,
-    help: [help],
+    title: `${name} 얼마나 자주 먹나요?`,
+    note: help,
+    period: '최근 1년',
     type: 'choice',
     options: FOOD_FREQ_8,
     showIf: ffqAge,
