@@ -50,7 +50,6 @@ export function buildTypeResult(answers) {
     missions: missionsOf(pickTips(features, extras)),
     // 부족할 수 있는 영양소: 유환님 (나)안 결과 (유형 × 성별 × 연령대)
     nutrients: typeNutrients(nutrientCells, leaf, extras.sex, extras.age),
-    nutrientsEmptyText: nutrientCells.empty_line2_text,
     sexLabel: extras.sex === 1 ? '남성' : '여성',
     ageLabel: AGE_LABELS[ageGroup(extras.age)],
     // 같이 다니면 좋은 유형: 내 약점을 채워 주는 유형, 나와 같은 약점이 있어 같이 바꿔 보기 좋은 유형

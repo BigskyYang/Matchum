@@ -37,7 +37,6 @@ describe('buildTypeResult (1단계 유형 결과)', () => {
   it('부족할 수 있는 영양소: 공통 8개 + 2줄 (판정 코드 포함), 성별·연령대 표시', () => {
     expect(r.nutrients.common).toHaveLength(8)
     for (const n of r.nutrients.picks) expect(['유형특이', '식사량영향', '흔함']).toContain(n.tag)
-    expect(r.nutrientsEmptyText).toEqual(expect.any(String))
     expect(r.sexLabel).toBe('여성')
     expect(r.ageLabel).toMatch(/세/)
   })

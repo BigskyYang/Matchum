@@ -109,46 +109,46 @@ function NutrientSheet({ n, sexLabel, ageLabel, onClose }) {
   )
 }
 
-export default function TypeNutrients({ common, picks, emptyText, sexLabel, ageLabel }) {
+export default function TypeNutrients({ common, picks, sexLabel, ageLabel }) {
   const [open, setOpen] = useState(null)
   const close = useCallback(() => setOpen(null), [])
   const typePicks = picks.filter((n) => n.tag !== '흔함')
   const peerPicks = picks.filter((n) => n.tag === '흔함')
 
+  // 해당 영양소가 없는 칸은 소제목째 숨긴다 (120칸 중 103칸이 '내 유형만 더 부족한 영양소 없음'이라 '없어요'만 보이게 되므로)
   return (
-    <div>
-      <h3 className="text-sm font-bold">🔹 내 유형이 특히 챙길 영양소</h3>
-      {typePicks.length ? (
-        <ul className="mt-2 space-y-2">
-          {typePicks.map((n) => (
-            <PickRow key={n.key} n={n} onOpen={setOpen} />
-          ))}
-        </ul>
-      ) : (
-        <p className="mt-2 text-sm text-ink-soft">
-          {peerPicks.length ? '내 유형만 특히 더 부족한 영양소는 없어요 👍' : `${emptyText} 👍`}
-        </p>
+    <div className="space-y-5">
+      {typePicks.length > 0 && (
+        <section>
+          <h3 className="text-sm font-bold">🔹 내 유형이 특히 챙길 영양소</h3>
+          <ul className="mt-2 space-y-2">
+            {typePicks.map((n) => (
+              <PickRow key={n.key} n={n} onOpen={setOpen} />
+            ))}
+          </ul>
+        </section>
       )}
 
       {peerPicks.length > 0 && (
-        <>
-          <h3 className="mt-5 text-sm font-bold text-ink-soft">▫️ 나와 같은 성별·나이대가 챙겨야 할 영양소</h3>
+        <section>
+          <h3 className="text-sm font-bold">▫️ 나와 같은 성별·나이대가 챙겨야 할 영양소</h3>
           <ul className="mt-2 space-y-2">
             {peerPicks.map((n) => (
               <PickRow key={n.key} n={n} onOpen={setOpen} muted />
             ))}
           </ul>
-        </>
+        </section>
       )}
 
-      <h3 className="mt-5 text-sm font-bold">🔸 모두가 챙겨야 할 영양소 {common.length}개</h3>
-      <p className="mt-1 text-xs text-ink-soft">유형과 상관없이 성인 절반 이상이 적게 먹는 영양소예요.</p>
-      <ul className="mt-2 flex flex-wrap gap-1.5">
-        {common.map((n) => (
-          <CommonChip key={n.key} n={n} onOpen={setOpen} />
-        ))}
-      </ul>
-
+      <section>
+        <h3 className="text-sm font-bold">🔸 모두가 챙겨야 할 영양소 {common.length}개</h3>
+        <p className="mt-1 text-xs text-ink-soft">유형과 상관없이 성인 절반 이상이 적게 먹는 영양소예요.</p>
+        <ul className="mt-2 flex flex-wrap gap-1.5">
+          {common.map((n) => (
+            <CommonChip key={n.key} n={n} onOpen={setOpen} />
+          ))}
+        </ul>
+      </section>
 
       {open && <NutrientSheet n={open} sexLabel={sexLabel} ageLabel={ageLabel} onClose={close} />}
     </div>

@@ -74,7 +74,6 @@ export default function ResultPage() {
           <TypeNutrients
             common={r.nutrients.common}
             picks={r.nutrients.picks}
-            emptyText={r.nutrientsEmptyText}
             sexLabel={r.sexLabel}
             ageLabel={r.ageLabel}
           />
