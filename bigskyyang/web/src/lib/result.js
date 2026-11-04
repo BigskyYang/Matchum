@@ -62,7 +62,7 @@ export function buildPersonalResult(answers) {
   for (const f of tips.flatMap((t) => t.foods ?? [])) {
     if (!foods.some((x) => x.label === f.label)) foods.push(f)
   }
-  const optional = extras.optional
+  const { health } = extras
 
   return {
     leafId: leaf,
@@ -70,7 +70,14 @@ export function buildPersonalResult(answers) {
     habits: PERSONAL_AXES.map((axis, i) => ({ ...axis, score: personalScores[i] })),
     missions: missionsOf(tips),
     foods: (foods.length ? foods : BALANCED_FOODS).slice(0, MAX_FOODS),
-    optional,
-    hasCondition: Boolean(optional && (optional.hypertension || optional.diabetes || optional.dyslipidemia)),
+    // 선택 문항 PHQ-9 (답하지 않았으면 null)
+    optional: extras.optional,
+    health,
+    // 대사질환 진단 → 식생활 주의점 카드
+    hasCondition: health.hypertension || health.diabetes || health.dyslipidemia,
+    // 건강기능식품 안내 전에 전문가 상담이 필요한 경우 (재준님 안전 규칙: 임신·수유는 제품 안내 중단)
+    consult: health.pregnant ? 'pregnant' : health.kidney || health.anticoagulant ? 'caution' : null,
+    supplements: extras.supplements,
+    ffqAsked: extras.ffq !== null,
   }
 }

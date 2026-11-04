@@ -88,10 +88,10 @@ describe('부족할 수 있는 영양소 결과표 (nutrientCells.json, 유환�
 const SCHEMA_TO_WEB = {
   Q1: 'sex',
   Q2: { merged: 'birth_year' }, // v3는 만 나이, 웹은 출생연도
-  Q3: 'smoke_100',
-  Q4: 'smoke_now',
+  Q3: { merged: 'smoke_now' }, // '평생 100개비'를 먼저 묻지 않고 지금 흡연 상태만 (모델은 현재 흡연만 쓴다)
+  Q4: { merged: 'smoke_now' }, // 보기에 '피운 적 없어요'를 더함
   Q5: 'cigarettes',
-  Q6: 'drink_ever',
+  Q6: { merged: 'drink_freq' }, // '평생 1잔'을 먼저 묻지 않고 빈도에 '최근 1년 안 마셨어요'
   Q7: 'drink_freq',
   Q8: 'drink_amount',
   Q9: { merged: 'activity' }, // 중강도·고강도 시간 → 주 150분 이상인지 한 문항 (모델은 그것만 쓴다)
@@ -110,12 +110,12 @@ const SCHEMA_TO_WEB = {
   Q22: 'eating_out',
   Q23: 'veg',
   Q24: 'fruit',
-  Q25: 'protein',
-  Q26: 'dairy',
+  Q25: { removed: '재준님 최종 설문(SURVEY_FINAL)의 mini-FFQ 5문항(ffq_meat … ffq_dairy)으로 바꿈' },
+  Q26: { removed: '재준님 최종 설문(SURVEY_FINAL)의 mini-FFQ 5문항으로 바꿈' },
   ...Object.fromEntries(Array.from({ length: 9 }, (_, i) => [`Q${27 + i}`, `phq${i + 1}`])),
-  Q36: 'dx_hypertension',
-  Q37: 'dx_diabetes',
-  Q38: 'dx_dyslipidemia',
+  Q36: { merged: 'health' }, // 대사질환 3문항 + 안전 문항을 '해당하는 것 모두 고르기' 한 화면으로
+  Q37: { merged: 'health' },
+  Q38: { merged: 'health' },
 }
 
 describe('설문 문항 ↔ 설문 v3 (Jaejun/config/survey_schema_v3.json)', () => {
@@ -144,5 +144,21 @@ describe('설문 문항 ↔ 설문 v3 (Jaejun/config/survey_schema_v3.json)', ()
   it('세 끼는 v3와 같은 보기 수로 한 화면에서 묻는다', () => {
     const meal = schemaQuestions.find((q) => q.id === 'Q19')
     expect(web.meals.options).toHaveLength(meal.options.length)
+  })
+})
+
+// 재준님 최종 설문(Jaejun/SURVEY_FINAL.md)의 mini-FFQ·안전 문항 ↔ 웹
+describe('설문 ↔ 재준님 최종 설문 (mini-FFQ·안전 문항)', () => {
+  const web = Object.fromEntries(QUESTIONS.map((q) => [q.id, q]))
+
+  it('mini-FFQ 5문항, 보기 8단계 0~7 (Jaejun/src/mini_ffq.py FOOD_FREQ_ORD)', () => {
+    for (const id of ['ffq_meat', 'ffq_fish', 'ffq_egg', 'ffq_legume', 'ffq_dairy']) {
+      expect(web[id].options.map((o) => o.value)).toEqual([0, 1, 2, 3, 4, 5, 6, 7])
+    }
+  })
+
+  it('안전 문항 4가지(영양제·임신수유·항응고제·신장질환)가 있다 (Jaejun/config/supplement_safety_rules.json)', () => {
+    expect(web.supplements).toBeDefined()
+    expect(web.health.options.map((o) => o.value)).toEqual(expect.arrayContaining(['pregnant', 'anticoagulant', 'kidney']))
   })
 })

@@ -3,17 +3,19 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import Mascot from '../components/Mascot.jsx'
 import PrimaryButton from '../components/PrimaryButton.jsx'
 import ChoiceInput from '../components/survey/ChoiceInput.jsx'
+import MultiInput from '../components/survey/MultiInput.jsx'
 import ProgressBar from '../components/survey/ProgressBar.jsx'
 import RowsInput from '../components/survey/RowsInput.jsx'
 import { DurationWheel, NumberWheel, TimeWheel } from '../components/survey/WheelInputs.jsx'
-import { OPTIONAL_SECTIONS, SECTIONS, visibleQuestions } from '../data/questions.js'
+import { OPTIONAL_SECTIONS, SECTIONS, optionsFor, visibleQuestions } from '../data/questions.js'
 import { loadSurvey, saveSurvey } from '../lib/storage.js'
 import { resolveStep, resultPath, surveyPath } from '../lib/surveyFlow.js'
 
-function QuestionStep({ q, answer, isLast, onAnswer }) {
+function QuestionStep({ q, answer, answers, isLast, onAnswer }) {
   // 휠 입력은 이전 응답이 있으면 그 값, 없으면 문항의 initial 값에서 시작. 여러 줄 선택은 빈 값에서 시작
-  const [draft, setDraft] = useState(() => answer ?? q.initial ?? (q.type === 'rows' ? {} : undefined))
-  const ready = q.type !== 'rows' || q.rows.every((row) => draft[row.id] !== undefined)
+  const [draft, setDraft] = useState(() => answer ?? q.initial ?? ({ rows: {}, multi: [] }[q.type]))
+  const ready =
+    q.type === 'rows' ? q.rows.every((row) => draft[row.id] !== undefined) : q.type === 'multi' ? draft.length > 0 : true
 
   return (
     <>
@@ -30,6 +32,7 @@ function QuestionStep({ q, answer, isLast, onAnswer }) {
         <div className="mt-6">
           {q.type === 'choice' && <ChoiceInput options={q.options} value={answer} onSelect={onAnswer} layout={q.layout} />}
           {q.type === 'rows' && <RowsInput rows={q.rows} options={q.options} value={draft} onChange={setDraft} />}
+          {q.type === 'multi' && <MultiInput options={optionsFor(q, answers)} value={draft} onChange={setDraft} />}
           {q.type === 'number' && <NumberWheel value={draft} onChange={setDraft} unit={q.unit} min={q.min} max={q.max} />}
           {q.type === 'time' && <TimeWheel value={draft} onChange={setDraft} hourStart={q.hourStart} />}
           {q.type === 'duration' && <DurationWheel value={draft} onChange={setDraft} per={q.per} maxHours={q.maxHours} />}
@@ -133,7 +136,14 @@ export default function SurveyPage({ stage = 1 }) {
       </div>
 
       <div className="mt-4 flex flex-1 flex-col">
-        <QuestionStep key={q.id} q={q} answer={state.answers[q.id]} isLast={step === list.length - 1} onAnswer={answer} />
+        <QuestionStep
+          key={q.id}
+          q={q}
+          answer={state.answers[q.id]}
+          answers={state.answers}
+          isLast={step === list.length - 1}
+          onAnswer={answer}
+        />
       </div>
     </main>
   )

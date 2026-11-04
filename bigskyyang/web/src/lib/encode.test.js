@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { visibleQuestions } from '../data/questions.js'
+import { QUESTIONS, optionsFor, visibleQuestions } from '../data/questions.js'
 import { ageFromYear, encode, sleepFromAverage, sleepHours } from './encode.js'
 import { SAMPLE, STAGE1_SAMPLE } from './fixtures.js'
 
@@ -60,20 +60,30 @@ describe('encode', () => {
     expect(encode(SAMPLE).features.ML_stress).toBe(1)
   })
 
-  it('현재 흡연자·음주자', () => {
-    const { features } = encode({
-      ...SAMPLE,
-      smoke_100: 'yes',
-      smoke_now: 'sometimes',
-      cigarettes: 5,
-      drink_ever: 'yes',
-      drink_freq: 1,
-      drink_amount: 2,
-    })
+  it('현재 흡연자·음주자 (요즘 가끔 피움 = 현재 흡연)', () => {
+    const { features } = encode({ ...SAMPLE, smoke_now: 'sometimes', cigarettes: 5, drink_freq: 1, drink_amount: 2 })
     expect(features.ML_smoker).toBe(1)
     expect(features.ML_cigarettes_day).toBe(5)
     expect(features.ML_drink_month).toBe(0) // 월 1회 미만
     expect(features.ML_drink_amount_ord).toBe(2)
+  })
+
+  it('끊었으면 비흡연, 예전에 답한 개비 수는 무시', () => {
+    const { features } = encode({ ...SAMPLE, smoke_now: 'past', cigarettes: 20 })
+    expect(features.ML_smoker).toBe(0)
+    expect(features.ML_cigarettes_day).toBe(0)
+  })
+
+  it('mini-FFQ 5문항은 재준님 모델 입력(0~7)으로, 하나라도 없으면 null', () => {
+    expect(encode(SAMPLE).extras.ffq).toEqual({ meat: 3, fish: 2, egg: 3, legume: 2, dairy: 2 })
+    expect(encode({ ...SAMPLE, ffq_dairy: undefined }).extras.ffq).toBeNull()
+  })
+
+  it('건강 상태·영양제 여러 개 고르기', () => {
+    const { extras } = encode({ ...SAMPLE, health: ['kidney', 'hypertension'], supplements: ['vitamin_d', 'omega3'] })
+    expect(extras.health).toMatchObject({ kidney: true, hypertension: true, pregnant: false, diabetes: false })
+    expect(extras.supplements).toEqual(['vitamin_d', 'omega3'])
+    expect(encode(SAMPLE).extras.supplements).toEqual([])
   })
 })
 
@@ -105,14 +115,45 @@ describe('visibleQuestions', () => {
     expect(ids).not.toContain('weekend_same')
   })
 
-  it('2단계: 비흡연·비음주자는 흡연량·음주 문항을 건너뛴다', () => {
+  it('2단계: 비흡연·최근 1년 비음주자는 흡연량·음주량 문항을 건너뛴다', () => {
     const ids = visibleQuestions(SAMPLE, 2).map((q) => q.id)
-    expect(ids).toEqual(['smoke_100', 'drink_ever', 'veg', 'fruit', 'protein', 'dairy', 'extra'])
+    expect(ids).toEqual([
+      'smoke_now',
+      'drink_freq',
+      'veg',
+      'fruit',
+      'ffq_meat',
+      'ffq_fish',
+      'ffq_egg',
+      'ffq_legume',
+      'ffq_dairy',
+      'health',
+      'supplements',
+      'extra',
+    ])
   })
 
-  it('최근 1년 음주를 안 했으면 음주량 문항만 건너뛴다', () => {
-    const ids = visibleQuestions({ ...SAMPLE, drink_ever: 'yes', drink_freq: 0 }, 2).map((q) => q.id)
-    expect(ids).toContain('drink_freq')
-    expect(ids).not.toContain('drink_amount')
+  it('흡연자·음주자는 개비 수·음주량을 묻는다', () => {
+    const ids = visibleQuestions({ ...SAMPLE, smoke_now: 'daily', drink_freq: 3 }, 2).map((q) => q.id)
+    expect(ids).toContain('cigarettes')
+    expect(ids).toContain('drink_amount')
+  })
+
+  it('65세 이상은 mini-FFQ를 묻지 않는다 (19~64세에서만 검증된 모델)', () => {
+    const year = new Date().getFullYear()
+    const ids = visibleQuestions({ ...SAMPLE, birth_year: year - 70 }, 2).map((q) => q.id)
+    expect(ids.filter((id) => id.startsWith('ffq_'))).toEqual([])
+    expect(visibleQuestions({ ...SAMPLE, birth_year: year - 64 }, 2).map((q) => q.id)).toContain('ffq_meat')
+  })
+})
+
+describe('optionsFor', () => {
+  const health = QUESTIONS.find((q) => q.id === 'health')
+  const year = new Date().getFullYear()
+
+  it('임신·수유 보기는 19~49세 여성에게만', () => {
+    expect(optionsFor(health, { sex: 2, birth_year: year - 30 }).map((o) => o.value)).toContain('pregnant')
+    expect(optionsFor(health, { sex: 1, birth_year: year - 30 }).map((o) => o.value)).not.toContain('pregnant')
+    expect(optionsFor(health, { sex: 2, birth_year: year - 55 }).map((o) => o.value)).not.toContain('pregnant')
   })
 })

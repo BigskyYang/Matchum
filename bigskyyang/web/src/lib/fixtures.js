@@ -16,15 +16,22 @@ export const SAMPLE = {
   meals: { breakfast: 0, lunch: 3, dinner: 3 },
   eating_out: 4,
   // 2단계
-  smoke_100: 'no',
-  drink_ever: 'no',
+  smoke_now: 'never',
+  drink_freq: 0,
   veg: 5,
   fruit: 3,
-  protein: 0.86,
-  dairy: 0.21,
+  ffq_meat: 3,
+  ffq_fish: 2,
+  ffq_egg: 3,
+  ffq_legume: 2,
+  ffq_dairy: 2,
+  health: ['none'],
+  supplements: ['none'],
 }
 
 // 1단계까지만 답한 상태
 export const STAGE1_SAMPLE = Object.fromEntries(
-  Object.entries(SAMPLE).filter(([k]) => !['smoke_100', 'drink_ever', 'veg', 'fruit', 'protein', 'dairy'].includes(k)),
+  Object.entries(SAMPLE).filter(
+    ([k]) => !['smoke_now', 'drink_freq', 'veg', 'fruit', 'health', 'supplements'].includes(k) && !k.startsWith('ffq_'),
+  ),
 )
