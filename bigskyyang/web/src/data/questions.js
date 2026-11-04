@@ -1,25 +1,18 @@
-// 설문 문항 정의 (bigskyyang/사용자_설문조사_초안.html 기준)
-// 문항을 빼거나 순서를 바꾸려면 이 배열만 고치면 된다. 응답 → 모델 변수 변환은 lib/encode.js에서 한다.
-// 문항 구성은 Jaejun/SURVEY_V3.md(설문 v3)를 따른다. 단, 만 나이는 생년월일로 받는다.
+// 설문 문항 정의. 응답 → 모델 변수 변환은 lib/encode.js에서 한다.
+// 문항 구성은 Jaejun/SURVEY_V3.md(설문 v3)를 바탕으로, 두 단계로 나눴다.
+//   stage 1: 유형 분류에 쓰는 생활습관 (지연님 12개 유형 모델 입력 + 성별·나이) → 유형 결과
+//   stage 2: 개인 결과에 쓰는 문항 (흡연·음주·채소·과일·식품, 선택 문항 PHQ-9·대사건강) → 개인 결과
+//            2단계는 1단계 응답을 그대로 이어 쓴다 (재준님 개인 예측 모델도 1단계 변수를 입력으로 쓴다)
 //
-// 핵심 문항(생활습관·식습관)이 끝나면 'extra' 문항에서 선택 문항(PHQ-9·대사건강)을 더 할지 고른다.
-// 선택 문항은 군집·영양 판정에 쓰지 않고 결과 화면의 간단한 안내에만 쓴다.
-//
-// type (choice 외에는 모두 휴대폰에서 위아래로 드래그해 고르는 휠 선택기)
-//   choice   : 보기 중 하나 선택 (누르면 바로 다음 문항)
-//   date     : 생년월일 'YYYY-MM-DD' { initial }
-//   number   : 숫자 { unit, min, max, initial }
-//   time     : 시각 'HH:MM' { initial, hourStart: 시 목록을 몇 시부터 보여줄지 }
-//   duration : 시간 + 분 → 분 단위 숫자 { per: '일주일에' | '하루', maxHours, initial(분) }
+// type
+//   choice   : 보기 중 하나 선택 (누르면 바로 다음 문항). 보기가 5개 이상이면 2열로 놓는다 (layout으로 바꿀 수 있다)
+//   rows     : 여러 줄을 한 화면에서 고르기 { rows: [{ id, label }], options } → 응답은 { 줄 id: 값 }
+//   number   : 숫자 휠 { unit, min, max, initial }
+//   time     : 시각 'HH:MM' 휠 { initial, hourStart: 시 목록을 몇 시부터 보여줄지 }
+//   duration : 시간 + 분 → 분 단위 숫자 휠 { per: '일주일에' | '하루', maxHours, initial(분) }
+// layout (choice): 'list' 한 줄에 하나 | 'grid' 2열 | 'row' 한 줄에 모두 (짧은 숫자 보기)
 // initial: 처음 화면에 맞춰져 있는 값 (많이 고르는 값을 기준으로)
 // showIf(answers): false면 해당 문항을 건너뛴다
-
-const MEAL = [
-  { label: '주 5~7회', value: 3 },
-  { label: '주 3~4회', value: 2 },
-  { label: '주 1~2회', value: 1 },
-  { label: '거의 안 한다 (주 0회)', value: 0 },
-]
 
 // 채소·과일 9단계 (값이 클수록 자주)
 const INTAKE_9 = [
@@ -35,6 +28,7 @@ const INTAKE_9 = [
 ]
 
 const isCurrentSmoker = (a) => a.smoke_now === 'daily' || a.smoke_now === 'sometimes'
+const THIS_YEAR = new Date().getFullYear()
 
 export const SECTIONS = {
   basic: '기본정보',
@@ -83,7 +77,11 @@ const YES_NO = [
   { label: '아니오', value: 'no' },
 ]
 
-export const QUESTIONS = [
+const isRegularSleep = (a) => a.sleep_regular === 'yes'
+const weekendDiffers = (a) => a.sleep_regular === 'yes' && a.weekend_same === 'no'
+
+// 1단계: 유형 분류 (지연님 모델 입력: 유산소·근력·좌식·수면·스트레스·세 끼·외식 + 성별·나이)
+const STAGE_1 = [
   // 1. 기본정보
   {
     id: 'sex',
@@ -95,9 +93,140 @@ export const QUESTIONS = [
       { label: '여성', value: 2 },
     ],
   },
-  // 만 나이는 생년월일로 자동 계산 (lib/encode.js)
-  { id: 'birth', section: 'basic', title: '생년월일을 선택해주세요.', type: 'date', initial: '2000-01-01' },
+  // 만 나이는 출생연도로 계산 (lib/encode.js). 만 19세 이상 성인 대상
+  { id: 'birth_year', section: 'basic', title: '태어난 해를 선택해주세요.', type: 'number', unit: '년', min: 1930, max: THIS_YEAR - 19, initial: 1995 },
 
+  // 4. 신체활동: 모델은 '중강도 + 고강도×2 ≥ 주 150분'(KNHANES 유산소 신체활동 실천)만 쓰므로 한 문항으로 묻는다
+  {
+    id: 'activity',
+    section: 'activity',
+    title: '숨이 조금 찰 정도로 몸을 움직이는 시간이 일주일에 모두 얼마나 되나요?',
+    help: ['빠르게 걷기, 자전거, 계단 오르기, 몸을 쓰는 일도 포함해요.', '달리기·등산처럼 숨이 많이 차는 운동은 2배로 쳐 주세요 (1시간 15분이면 2시간 반).'],
+    type: 'choice',
+    // 값 3 = 주 150분 이상 → ML_aerobic 1
+    options: [
+      { label: '거의 없어요', value: 0 },
+      { label: '1시간 미만', value: 1 },
+      { label: '1시간 ~ 2시간 반 미만', value: 2 },
+      { label: '2시간 반 이상', value: 3 },
+    ],
+  },
+  {
+    id: 'strength_days',
+    section: 'activity',
+    title: '최근 1주일 동안 팔굽혀펴기, 윗몸일으키기, 아령, 역기, 철봉 등의 근력운동을 한 날은 며칠입니까?',
+    type: 'choice',
+    layout: 'row',
+    options: [
+      { label: '0일', value: 0 },
+      { label: '1일', value: 1 },
+      { label: '2일', value: 2 },
+      { label: '3일', value: 3 },
+      { label: '4일', value: 4 },
+      { label: '5일+', value: 5 },
+    ],
+  },
+  // 5. 좌식시간
+  {
+    id: 'sedentary_min',
+    section: 'sedentary',
+    title: '평소 하루에 앉아 있거나 누워 있는 시간은 총 얼마나 됩니까?',
+    help: ['잠자는 시간은 빼 주세요.', '책상·이동·TV·게임·인터넷 등 하루 전체를 생각해 주세요.'],
+    type: 'duration',
+    per: '하루',
+    maxHours: 20,
+    initial: 8 * 60,
+  },
+  // 수면: 시간이 일정한 사람은 취침·기상 시각(주말도 비슷하면 주중만), 들쭉날쭉한 사람은 평균 수면 시간
+  {
+    id: 'sleep_regular',
+    section: 'sleep',
+    title: '잠자리에 드는 시각과 일어나는 시각이 대체로 일정한 편인가요?',
+    type: 'choice',
+    options: [
+      { label: '네, 대체로 일정해요', value: 'yes' },
+      { label: '아니요, 날마다 들쭉날쭉해요', value: 'no' },
+    ],
+  },
+  { id: 'weekday_bed', section: 'sleep', title: '평소 주중(또는 주로 일하는 날)에 잠자리에 드는 시각은 언제입니까?', type: 'time', initial: '22:00', hourStart: 18, showIf: isRegularSleep },
+  { id: 'weekday_wake', section: 'sleep', title: '평소 주중(또는 주로 일하는 날)에 일어나는 시각은 언제입니까?', type: 'time', initial: '07:00', hourStart: 3, showIf: isRegularSleep },
+  {
+    id: 'weekend_same',
+    section: 'sleep',
+    title: '주말(또는 쉬는 날)에도 비슷한 시각에 자고 일어나나요?',
+    type: 'choice',
+    options: [
+      { label: '네, 비슷해요', value: 'yes' },
+      { label: '아니요, 달라요', value: 'no' },
+    ],
+    showIf: isRegularSleep,
+  },
+  { id: 'weekend_bed', section: 'sleep', title: '주말(또는 쉬는 날)에 잠자리에 드는 시각은 언제입니까?', type: 'time', initial: '22:00', hourStart: 18, showIf: weekendDiffers },
+  { id: 'weekend_wake', section: 'sleep', title: '주말(또는 쉬는 날)에 일어나는 시각은 언제입니까?', type: 'time', initial: '07:00', hourStart: 3, showIf: weekendDiffers },
+  {
+    id: 'sleep_avg',
+    section: 'sleep',
+    title: '하루에 평균 몇 시간 정도 주무시나요?',
+    help: ['요즘 일주일을 떠올려 평균으로 골라 주세요. 낮잠은 빼 주세요.'],
+    type: 'duration',
+    per: '하루 평균',
+    maxHours: 14,
+    initial: 7 * 60,
+    showIf: (a) => a.sleep_regular === 'no',
+  },
+  // 7. 스트레스
+  {
+    id: 'stress',
+    section: 'stress',
+    title: '평소 일상생활 중에 스트레스를 어느 정도 느끼고 있습니까?',
+    type: 'choice',
+    // 값 = KNHANES BP1 (1·2 → 스트레스 높음)
+    options: [
+      { label: '대단히 많이 느낀다', value: 1 },
+      { label: '많이 느끼는 편이다', value: 2 },
+      { label: '조금 느끼는 편이다', value: 3 },
+      { label: '거의 느끼지 않는다', value: 4 },
+    ],
+  },
+  // 8. 식사습관 (값 = ML_*_freq_ord). 세 끼를 한 화면에서 고른다
+  {
+    id: 'meals',
+    section: 'meal',
+    title: '최근 1년 동안 아침·점심·저녁을 한 주에 몇 번 정도 드셨나요?',
+    type: 'rows',
+    rows: [
+      { id: 'breakfast', label: '아침' },
+      { id: 'lunch', label: '점심' },
+      { id: 'dinner', label: '저녁' },
+    ],
+    options: [
+      { label: '5~7회', value: 3 },
+      { label: '3~4회', value: 2 },
+      { label: '1~2회', value: 1 },
+      { label: '거의 안 먹어요', value: 0 },
+    ],
+  },
+  {
+    id: 'eating_out',
+    section: 'meal',
+    title: '최근 1년 동안 평균적으로 외식을 얼마나 자주 하셨습니까?',
+    help: ['음식점 식사뿐 아니라 배달·포장 음식, 급식도 포함합니다.'],
+    type: 'choice',
+    // 값 = ML_eatingout_freq_ord
+    options: [
+      { label: '하루 2회 이상', value: 6 },
+      { label: '하루 1회', value: 5 },
+      { label: '주 5~6회', value: 4 },
+      { label: '주 3~4회', value: 3 },
+      { label: '주 1~2회', value: 2 },
+      { label: '월 1~3회', value: 1 },
+      { label: '거의 안 한다 (월 1회 미만)', value: 0 },
+    ],
+  },
+]
+
+// 2단계: 개인 결과 (재준님 개인 예측 모델의 나머지 입력, 결과 안내용 선택 문항)
+const STAGE_2 = [
   // 2. 흡연
   {
     id: 'smoke_100',
@@ -132,7 +261,6 @@ export const QUESTIONS = [
     initial: 10,
     showIf: isCurrentSmoker,
   },
-
   // 3. 음주
   {
     id: 'drink_ever',
@@ -177,113 +305,6 @@ export const QUESTIONS = [
     ],
     showIf: (a) => a.drink_ever === 'yes' && a.drink_freq > 0,
   },
-
-  // 4. 신체활동
-  {
-    id: 'moderate_min',
-    section: 'activity',
-    title: '평소 일주일 동안 중강도 신체활동을 총 얼마나 하십니까?',
-    help: ['숨이 약간 차거나 심장이 약간 빠르게 뛰는 정도의 활동이에요.', '예: 빠르게 걷기, 자전거 타기, 몸을 쓰는 업무 등 (일·이동·여가 모두 포함)'],
-    type: 'duration',
-    per: '일주일에',
-    maxHours: 40,
-    initial: 0,
-  },
-  {
-    id: 'vigorous_min',
-    section: 'activity',
-    title: '평소 일주일 동안 고강도 신체활동을 총 얼마나 하십니까?',
-    help: ['숨이 많이 차거나 심장이 매우 빠르게 뛰는 정도의 활동이에요.', '예: 달리기, 등산, 수영, 농구, 줄넘기, 무거운 물건 나르기 등'],
-    type: 'duration',
-    per: '일주일에',
-    maxHours: 40,
-    initial: 0,
-  },
-  {
-    id: 'strength_days',
-    section: 'activity',
-    title: '최근 1주일 동안 팔굽혀펴기, 윗몸일으키기, 아령, 역기, 철봉 등의 근력운동을 한 날은 며칠입니까?',
-    type: 'choice',
-    options: [
-      { label: '전혀 하지 않음', value: 0 },
-      { label: '1일', value: 1 },
-      { label: '2일', value: 2 },
-      { label: '3일', value: 3 },
-      { label: '4일', value: 4 },
-      { label: '5일 이상', value: 5 },
-    ],
-  },
-
-  // 5. 좌식시간
-  {
-    id: 'sedentary_min',
-    section: 'sedentary',
-    title: '평소 하루에 앉아 있거나 누워 있는 시간은 총 얼마나 됩니까?',
-    help: ['잠자는 시간은 빼 주세요.', '책상·이동·TV·게임·인터넷 등 하루 전체를 생각해 주세요.'],
-    type: 'duration',
-    per: '하루',
-    maxHours: 20,
-    initial: 8 * 60,
-  },
-
-  // 6. 수면
-  { id: 'weekday_bed', section: 'sleep', title: '평소 주중(또는 주로 일하는 날)에 잠자리에 드는 시각은 언제입니까?', type: 'time', initial: '22:00', hourStart: 18 },
-  { id: 'weekday_wake', section: 'sleep', title: '평소 주중(또는 주로 일하는 날)에 일어나는 시각은 언제입니까?', type: 'time', initial: '07:00', hourStart: 3 },
-  { id: 'weekend_bed', section: 'sleep', title: '평소 주말(또는 주로 쉬는 날)에 잠자리에 드는 시각은 언제입니까?', type: 'time', initial: '22:00', hourStart: 18 },
-  { id: 'weekend_wake', section: 'sleep', title: '평소 주말(또는 주로 쉬는 날)에 일어나는 시각은 언제입니까?', type: 'time', initial: '07:00', hourStart: 3 },
-  {
-    id: 'shift_work',
-    section: 'sleep',
-    title: '야간·교대·불규칙 근무를 하고 있습니까?',
-    type: 'choice',
-    // 생활패턴 해석용 (모델 입력 아님)
-    options: [
-      { label: '아니오', value: 'no' },
-      { label: '야간근무', value: 'night' },
-      { label: '정기적 교대근무', value: 'shift' },
-      { label: '24시간 교대근무', value: 'shift24' },
-      { label: '불규칙 근무', value: 'irregular' },
-      { label: '기타', value: 'other' },
-    ],
-  },
-
-  // 7. 스트레스
-  {
-    id: 'stress',
-    section: 'stress',
-    title: '평소 일상생활 중에 스트레스를 어느 정도 느끼고 있습니까?',
-    type: 'choice',
-    // 값 = KNHANES BP1 (1·2 → 스트레스 높음)
-    options: [
-      { label: '대단히 많이 느낀다', value: 1 },
-      { label: '많이 느끼는 편이다', value: 2 },
-      { label: '조금 느끼는 편이다', value: 3 },
-      { label: '거의 느끼지 않는다', value: 4 },
-    ],
-  },
-
-  // 8. 식사습관 (값 = ML_*_freq_ord)
-  { id: 'breakfast', section: 'meal', title: '최근 1년 동안 아침식사를 1주일에 몇 회 하셨습니까?', type: 'choice', options: MEAL },
-  { id: 'lunch', section: 'meal', title: '최근 1년 동안 점심식사를 1주일에 몇 회 하셨습니까?', type: 'choice', options: MEAL },
-  { id: 'dinner', section: 'meal', title: '최근 1년 동안 저녁식사를 1주일에 몇 회 하셨습니까?', type: 'choice', options: MEAL },
-  {
-    id: 'eating_out',
-    section: 'meal',
-    title: '최근 1년 동안 평균적으로 외식을 얼마나 자주 하셨습니까?',
-    help: ['음식점 식사뿐 아니라 배달·포장 음식, 급식도 포함합니다.'],
-    type: 'choice',
-    // 값 = ML_eatingout_freq_ord
-    options: [
-      { label: '하루 2회 이상', value: 6 },
-      { label: '하루 1회', value: 5 },
-      { label: '주 5~6회', value: 4 },
-      { label: '주 3~4회', value: 3 },
-      { label: '주 1~2회', value: 2 },
-      { label: '월 1~3회', value: 1 },
-      { label: '거의 안 한다 (월 1회 미만)', value: 0 },
-    ],
-  },
-
   // 9. 채소·과일
   {
     id: 'veg',
@@ -294,7 +315,6 @@ export const QUESTIONS = [
     options: INTAKE_9,
   },
   { id: 'fruit', section: 'veg', title: '최근 1년 동안 평균적으로 과일을 얼마나 자주 드셨습니까?', type: 'choice', options: INTAKE_9 },
-
   // 10. 주요 식품 (값 = 하루 평균 섭취 횟수 servings/day)
   {
     id: 'protein',
@@ -327,20 +347,18 @@ export const QUESTIONS = [
       { label: '하루 2회 이상', value: 2 },
     ],
   },
-
   // 11. 선택 문항 여부
   {
     id: 'extra',
     section: 'extra',
-    title: '핵심 질문이 끝났어요! 마음 건강·대사 건강 질문도 답해 볼까요?',
-    help: ['선택 문항 12개예요. 유형 판정에는 쓰지 않고, 결과 화면에서 간단한 안내만 드려요.', '응답은 이 휴대폰에만 잠시 저장되고 어디에도 전송되지 않아요.'],
+    title: '거의 다 왔어요! 마음 건강·대사 건강 질문도 답해 볼까요?',
+    help: ['선택 문항 12개예요. 결과 화면에서 간단한 안내만 드려요.', '응답은 이 휴대폰에만 잠시 저장되고 어디에도 전송되지 않아요.'],
     type: 'choice',
     options: [
       { label: '결과 바로 보기', value: 'skip' },
       { label: '추가 질문 답하기 (선택)', value: 'more' },
     ],
   },
-
   // 12. 마음 건강 (PHQ-9)
   ...PHQ_ITEMS.map((text, i) => ({
     id: `phq${i + 1}`,
@@ -351,7 +369,6 @@ export const QUESTIONS = [
     options: PHQ_OPTIONS,
     showIf: wantsExtra,
   })),
-
   // 13. 대사 건강 (결과 해석용)
   { id: 'dx_hypertension', section: 'metabolic', title: '의사에게 고혈압 진단을 받은 적이 있습니까?', type: 'choice', options: YES_NO, showIf: wantsExtra },
   { id: 'dx_diabetes', section: 'metabolic', title: '의사에게 당뇨병 진단을 받은 적이 있습니까?', type: 'choice', options: YES_NO, showIf: wantsExtra },
@@ -365,5 +382,8 @@ export const QUESTIONS = [
   },
 ]
 
-// 지금 응답 기준으로 보여줄 문항만 남긴다
-export const visibleQuestions = (answers) => QUESTIONS.filter((q) => !q.showIf || q.showIf(answers))
+export const QUESTIONS = [...STAGE_1.map((q) => ({ ...q, stage: 1 })), ...STAGE_2.map((q) => ({ ...q, stage: 2 }))]
+
+// 지금 응답 기준으로 그 단계에서 보여줄 문항만 남긴다
+export const visibleQuestions = (answers, stage = 1) =>
+  QUESTIONS.filter((q) => q.stage === stage && (!q.showIf || q.showIf(answers)))

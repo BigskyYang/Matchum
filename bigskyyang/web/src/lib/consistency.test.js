@@ -84,28 +84,29 @@ describe('부족할 수 있는 영양소 결과표 (nutrientCells.json, 유환�
 })
 
 // 설문 v3 문항 ID ↔ 웹 문항 ID
+//   문자열: 같은 문항 / { merged: 웹 문항 }: 웹에서 다른 문항과 합침 / { removed: 이유 }: 웹에서 뺌
 const SCHEMA_TO_WEB = {
   Q1: 'sex',
-  Q2: 'birth', // v3는 만 나이 숫자, 웹은 생년월일로 받는다
+  Q2: { merged: 'birth_year' }, // v3는 만 나이, 웹은 출생연도
   Q3: 'smoke_100',
   Q4: 'smoke_now',
   Q5: 'cigarettes',
   Q6: 'drink_ever',
   Q7: 'drink_freq',
   Q8: 'drink_amount',
-  Q9: 'moderate_min',
-  Q10: 'vigorous_min',
+  Q9: { merged: 'activity' }, // 중강도·고강도 시간 → 주 150분 이상인지 한 문항 (모델은 그것만 쓴다)
+  Q10: { merged: 'activity' },
   Q11: 'strength_days',
   Q12: 'sedentary_min',
   Q13: 'weekday_bed',
   Q14: 'weekday_wake',
   Q15: 'weekend_bed',
   Q16: 'weekend_wake',
-  Q17: 'shift_work',
+  Q17: { removed: '교대근무는 모델 입력이 아님. 수면이 들쭉날쭉한지(sleep_regular) 묻고 미션으로 안내' },
   Q18: 'stress',
-  Q19: 'breakfast',
-  Q20: 'lunch',
-  Q21: 'dinner',
+  Q19: { merged: 'meals' }, // 아침·점심·저녁을 한 화면에서
+  Q20: { merged: 'meals' },
+  Q21: { merged: 'meals' },
   Q22: 'eating_out',
   Q23: 'veg',
   Q24: 'fruit',
@@ -120,17 +121,28 @@ const SCHEMA_TO_WEB = {
 describe('설문 문항 ↔ 설문 v3 (Jaejun/config/survey_schema_v3.json)', () => {
   const schemaQuestions = surveySchema.sections.flatMap((s) => s.questions)
   const web = Object.fromEntries(QUESTIONS.map((q) => [q.id, q]))
+  const webId = (m) => (typeof m === 'string' ? m : m?.merged)
 
-  it('v3의 모든 문항이 웹에 있다 (새 문항이 생기면 여기서 알려준다)', () => {
-    const missing = schemaQuestions.filter((q) => !web[SCHEMA_TO_WEB[q.id]]).map((q) => `${q.id} ${q.text}`)
+  it('v3의 모든 문항이 웹에 있거나, 합치거나 뺀 이유가 적혀 있다 (새 문항이 생기면 여기서 알려준다)', () => {
+    const missing = schemaQuestions
+      .filter((q) => {
+        const m = SCHEMA_TO_WEB[q.id]
+        return !m || (!m.removed && !web[webId(m)])
+      })
+      .map((q) => `${q.id} ${q.text}`)
     expect(missing).toEqual([])
   })
 
-  it('보기 문항은 보기 개수가 v3와 같다', () => {
+  it('그대로 옮긴 보기 문항은 보기 개수가 v3와 같다', () => {
     const mismatched = schemaQuestions
-      .filter((q) => q.type === 'choice')
+      .filter((q) => q.type === 'choice' && typeof SCHEMA_TO_WEB[q.id] === 'string')
       .map((q) => ({ id: q.id, text: q.text, v3: q.options.length, web: web[SCHEMA_TO_WEB[q.id]]?.options?.length }))
       .filter((q) => q.v3 !== q.web)
     expect(mismatched).toEqual([])
+  })
+
+  it('세 끼는 v3와 같은 보기 수로 한 화면에서 묻는다', () => {
+    const meal = schemaQuestions.find((q) => q.id === 'Q19')
+    expect(web.meals.options).toHaveLength(meal.options.length)
   })
 })

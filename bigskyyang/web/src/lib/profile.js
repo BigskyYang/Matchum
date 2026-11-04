@@ -25,7 +25,12 @@ export const SCORE_AXES = [
   { key: 'homeMeal', icon: '🏠', label: '집밥', score: (f) => clamp01(1 - f.ML_eatingout_freq_ord / 6) },
 ]
 
-export const scores = (features) => SCORE_AXES.map((axis) => axis.score(features))
+// 유형 결과에는 유형을 만든 생활습관 영역만, 흡연·음주는 개인 결과에 (유형이 흡연·음주를 거의 가르지 않는다)
+const PERSONAL_KEYS = ['smoke', 'drink']
+export const TYPE_AXES = SCORE_AXES.filter((a) => !PERSONAL_KEYS.includes(a.key))
+export const PERSONAL_AXES = SCORE_AXES.filter((a) => PERSONAL_KEYS.includes(a.key))
+
+export const scores = (features, axes = SCORE_AXES) => axes.map((axis) => axis.score(features))
 
 // 점수 → 신호등 단계
 export const LEVELS = [
@@ -36,7 +41,7 @@ export const LEVELS = [
 export const levelOf = (score) => LEVELS.find((l) => score >= l.min)
 
 // 유형 평균(classify.js의 toFeatures로 ML_* 이름으로 바꾼 값)의 신호등 점수
-export const groupScores = (typeFeatures) => scores(typeFeatures)
+export const groupScores = (typeFeatures, axes = SCORE_AXES) => scores(typeFeatures, axes)
 
 // 전체 평균 대비 크게 다른 항목(|z| ≥ 0.5)을 해시태그로. [평균보다 높을 때, 낮을 때]
 // 키는 유형 정보(nbti12.json types[].z)의 변수 이름
@@ -73,12 +78,12 @@ export function hashtags(type, limit = 4) {
 
 // 같이 다니면 좋은 유형: 내가 약한 영역을 잘 챙기는 대분류 유형.
 // 내 점수보다 그 유형 평균이 높은 만큼을 모두 더해 가장 큰 유형을 고르고, 차이가 큰 영역 2개를 이유로 든다.
-// mainScores: { 대분류 코드: 그 대분류 평균의 신호등 점수 }
-export function bestPartner(myScores, myMain, mainScores) {
+// mainScores: { 대분류 코드: 그 대분류 평균의 신호등 점수 } (axes와 같은 순서)
+export function bestPartner(myScores, myMain, mainScores, axes = SCORE_AXES) {
   const ranked = Object.entries(mainScores)
     .filter(([label]) => label !== myMain)
     .map(([label, theirs]) => {
-      const gains = theirs.map((s, i) => ({ axis: SCORE_AXES[i], gain: s - myScores[i] }))
+      const gains = theirs.map((s, i) => ({ axis: axes[i], gain: s - myScores[i] }))
       const total = gains.reduce((sum, g) => sum + Math.max(0, g.gain), 0)
       return { label, total, gains }
     })

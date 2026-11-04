@@ -6,13 +6,13 @@ import { ageGroup, typeNutrients } from './nutrition.js'
 
 describe('선택 문항 (PHQ-9·대사건강)', () => {
   it('결과 바로 보기를 고르면 선택 문항이 나오지 않고 optional은 null', () => {
-    const ids = visibleQuestions({ ...SAMPLE, extra: 'skip' }).map((q) => q.id)
+    const ids = visibleQuestions({ ...SAMPLE, extra: 'skip' }, 2).map((q) => q.id)
     expect(ids).not.toContain('phq1')
     expect(encode({ ...SAMPLE, extra: 'skip' }).extras.optional).toBeNull()
   })
 
   it('추가 질문을 고르면 PHQ-9 9문항 + 대사건강 3문항이 나온다', () => {
-    const ids = visibleQuestions({ ...SAMPLE, extra: 'more' }).map((q) => q.id)
+    const ids = visibleQuestions({ ...SAMPLE, extra: 'more' }, 2).map((q) => q.id)
     expect(ids.filter((id) => id.startsWith('phq'))).toHaveLength(9)
     expect(ids.filter((id) => id.startsWith('dx_'))).toHaveLength(3)
   })

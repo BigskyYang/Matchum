@@ -7,9 +7,10 @@
     line2: 그 밖에 '내 유형에서 살펴볼 것' (부족 비율 ≥ 0.5 또는 같은 성별·나이 대비 1.2배 이상 그리고 ≥ 0.3)
   어떤 영양소를 고를지는 유환님 코드가 정한다. 웹은 그 결과를 그대로 보여 준다.
 출력: 결과 화면이 쓰는 값만 남긴다 (영양소 이름·역할·음식은 web/src/data/nutrientGuide.js)
-  types[유형][성별 1·2][연령대] = { line1: [{ key, of10 }], line2: [{ key, of10, peerOf10, text }] }
+  types[유형][성별 1·2][연령대] = { line1: [{ key, of10 }], line2: [{ key, of10, peerOf10, tag, text }] }
     of10     : 같은 유형·성별·연령대 10명 중 기준보다 적게 먹는 사람 수
     peerOf10 : 같은 성별·연령대 전체 10명 중 몇 명
+    tag      : 유형특이 · 식사량영향 · 흔함 (흔함 = 유형이 아니라 성별·나이 때문에 흔한 것, 화면에서 따로 묶는다)
     text     : 판정 문구 (이 유형에서 특히 많아요 / 식사량 점검이 먼저예요 / 같은 성별·나이대에서 흔해요)
 
 유환님 분석이 바뀌면 다시 실행한다 (bigskyyang 폴더에서)
@@ -47,7 +48,7 @@ out = {
                 age: {
                     'line1': [{'key': KEYS[r['nutrient']], 'of10': r['of10']} for r in cell['line1']],
                     'line2': [{'key': KEYS[r['nutrient']], 'of10': r['of10'], 'peerOf10': r['same_sex_age_of10'],
-                               'text': r['tag_text']} for r in cell['line2']],
+                               'tag': r['tag'], 'text': r['tag_text']} for r in cell['line2']],
                 }
                 for age, cell in ages.items()
             }
