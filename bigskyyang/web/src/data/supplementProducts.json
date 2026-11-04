@@ -1,7 +1,0 @@
-{
-  "version": null,
-  "source": null,
-  "note": "제품 목록 준비 중. scripts/build_supplement_products.py로 준혁님·유환님 분류 결과에서 만든다",
-  "nutrients": {},
-  "multivitamin": { "balanced": [], "fatigue": [] }
-}

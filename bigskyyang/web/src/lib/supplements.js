@@ -1,52 +1,70 @@
-// 개인 결과 '건강기능식품 정보'
-//   supplementTargets: 재준님 모델 결과 → 준혁님 제품 분류(11종)로 넘기는 영양소. 지금 화면은 이것만 보여 준다
-//   supplementInfo: 그 영양소의 제품 목록(supplementProducts.json)에서 내 성별·나이에 맞는 제품 (제품 표시는 팀 합의 후 다시 연결)
-// 어떤 제품을 어떤 순서로 둘지는 준혁님·유환님 분류 결과가 정하고, 웹은 대상만 맞춰 앞에서부터 보여 준다
-// 임신·수유·질환·복용약은 묻지 않는다. 화면에서 제품 정보를 펼치기 전에 한 번 확인하고(저장하지 않음), 해당되면 상담을 권한다
+// 건강기능식품: 재준님 모델의 '살펴볼 영양소' → 준혁님 제품 목록(data/supplementCatalog.json)
+//   웹은 고르기·보여 주기만 한다. 제품을 더하거나 빼지 않고, 같은 영양소·대상 안의 순서도 그대로 쓴다
+//   대상(일반·남성·여성·시니어)은 섞지 않고 칸을 나눈다 (재준님 인계: 서로 다른 대상의 순서는 같은 척도가 아님)
 import { NUTRIENT_GUIDE } from '../data/nutrientGuide.js'
-import { FOOD_ONLY, MAX_PRODUCTS, PRODUCT_NUTRIENTS, SENIOR_AGE } from '../data/supplementInfo.js'
+import { FOOD_ONLY, PRODUCT_NUTRIENTS, SENIOR_AGE } from '../data/supplementInfo.js'
 
 const GUIDE = Object.fromEntries(NUTRIENT_GUIDE.map((n) => [n.key, n]))
 
-// 내 성별·나이에 보여 줄 제품 대상
+// 내 성별·나이에 맞는 대상 칸 (내게 맞춘 칸 먼저, '일반'은 마지막)
 export function targetsFor(sex, age) {
-  return ['일반', sex === 1 ? '남성' : '여성', ...(age >= SENIOR_AGE ? ['시니어'] : [])]
+  return [sex === 1 ? '남성' : '여성', ...(age >= SENIOR_AGE ? ['시니어'] : []), '일반']
 }
 
-// 제품 분류에 있는 영양소만, 부족 영양소 순서대로 (비타민 B1·B2 → 비타민 B군 하나)
-const productNutrients = (nutrientKeys) =>
-  PRODUCT_NUTRIENTS.filter((n) => n.from.some((k) => nutrientKeys.includes(k)))
-    .map((n) => ({ ...n, order: Math.min(...n.from.map((k) => nutrientKeys.indexOf(k)).filter((i) => i >= 0)) }))
-    .sort((a, b) => a.order - b.order)
-const foodOnlyOf = (nutrientKeys) => FOOD_ONLY.filter((k) => nutrientKeys.includes(k)).map((k) => GUIDE[k].label)
-
-// watchKeys: 재준님 모델의 '살펴볼 영양소'(대표 등급 높은 편) 키 → { nutrients: 제품 분류 영양소, foodOnly: 음식으로만 챙길 영양소 이름 }
-//   나트륨(많이 먹을 위험)·비타민 A는 제품 분류에 없어 빠진다
+// watchKeys: 재준님 모델의 '살펴볼 영양소' 키 (순서대로)
+// → { nutrients: 제품 목록이 있는 영양소 [{ key, label, icon, from: 해당 모델 영양소 키 }], foodOnly: 음식으로만 챙길 영양소 이름 }
+//   비타민 B1·B2는 비타민 B군 하나로. 나트륨·비타민 A는 제품 목록이 없어 빠진다
 export function supplementTargets(watchKeys) {
-  return {
-    nutrients: productNutrients(watchKeys).map(({ key, label, icon }) => ({ key, label, icon })),
-    foodOnly: foodOnlyOf(watchKeys),
-  }
+  const nutrients = PRODUCT_NUTRIENTS.filter((n) => n.from.some((k) => watchKeys.includes(k))).map((n) => ({
+    key: n.key,
+    label: n.label,
+    icon: n.icon,
+    from: n.from.filter((k) => watchKeys.includes(k)),
+  }))
+  return { nutrients, foodOnly: FOOD_ONLY.filter((k) => watchKeys.includes(k)).map((k) => GUIDE[k].label) }
 }
 
-const pick = (products, targets, n = MAX_PRODUCTS) => (products ?? []).filter((p) => targets.includes(p.target)).slice(0, n)
+// 제품 한 줄: 목록 줄 [신고번호, 구분, 1일 함량, 기준치 %] + 제품 정보
+const productOf = (catalog, [id, type, amount, dvPct]) => ({ id, type, amount, dvPct, ...catalog.products[id] })
 
-// nutrientKeys: 부족할 수 있는 영양소 (결과표 키, 앞일수록 먼저 보여 준다)
-// → { ready: 제품 목록이 있는지, nutrients: 제품을 찾아볼 영양소와 제품, foodOnly: 음식으로만 챙길 영양소 이름, multivitamins }
-export function supplementInfo(data, nutrientKeys, { sex, age }) {
-  const targets = targetsFor(sex, age)
-  const nutrients = productNutrients(nutrientKeys).map(({ key, label, icon }) => ({
-    key,
-    label,
-    icon,
-    products: pick(data.nutrients?.[key], targets),
-  }))
+// 영양소 하나의 제품을 대상 칸별로. forms가 있으면 그 제형만 (순서는 그대로)
+//   → [{ target, total: 거르기 전 개수, items }] (제품이 없는 대상은 빠진다)
+export function productSections(catalog, key, targets, forms = []) {
+  return targets
+    .map((target) => {
+      const rows = catalog.lists[key]?.[target] ?? []
+      const items = rows.map((row) => productOf(catalog, row)).filter((p) => !forms.length || forms.includes(p.form))
+      return { target, total: rows.length, items }
+    })
+    .filter((s) => s.total > 0)
+}
 
-  return {
-    ready: Object.values(data.nutrients ?? {}).some((list) => list.length > 0),
-    nutrients,
-    foodOnly: foodOnlyOf(nutrientKeys),
-    multivitamins: pick(data.multivitamin?.balanced, targets),
-    source: data.source,
-  }
+// 영양소 하나에서 내 대상의 제품 수 (같은 제품이 여러 대상 칸에 있으면 한 번만)
+export function productCount(catalog, key, targets) {
+  return new Set(targets.flatMap((t) => (catalog.lists[key]?.[t] ?? []).map(([id]) => id))).size
+}
+
+// 고를 수 있는 제형과 개수 (많은 순)
+export function formsOf(catalog, key, targets) {
+  const count = {}
+  for (const t of targets) for (const [id] of catalog.lists[key]?.[t] ?? []) count[catalog.products[id].form] = (count[catalog.products[id].form] ?? 0) + 1
+  return Object.entries(count)
+    .sort((a, b) => b[1] - a[1])
+    .map(([form, n]) => ({ form, count: n }))
+}
+
+// 제품 정보 원문 (기능성·섭취 시 주의사항은 같은 문구를 한 번만 저장해 번호로 가리킨다)
+export const productTexts = (catalog, p) => ({ function: catalog.texts[p.function], caution: catalog.texts[p.caution] })
+
+// 고른 제품을 함께 먹을 때 하루 합계와 상한섭취량 (2025 KDRI 성인). 하루 함량을 아는 성분만 더한다
+//   → [{ key, label, unit, total, ul, over, count: 그 성분이 든 고른 제품 수 }]
+export function dailyTotals(catalog, ids, sex) {
+  return catalog.daily
+    .map((d) => {
+      const values = ids.map((id) => catalog.products[id]?.daily[d.key]).filter((v) => v !== undefined)
+      const total = Math.round(values.reduce((s, v) => s + v, 0) * 100) / 100
+      const ul = sex === 1 && d.ulMale ? d.ulMale : d.ul
+      return { key: d.key, label: d.label, unit: d.unit, total, ul, over: ul != null && total > ul, count: values.length }
+    })
+    .filter((x) => x.count > 0)
 }

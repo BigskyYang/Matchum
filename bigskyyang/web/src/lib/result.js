@@ -131,6 +131,8 @@ export function buildPersonalResult(answers, models = null) {
     missions: missionsOf(tips),
     foods: (foods.length ? foods : BALANCED_FOODS).slice(0, MAX_FOODS),
     ffqAsked: extras.ffq !== null,
+    sex: extras.sex,
+    age: extras.age,
     // 개인 영양 위험 (재준님 생활습관·평소 식사 모델)
     nutrition,
     // 건강기능식품 정보: 재준님 모델의 '살펴볼 영양소' 중 준혁님 제품 분류에 있는 영양소만 (모델을 불러오기 전에는 null)

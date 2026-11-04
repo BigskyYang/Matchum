@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { SecondaryButton } from '../components/PrimaryButton.jsx'
 import Card from '../components/result/Card.jsx'
@@ -7,22 +7,17 @@ import HabitSignals from '../components/result/HabitSignals.jsx'
 import MissionList from '../components/result/MissionList.jsx'
 import AboutLink from '../components/result/AboutLink.jsx'
 import NutritionRisk from '../components/result/NutritionRisk.jsx'
+import SupplementPreview from '../components/result/SupplementPreview.jsx'
 import { buildPersonalResult } from '../lib/result.js'
 import { clearSurvey, loadSurvey } from '../lib/storage.js'
+import { useModels } from '../lib/useCatalog.js'
 
 // 2단계 개인 결과 (나만 보기). 보여 줄 값은 lib/result.js의 buildPersonalResult가 계산한다
 // 개인 영양 위험은 재준님 모델(data/nutritionModels.json, 약 1.3MB)을 이 화면에서만 불러와 휴대폰에서 계산한다
 // 우울 점수·질환별 조언은 하지 않는다
 // 순서: 내가 챙겨야 할 영양소(부족하기 쉬운 영양소 칩, 누르면 상세 창) → 흡연·음주 신호등·이번 주 해볼 것 → 음식
-// 건강기능식품 안내는 영양소 상세 창 안에, 근거·주의 안내는 맨 아래 '어떻게 만들었나요?' 창에 모았다
-
-function useModels() {
-  const [models, setModels] = useState(null)
-  useEffect(() => {
-    import('../data/nutritionModels.json').then((m) => setModels(m.default))
-  }, [])
-  return models
-}
+// 영양소 칩 아래에 도움이 될 수 있는 건강기능식품(추천 이유·제품 수) → 모두 보고 고르기는 /supplements
+// 근거·주의 안내는 맨 아래 '어떻게 만들었나요?' 창에 모았다
 
 function useResult() {
   const models = useModels()
@@ -55,6 +50,7 @@ export default function PersonalResultPage() {
 
       <Card title="내가 챙겨야 할 영양소" icon="🔍">
         <NutritionRisk nutrition={r.nutrition} ffqAsked={r.ffqAsked} />
+        {r.nutrition && <SupplementPreview supplements={r.supplements} watch={r.nutrition.watch} sex={r.sex} age={r.age} />}
       </Card>
 
       <Card title="흡연·음주 신호등" icon="🚦">
