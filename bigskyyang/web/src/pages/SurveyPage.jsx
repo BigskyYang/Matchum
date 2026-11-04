@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import BottomSheet from '../components/BottomSheet.jsx'
 import Mascot from '../components/Mascot.jsx'
 import PrimaryButton from '../components/PrimaryButton.jsx'
 import ChoiceInput from '../components/survey/ChoiceInput.jsx'
@@ -16,17 +17,37 @@ function QuestionStep({ q, answer, isLast, onAnswer }) {
   // check: 다음으로 넘어갈 수 없는 값이면 안내 문구 (예: 만 19세 미만)
   const error = q.check?.(draft) ?? null
   const ready = (q.type !== 'rows' || q.rows.every((row) => draft[row.id] !== undefined)) && !error
+  const [info, setInfo] = useState(false)
 
   return (
     <>
       <section className="flex-1">
+        {q.period && (
+          <p className="mb-2 inline-block rounded-full bg-white px-2.5 py-1 text-xs font-bold text-ink-soft shadow-soft">
+            📅 {q.period} 기준
+          </p>
+        )}
         <h1 className="text-xl leading-snug font-bold">{q.title}</h1>
-        {q.help && (
-          <ul className="mt-3 space-y-1 text-sm leading-relaxed text-ink-soft">
-            {q.help.map((line) => (
-              <li key={line}>※ {line}</li>
-            ))}
-          </ul>
+        {(q.note || q.info) && (
+          <p className="mt-1.5 flex flex-wrap items-center gap-x-2 text-sm text-ink-soft">
+            {q.note}
+            {q.info && (
+              <button type="button" onClick={() => setInfo(true)} className="py-1.5 font-semibold text-primary-shade">
+                ⓘ 자세히
+              </button>
+            )}
+          </p>
+        )}
+        {info && (
+          <BottomSheet title="도움말" onClose={() => setInfo(false)}>
+            <ul className="space-y-2">
+              {q.info.map((line) => (
+                <li key={line} className="rounded-card bg-cream px-4 py-3 text-sm leading-relaxed">
+                  {line}
+                </li>
+              ))}
+            </ul>
+          </BottomSheet>
         )}
 
         <div className="mt-6">
@@ -75,7 +96,10 @@ export default function SurveyPage({ stage = 1 }) {
     if (params.get('q') !== q.id) navigate(surveyPath(q, stage), { replace: true })
     window.scrollTo(0, 0)
   }, [q, params, navigate, stage])
-  // 지금까지 답한 비율 (단계마다 0~100%)
+  // 진행: 영역(기본정보·신체활동·수면 …)마다 한 칸, 지금 영역 안에서 몇 번째인지
+  const sections = [...new Set(list.map((x) => x.section))]
+  const inSection = list.filter((x) => x.section === q.section)
+  const position = inSection.indexOf(q) + 1
   const percent = Math.round((step / list.length) * 100)
 
   const answer = (value) => {
@@ -125,12 +149,19 @@ export default function SurveyPage({ stage = 1 }) {
         <div className="flex-1">
           <div className="mb-1.5 flex justify-between text-xs font-semibold text-ink-soft">
             <span>
-              {stage === 2 && <b className="mr-1.5 text-primary-strong">2단계</b>}
+              {stage === 2 && <b className="mr-1.5 text-primary-shade">2단계</b>}
               {SECTIONS[q.section]}
             </span>
-            <span className="text-primary-strong">{percent}%</span>
+            <span className="text-primary-shade" aria-label={`${SECTIONS[q.section]} ${inSection.length}문항 중 ${position}번째`}>
+              {position} / {inSection.length}
+            </span>
           </div>
-          <ProgressBar percent={percent} />
+          <ProgressBar
+            percent={percent}
+            sections={sections.length}
+            current={sections.indexOf(q.section)}
+            fraction={position / inSection.length}
+          />
         </div>
       </header>
 

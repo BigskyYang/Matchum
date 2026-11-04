@@ -1,4 +1,4 @@
-// 결과 화면용 계산: 생활습관 점수(신호등), 유형 해시태그, 같이 다니면 좋은 유형
+// 결과 화면용 계산: 생활습관 점수(신호등), 유형 해시태그, 같이 다니면 좋은 유형 2개
 
 const clamp01 = (v) => Math.min(1, Math.max(0, v))
 
@@ -76,23 +76,40 @@ export function hashtags(type, limit = 4) {
   return picked.slice(0, limit)
 }
 
-// 같이 다니면 좋은 유형: 내가 약한 영역을 잘 챙기는 대분류 유형.
-// 내 점수보다 그 유형 평균이 높은 만큼을 모두 더해 가장 큰 유형을 고르고, 차이가 큰 영역 2개를 이유로 든다.
-// mainScores: { 대분류 코드: 그 대분류 평균의 신호등 점수 } (axes와 같은 순서)
-export function bestPartner(myScores, myMain, mainScores, axes = SCORE_AXES) {
-  const ranked = Object.entries(mainScores)
-    .filter(([label]) => label !== myMain)
-    .map(([label, theirs]) => {
-      const gains = theirs.map((s, i) => ({ axis: axes[i], gain: s - myScores[i] }))
-      const total = gains.reduce((sum, g) => sum + Math.max(0, g.gain), 0)
-      return { label, total, gains }
-    })
-    .sort((a, b) => b.total - a.total)
-  const best = ranked[0]
-  const helps = best.gains
-    .filter((g) => g.gain > 0.05)
-    .sort((a, b) => b.gain - a.gain)
+// 같이 다니면 좋은 유형 2개 (세부 유형 12개 중, 내 유형 제외)
+//   fill (채워 주는 짝꿍): 내가 약한 영역을 잘 챙기는 유형. 그 유형 평균이 내 점수보다 높은 만큼을 모두 더해 가장 큰 유형
+//   together (같이 크는 짝꿍): 나와 같은 영역이 약해 함께 바꿔 보기 좋은 유형.
+//     영역마다 '좋아요'(0.75)에 못 미치는 만큼이 나와 겹치는 정도를 더해 가장 큰 유형 (fill과 같은 유형은 뺀다).
+//     겹치는 약점이 없으면 생활습관 점수가 가장 비슷한 유형
+//   axes: 이유로 드는 영역 (차이·겹침이 큰 순서로 2개까지)
+// leafScores: { 세부 유형 ID: 그 유형 평균의 신호등 점수 } (axes와 같은 순서)
+const GOOD = LEVELS[0].min
+const topAxes = (list) =>
+  list
+    .filter((g) => g.v > 0.05)
+    .sort((a, b) => b.v - a.v)
     .slice(0, 2)
     .map((g) => g.axis)
-  return { label: best.label, helps }
+
+export function partnerTypes(myScores, myLeaf, leafScores, axes = SCORE_AXES) {
+  const others = Object.entries(leafScores).filter(([id]) => id !== myLeaf)
+  const sum = (list) => list.reduce((t, g) => t + Math.max(0, g.v), 0)
+
+  const fill = others
+    .map(([id, theirs]) => ({ id, gains: theirs.map((s, i) => ({ axis: axes[i], v: s - myScores[i] })) }))
+    .map((x) => ({ ...x, total: sum(x.gains) }))
+    .sort((a, b) => b.total - a.total)[0]
+
+  const lack = (s) => Math.max(0, GOOD - s)
+  const together = others
+    .filter(([id]) => id !== fill.id)
+    .map(([id, theirs]) => ({
+      id,
+      shared: theirs.map((s, i) => ({ axis: axes[i], v: Math.min(lack(s), lack(myScores[i])) })),
+      distance: theirs.reduce((t, s, i) => t + (s - myScores[i]) ** 2, 0),
+    }))
+    .map((x) => ({ ...x, total: sum(x.shared) }))
+    .sort((a, b) => b.total - a.total || a.distance - b.distance)[0]
+
+  return { fill: { id: fill.id, axes: topAxes(fill.gains) }, together: { id: together.id, axes: topAxes(together.shared) } }
 }

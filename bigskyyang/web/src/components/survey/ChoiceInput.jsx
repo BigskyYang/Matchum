@@ -8,7 +8,7 @@ const LAYOUT = {
 }
 const BUTTON = {
   list: 'px-5 py-4 text-left text-base',
-  grid: 'h-full px-3 py-3.5 text-left text-[0.95rem] leading-snug',
+  grid: 'h-full px-3 py-3.5 text-left text-base leading-snug',
   row: 'px-1 py-4 text-center text-base',
 }
 
