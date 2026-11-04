@@ -2,6 +2,7 @@ import Mascot from '../components/Mascot.jsx'
 import PrimaryButton from '../components/PrimaryButton.jsx'
 import RotatingNotes from '../components/RotatingNotes.jsx'
 import { SERVICE_NAME, TEAM_NAME } from '../config.js'
+import { QUESTIONS } from '../data/questions.js'
 import { model } from '../lib/classify.js'
 
 // 'NBTI 유형 검사'에서 앞의 N(Nutrient)만 강조
@@ -23,6 +24,8 @@ function Title() {
 
 export default function StartPage() {
   const sampleSize = model.population.n.toLocaleString('ko-KR')
+  // 1단계 문항 수 (주말 수면이 같으면 2개 줄어든다)
+  const stage1 = QUESTIONS.filter((q) => q.stage === 1).length
 
   return (
     <main className="flex flex-1 flex-col px-6 pt-5 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
@@ -44,6 +47,14 @@ export default function StartPage() {
           <span className="rounded-full bg-mint px-2.5 py-1">🥗 Nutrient</span>
           <span className="text-ink-faint">+</span>
           <span className="rounded-full bg-lavender px-2.5 py-1">🧩 MBTI</span>
+        </p>
+        <p className="mt-5 text-sm leading-relaxed text-ink-soft">
+          생활습관 질문에 답하면 <b className="text-ink">{model.types.length}가지 유형</b> 중 내 유형과
+          <br />
+          챙기면 좋은 영양소를 알려 드려요
+        </p>
+        <p className="mt-3 rounded-full bg-white px-3.5 py-1.5 text-xs font-bold text-ink-soft shadow-soft">
+          ⏱ 질문 {stage1}개 이내 · 약 2분
         </p>
       </section>
 

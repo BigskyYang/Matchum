@@ -128,7 +128,9 @@ export default function SurveyPage({ stage = 1 }) {
               {stage === 2 && <b className="mr-1.5 text-primary-shade">2단계</b>}
               {SECTIONS[q.section]}
             </span>
-            <span className="text-primary-shade">{percent}%</span>
+            <span className="text-primary-shade" aria-label={`${list.length}문항 중 ${step + 1}번째`}>
+              {step + 1} / {list.length}
+            </span>
           </div>
           <ProgressBar percent={percent} />
         </div>

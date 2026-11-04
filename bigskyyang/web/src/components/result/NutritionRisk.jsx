@@ -4,6 +4,8 @@
 //   - 확률 숫자는 보여 주지 않고 '높은 편·보통·낮은 편'만
 //   - 두 기준이 다르면 생활습관 기준 등급을 작게 같이 적는다
 //   살펴볼 영양소(최대 5개)는 한 묶음 목록으로 펼쳐 두고(모두 '높은 편'이라 등급 표시는 제목에 한 번만), 나머지는 접어 둔 2열 칸으로
+import SupplementInfo from './SupplementInfo.jsx'
+
 const BAND = {
   High: { label: '높은 편', cls: 'bg-primary-soft text-primary-shade' },
   Mid: { label: '보통', cls: 'bg-butter text-ink' },
@@ -45,7 +47,7 @@ function RestItem({ n, showSource }) {
   )
 }
 
-export default function NutritionRisk({ nutrition, ffqAsked }) {
+export default function NutritionRisk({ nutrition, ffqAsked, supplements }) {
   if (!nutrition) return <p className="text-sm text-ink-soft">계산하고 있어요…</p>
   const { watch, rest, habitualAvailable } = nutrition
 
@@ -72,8 +74,8 @@ export default function NutritionRisk({ nutrition, ffqAsked }) {
       )}
 
       {rest.length > 0 && (
-        <details className="mt-3">
-          <summary className="cursor-pointer text-sm font-semibold text-ink-soft">나머지 영양소 {rest.length}개 보기</summary>
+        <details className="mt-1">
+          <summary className="cursor-pointer py-3 text-sm font-semibold text-ink-soft">나머지 영양소 {rest.length}개 보기</summary>
           <ul className="mt-2 grid grid-cols-2 gap-1.5">
             {rest.map((n) => (
               <RestItem key={n.key} n={n} showSource={habitualAvailable} />
@@ -81,6 +83,8 @@ export default function NutritionRisk({ nutrition, ffqAsked }) {
           </ul>
         </details>
       )}
+
+      <SupplementInfo info={supplements} />
 
       <ul className="mt-4 space-y-1 text-xs leading-relaxed text-ink-faint">
         {habitualAvailable ? (

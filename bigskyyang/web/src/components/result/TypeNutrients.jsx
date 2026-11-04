@@ -2,25 +2,23 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { BASIS_TEXT } from '../../data/nutrientGuide.js'
 
 // 유형 화면의 '부족할 수 있는 영양소' ((나)안, 데이터는 lib/nutrition.js의 typeNutrients)
-//   🔸 모두가 챙겨야 할 영양소: 공통 8개 (같은 크기 타일 4열)
-//   🔹 내 유형이 특히 챙길 영양소: 2줄 중 유형특이·식사량영향 (테두리 색 = 부족·주의)
+//   🔹 내 유형이 특히 챙길 영양소: 2줄 중 유형특이·식사량영향 (테두리 색 = 부족·주의). 내 유형 결과라 맨 위에 크게
 //   ▫️ 나와 같은 성별·나이대에서 흔한 영양소: 2줄 중 '흔함' (유형이 아니라 성별·나이 때문)
+//   🔸 모두가 챙겨야 할 영양소: 공통 8개 (유형과 상관없어 맨 아래 작은 칩으로)
 // 영양소를 누르면 화면 아래에서 올라오는 카드로 역할·대표 음식을 보여 준다 (화면이 밀리지 않게)
 const BORDER = { poor: 'border-primary-strong', fair: 'border-[#f2c14e]' }
 const CHIP = { poor: 'bg-primary-soft text-primary-shade', fair: 'bg-butter text-ink' }
 
-function CommonTile({ n, onOpen }) {
+function CommonChip({ n, onOpen }) {
   return (
     <li>
       <button
         type="button"
         onClick={() => onOpen(n)}
-        className="flex aspect-square w-full flex-col items-center justify-center gap-1 rounded-card bg-cream px-1 text-center active:scale-95"
+        className="flex items-center gap-1 rounded-full bg-cream px-3 py-2 text-sm font-bold active:scale-95"
       >
-        <span aria-hidden="true" className="text-2xl">
-          {n.icon}
-        </span>
-        <span className="text-xs leading-tight font-bold">{n.label}</span>
+        <span aria-hidden="true">{n.icon}</span>
+        {n.label}
       </button>
     </li>
   )
@@ -128,14 +126,7 @@ export default function TypeNutrients({ common, picks, emptyText, sexLabel, ageL
 
   return (
     <div>
-      <h3 className="text-sm font-bold">🔸 모두가 챙겨야 할 영양소</h3>
-      <ul className="mt-2 grid grid-cols-4 gap-1.5">
-        {common.map((n) => (
-          <CommonTile key={n.key} n={n} onOpen={setOpen} />
-        ))}
-      </ul>
-
-      <h3 className="mt-5 text-sm font-bold">🔹 내 유형이 특히 챙길 영양소</h3>
+      <h3 className="text-sm font-bold">🔹 내 유형이 특히 챙길 영양소</h3>
       {typePicks.length ? (
         <ul className="mt-2 space-y-2">
           {typePicks.map((n) => (
@@ -159,7 +150,15 @@ export default function TypeNutrients({ common, picks, emptyText, sexLabel, ageL
         </>
       )}
 
-      <p className="mt-3 text-xs leading-relaxed text-ink-faint">
+      <h3 className="mt-5 text-sm font-bold">🔸 모두가 챙겨야 할 영양소 {common.length}개</h3>
+      <p className="mt-1 text-xs text-ink-soft">유형과 상관없이 성인 절반 이상이 적게 먹는 영양소예요.</p>
+      <ul className="mt-2 flex flex-wrap gap-1.5">
+        {common.map((n) => (
+          <CommonChip key={n.key} n={n} onOpen={setOpen} />
+        ))}
+      </ul>
+
+      <p className="mt-4 text-xs leading-relaxed text-ink-faint">
         영양소를 누르면 하는 일과 음식을 볼 수 있어요. 국민건강영양조사 2022–2024의 하루 식사 기록(음식만, 영양제 제외)을 2025
         한국인 영양소 섭취기준과 비교한, 나와 비슷한 사람들의 경향이에요. 나의 영양 상태를 진단한 결과가 아니에요.
       </p>

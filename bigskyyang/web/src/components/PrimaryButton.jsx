@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom'
 const BASE =
   'block w-full rounded-button py-5 text-center text-xl font-bold select-none transition-[translate,box-shadow,background-color] duration-100'
 const ENABLED = 'bg-primary-strong text-white shadow-button active:translate-y-1 active:shadow-button-pressed'
-const DISABLED = 'bg-primary-soft text-primary-shade/70 cursor-not-allowed'
+// 비활성: 활성 버튼(분홍)과 헷갈리지 않게 회색
+const DISABLED = 'bg-ink/10 text-ink-soft cursor-not-allowed'
 
 export default function PrimaryButton({ to, disabled = false, className = '', children, ...props }) {
   const cls = `${BASE} ${disabled ? DISABLED : ENABLED} ${className}`

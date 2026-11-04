@@ -6,14 +6,14 @@ import FoodGrid from '../components/result/FoodGrid.jsx'
 import HabitSignals from '../components/result/HabitSignals.jsx'
 import MissionList from '../components/result/MissionList.jsx'
 import NutritionRisk from '../components/result/NutritionRisk.jsx'
-import SupplementInfo from '../components/result/SupplementInfo.jsx'
 import { buildPersonalResult } from '../lib/result.js'
 import { clearSurvey, loadSurvey } from '../lib/storage.js'
 
 // 2단계 개인 결과 (나만 보기). 보여 줄 값은 lib/result.js의 buildPersonalResult가 계산한다
 // 개인 영양 위험은 재준님 모델(data/nutritionModels.json, 약 1.3MB)을 이 화면에서만 불러와 휴대폰에서 계산한다
 // 우울 점수·질환별 조언은 하지 않는다
-// 건강기능식품 정보는 음식 다음에, 재준님 결과 중 준혁님 제품 분류로 넘기는 영양소만 (제품 표시는 팀 합의 후, components/result/SupplementInfo.jsx)
+// 맨 위 '한눈에 보기'에 가장 먼저 챙길 것만 모으고, 자세한 것은 아래 카드에서 본다
+// 건강기능식품 정보는 '나의 영양소 부족 위험' 카드 맨 아래 (같은 영양소라 카드를 따로 두지 않는다, components/result/SupplementInfo.jsx)
 
 function useModels() {
   const [models, setModels] = useState(null)
@@ -31,6 +31,38 @@ function useResult() {
     const redirect = !done[1] ? '/survey' : !done[2] ? '/survey2' : null
     return { redirect, result: redirect ? null : buildPersonalResult(answers, models) }
   }, [survey, models])
+}
+
+// 한눈에 보기: 살펴볼 영양소 · 이번 주 해볼 것 · 챙겨 먹을 음식 (자세한 것은 아래 카드)
+function Summary({ r }) {
+  const watch = r.nutrition?.watch
+  const rows = [
+    {
+      icon: '🔺',
+      title: '살펴볼 영양소',
+      text: !watch ? '계산하고 있어요…' : watch.length ? watch.map((n) => n.label).join(', ') : '높은 편인 영양소는 없어요 👍',
+    },
+    { icon: '🎯', title: '이번 주 해볼 것', text: r.missions[0]?.title ?? '지금의 흡연·음주 습관 유지하기' },
+    { icon: '🥗', title: '챙겨 먹을 음식', text: r.foods.slice(0, 3).map((f) => f.label).join(', ') },
+  ]
+  return (
+    <section aria-labelledby="summary-title" className="rounded-card bg-primary-soft/70 px-5 py-4">
+      <h2 id="summary-title" className="text-base font-bold">
+        📌 한눈에 보기
+      </h2>
+      <dl className="mt-2.5 space-y-2 text-sm">
+        {rows.map((row) => (
+          <div key={row.title} className="flex gap-3">
+            <dt className="w-28 shrink-0 font-bold">
+              <span aria-hidden="true">{row.icon} </span>
+              {row.title}
+            </dt>
+            <dd className="min-w-0 flex-1 leading-relaxed">{row.text}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+  )
 }
 
 export default function PersonalResultPage() {
@@ -51,6 +83,8 @@ export default function PersonalResultPage() {
         <p className="mt-2 text-sm leading-relaxed text-ink-soft">이 결과는 공유되지 않고 이 휴대폰에서만 볼 수 있어요.</p>
       </header>
 
+      <Summary r={r} />
+
       <Card title="흡연·음주 신호등" icon="🚦">
         <HabitSignals habits={r.habits} />
         <h3 className="mt-5 mb-2 text-sm font-bold">🎯 이번 주 해볼 것</h3>
@@ -58,15 +92,11 @@ export default function PersonalResultPage() {
       </Card>
 
       <Card title="나의 영양소 부족 위험" icon="🔍">
-        <NutritionRisk nutrition={r.nutrition} ffqAsked={r.ffqAsked} />
+        <NutritionRisk nutrition={r.nutrition} ffqAsked={r.ffqAsked} supplements={r.supplements} />
       </Card>
 
       <Card title="챙겨 먹으면 좋은 음식" icon="🥗">
         <FoodGrid foods={r.foods} />
-      </Card>
-
-      <Card title="건강기능식품 정보" icon="💊">
-        <SupplementInfo info={r.supplements} />
       </Card>
 
       <footer className="mt-2 flex flex-col gap-3">
