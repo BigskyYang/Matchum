@@ -6,7 +6,7 @@ import ChoiceInput from '../components/survey/ChoiceInput.jsx'
 import ProgressBar from '../components/survey/ProgressBar.jsx'
 import RowsInput from '../components/survey/RowsInput.jsx'
 import { DurationWheel, NumberWheel, TimeWheel } from '../components/survey/WheelInputs.jsx'
-import { OPTIONAL_SECTIONS, SECTIONS, visibleQuestions } from '../data/questions.js'
+import { SECTIONS, visibleQuestions } from '../data/questions.js'
 import { loadSurvey, saveSurvey } from '../lib/storage.js'
 import { resolveStep, resultPath, surveyPath } from '../lib/surveyFlow.js'
 
@@ -67,10 +67,8 @@ export default function SurveyPage({ stage = 1 }) {
     if (params.get('q') !== q.id) navigate(surveyPath(q, stage), { replace: true })
     window.scrollTo(0, 0)
   }, [q, params, navigate, stage])
-  // 지금까지 답한 비율. 핵심 문항과 선택 문항(PHQ-9·대사건강)은 따로 0~100%로 센다
-  // (선택 문항을 열었을 때 진행률이 뒤로 줄어들지 않게)
-  const part = list.filter((x) => OPTIONAL_SECTIONS.includes(x.section) === OPTIONAL_SECTIONS.includes(q.section))
-  const percent = Math.round((part.indexOf(q) / part.length) * 100)
+  // 지금까지 답한 비율 (단계마다 0~100%)
+  const percent = Math.round((step / list.length) * 100)
 
   const answer = (value) => {
     if (busy.current) return
@@ -133,7 +131,13 @@ export default function SurveyPage({ stage = 1 }) {
       </div>
 
       <div className="mt-4 flex flex-1 flex-col">
-        <QuestionStep key={q.id} q={q} answer={state.answers[q.id]} isLast={step === list.length - 1} onAnswer={answer} />
+        <QuestionStep
+          key={q.id}
+          q={q}
+          answer={state.answers[q.id]}
+          isLast={step === list.length - 1}
+          onAnswer={answer}
+        />
       </div>
     </main>
   )

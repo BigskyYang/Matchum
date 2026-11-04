@@ -85,7 +85,8 @@ export const TIPS = [
   {
     id: 'protein',
     personal: true,
-    when: (_, x) => x.proteinServings !== null && x.proteinServings < 1,
+    // 고기·생선·달걀·두부 중 어느 것도 하루 1회 이상 먹지 않음 (mini-FFQ 5 = 하루 1회)
+    when: (_, x) => x.ffq !== null && Math.max(x.ffq.meat, x.ffq.fish, x.ffq.egg, x.ffq.legume) < 5,
     foods: [
       { emoji: '🥚', label: '달걀', why: '매끼 단백질' },
       { emoji: '🫘', label: '콩·두부', why: '매끼 단백질' },
@@ -94,7 +95,7 @@ export const TIPS = [
   {
     id: 'dairy',
     personal: true,
-    when: (_, x) => x.dairyServings !== null && x.dairyServings < 1,
+    when: (_, x) => x.ffq !== null && x.ffq.dairy < 5,
     foods: [{ emoji: '🧀', label: '치즈·요구르트', why: '하루 1회 이상' }],
   },
 ]

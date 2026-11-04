@@ -1,32 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { visibleQuestions } from '../data/questions.js'
-import { encode } from './encode.js'
-import { SAMPLE } from './fixtures.js'
 import { ageGroup, typeNutrients } from './nutrition.js'
-
-describe('선택 문항 (PHQ-9·대사건강)', () => {
-  it('결과 바로 보기를 고르면 선택 문항이 나오지 않고 optional은 null', () => {
-    const ids = visibleQuestions({ ...SAMPLE, extra: 'skip' }, 2).map((q) => q.id)
-    expect(ids).not.toContain('phq1')
-    expect(encode({ ...SAMPLE, extra: 'skip' }).extras.optional).toBeNull()
-  })
-
-  it('추가 질문을 고르면 PHQ-9 9문항 + 대사건강 3문항이 나온다', () => {
-    const ids = visibleQuestions({ ...SAMPLE, extra: 'more' }, 2).map((q) => q.id)
-    expect(ids.filter((id) => id.startsWith('phq'))).toHaveLength(9)
-    expect(ids.filter((id) => id.startsWith('dx_'))).toHaveLength(3)
-  })
-
-  it('PHQ-9 총점과 9번 문항, 진단 여부를 정리한다', () => {
-    const phq = Object.fromEntries(Array.from({ length: 9 }, (_, i) => [`phq${i + 1}`, i === 8 ? 1 : 2]))
-    const { optional } = encode({ ...SAMPLE, extra: 'more', ...phq, dx_hypertension: 'yes', dx_diabetes: 'no', dx_dyslipidemia: 'no' })
-      .extras
-    expect(optional.phqTotal).toBe(17)
-    expect(optional.phqItem9).toBe(1)
-    expect(optional.hypertension).toBe(true)
-    expect(optional.diabetes).toBe(false)
-  })
-})
 
 describe('부족할 수 있는 영양소 ((나)안)', () => {
   // 유환님 결과 형식 예시 (scripts/build_nutrient_cells.py가 만드는 형식)
