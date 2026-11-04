@@ -1,0 +1,15 @@
+{
+  "version": "v1.4.1-web-feedback",
+  "labels": {
+    "High": "높은 편",
+    "Mid": "보통",
+    "Low": "낮은 편"
+  },
+  "show_probability_numbers": false,
+  "disagreement_policy": "prefer_habitual_diet_when_available",
+  "fallback_policy": "use_lifestyle_if_habitual_unavailable",
+  "max_selected_nutrients": 5,
+  "selection_owner": "existing_web_rule",
+  "cross_nutrient_probability_sorting": false,
+  "disclaimer": "기준 자료 안에서의 상대 등급이며, 부족을 진단한 결과가 아니고 필요한 양을 알려주지 않습니다."
+}

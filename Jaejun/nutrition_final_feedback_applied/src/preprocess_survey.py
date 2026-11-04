@@ -2,7 +2,6 @@
 from typing import Any, Dict
 
 SEX_MAP = {"남성":1, "여성":2}
-CURRENT_SMOKING_MAP = {"매일 피움":1, "가끔 피움":1, "과거에는 피웠으나 현재는 피우지 않음":0}
 DRINK_FREQ_ORD_MAP = {"최근 1년간 마시지 않음":0, "월 1회 미만":1, "월 1회 정도":2, "월 2~4회":3, "주 2~3회":4, "주 4회 이상":5}
 DRINK_AMOUNT_ORD_MAP = {"1~2잔":1, "3~4잔":2, "5~6잔":3, "7~9잔":4, "10잔 이상":5}
 STRENGTH_DAYS_MAP = {"0일":0, "1일":1, "2일":2, "3일":3, "4일":4, "5일 이상":5}
@@ -44,14 +43,11 @@ def preprocess_survey_response(s):
     if not (19 <= age <= 120) or not age.is_integer():
         raise ValueError("age must be a whole number between 19 and 120")
 
-    lifetime=_require(s,"smoked_100_cigarettes")
-    if type(lifetime) is not bool:
-        raise ValueError("smoked_100_cigarettes must be boolean")
-    if not lifetime:
-        smoker=0; cig=0.0
-    else:
-        smoker=_choice(_require(s,"current_smoking"),CURRENT_SMOKING_MAP,"current_smoking")
-        cig=float(_require(s,"cigarettes_per_day")) if smoker else 0.0
+    smoking=_require(s,"currently_smoking")
+    if type(smoking) is not bool:
+        raise ValueError("currently_smoking must be boolean")
+    smoker=int(smoking)
+    cig=float(_require(s,"cigarettes_per_day")) if smoking else 0.0
 
     ever=_require(s,"ever_drink")
     if type(ever) is not bool:
@@ -66,13 +62,20 @@ def preprocess_survey_response(s):
         # A person drinking less than monthly still has a nonzero amount code.
         drink_amount=0 if drink_freq==0 else _choice(_require(s,"drink_amount"),DRINK_AMOUNT_ORD_MAP,"drink_amount")
 
-    mod=_mins(s.get("moderate_hours",0) or 0,s.get("moderate_minutes",0) or 0)
-    vig=_mins(s.get("vigorous_hours",0) or 0,s.get("vigorous_minutes",0) or 0)
-    aerobic=int(mod+2*vig>=150)
+    active=_require(s,"aerobic_150min")
+    if type(active) is not bool:
+        raise ValueError("aerobic_150min must be boolean")
+    aerobic=int(active)
 
-    work_sleep=_sleep(_require(s,"workday_bedtime"),_require(s,"workday_waketime"))
-    rest_sleep=_sleep(_require(s,"restday_bedtime"),_require(s,"restday_waketime"))
-    sleep=(work_sleep*5+rest_sleep*2)/7
+    regular=_require(s,"regular_sleep_schedule")
+    if type(regular) is not bool:
+        raise ValueError("regular_sleep_schedule must be boolean")
+    if regular:
+        work_sleep=_sleep(_require(s,"workday_bedtime"),_require(s,"workday_waketime"))
+        rest_sleep=_sleep(_require(s,"restday_bedtime"),_require(s,"restday_waketime"))
+        sleep=(work_sleep*5+rest_sleep*2)/7
+    else:
+        sleep=float(_require(s,"average_sleep_hours"))
 
     model_features={
         "설명_sex":sex,

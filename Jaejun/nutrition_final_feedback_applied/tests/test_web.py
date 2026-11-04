@@ -4,7 +4,6 @@ from src.preprocess_survey import preprocess_survey_response,MEAL_FREQ_ORD_MAP,E
 from src.pipeline_web import predict_from_survey_web,predict_from_features_web,_ffq_band
 from src.predict import _band,CUTS
 from src.validation import validate_service_features
-from src.cluster_hook import attach_web_cluster
 from scripts.clean_training_unknowns import clean_table
 import pandas as pd
 ROOT=Path(__file__).resolve().parents[1]
@@ -38,7 +37,7 @@ class WebTests(unittest.TestCase):
   out=predict_from_survey_web(self.s)
   direct=predict_from_features_web(preprocess_survey_response(self.s)['model_features'],mini_ffq_survey=self.s)
   self.assertEqual(out,direct);self.assertEqual(len(out['nutrition']['lifestyle_risk']),14);self.assertEqual(len(out['nutrition']['habitual_diet_risk']),10)
-  self.assertEqual(set(out),{'version','nutrition','food_guidance','lifestyle_cluster','model_data_quality'})
+  self.assertEqual(set(out),{'version','model_version','nutrition','food_guidance','display_summary','lifestyle_cluster','model_data_quality'})
   for module in ('lifestyle_risk','habitual_diet_risk'):
    for v in out['nutrition'][module].values():self.assertTrue(0<=v['probability']<=1);self.assertIn(v['risk_band'],('Low','Mid','High'))
   phosphorus=next(x for x in out['food_guidance'] if x['nutrient_id']=='phosphorus');self.assertEqual(phosphorus['target'],'below_EAR')
@@ -60,7 +59,7 @@ class WebTests(unittest.TestCase):
    s=copy.deepcopy(self.s);s.pop(field)
    with self.assertRaises(ValueError):predict_from_survey_web(s)
  def test_age_bool_and_duration_validation(self):
-  for field,val in [('age',18),('age',35.5),('ever_drink','false'),('smoked_100_cigarettes','false'),('sedentary_minutes',60),('moderate_hours',-1)]:
+  for field,val in [('age',18),('age',35.5),('ever_drink','false'),('currently_smoking','false'),('sedentary_minutes',60),('average_sleep_hours',-1)]:
    s=copy.deepcopy(self.s);s[field]=val
    with self.assertRaises(ValueError):predict_from_survey_web(s)
  def test_threshold_equality(self):
@@ -70,10 +69,4 @@ class WebTests(unittest.TestCase):
  def test_cleaner_preserves_valid_values(self):
   d=pd.DataFrame({'식습관_LS_FRUIT':[1,9,99,None],'식습관_LS_VEG2':[99,2,8,None]});clean,counts=clean_table(d)
   self.assertEqual(counts,{'식습관_LS_FRUIT':1,'식습관_LS_VEG2':1});self.assertEqual(clean.loc[1,'식습관_LS_FRUIT'],9);self.assertEqual(d.loc[2,'식습관_LS_FRUIT'],99)
- def test_cluster_ids_only_from_supplied_source(self):
-  with self.assertRaises(ValueError):attach_web_cluster('N1')
-  with tempfile.TemporaryDirectory() as d:
-   p=Path(d)/'nbti12.json';p.write_text(json.dumps([{'id':'N1'},{'id':'O3'}]))
-   self.assertEqual(attach_web_cluster('N1',p)['cluster_id'],'N1')
-   with self.assertRaises(ValueError):attach_web_cluster('G0_비활동형_0',p)
 if __name__=='__main__':unittest.main()

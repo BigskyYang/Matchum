@@ -1,5 +1,5 @@
 {
-  "version": "v1.4-web-retrained",
+  "version": "v1.4.1-web-feedback",
   "frozen": true,
   "lifestyle_mean_auc": 0.6643906652906597,
   "mini_ffq_mean_auc": 0.8766402722744397,
@@ -8,7 +8,7 @@
   "probability_combination": "none",
   "source_weights_version": "lifestyle_retrained_from_v1.2_recipe; mini_ffq_unchanged_v1.2",
   "weights_retrained": true,
-  "scope": "nutrition_and_general_food_information_only",
+  "scope": "nutrition_model_package_only; product_information_owned_by_Junhyeok_module",
   "profile_layers_enabled": false,
   "product_recommendation_enabled": false,
   "training_data_quality": "invalid_fruit_vegetable_codes_removed_from_training",
@@ -17,5 +17,10 @@
   ],
   "lifestyle_n_train": 9740,
   "lifestyle_n_holdout": 5320,
-  "relative_band_policy": "retain_original_fixed_v1.2_thresholds"
+  "relative_band_policy": "retain_original_fixed_v1.2_thresholds",
+  "model_version": "v1.4-web-retrained",
+  "weights_retrained_in_this_patch": false,
+  "model_export_required_for_this_patch": false,
+  "cluster_owner": "web",
+  "display_policy": "prefer_habitual_when_available; labels_only; web_selects_up_to_5"
 }
