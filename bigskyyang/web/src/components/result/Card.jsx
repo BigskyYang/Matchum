@@ -11,16 +11,3 @@ export default function Card({ title, icon, children }) {
   )
 }
 
-// 칩 목록. 비어 있으면 placeholder 문구를 보여준다
-export function Chips({ items, empty }) {
-  if (!items?.length) return <p className="text-sm leading-relaxed text-ink-faint">{empty}</p>
-  return (
-    <ul className="flex flex-wrap gap-2">
-      {items.map((item) => (
-        <li key={item} className="rounded-full bg-butter px-3 py-1.5 text-sm font-semibold">
-          {item}
-        </li>
-      ))}
-    </ul>
-  )
-}

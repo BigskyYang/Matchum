@@ -19,15 +19,21 @@ npm run preview  # 빌드 결과 미리보기
 - 숫자·날짜·시각 입력은 위아래로 드래그하는 무한 반복 휠 선택기(`components/survey/WheelPicker.jsx`). 처음 맞춰질 값은 `questions.js`의 `initial`
 - 응답은 브라우저(sessionStorage)에만 임시 저장하고 서버로 보내지 않는다. 유형 판정도 휴대폰 안에서 한다.
 - 앱에서 머신러닝을 돌리지 않는다. 미리 만든 결과(군집 중심, 유형별 영양소 결과표)를 찾아 보여줄 뿐이다.
+- 두 단계로 진행한다 (응답은 두 단계가 함께 쓴다)
+  - 1단계 `/survey` → `/result` 유형 결과 (공유용): 유형·비율 → 생활습관 신호등·이번 주 해볼 것 → 부족할 수 있는 영양소 → 짝꿍 유형 → 2단계로
+  - 2단계 `/survey2` → `/result2` 개인 결과 (나만 보기): 흡연·음주 신호등 → 챙겨 먹으면 좋은 음식 → 개인 영양 위험(준비 중) → 마음·대사 건강
+  - 1단계는 유형 분류에 쓰는 생활습관만 묻는다 (출생연도, 운동 1문항, 수면이 들쭉날쭉하면 평균 시간, 세 끼 한 화면). 보기가 5개 이상이면 2열로 놓아 스크롤하지 않게 한다
 
 ## 고칠 곳
 | 바꾸고 싶은 것 | 파일 |
 |---|---|
 | 서비스 이름·소개 문구 | `src/config.js` |
-| 설문 문항·보기·분기 | `src/data/questions.js` |
+| 설문 문항·보기·분기 (1단계·2단계) | `src/data/questions.js` |
 | 응답 → 모델 변수 변환 규칙 | `src/lib/encode.js` |
 | 유형 이름·설명 | `src/data/types.js` |
-| 영양소 14종 이름·대표 음식·건강기능식품 원료·AUC | `src/data/nutrients.js` |
+| 유형 화면 영양소 15종 이름·역할·대표 음식 | `src/data/nutrientGuide.js` |
+| 결과 화면에 보여 줄 값 계산 (유형 결과 `buildTypeResult`, 개인 결과 `buildPersonalResult`) | `src/lib/result.js` |
+| 개인화용 영양소 14종 (재준님 모델)·건강기능식품 원료·AUC | `src/data/nutrients.js` |
 | 개인 응답 기반 미션·추천 음식 | `src/data/tips.js` |
 | 생활습관 신호등 점수·해시태그·짝꿍 유형 기준 | `src/lib/profile.js` |
 | 마음 건강(PHQ-9)·대사 건강 안내 문구 | `src/components/result/MindCard.jsx`, `MetabolicCard.jsx` |
@@ -49,36 +55,29 @@ python scripts/make_classify_fixtures.py   # 판정 테스트용 예시 응답 �
 - 유형 ID: 대분류 `N`(나무늘보)·`A`(갓생러)·`S`(예민보스)·`O`(워커홀릭) + 세부 번호 → `N1`~`O3`. 이름·설명은 `types.js`
 - 유형 비율·평균은 조사 가중치(wt_tot/3)를 쓴 값이다. 분석 과정과 검증은 `bigskyyang/analysis/군집화_결론.md`
 
-### 영양소 신호등 `src/data/nutrientCells.json`
-결과 화면의 '영양소 신호등'은 유환님 12유형 결과표에서 내 유형 × 성별 × 연령대 칸을 찾아 영양소 15개를 보여준다.
-칸마다 '같은 조건 사람 중 2025 KDRI 기준보다 적게 먹는 비율'로 부족(10명 중 5명 이상)·주의(3~4명)·충분(0~2명)을 나눈다 (기준은 `src/data/nutrientGuide.js`).
-영양소를 누르면 역할·대표 음식 카드가 나온다. 유환님 분석이 바뀌면:
+### 부족할 수 있는 영양소 `src/data/nutrientCells.json`
+유형 화면은 생활습관과 '부족할 수 있는 영양소'까지만 보여준다. 개인별 영양 위험 예측과 건강기능식품 안내는 개인화('더 알아보기', 준비 중)에서 한다.
+
+유환님 (나)안 결과에서 내 유형 × 성별 × 연령대 칸을 찾아 그대로 보여준다. 어떤 영양소를 고를지는 유환님 코드가 정한다.
+- 1줄 '대부분의 사람에게 부족해요': 공통 영양소 8개 (비타민 A·C·D·E, 엽산, 칼슘, 칼륨, 식이섬유)
+- 2줄 '내 유형에서 살펴볼 것': 공통 외에 부족 비율 ≥ 0.5 또는 (같은 성별·나이 대비 1.2배 이상 그리고 ≥ 0.3)
+  - "내 유형 10명 중 N명 / 같은 성별·나이 평균 10명 중 M명" + 문구(이 유형에서 특히 많아요 / 식사량 점검이 먼저예요 / 같은 성별·나이대에서 흔해요)
+  - 테두리 색: 10명 중 5명 이상 부족(분홍), 그 아래 주의(노랑). 없으면 "공통 영양소 외에 특히 더 부족한 영양소는 없어요"
+- 영양소를 누르면 역할·대표 음식 카드가 나온다 (`src/data/nutrientGuide.js`). 역할 문구에 질병 예방·치료 효과를 쓰지 않는다
+
+유환님 분석이 바뀌면:
 
 ```bash
 python scripts/build_nutrient_cells.py
 ```
 
-- 입력: `Yuhwan/영양분석/output/08_유형별_부족영양소_추천.json` (유환님 v8, 아직 작업 중이라 임시로 연결)
-- 영양소 이름·역할·대표 음식: `src/data/nutrientGuide.js` (역할 문구에 질병 예방·치료 효과를 쓰지 않는다)
-
-### 유형별 영양소 결과표 `src/data/nutrientProfiles.json`
-결과 화면의 '건강기능식품 원료'는 이 표에서 내 유형의 값을 찾아 보여준다.
-표가 비어 있으면 "결과가 준비되면 표시돼요"가 나온다.
-
-```bash
-python scripts/build_nutrient_profiles.py --nutrients <개인별 영양소 CSV>
-```
-
-- 입력 CSV: `ID`, `year` + 영양소별 열 (`<영양소키>_prob` 예측확률, 또는 `Jaejun/config/targets.json`의 실제 부족 여부 0/1)
-- 군집 결과(`Jiyeon/...xlsx`)와 `ID`·`year`로 합쳐 유형(대분류 4개 + 세부 20개)별 평균을 내고, `Jaejun/config/risk_thresholds.json` 기준으로 Low/Mid/High를 붙인다
-- 가중치를 적용하지 않은 표본 평균이다. 세부 유형 값이 없으면 대분류 값을 쓴다
-- ※ 이 스크립트는 예전 군집(대분류 4 + 세부 20)용이라 12개 유형에 맞게 다시 고쳐야 한다. 지금 결과표는 비어 있다
+- 입력: `Yuhwan/영양분석/output/13_유형화면_나안.json` (유환님 v9, (나)안 확정)
 
 ## 데이터·설문이 바뀌었을 때 점검 (`npm test`의 `src/lib/consistency.test.js`)
 다음이 어긋나면 테스트가 실패하고 무엇이 다른지 보여준다.
 - 군집 모델의 유형 ↔ `types.js`의 유형 이름·설명 ↔ 유형별 마스코트 그림
 - `src/data/nutrients.js`의 영양소 14종 ↔ `Jaejun/config/targets.json`
-- 영양소 결과표의 유형·영양소·등급, 영양소 신호등 결과표의 유형·칸·영양소
+- 부족할 수 있는 영양소 결과표의 유형·칸·영양소·공통 영양소
 - 웹 설문 문항 ↔ `Jaejun/config/survey_schema_v3.json` (문항이 추가되거나 보기 개수가 바뀌면 실패)
 
 ## 이미지 (`bigskyyang` 폴더에서)

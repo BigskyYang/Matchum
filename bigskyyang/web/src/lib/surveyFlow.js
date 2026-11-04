@@ -9,4 +9,7 @@ export function resolveStep(list, answers, requestedId, storedStep = 0) {
   return Math.min(Math.max(0, step), limit)
 }
 
-export const surveyPath = (q) => `/survey?q=${q.id}`
+// 단계마다 설문 주소가 다르다: 1단계 /survey, 2단계 /survey2
+export const surveyBase = (stage) => (stage === 2 ? '/survey2' : '/survey')
+export const resultPath = (stage) => (stage === 2 ? '/result2' : '/result')
+export const surveyPath = (q, stage = 1) => `${surveyBase(stage)}?q=${q.id}`

@@ -7,8 +7,6 @@ export function range(from, to, step = 1) {
   return out
 }
 
-export const daysInMonth = (year, month) => new Date(year, month, 0).getDate()
-
 // 0~23시 → '오전 7시', '오후 10시', '밤 12시'
 export function hourLabel(h) {
   if (h === 0) return '밤 12시'

@@ -1,45 +1,29 @@
 import { levelOf } from '../../lib/profile.js'
 
-// 생활습관 신호등: 영역마다 내 점수 막대 + 같은 유형 평균 눈금 + 좋아요/보통/노력 필요
+// 생활습관 신호등: 영역마다 작은 타일 (아이콘·이름·단계). 2열로 놓아 짧게 보이게 한다
+// habits: [{ key, icon, label, score(0~1) }]
 const TONE = {
-  good: { bar: 'bg-mint-strong', chip: 'bg-mint text-ink' },
-  fair: { bar: 'bg-[#f2c14e]', chip: 'bg-butter text-ink' },
-  poor: { bar: 'bg-primary-strong', chip: 'bg-primary-soft text-primary-shade' },
+  good: { tile: 'bg-mint', chip: 'bg-white text-mint-strong' },
+  fair: { tile: 'bg-butter', chip: 'bg-white text-ink' },
+  poor: { tile: 'bg-primary-soft', chip: 'bg-white text-primary-shade' },
 }
 
-export default function HabitSignals({ axes, mine, group }) {
+export default function HabitSignals({ habits }) {
   return (
-    <div>
-      <ul className="space-y-3">
-        {axes.map((axis, i) => {
-          const level = levelOf(mine[i])
-          const tone = TONE[level.tone]
-          return (
-            <li key={axis.key} className="flex items-center gap-3">
-              <span aria-hidden="true" className="w-6 text-center text-xl">
-                {axis.icon}
-              </span>
-              <span className="w-[4.5rem] shrink-0 text-sm font-semibold">{axis.label}</span>
-              <div className="relative h-3 flex-1 rounded-full bg-cream">
-                <div className={`h-full rounded-full ${tone.bar}`} style={{ width: `${Math.max(4, mine[i] * 100)}%` }} />
-                {/* 같은 유형 평균 */}
-                <div
-                  aria-hidden="true"
-                  className="absolute -top-1 h-5 w-0.5 rounded-full bg-ink/50"
-                  style={{ left: `calc(${group[i] * 100}% - 1px)` }}
-                />
-              </div>
-              <span className={`w-[4.25rem] shrink-0 rounded-full py-1 text-center text-xs font-bold ${tone.chip}`}>
-                {level.label}
-              </span>
-            </li>
-          )
-        })}
-      </ul>
-      <p className="mt-4 flex items-center justify-center gap-1.5 text-xs text-ink-faint">
-        <span aria-hidden="true" className="inline-block h-3 w-0.5 rounded-full bg-ink/50" />
-        같은 유형 평균
-      </p>
-    </div>
+    <ul className="grid grid-cols-2 gap-2">
+      {habits.map((h) => {
+        const level = levelOf(h.score)
+        const tone = TONE[level.tone]
+        return (
+          <li key={h.key} className={`flex items-center gap-2 rounded-card px-3 py-3 ${tone.tile}`}>
+            <span aria-hidden="true" className="text-xl">
+              {h.icon}
+            </span>
+            <span className="min-w-0 flex-1 text-sm leading-tight font-bold">{h.label}</span>
+            <span className={`shrink-0 rounded-full px-2 py-0.5 text-[0.7rem] font-bold ${tone.chip}`}>{level.label}</span>
+          </li>
+        )
+      })}
+    </ul>
   )
 }

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { visibleQuestions } from '../data/questions.js'
-import { ageFromBirth, encode, sleepHours } from './encode.js'
-import { SAMPLE } from './fixtures.js'
+import { ageFromYear, encode, sleepFromAverage, sleepHours } from './encode.js'
+import { SAMPLE, STAGE1_SAMPLE } from './fixtures.js'
 
 describe('sleepHours', () => {
   it('자정을 넘기는 수면을 계산한다', () => {
@@ -10,17 +10,14 @@ describe('sleepHours', () => {
   })
 })
 
-describe('ageFromBirth', () => {
-  it('생일이 지나지 않았으면 한 살 적다', () => {
-    const today = new Date(2026, 10, 2) // 2026-11-02
-    expect(ageFromBirth('2001-03-15', today)).toBe(25)
-    expect(ageFromBirth('2001-11-02', today)).toBe(25)
-    expect(ageFromBirth('2001-11-03', today)).toBe(24)
+describe('ageFromYear', () => {
+  it('올해 - 출생연도', () => {
+    expect(ageFromYear(2001, new Date(2026, 10, 4))).toBe(25)
   })
 })
 
 describe('encode', () => {
-  it('비흡연·비음주 응답을 0으로 변환한다', () => {
+  it('2단계에서 비흡연·비음주로 답하면 0', () => {
     const { features } = encode(SAMPLE)
     expect(features.ML_smoker).toBe(0)
     expect(features.ML_cigarettes_day).toBe(0)
@@ -29,13 +26,34 @@ describe('encode', () => {
     expect(features.ML_drink_amount_ord).toBe(0)
   })
 
-  it('유산소 기준은 중강도 + 고강도×2 ≥ 150분', () => {
-    expect(encode(SAMPLE).features.ML_aerobic).toBe(0) // 60 + 60 = 120
-    expect(encode({ ...SAMPLE, vigorous_min: 45 }).features.ML_aerobic).toBe(1) // 60 + 90 = 150
+  it('1단계만 답해도 변환된다 (2단계 값은 0 또는 null)', () => {
+    const { features, extras } = encode(STAGE1_SAMPLE)
+    expect(features.ML_smoker).toBe(0)
+    expect(features.ML_drink_freq_ord).toBe(0)
+    expect(extras.veg).toBeNull()
+    expect(extras.age).toBeGreaterThanOrEqual(19)
   })
 
-  it('평균 수면 = (주중×5 + 주말×2) / 7', () => {
+  it('유산소: 보기 "2시간 반 이상"만 주 150분 이상', () => {
+    expect(encode(SAMPLE).features.ML_aerobic).toBe(0)
+    expect(encode({ ...SAMPLE, activity: 3 }).features.ML_aerobic).toBe(1)
+  })
+
+  it('세 끼는 한 문항의 줄별 응답', () => {
+    const { features } = encode(SAMPLE)
+    expect([features.ML_breakfast_freq_ord, features.ML_lunch_freq_ord, features.ML_dinner_freq_ord]).toEqual([0, 3, 3])
+  })
+
+  it('평균 수면 = (주중×5 + 주말×2) / 7, 주말이 비슷하면 주중 값을 그대로', () => {
     expect(encode(SAMPLE).features.ML_sleep_hours).toBeCloseTo((6 * 5 + 8 * 2) / 7)
+    expect(encode({ ...SAMPLE, weekend_same: 'yes' }).features.ML_sleep_hours).toBeCloseTo(6)
+  })
+
+  it('수면이 들쭉날쭉하면 평균 시간을 2024 척도로 옮겨 쓰고, 미션 안내용으로 표시한다', () => {
+    const { features, extras } = encode({ ...SAMPLE, sleep_regular: 'no', sleep_avg: 7 * 60 })
+    expect(features.ML_sleep_hours).toBeCloseTo(sleepFromAverage(7))
+    expect(features.ML_sleep_hours).toBeGreaterThan(7) // 직접 답한 시간은 시각으로 계산한 것보다 짧게 나오는 경향
+    expect(extras.sleepIrregular).toBe(true)
   })
 
   it('스트레스 1·2 → 1', () => {
@@ -60,16 +78,40 @@ describe('encode', () => {
 })
 
 describe('visibleQuestions', () => {
-  it('비흡연·비음주자는 흡연량·음주 문항을 건너뛴다', () => {
-    const ids = visibleQuestions(SAMPLE).map((q) => q.id)
-    expect(ids).not.toContain('smoke_now')
-    expect(ids).not.toContain('cigarettes')
-    expect(ids).not.toContain('drink_freq')
-    expect(ids).toHaveLength(23) // 핵심 26문항 + 선택 여부 1 - 흡연 2 - 음주 2 (선택 문항은 답하기 전이라 숨김)
+  it('1단계는 유형 분류 문항만, 수면이 일정하고 주말이 다르면 시각 4개', () => {
+    const ids = visibleQuestions(SAMPLE, 1).map((q) => q.id)
+    expect(ids).toEqual([
+      'sex',
+      'birth_year',
+      'activity',
+      'strength_days',
+      'sedentary_min',
+      'sleep_regular',
+      'weekday_bed',
+      'weekday_wake',
+      'weekend_same',
+      'weekend_bed',
+      'weekend_wake',
+      'stress',
+      'meals',
+      'eating_out',
+    ])
+  })
+
+  it('수면이 들쭉날쭉하면 시각 대신 평균 시간 한 문항', () => {
+    const ids = visibleQuestions({ ...SAMPLE, sleep_regular: 'no' }, 1).map((q) => q.id)
+    expect(ids).toContain('sleep_avg')
+    expect(ids).not.toContain('weekday_bed')
+    expect(ids).not.toContain('weekend_same')
+  })
+
+  it('2단계: 비흡연·비음주자는 흡연량·음주 문항을 건너뛴다', () => {
+    const ids = visibleQuestions(SAMPLE, 2).map((q) => q.id)
+    expect(ids).toEqual(['smoke_100', 'drink_ever', 'veg', 'fruit', 'protein', 'dairy', 'extra'])
   })
 
   it('최근 1년 음주를 안 했으면 음주량 문항만 건너뛴다', () => {
-    const ids = visibleQuestions({ ...SAMPLE, drink_ever: 'yes', drink_freq: 0 }).map((q) => q.id)
+    const ids = visibleQuestions({ ...SAMPLE, drink_ever: 'yes', drink_freq: 0 }, 2).map((q) => q.id)
     expect(ids).toContain('drink_freq')
     expect(ids).not.toContain('drink_amount')
   })

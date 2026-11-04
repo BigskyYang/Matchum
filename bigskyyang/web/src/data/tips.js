@@ -1,18 +1,21 @@
 // 응답자 본인의 생활습관에서 개선할 점을 골라 보여주는 규칙. 배열 순서가 우선순위다.
 // when(features, extras): 해당하면 true
-//   mission: 결과 화면 '오늘부터 해볼 미션' 카드 { icon, title, detail }
-//   foods:   '챙겨 먹으면 좋은 음식' 타일 [{ emoji, label, why }]
+//   personal: true면 2단계 문항(흡연·음주·채소·과일·식품)을 쓰는 팁 → 개인 결과에만, 없으면 유형 결과에
+//   mission: '이번 주 해볼 것' { icon, title, detail }
+//   foods:   '챙겨 먹으면 좋은 음식' 타일 [{ emoji, label, why }] (개인 결과)
 // ※ 의료적 효능을 말하지 않고, 일반적인 생활·식생활 정보 수준으로 쓴다.
 
 export const TIPS = [
   {
     id: 'smoke',
+    personal: true,
     when: (f) => f.ML_smoker === 1,
     mission: { icon: '🚭', title: '금연 상담 받아보기', detail: '가까운 보건소 금연클리닉에서 무료로 상담받을 수 있어요.' },
     foods: [{ emoji: '🍊', label: '귤·키위', why: '매일 간식으로' }],
   },
   {
     id: 'drink',
+    personal: true,
     when: (f) => f.ML_drink_freq_ord >= 4 || f.ML_drink_amount_ord >= 3,
     mission: { icon: '🍶', title: '술자리 한 번 줄이기', detail: '횟수와 한 번에 마시는 양을 조금씩 줄여 보세요.' },
     foods: [{ emoji: '🐟', label: '두부·생선 안주', why: '술 마실 때 함께' }],
@@ -69,17 +72,20 @@ export const TIPS = [
   },
   {
     id: 'veg',
-    when: (_, x) => x.veg < 6,
+    personal: true,
+    when: (_, x) => x.veg !== null && x.veg < 6,
     foods: [{ emoji: '🥦', label: '채소·나물', why: '하루 한 번 이상' }],
   },
   {
     id: 'fruit',
-    when: (_, x) => x.fruit < 6,
+    personal: true,
+    when: (_, x) => x.fruit !== null && x.fruit < 6,
     foods: [{ emoji: '🍎', label: '과일', why: '하루 1~2회 간식' }],
   },
   {
     id: 'protein',
-    when: (_, x) => x.proteinServings < 1,
+    personal: true,
+    when: (_, x) => x.proteinServings !== null && x.proteinServings < 1,
     foods: [
       { emoji: '🥚', label: '달걀', why: '매끼 단백질' },
       { emoji: '🫘', label: '콩·두부', why: '매끼 단백질' },
@@ -87,7 +93,8 @@ export const TIPS = [
   },
   {
     id: 'dairy',
-    when: (_, x) => x.dairyServings < 1,
+    personal: true,
+    when: (_, x) => x.dairyServings !== null && x.dairyServings < 1,
     foods: [{ emoji: '🧀', label: '치즈·요구르트', why: '하루 1회 이상' }],
   },
 ]
@@ -100,4 +107,6 @@ export const BALANCED_FOODS = [
   { emoji: '🍎', label: '과일', why: '골고루' },
 ]
 
-export const pickTips = (features, extras) => TIPS.filter((t) => t.when(features, extras))
+// personal: false = 유형 결과용 팁, true = 개인 결과용 팁
+export const pickTips = (features, extras, personal = false) =>
+  TIPS.filter((t) => Boolean(t.personal) === personal && t.when(features, extras))

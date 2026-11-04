@@ -1,66 +1,18 @@
 import { describe, expect, it } from 'vitest'
-import { NUTRIENTS } from '../data/nutrients.js'
 import { visibleQuestions } from '../data/questions.js'
 import { encode } from './encode.js'
 import { SAMPLE } from './fixtures.js'
-import { ageGroup, lookupProfile, nutrientSignals, rankNutrients, supplementsFor } from './nutrition.js'
-
-// 결과표 형식 예시 (scripts/build_nutrient_profiles.py가 만드는 형식과 같다)
-const PROFILES = {
-  types: {
-    Group_1: {
-      n: 100,
-      nutrients: {
-        calcium: { rate: 0.9, band: 'High' },
-        vitamin_c: { rate: 0.8, band: 'High' },
-        potassium: { rate: 0.95, band: 'High' },
-        protein: { rate: 0.1, band: 'Mid' },
-        iron: { rate: 0.02, band: 'Low' },
-      },
-    },
-    'Group_1-1_A': { n: 30, nutrients: { zinc: { rate: 0.4, band: 'High' } } },
-  },
-}
-
-describe('lookupProfile', () => {
-  it('세부 유형이 있으면 세부 유형, 없으면 대분류 값을 쓴다', () => {
-    expect(lookupProfile(PROFILES, 'Group_1-1_A', 'Group_1').label).toBe('Group_1-1_A')
-    expect(lookupProfile(PROFILES, 'Group_1-0_B', 'Group_1').label).toBe('Group_1')
-    expect(lookupProfile(PROFILES, 'Group_2-0', 'Group_2')).toBeNull()
-    expect(lookupProfile({ types: {} }, 'Group_1-0_B', 'Group_1')).toBeNull()
-  })
-})
-
-describe('rankNutrients', () => {
-  const ranked = rankNutrients(lookupProfile(PROFILES, 'Group_1-0_B', 'Group_1'))
-
-  it('주의 → 보통 → 양호, 같은 등급은 비율 높은 순', () => {
-    expect(ranked.map((n) => n.key)).toEqual(['potassium', 'calcium', 'vitamin_c', 'protein', 'iron'])
-  })
-
-  it('예측 정확도가 낮은 영양소는 참고로 표시한다', () => {
-    expect(ranked.find((n) => n.key === 'vitamin_c').reliable).toBe(false)
-    expect(ranked.find((n) => n.key === 'calcium').reliable).toBe(true)
-  })
-
-  it('건강기능식품 원료는 주의 등급이면서 원료가 있는 영양소만 (칼륨은 음식으로만)', () => {
-    expect(supplementsFor(ranked)).toEqual(['칼슘', '비타민 C'])
-  })
-
-  it('영양소 정보는 Jaejun 모델의 14개와 같다', () => {
-    expect(NUTRIENTS).toHaveLength(14)
-  })
-})
+import { ageGroup, typeNutrients } from './nutrition.js'
 
 describe('선택 문항 (PHQ-9·대사건강)', () => {
   it('결과 바로 보기를 고르면 선택 문항이 나오지 않고 optional은 null', () => {
-    const ids = visibleQuestions({ ...SAMPLE, extra: 'skip' }).map((q) => q.id)
+    const ids = visibleQuestions({ ...SAMPLE, extra: 'skip' }, 2).map((q) => q.id)
     expect(ids).not.toContain('phq1')
     expect(encode({ ...SAMPLE, extra: 'skip' }).extras.optional).toBeNull()
   })
 
   it('추가 질문을 고르면 PHQ-9 9문항 + 대사건강 3문항이 나온다', () => {
-    const ids = visibleQuestions({ ...SAMPLE, extra: 'more' }).map((q) => q.id)
+    const ids = visibleQuestions({ ...SAMPLE, extra: 'more' }, 2).map((q) => q.id)
     expect(ids.filter((id) => id.startsWith('phq'))).toHaveLength(9)
     expect(ids.filter((id) => id.startsWith('dx_'))).toHaveLength(3)
   })
@@ -76,15 +28,21 @@ describe('선택 문항 (PHQ-9·대사건강)', () => {
   })
 })
 
-describe('영양소 신호등', () => {
+describe('부족할 수 있는 영양소 ((나)안)', () => {
+  // 유환님 결과 형식 예시 (scripts/build_nutrient_cells.py가 만드는 형식)
   const CELLS = {
     types: {
       N2: {
         2: {
           '30-49': {
-            iron: { p: 0.57, vs: 1.35, tag: '유형특이' },
-            protein: { p: 0.34, vs: 1.36, tag: '' },
-            zinc: { p: 0.12, vs: 0.9, tag: '' },
+            line1: [
+              { key: 'vitamin_d', of10: 10 },
+              { key: 'calcium', of10: 7 },
+            ],
+            line2: [
+              { key: 'iron', of10: 6, peerOf10: 4, text: '이 유형에서 특히 많아요' },
+              { key: 'zinc', of10: 4, peerOf10: 3, text: '식사량 점검이 먼저예요' },
+            ],
           },
         },
       },
@@ -97,26 +55,21 @@ describe('영양소 신호등', () => {
     ])
   })
 
-  it('내 유형·성별·연령대 칸을 찾아 부족 비율이 높은 순으로, 부족·주의·충분을 붙인다', () => {
-    const items = nutrientSignals(CELLS, 'N2', 2, 35)
-    expect(items.map((n) => [n.key, n.level.label])).toEqual([
-      ['iron', '부족'],
-      ['protein', '주의'],
-      ['zinc', '충분'],
+  it('내 유형·성별·연령대 칸의 1줄·2줄을 순서 그대로 가져오고 영양소 이름·역할을 붙인다', () => {
+    const { common, picks } = typeNutrients(CELLS, 'N2', 2, 35)
+    expect(common.map((n) => [n.label, n.of10])).toEqual([
+      ['비타민 D', 10],
+      ['칼슘', 7],
     ])
-    expect(items[0]).toMatchObject({ label: '철', basis: 'EAR', tag: '유형특이', of10: 6 })
+    expect(picks.map((n) => [n.label, n.of10, n.peerOf10, n.level.label])).toEqual([
+      ['철', 6, 4, '부족'],
+      ['아연', 4, 3, '주의'],
+    ])
+    expect(picks[0]).toMatchObject({ basis: 'EAR', text: '이 유형에서 특히 많아요', role: expect.any(String) })
   })
 
-  it('단계는 화면에 보이는 10명 중 N명(반올림)으로 정한다', () => {
-    const cells = { types: { N2: { 2: { '30-49': { protein: { p: 0.29 }, zinc: { p: 0.24 } } } } } }
-    expect(nutrientSignals(cells, 'N2', 2, 35).map((n) => [n.of10, n.level.label])).toEqual([
-      [3, '주의'],
-      [2, '충분'],
-    ])
-  })
-
-  it('칸이 없으면 빈 목록', () => {
-    expect(nutrientSignals(CELLS, 'N2', 1, 35)).toEqual([])
-    expect(nutrientSignals(CELLS, 'O3', 2, 35)).toEqual([])
+  it('칸이 없으면 null', () => {
+    expect(typeNutrients(CELLS, 'N2', 1, 35)).toBeNull()
+    expect(typeNutrients(CELLS, 'O3', 2, 35)).toBeNull()
   })
 })

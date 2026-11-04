@@ -1,5 +1,6 @@
-// 영양소 14종 정보 (Jaejun/config/targets.json, Jaejun/README.md 기준)
-// auc: 2024 독립검증 AUC. RELIABLE_AUC 미만은 결과 화면에서 '참고'로 표시한다
+// 개인화('더 알아보기')용 영양소 14종 정보: 재준님 개인 예측 모델 (Jaejun/config/targets.json, Jaejun/README.md 기준)
+// 유형 화면의 '부족할 수 있는 영양소'는 이 파일이 아니라 nutrientGuide.js를 쓴다
+// auc: 2024 독립검증 AUC. RELIABLE_AUC 미만은 '참고'로 표시할 예정
 // foods: 챙겨 먹으면 좋은 대표 음식, supplement: 고려해 볼 수 있는 건강기능식품 원료(없으면 음식으로만 안내)
 // excess: true면 '부족'이 아니라 '과잉' 위험
 
