@@ -29,7 +29,6 @@ export const sleepFromAverage = (hours) =>
   ((hours - SLEEP_ASKED.mean) / SLEEP_ASKED.std) * SLEEP_2024.std + SLEEP_2024.mean
 
 const FFQ_KEYS = ['meat', 'fish', 'egg', 'legume', 'dairy']
-const HEALTH_KEYS = ['pregnant', 'kidney', 'anticoagulant', 'hypertension', 'diabetes', 'dyslipidemia']
 
 function sleepOf(a) {
   if (a.sleep_regular === 'no') return { hours: sleepFromAverage(a.sleep_avg / 60), irregular: true }
@@ -40,7 +39,8 @@ function sleepOf(a) {
 
 export function encode(a) {
   // 앞 문항 응답을 바꿔 건너뛰게 된 문항의 옛 응답은 무시한다
-  // 현재 흡연 = 요즘 매일·가끔 피움 (KNHANES는 '평생 100개비 이상'도 보지만, 지금 피우는 사람은 거의 모두 해당한다)
+  // 현재 흡연 = 요즘 매일·가끔 피움, 전자담배 포함
+  // (KNHANES 학습 자료는 '궐련 평생 100개비 이상 + 현재 흡연'. 지금 피우는 사람은 거의 모두 해당하고, 전자담배만 피우는 사람만 다르다)
   const smoker = a.smoke_now === 'daily' || a.smoke_now === 'sometimes' ? 1 : 0
   const drinkFreq = a.drink_freq ?? 0
   const drinkAmount = drinkFreq > 0 ? a.drink_amount : 0
@@ -75,17 +75,7 @@ export function encode(a) {
     fruit: a.fruit ?? null,
     // mini-FFQ 5문항 (재준님 mini-FFQ 모델 입력 meat_ord … dairy_ord, 0~7). 65세 이상은 묻지 않아 null
     ffq: FFQ_KEYS.every((k) => a[`ffq_${k}`] !== undefined) ? Object.fromEntries(FFQ_KEYS.map((k) => [k, a[`ffq_${k}`]])) : null,
-    // 건강 상태 (안전 문항 + 대사질환 진단)
-    health: Object.fromEntries(HEALTH_KEYS.map((k) => [k, (a.health ?? []).includes(k)])),
-    supplements: (a.supplements ?? []).filter((v) => v !== 'none'),
-    // 선택 문항(PHQ-9): 답하지 않았으면 null
-    optional: a.extra === 'more' ? optionalAnswers(a) : null,
   }
 
   return { features, extras }
-}
-
-function optionalAnswers(a) {
-  const phq = Array.from({ length: 9 }, (_, i) => a[`phq${i + 1}`] ?? 0)
-  return { phqTotal: phq.reduce((sum, v) => sum + v, 0), phqItem9: phq[8] }
 }

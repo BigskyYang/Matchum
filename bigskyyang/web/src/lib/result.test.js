@@ -66,16 +66,11 @@ describe('buildPersonalResult (2단계 개인 결과)', () => {
     expect(smoker.missions.map((m) => m.icon)).toContain('🚭')
   })
 
-  it('해당 없음이면 마음·대사 건강 카드와 상담 강조가 없다', () => {
-    expect(r.optional).toBeNull()
-    expect(r.hasCondition).toBe(false)
-    expect(r.consult).toBeNull()
+  it('mini-FFQ에 답했는지 (65세 이상은 묻지 않음)', () => {
     expect(r.ffqAsked).toBe(true)
-  })
-
-  it('건강 상태에 따라 상담 문구 (임신·수유가 가장 먼저)', () => {
-    expect(buildPersonalResult({ ...SAMPLE, health: ['kidney'] }).consult).toBe('caution')
-    expect(buildPersonalResult({ ...SAMPLE, health: ['pregnant', 'kidney'] }).consult).toBe('pregnant')
-    expect(buildPersonalResult({ ...SAMPLE, health: ['diabetes'] }).hasCondition).toBe(true)
+    const year = new Date().getFullYear()
+    const older = { ...SAMPLE, birth_year: year - 70 }
+    for (const k of ['meat', 'fish', 'egg', 'legume', 'dairy']) delete older[`ffq_${k}`]
+    expect(buildPersonalResult(older).ffqAsked).toBe(false)
   })
 })

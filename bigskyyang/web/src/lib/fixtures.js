@@ -25,13 +25,11 @@ export const SAMPLE = {
   ffq_egg: 3,
   ffq_legume: 2,
   ffq_dairy: 2,
-  health: ['none'],
-  supplements: ['none'],
 }
 
 // 1단계까지만 답한 상태
 export const STAGE1_SAMPLE = Object.fromEntries(
   Object.entries(SAMPLE).filter(
-    ([k]) => !['smoke_now', 'drink_freq', 'veg', 'fruit', 'health', 'supplements'].includes(k) && !k.startsWith('ffq_'),
+    ([k]) => !['smoke_now', 'drink_freq', 'veg', 'fruit'].includes(k) && !k.startsWith('ffq_'),
   ),
 )

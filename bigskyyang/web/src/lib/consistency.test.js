@@ -112,10 +112,12 @@ const SCHEMA_TO_WEB = {
   Q24: 'fruit',
   Q25: { removed: '재준님 최종 설문(SURVEY_FINAL)의 mini-FFQ 5문항(ffq_meat … ffq_dairy)으로 바꿈' },
   Q26: { removed: '재준님 최종 설문(SURVEY_FINAL)의 mini-FFQ 5문항으로 바꿈' },
-  ...Object.fromEntries(Array.from({ length: 9 }, (_, i) => [`Q${27 + i}`, `phq${i + 1}`])),
-  Q36: { merged: 'health' }, // 대사질환 3문항 + 안전 문항을 '해당하는 것 모두 고르기' 한 화면으로
-  Q37: { merged: 'health' },
-  Q38: { merged: 'health' },
+  // PHQ-9·대사질환 진단은 묻지 않는다: 점수 해석이나 질환별 조언이 진단·처방처럼 보일 소지가 있고(의료법),
+  // 영양 예측 모델에도 쓰지 않는다. 건강 정보(민감정보)도 꼭 필요한 만큼만 받는다
+  ...Object.fromEntries(Array.from({ length: 9 }, (_, i) => [`Q${27 + i}`, { removed: 'PHQ-9: 우울 점수 해석이 진단처럼 보일 소지' }])),
+  Q36: { removed: '대사질환 진단: 질환별 식사 조언이 처방처럼 보일 소지' },
+  Q37: { removed: '대사질환 진단' },
+  Q38: { removed: '대사질환 진단' },
 }
 
 describe('설문 문항 ↔ 설문 v3 (Jaejun/config/survey_schema_v3.json)', () => {
@@ -147,8 +149,9 @@ describe('설문 문항 ↔ 설문 v3 (Jaejun/config/survey_schema_v3.json)', ()
   })
 })
 
-// 재준님 최종 설문(Jaejun/SURVEY_FINAL.md)의 mini-FFQ·안전 문항 ↔ 웹
-describe('설문 ↔ 재준님 최종 설문 (mini-FFQ·안전 문항)', () => {
+// 재준님 최종 설문(Jaejun/SURVEY_FINAL.md)의 mini-FFQ ↔ 웹
+// (제품 추천 안전 문항 4가지는 웹에서 건강기능식품 제품을 추천하지 않으므로 묻지 않는다)
+describe('설문 ↔ 재준님 최종 설문 (mini-FFQ)', () => {
   const web = Object.fromEntries(QUESTIONS.map((q) => [q.id, q]))
 
   it('mini-FFQ 5문항, 보기 8단계 0~7 (Jaejun/src/mini_ffq.py FOOD_FREQ_ORD)', () => {
@@ -157,8 +160,4 @@ describe('설문 ↔ 재준님 최종 설문 (mini-FFQ·안전 문항)', () => {
     }
   })
 
-  it('안전 문항 4가지(영양제·임신수유·항응고제·신장질환)가 있다 (Jaejun/config/supplement_safety_rules.json)', () => {
-    expect(web.supplements).toBeDefined()
-    expect(web.health.options.map((o) => o.value)).toEqual(expect.arrayContaining(['pregnant', 'anticoagulant', 'kidney']))
-  })
 })

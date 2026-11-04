@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { QUESTIONS, optionsFor, visibleQuestions } from '../data/questions.js'
+import { visibleQuestions } from '../data/questions.js'
 import { ageFromYear, encode, sleepFromAverage, sleepHours } from './encode.js'
 import { SAMPLE, STAGE1_SAMPLE } from './fixtures.js'
 
@@ -78,13 +78,6 @@ describe('encode', () => {
     expect(encode(SAMPLE).extras.ffq).toEqual({ meat: 3, fish: 2, egg: 3, legume: 2, dairy: 2 })
     expect(encode({ ...SAMPLE, ffq_dairy: undefined }).extras.ffq).toBeNull()
   })
-
-  it('건강 상태·영양제 여러 개 고르기', () => {
-    const { extras } = encode({ ...SAMPLE, health: ['kidney', 'hypertension'], supplements: ['vitamin_d', 'omega3'] })
-    expect(extras.health).toMatchObject({ kidney: true, hypertension: true, pregnant: false, diabetes: false })
-    expect(extras.supplements).toEqual(['vitamin_d', 'omega3'])
-    expect(encode(SAMPLE).extras.supplements).toEqual([])
-  })
 })
 
 describe('visibleQuestions', () => {
@@ -127,9 +120,6 @@ describe('visibleQuestions', () => {
       'ffq_egg',
       'ffq_legume',
       'ffq_dairy',
-      'health',
-      'supplements',
-      'extra',
     ])
   })
 
@@ -144,16 +134,5 @@ describe('visibleQuestions', () => {
     const ids = visibleQuestions({ ...SAMPLE, birth_year: year - 70 }, 2).map((q) => q.id)
     expect(ids.filter((id) => id.startsWith('ffq_'))).toEqual([])
     expect(visibleQuestions({ ...SAMPLE, birth_year: year - 64 }, 2).map((q) => q.id)).toContain('ffq_meat')
-  })
-})
-
-describe('optionsFor', () => {
-  const health = QUESTIONS.find((q) => q.id === 'health')
-  const year = new Date().getFullYear()
-
-  it('임신·수유 보기는 19~49세 여성에게만', () => {
-    expect(optionsFor(health, { sex: 2, birth_year: year - 30 }).map((o) => o.value)).toContain('pregnant')
-    expect(optionsFor(health, { sex: 1, birth_year: year - 30 }).map((o) => o.value)).not.toContain('pregnant')
-    expect(optionsFor(health, { sex: 2, birth_year: year - 55 }).map((o) => o.value)).not.toContain('pregnant')
   })
 })

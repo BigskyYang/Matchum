@@ -1,8 +1,10 @@
 // 설문 문항 정의. 응답 → 모델 변수 변환은 lib/encode.js에서 한다.
 // 문항 구성은 Jaejun/SURVEY_V3.md(설문 v3)를 바탕으로, 두 단계로 나눴다.
 //   stage 1: 유형 분류에 쓰는 생활습관 (지연님 12개 유형 모델 입력 + 성별·나이) → 유형 결과
-//   stage 2: 개인 결과에 쓰는 문항 (흡연·음주·채소·과일, mini-FFQ 5문항, 건강 상태·영양제, 선택 문항 PHQ-9) → 개인 결과
+//   stage 2: 개인 결과에 쓰는 문항 (흡연·음주·채소·과일, mini-FFQ 5문항) → 개인 결과
 //            문항은 재준님 최종 설문(Jaejun/SURVEY_FINAL.md)을 따르되, 답하기 쉽게 줄였다 (흡연·음주 첫 문항 생략)
+//            진단처럼 보이거나 건강기능식품 제품 추천에만 쓰이는 문항(PHQ-9, 질환·임신·약물, 지금 먹는 영양제)은 묻지 않는다
+//            (의료법상 진단·처방으로 보일 소지, 건강기능식품 광고 규제, 민감정보 최소 수집)
 //            2단계는 1단계 응답을 그대로 이어 쓴다 (재준님 개인 예측 모델도 1단계 변수를 입력으로 쓴다)
 //
 // type
@@ -11,8 +13,6 @@
 //   number   : 숫자 휠 { unit, min, max, initial }
 //   time     : 시각 'HH:MM' 휠 { initial, hourStart: 시 목록을 몇 시부터 보여줄지 }
 //   duration : 시간 + 분 → 분 단위 숫자 휠 { per: '일주일에' | '하루', maxHours, initial(분) }
-//   multi    : 여러 개 고르기 → 응답은 값 배열. 보기에 exclusive: true면 그것만 고를 수 있다 ('해당 없어요'),
-//              보기마다 showIf(answers)로 숨길 수 있다
 // layout (choice): 'list' 한 줄에 하나 | 'grid' 2열 | 'row' 한 줄에 모두 (짧은 숫자 보기)
 // initial: 처음 화면에 맞춰져 있는 값 (많이 고르는 값을 기준으로)
 // showIf(answers): false면 해당 문항을 건너뛴다
@@ -59,39 +59,7 @@ export const SECTIONS = {
   meal: '식사습관',
   veg: '채소·과일',
   food: '평소 식사',
-  health: '건강 상태',
-  supplement: '영양제',
-  extra: '선택 문항',
-  mind: '마음 건강',
-  metabolic: '대사 건강',
 }
-
-// 선택 문항 영역 (진행률을 핵심 문항과 따로 센다)
-export const OPTIONAL_SECTIONS = ['mind']
-
-const wantsExtra = (a) => a.extra === 'more'
-
-// PHQ-9 응답 (값 = 점수 0~3)
-const PHQ_OPTIONS = [
-  { label: '전혀 아니다', value: 0 },
-  { label: '여러 날 동안', value: 1 },
-  { label: '일주일 이상', value: 2 },
-  { label: '거의 매일', value: 3 },
-]
-
-// 국민건강영양조사 PHQ-9 한국어판 문항
-const PHQ_ITEMS = [
-  '일 또는 여가 활동을 하는 데 흥미나 즐거움을 느끼지 못함',
-  '기분이 가라앉거나, 우울하거나, 희망이 없음',
-  '잠이 들거나 계속 잠을 자는 것이 어려움, 또는 잠을 너무 많이 잠',
-  '피곤하다고 느끼거나 기운이 거의 없음',
-  '입맛이 없거나 과식을 함',
-  '자신을 부정적으로 봄. 혹은 자신이 실패자라고 느끼거나 자신 또는 가족을 실망시킴',
-  '신문을 읽거나 텔레비전을 보는 것과 같은 일에 집중하는 것이 어려움',
-  '다른 사람들이 주목할 정도로 너무 느리게 움직이거나 말을 함. 또는 반대로 평상시보다 많이 움직여서 너무 안절부절못하거나 들떠 있음',
-  '차라리 죽는 것이 더 낫겠다고 생각하거나 어떤 식으로든 자신을 해칠 것이라고 생각함',
-]
-
 
 const isRegularSleep = (a) => a.sleep_regular === 'yes'
 const weekendDiffers = (a) => a.sleep_regular === 'yes' && a.weekend_same === 'no'
@@ -253,12 +221,12 @@ const FFQ_ITEMS = [
 ]
 
 const STAGE_2 = [
-  // 흡연 (값 → ML_smoker: 매일·가끔 = 1)
+  // 흡연 (값 → ML_smoker: 매일·가끔 = 1). 전자담배도 포함한다 (KNHANES 학습 자료는 궐련 기준이라 약간 다르다)
   {
     id: 'smoke_now',
     section: 'smoke',
-    title: '요즘 담배(궐련)를 피우시나요?',
-    help: ['전자담배만 피운다면 "피운 적 없어요"를 골라 주세요.'],
+    title: '담배를 피우시나요?',
+    help: ['전자담배도 포함해요.'],
     type: 'choice',
     options: [
       { label: '매일 피워요', value: 'daily' },
@@ -270,7 +238,8 @@ const STAGE_2 = [
   {
     id: 'cigarettes',
     section: 'smoke',
-    title: '담배를 피우는 날에는 하루 평균 몇 개비 정도 피우십니까?',
+    title: '담배를 피우는 날에는 하루 평균 몇 개비 정도 피우시나요?',
+    help: ['전자담배는 담배 1개비를 피우는 정도를 1개비로 세어 주세요.'],
     type: 'number',
     unit: '개비',
     min: 1,
@@ -330,74 +299,9 @@ const STAGE_2 = [
     options: FOOD_FREQ_8,
     showIf: ffqAge,
   })),
-
-  // 건강 상태 (건강기능식품 안전 문항 + 대사질환 진단. 결과 해석용, 영양 예측에는 쓰지 않는다)
-  {
-    id: 'health',
-    section: 'health',
-    title: '해당하는 것을 모두 골라 주세요.',
-    help: ['결과를 안전하게 안내하는 데만 써요. 이 휴대폰 밖으로 보내지 않아요.'],
-    type: 'multi',
-    options: [
-      { label: '임신 중이거나 수유 중이에요', value: 'pregnant', showIf: (a) => a.sex === 2 && ageOf(a) <= 49 },
-      { label: '신장질환이 있거나 신장결석을 앓은 적이 있어요', value: 'kidney' },
-      { label: '항응고제나 아스피린을 먹고 있어요', value: 'anticoagulant' },
-      { label: '고혈압 진단을 받았어요', value: 'hypertension' },
-      { label: '당뇨병 진단을 받았어요', value: 'diabetes' },
-      { label: '이상지질혈증(고지혈증) 진단을 받았어요', value: 'dyslipidemia' },
-      { label: '해당 없어요', value: 'none', exclusive: true },
-    ],
-  },
-  // 지금 먹는 영양제 (겹치는 성분 확인용)
-  {
-    id: 'supplements',
-    section: 'supplement',
-    title: '요즘 챙겨 먹는 영양제를 모두 골라 주세요.',
-    type: 'multi',
-    options: [
-      { label: '종합비타민', value: 'multivitamin' },
-      { label: '비타민 D', value: 'vitamin_d' },
-      { label: '비타민 C', value: 'vitamin_c' },
-      { label: '비타민 B군', value: 'vitamin_b' },
-      { label: '칼슘', value: 'calcium' },
-      { label: '마그네슘', value: 'magnesium' },
-      { label: '철분', value: 'iron' },
-      { label: '오메가3', value: 'omega3' },
-      { label: '유산균', value: 'probiotics' },
-      { label: '그 밖의 영양제', value: 'other' },
-      { label: '먹지 않아요', value: 'none', exclusive: true },
-    ],
-  },
-
-  // 선택 문항 여부
-  {
-    id: 'extra',
-    section: 'extra',
-    title: '거의 다 왔어요! 마음 건강 질문(9개)도 답해 볼까요?',
-    help: ['선택 문항이에요. 결과 화면에서 간단한 안내만 드려요.', '응답은 이 휴대폰에만 잠시 저장되고 어디에도 전송되지 않아요.'],
-    type: 'choice',
-    options: [
-      { label: '결과 바로 보기', value: 'skip' },
-      { label: '마음 건강 질문 답하기 (선택)', value: 'more' },
-    ],
-  },
-
-  // 12. 마음 건강 (PHQ-9)
-  ...PHQ_ITEMS.map((text, i) => ({
-    id: `phq${i + 1}`,
-    section: 'mind',
-    title: text,
-    help: ['지난 2주 동안 이런 문제를 얼마나 자주 겪었는지 골라 주세요.'],
-    type: 'choice',
-    options: PHQ_OPTIONS,
-    showIf: wantsExtra,
-  })),
 ]
 
 export const QUESTIONS = [...STAGE_1.map((q) => ({ ...q, stage: 1 })), ...STAGE_2.map((q) => ({ ...q, stage: 2 }))]
-
-// 여러 개 고르기 문항에서 지금 응답 기준으로 보여 줄 보기
-export const optionsFor = (q, answers) => q.options.filter((o) => !o.showIf || o.showIf(answers))
 
 // 지금 응답 기준으로 그 단계에서 보여줄 문항만 남긴다
 export const visibleQuestions = (answers, stage = 1) =>

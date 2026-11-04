@@ -4,22 +4,13 @@ import { SecondaryButton } from '../components/PrimaryButton.jsx'
 import Card from '../components/result/Card.jsx'
 import FoodGrid from '../components/result/FoodGrid.jsx'
 import HabitSignals from '../components/result/HabitSignals.jsx'
-import MetabolicCard from '../components/result/MetabolicCard.jsx'
-import MindCard from '../components/result/MindCard.jsx'
 import MissionList from '../components/result/MissionList.jsx'
 import { buildPersonalResult } from '../lib/result.js'
 import { clearSurvey, loadSurvey } from '../lib/storage.js'
 
 // 2단계 개인 결과 (나만 보기). 보여 줄 값은 lib/result.js의 buildPersonalResult가 계산한다
-// 개인 영양 위험 예측(재준님 모델)과 건강기능식품 정보는 연결 준비 중
+// 개인 영양 위험 예측(재준님 모델)은 연결 준비 중. 우울 점수·질환별 조언·건강기능식품 제품 추천은 하지 않는다
 
-// 건강 상태 응답에 따른 상담 문구. 어떤 영양제를 피하라고 하지 않고, 상담만 권한다 (11/3 회의 원칙)
-const CONSULT = {
-  pregnant: '임신·수유 중에는 건강기능식품을 먹기 전에 꼭 담당 의사와 먼저 상의하세요.',
-  caution: '앓고 있는 질환이나 먹고 있는 약이 있으니, 건강기능식품은 꼭 담당 의사·약사와 먼저 상의하세요.',
-  condition: '진단받은 질환이 있으니, 건강기능식품을 고를 때는 꼭 담당 의사·약사와 먼저 상의하세요.',
-  default: '질환이 있거나 약을 먹고 있다면 건강기능식품을 먹기 전에 의사·약사와 상담하세요.',
-}
 function useResult() {
   return useMemo(() => {
     const { answers, done } = loadSurvey()
@@ -58,35 +49,21 @@ export default function PersonalResultPage() {
 
       <Card title="나의 영양소 부족 위험" icon="🔍">
         <p className="text-sm leading-relaxed text-ink-soft">
-          내 응답으로 영양소별 부족 위험을 따로 예측하고, 그에 맞는 건강기능식품 정보를 알려 주는 기능을 준비하고 있어요.
+          내 응답으로 영양소별 섭취 부족 위험을 따로 예측해 보여 주는 기능을 준비하고 있어요.
         </p>
         {!r.ffqAsked && (
           <p className="mt-2 text-xs leading-relaxed text-ink-faint">
             평소 식사 기준 예측은 19~64세에서만 검증돼, 65세 이상은 생활습관 기준으로만 알려 드릴 예정이에요.
           </p>
         )}
-        <p className={`mt-3 text-xs leading-relaxed ${r.consult || r.hasCondition ? 'font-semibold text-primary-shade' : 'text-ink-faint'}`}>
-          {CONSULT[r.consult ?? (r.hasCondition ? 'condition' : 'default')]}
-        </p>
       </Card>
-
-      {r.optional && (
-        <Card title="마음 건강 체크" icon="💗">
-          <MindCard total={r.optional.phqTotal} item9={r.optional.phqItem9} />
-        </Card>
-      )}
-
-      {r.hasCondition && (
-        <Card title="진단받은 질환이 있다면" icon="🩺">
-          <MetabolicCard optional={r.health} />
-        </Card>
-      )}
 
       <footer className="mt-2 flex flex-col gap-3">
         <SecondaryButton to="/result">내 유형 결과로 돌아가기</SecondaryButton>
         <SecondaryButton onClick={retry}>처음부터 다시 검사하기</SecondaryButton>
         <p className="mt-2 text-center text-xs leading-relaxed text-ink-faint">
-          추천 결과는 국민건강영양조사 자료를 바탕으로 한 참고용이며 의료적 진단이나 처방을 대체하지 않습니다.
+          결과는 국민건강영양조사 자료를 바탕으로 한 참고용이며 의료적 진단이나 처방을 대체하지 않습니다. 질환이 있거나 약을
+          먹고 있다면 식단과 건강기능식품은 의사·약사와 먼저 상의하세요.
         </p>
       </footer>
     </main>

@@ -3,19 +3,17 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import Mascot from '../components/Mascot.jsx'
 import PrimaryButton from '../components/PrimaryButton.jsx'
 import ChoiceInput from '../components/survey/ChoiceInput.jsx'
-import MultiInput from '../components/survey/MultiInput.jsx'
 import ProgressBar from '../components/survey/ProgressBar.jsx'
 import RowsInput from '../components/survey/RowsInput.jsx'
 import { DurationWheel, NumberWheel, TimeWheel } from '../components/survey/WheelInputs.jsx'
-import { OPTIONAL_SECTIONS, SECTIONS, optionsFor, visibleQuestions } from '../data/questions.js'
+import { SECTIONS, visibleQuestions } from '../data/questions.js'
 import { loadSurvey, saveSurvey } from '../lib/storage.js'
 import { resolveStep, resultPath, surveyPath } from '../lib/surveyFlow.js'
 
-function QuestionStep({ q, answer, answers, isLast, onAnswer }) {
+function QuestionStep({ q, answer, isLast, onAnswer }) {
   // 휠 입력은 이전 응답이 있으면 그 값, 없으면 문항의 initial 값에서 시작. 여러 줄 선택은 빈 값에서 시작
-  const [draft, setDraft] = useState(() => answer ?? q.initial ?? ({ rows: {}, multi: [] }[q.type]))
-  const ready =
-    q.type === 'rows' ? q.rows.every((row) => draft[row.id] !== undefined) : q.type === 'multi' ? draft.length > 0 : true
+  const [draft, setDraft] = useState(() => answer ?? q.initial ?? (q.type === 'rows' ? {} : undefined))
+  const ready = q.type !== 'rows' || q.rows.every((row) => draft[row.id] !== undefined)
 
   return (
     <>
@@ -32,7 +30,6 @@ function QuestionStep({ q, answer, answers, isLast, onAnswer }) {
         <div className="mt-6">
           {q.type === 'choice' && <ChoiceInput options={q.options} value={answer} onSelect={onAnswer} layout={q.layout} />}
           {q.type === 'rows' && <RowsInput rows={q.rows} options={q.options} value={draft} onChange={setDraft} />}
-          {q.type === 'multi' && <MultiInput options={optionsFor(q, answers)} value={draft} onChange={setDraft} />}
           {q.type === 'number' && <NumberWheel value={draft} onChange={setDraft} unit={q.unit} min={q.min} max={q.max} />}
           {q.type === 'time' && <TimeWheel value={draft} onChange={setDraft} hourStart={q.hourStart} />}
           {q.type === 'duration' && <DurationWheel value={draft} onChange={setDraft} per={q.per} maxHours={q.maxHours} />}
@@ -70,10 +67,8 @@ export default function SurveyPage({ stage = 1 }) {
     if (params.get('q') !== q.id) navigate(surveyPath(q, stage), { replace: true })
     window.scrollTo(0, 0)
   }, [q, params, navigate, stage])
-  // 지금까지 답한 비율. 핵심 문항과 선택 문항(PHQ-9·대사건강)은 따로 0~100%로 센다
-  // (선택 문항을 열었을 때 진행률이 뒤로 줄어들지 않게)
-  const part = list.filter((x) => OPTIONAL_SECTIONS.includes(x.section) === OPTIONAL_SECTIONS.includes(q.section))
-  const percent = Math.round((part.indexOf(q) / part.length) * 100)
+  // 지금까지 답한 비율 (단계마다 0~100%)
+  const percent = Math.round((step / list.length) * 100)
 
   const answer = (value) => {
     if (busy.current) return
@@ -140,7 +135,6 @@ export default function SurveyPage({ stage = 1 }) {
           key={q.id}
           q={q}
           answer={state.answers[q.id]}
-          answers={state.answers}
           isLast={step === list.length - 1}
           onAnswer={answer}
         />
