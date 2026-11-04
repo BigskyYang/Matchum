@@ -2,7 +2,8 @@
 // 군집화를 다시 돌리거나 설문(Jaejun/config)이 바뀌었는데 웹을 안 맞췄으면 여기서 실패한다.
 import { existsSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
-import targets from '../../../../Jaejun/config/targets.json'
+import targets from '../../../../Jaejun/nutrition_final_feedback_applied/config/targets.json'
+import contract from '../../../../Jaejun/nutrition_final_feedback_applied/config/encoding_contract.json'
 import surveySchema from '../../../../Jaejun/config/survey_schema_v3.json'
 import nutrientCells from '../data/nutrientCells.json'
 import { NUTRIENT_GUIDE } from '../data/nutrientGuide.js'
@@ -37,7 +38,7 @@ describe('군집 모델 ↔ 유형 설명 (types.js) ↔ 마스코트 그림', (
   })
 })
 
-describe('개인화용 영양소 정의 (nutrients.js) ↔ 재준 모델 (Jaejun/config/targets.json)', () => {
+describe('개인화용 영양소 정의 (nutrients.js) ↔ 재준 모델 (Jaejun/nutrition_final_feedback_applied/config/targets.json)', () => {
   it('14개 영양소 키가 같다', () => {
     expect(NUTRIENTS.map((n) => n.key).sort()).toEqual(Object.keys(targets).sort())
   })
@@ -160,4 +161,29 @@ describe('설문 ↔ 재준님 최종 설문 (mini-FFQ)', () => {
     }
   })
 
+})
+
+// 재준님 v1.4 입력 계약(encoding_contract.json) ↔ 웹 보기 값: 보기 순서대로 같은 코드인지 (방향이 뒤집히면 실패)
+describe('설문 보기 값 ↔ 재준님 v1.4 입력 계약 (encoding_contract.json)', () => {
+  const web = Object.fromEntries(QUESTIONS.map((q) => [q.id, q]))
+  const codes = (key) => Object.values(contract.encoded_training_features[key])
+  const values = (id) => web[id].options.map((o) => o.value)
+
+  it('끼니(주 5~7회 = 3)·외식(하루 2회 이상 = 6)·음주 빈도·음주량', () => {
+    expect(values('meals')).toEqual(codes('ML_breakfast_freq_ord'))
+    expect(values('eating_out')).toEqual(codes('ML_eatingout_freq_ord'))
+    expect(values('drink_freq')).toEqual(codes('ML_drink_freq_ord'))
+    expect(values('drink_amount')).toEqual(codes('ML_drink_amount_ord'))
+  })
+
+  it('채소·과일: 웹 값 v → 모델 9 − v (1 = 하루 3회 이상 … 9 = 거의 안 함)', () => {
+    expect(values('veg').map((v) => 9 - v)).toEqual(codes('식습관_LS_VEG2'))
+    expect(values('fruit').map((v) => 9 - v)).toEqual(codes('식습관_LS_FRUIT'))
+  })
+
+  it('mini-FFQ 5문항 (거의 먹지 않음 = 0 … 하루 3회 이상 = 7)', () => {
+    for (const id of ['ffq_meat', 'ffq_fish', 'ffq_egg', 'ffq_legume', 'ffq_dairy']) {
+      expect(values(id)).toEqual(Object.values(contract.mini_ffq_frequency))
+    }
+  })
 })

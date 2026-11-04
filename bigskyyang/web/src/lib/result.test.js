@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import models from '../data/nutritionModels.json'
 import { LEAF_TYPES } from '../data/types.js'
 import { SAMPLE, STAGE1_SAMPLE } from './fixtures.js'
 import { PERSONAL_AXES, TYPE_AXES } from './profile.js'
@@ -72,5 +73,51 @@ describe('buildPersonalResult (2단계 개인 결과)', () => {
     const older = { ...SAMPLE, birth_year: year - 70 }
     for (const k of ['meat', 'fish', 'egg', 'legume', 'dairy']) delete older[`ffq_${k}`]
     expect(buildPersonalResult(older).ffqAsked).toBe(false)
+  })
+})
+
+describe('buildPersonalResult 건강기능식품 정보', () => {
+  const { supplements } = buildPersonalResult(SAMPLE)
+
+  it('유형 결과의 부족할 수 있는 영양소 중 제품 정보가 있는 영양소만 (비타민 A·E 없음)', () => {
+    const keys = supplements.nutrients.map((n) => n.key)
+    expect(keys.length).toBeGreaterThan(0)
+    expect(keys).not.toContain('vitamin_a')
+    expect(keys).not.toContain('vitamin_e')
+    expect(new Set(keys).size).toBe(keys.length)
+  })
+})
+
+describe('buildPersonalResult 개인 영양 위험 (재준님 모델)', () => {
+  it('모델을 아직 불러오지 않았으면 null', () => {
+    expect(buildPersonalResult(SAMPLE).nutrition).toBeNull()
+  })
+
+  const r = buildPersonalResult(SAMPLE, models)
+
+  it('영양소 14개가 살펴볼 것(최대 5개)과 나머지로 나뉜다', () => {
+    const { watch, rest } = r.nutrition
+    expect(watch.length + rest.length).toBe(14)
+    expect(watch.length).toBeLessThanOrEqual(5)
+    // 평소 식사 기준 높은 편, 또는 생활습관 높은 편 + 평소 식사가 낮은 편이 아님
+    for (const n of watch) expect(n.habitual === 'High' || (n.lifestyle === 'High' && n.habitual !== 'Low')).toBe(true)
+    for (const n of rest.filter((x) => !x.high)) expect(n.habitual !== 'High' && !(n.lifestyle === 'High' && n.habitual !== 'Low')).toBe(true)
+    expect(r.nutrition.habitualAvailable).toBe(true)
+  })
+
+  it('65세 이상은 생활습관 기준만', () => {
+    const older = { ...SAMPLE, birth_year: new Date().getFullYear() - 70 }
+    for (const k of ['meat', 'fish', 'egg', 'legume', 'dairy']) delete older[`ffq_${k}`]
+    const o = buildPersonalResult(older, models).nutrition
+    expect(o.habitualAvailable).toBe(false)
+    for (const n of [...o.watch, ...o.rest]) expect(n.habitual).toBeNull()
+  })
+
+  it('건강기능식품 정보는 부족 위험이 높은 편인 영양소로 (나트륨 제외)', () => {
+    const high = r.nutrition.watch.map((n) => n.key)
+    for (const n of r.supplements.nutrients) {
+      const from = { vitamin_b: ['vitamin_b1', 'vitamin_b2'] }[n.key] ?? [n.key]
+      expect(from.some((k) => high.includes(k)) || ['vitamin_d', 'vitamin_e'].includes(n.key)).toBe(true)
+    }
   })
 })
