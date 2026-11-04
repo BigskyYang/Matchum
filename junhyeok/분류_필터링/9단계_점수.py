@@ -21,14 +21,22 @@
 순서 (영양소 × 대상 안에서): 등급 → 점수 → 하루 섭취 개수 적은 순 → 기준치 100%에 가까운 순 → 원재료 적은 순
   (의미 없는 신고번호 순은 쓰지 않음. 그래도 같으면 같은 순위로 보고 10단계에서 업체가 겹치지 않게 고름)
 
+웹용 파일 (11-04 결정: '칸마다 3개 고르기'는 폐기 → 사람마다 웹에서 고름)
+  · 70점 이상 후보 전체를 junhyeok/output/web_products.csv로 저장 (UTF-8, 모든 칸 따옴표)
+  · 열: 영양소, 제품명, 업체명, 품목제조신고번호, 대상, 1일 섭취량, 1일 함량, 기준치 대비(%), 기능성, 섭취 시 주의사항
+        + 순서(칸 안에서 먼저 볼 순서, 점수는 넣지 않음), 구분, 제형
+        + 제품의 하루 함량 열(비타민 C·D·B1·B2·B6·니아신, 칼슘, 마그네슘, 철, 아연, 엽산, 비타민 A·E)
+          → 웹에서 여러 제품을 함께 볼 때 상한 합산 확인, B1·B2가 든 제품 확인에 씀
+  · 저장 전 자동 점검: 열 이름·순서, 대상, 영양소, 신고번호 형식, 중복, 어린이·임산부 이름
+
 입력  8단계_결과.pkl, 6단계_제품별함량.pkl
-출력  9단계_점수.xlsx, 9단계_결과.pkl (다음 단계 입력)
+출력  9단계_점수.xlsx, 9단계_결과.pkl, ../output/web_products.csv, ../output/web_products_정보.md
 """
-import re
+import os, re, csv, datetime
 import importlib
 import numpy as np
 import pandas as pd
-from 공통 import out, nf, new_book, add_sheet, add_criteria_sheet
+from 공통 import HERE, out, nf, new_book, add_sheet, add_criteria_sheet
 
 step6 = importlib.import_module("6단계_1일환산")      # 기준규격 표시량 읽는 함수를 같이 씀
 
@@ -47,6 +55,16 @@ CAUTION_TEXT = r"카페인|간\s*질환|간\s*손상|간\s*기능\s*이상|간�
 CAUTION_RAW = r"카페인|과라나|커피|녹차\s*추출"
 GRADE = [("상", 85), ("중", 70), ("하", 0)]          # 11-04 결정 '가'
 PASS_GRADES = ["상", "중"]
+
+# 웹용 CSV
+OUT_DIR = os.path.join(os.path.dirname(HERE), "output")       # junhyeok/output
+CSV_NAME = "web_products.csv"
+BASE_COLUMNS = ["영양소", "제품명", "업체명", "품목제조신고번호", "대상", "1일 섭취량", "1일 함량", "기준치 대비(%)",
+                "기능성", "섭취 시 주의사항"]
+AMOUNT_COLUMNS = [("비타민 C", "mg"), ("비타민 D", "μg"), ("비타민 B1", "mg"), ("비타민 B2", "mg"), ("비타민 B6", "mg"),
+                  ("니아신", "mg"), ("칼슘", "mg"), ("마그네슘", "mg"), ("철", "mg"), ("아연", "mg"), ("엽산", "μg"),
+                  ("비타민 A", "μg RAE"), ("비타민 E", "mg α-TE")]
+COLUMNS = BASE_COLUMNS + ["순서", "구분", "제형"] + [f"하루 {k}({u})" for k, u in AMOUNT_COLUMNS]
 
 
 # ── 제품 단위 정보 (8단계 ④ 비슷한 제품 판단에도 같이 씀)
@@ -156,6 +174,93 @@ def grade_of(score):
     return "하"
 
 
+def amount_text(r):
+    if pd.isna(r["1일 함량"]) or r["1일 함량"] in ("", None):
+        return ""
+    return f"{float(r['1일 함량']):g} {r['1일 함량 단위']}".strip()
+
+
+def product_amounts(no, amt, info):
+    """제품의 하루 함량 → {열 이름: 값 글자}"""
+    a = amt.loc[no]
+    res = {}
+    for k, u in AMOUNT_COLUMNS:
+        if k in ("비타민 B1", "비타민 B2"):
+            p = info[no]["b"].get(k)
+            v = None if p is None else p * B_VITAMINS[k][1] / 100
+        else:
+            v = a[k] if k in a.index and pd.notna(a[k]) else None
+        res[f"하루 {k}({u})"] = "" if v is None else f"{float(v):.4g}"
+    return res
+
+
+def check(df):
+    """저장 전 점검. 문제 목록을 돌려줌 (비어 있으면 통과)"""
+    problems = []
+    if list(df.columns) != COLUMNS:
+        problems.append(f"열 이름·순서가 다름: {list(df.columns)}")
+    bad_t = set(df["대상"]) - set(TARGETS)
+    if bad_t:
+        problems.append(f"허용하지 않는 대상: {bad_t}")
+    bad_n = set(df["영양소"]) - set(NUTRIENTS)
+    if bad_n:
+        problems.append(f"허용하지 않는 영양소: {bad_n}")
+    if not df["품목제조신고번호"].str.fullmatch(r"\d{10,20}").all():
+        problems.append("품목제조신고번호 형식이 이상한 줄이 있음")
+    if df.duplicated(["영양소", "대상", "품목제조신고번호"]).any():
+        problems.append("같은 칸에 같은 제품이 두 번 들어감")
+    if df["제품명"].str.contains("임산부|수유|키즈|어린이", na=False).any():
+        problems.append("어린이·임산부 제품으로 보이는 이름이 있음")
+    return problems
+
+
+def write_web_csv(keep, amt, info):
+    """70점 이상 후보 전체 → junhyeok/output/web_products.csv"""
+    base = pd.DataFrame({
+        "영양소": keep["영양소"].astype(str), "제품명": keep["제품명"], "업체명": keep["업체명"],
+        "품목제조신고번호": keep["품목제조신고번호"].astype(str), "대상": keep["대상"].astype(str),
+        "1일 섭취량": keep["1일 섭취량"].fillna(""), "1일 함량": keep.apply(amount_text, axis=1),
+        "기준치 대비(%)": keep["기준치 대비(%)"].map(lambda v: "" if pd.isna(v) else f"{int(v)}"),
+        "기능성": keep["기능성"].fillna("").str.strip(), "섭취 시 주의사항": keep["섭취 시 주의사항"].fillna("").str.strip(),
+        "순서": keep["순서"].astype(int).astype(str), "구분": keep["구분"].fillna(""), "제형": keep["제형"].fillna(""),
+    })
+    amounts = pd.DataFrame([product_amounts(no, amt, info) for no in keep["품목제조신고번호"]], index=keep.index)
+    web = pd.concat([base, amounts], axis=1)
+    problems = check(web)
+    if problems:
+        print("!! 점검에서 문제가 있어 CSV를 저장하지 않았어요:")
+        for p in problems:
+            print("   -", p)
+        raise SystemExit(1)
+    os.makedirs(OUT_DIR, exist_ok=True)
+    csv_path = os.path.join(OUT_DIR, CSV_NAME)
+    web.to_csv(csv_path, index=False, encoding="utf-8", quoting=csv.QUOTE_ALL, lineterminator="\n")
+    cnt = pd.crosstab(web["영양소"], web["대상"]).reindex(index=NUTRIENTS, columns=TARGETS).fillna(0).astype(int)
+    lines = [
+        "# web_products.csv 정보", "",
+        f"- 만든 날짜: {datetime.date.today().isoformat()}",
+        "- 만든 코드: `junhyeok/분류_필터링/전체_실행.py` (1단계 → 9단계)",
+        "- 기준: 「영양제_분류_필터링_기준(1104).pdf」 + 11-04 팀 결정, 상한섭취량은 2025 한국인 영양소 섭취기준",
+        f"- 줄 수: {len(web):,} (제품 {web['품목제조신고번호'].nunique():,}개, 한 제품이 여러 영양소·대상에 나올 수 있음)",
+        "- **9단계를 통과한(70점 이상) 후보 전체**예요. '칸마다 3개'는 폐기했고(11-04), 웹에서 사람마다 필요한 제품을 골라요",
+        "- `순서`: 같은 영양소·대상 안에서 먼저 볼 순서 (등급 → 점수 → 하루 섭취 개수 → 기준치 100% 근접 → 원재료 수). 점수 자체는 넣지 않음",
+        "- `하루 ○○` 열: 그 제품을 하루 섭취량대로 먹을 때 든 양. 여러 제품을 함께 볼 때 **상한을 합쳐서 확인**하는 데 써 주세요",
+        "  - 상한(2025 KDRI 성인): 비타민 C 2,000mg · D 100μg · B6 50mg · 니아신 35mg(니코틴산) · 칼슘 2,000mg(남성 2,500) · 마그네슘 350mg(식품 외) · 철 45mg · 아연 35mg · 엽산 1,000μg · A 3,000μg RAE · E 540mg α-TE",
+        "  - 비타민 B1·B2 열이 비어 있으면 그 제품에 B1·B2가 없거나 양을 읽지 못한 것",
+        "- 대상: 일반·남성·여성·시니어 (어린이·임산부·수유부 제외). 웹에서는 성별·나이(50세 이상은 시니어 포함)로 맞춤",
+        "- 1일 함량·기준치 대비(%)는 기준치가 하나로 정해지는 영양소만 채움 (비타민 B군·식이섬유·종합비타민은 빈칸)",
+        "- 품목제조신고번호는 문자열. **엑셀로 열어서 저장하면 숫자로 바뀌어 깨지니 저장하지 마세요.**",
+        "- 화면에서는 점수·순위·'베스트' 같은 표현을 쓰지 않고, 제품을 하나씩 '이런 제품도 있어요' 톤으로 안내",
+        "", "## 영양소 × 대상 개수", "",
+        "| 영양소 | " + " | ".join(TARGETS) + " |", "|---|" + "---:|" * len(TARGETS),
+    ] + [f"| {k} | " + " | ".join(f"{cnt.loc[k, t]:,}" for t in TARGETS) + " |" for k in NUTRIENTS]
+    with open(os.path.join(OUT_DIR, "web_products_정보.md"), "w", encoding="utf-8") as fp:
+        fp.write("\n".join(lines) + "\n")
+    with open(os.path.join(OUT_DIR, ".gitignore"), "w", encoding="utf-8") as fp:
+        fp.write("# 팀 .gitignore는 *.csv를 막지만, 웹용 결과 파일 하나만은 올림 (11-04 대천님 요청)\n!web_products.csv\n")
+    return web, csv_path
+
+
 def main():
     print("[1/3] 8단계 결과 읽는 중...")
     web = pd.read_pickle(out("8단계_결과.pkl"))
@@ -163,7 +268,8 @@ def main():
     prod = web.drop_duplicates("품목제조신고번호").set_index("품목제조신고번호")
 
     print("[2/3] 점수 매기는 중...")
-    sc = score_table(web, product_info(prod, amt))
+    info = product_info(prod, amt)
+    sc = score_table(web, info)
     sc["등급"] = sc["점수"].map(grade_of)
     sc["영양소"] = pd.Categorical(sc["영양소"].astype(str), NUTRIENTS, ordered=True)
     sc["대상"] = pd.Categorical(sc["대상"].astype(str), TARGETS, ordered=True)
@@ -177,6 +283,7 @@ def main():
     drop = sc[~sc["등급"].isin(PASS_GRADES)].reset_index(drop=True)
     keep["순서"] = keep.groupby(["영양소", "대상"], observed=True).cumcount() + 1
     keep.to_pickle(out("9단계_결과.pkl"))
+    webcsv, csv_path = write_web_csv(keep, amt, info)
 
     labels = ["50 미만", "50~59", "60~69", "70~74", "75~79", "80~84", "85~89", "90~100"]
     band = pd.cut(sc["점수"], [0, 50, 60, 70, 75, 80, 85, 90, 101], labels=labels, right=False)
@@ -211,6 +318,12 @@ def main():
         ("", False), ("참고", True),
         ("· 마그네슘은 기준치(315mg)와 상한(350mg)이 가까워서 상한 근접 감점을 거의 항상 받음 → 상 등급이 적음", False),
         ("· 단일 제품은 성분 구성 10점을 받을 수 없어 최고 90점", False),
+        ("", False), ("웹용 파일", True),
+        (f"· {csv_path}", False),
+        (f"· 70점 이상 후보 전체 {len(webcsv):,}줄. '칸마다 3개 고르기'는 폐기 (11-04) → 웹에서 사람마다 고름", False),
+        ("· 제품별 하루 함량 열을 붙여서, 웹에서 여러 제품을 함께 볼 때 상한 합산을 확인할 수 있음", False),
+        ("· 저장 전 자동 점검 통과: 열 이름·순서 / 대상 / 영양소 / 신고번호 형식 / 중복 / 어린이·임산부 이름", False),
+        ("", False),
         ("· 같은 결과를 다시 만들려면: python 전체_실행.py", False),
     ]
     wb = new_book(lines)
@@ -226,6 +339,8 @@ def main():
                                          "주의 원료 10", "성분 구성 10", "종합비타민 점수", "등급"]})
     done["비타민 D는 일반 정보로"] = "비타민 D 포함 / 오메가3·유산균·루테인·밀크씨슬은 웹에서 아직 안 씀 (11-04)"
     done["기능성 원료는 상한이 아니라"] = "해당 없음 (웹에서 오메가3·루테인 등을 쓰지 않음)"
+    done["70점 이상 후보 전체"] = f"적용 완료 ({len(webcsv):,}줄)"
+    done["후보를 몇 개까지"] = "폐기 (11-04): 칸마다 3개 대신 70점 이상 후보 전체를 웹으로 넘기고 사람마다 고름"
     add_criteria_sheet(wb, done)
     add_sheet(wb, "점수 분포 (영양소별)", dist.reset_index().rename(columns={"index": "영양소"}), [24] + [9] * 8, freeze="A2")
     add_sheet(wb, "등급 (영양소별)", grade_tbl.reset_index().rename(columns={"index": "영양소"}), [24, 8, 8, 10], freeze="A2")
@@ -236,8 +351,10 @@ def main():
     w = [22, 8, 6, 6, 6, 8, 8, 8, 8, 8, 8, 30, 30, 16, 8, 18, 18, 32, 20, 10, 26, 10, 8, 10, 8]
     add_sheet(wb, f"통과 ({len(keep):,}줄)", keep[cols], w)
     add_sheet(wb, f"탈락 ({len(drop):,}줄)", drop[cols], w)
+    add_sheet(wb, "web_products 미리보기 (앞 300줄)", webcsv.head(300), [22, 34, 22, 18, 8, 26, 12, 10, 50, 50, 6, 18, 8] + [10] * len(AMOUNT_COLUMNS))
     wb.save(out("9단계_점수.xlsx"))
     print(f"9단계 완료: {len(sc):,}줄 → 상 {gc.get('상', 0):,} · 중 {gc.get('중', 0):,} · 탈락 {gc.get('하', 0):,} → 제품 {n_keep:,}개 ({len(keep):,}줄)")
+    print(f"웹용 파일: {csv_path} ({len(webcsv):,}줄)")
     print(after.to_string())
 
 

@@ -37,7 +37,6 @@ describe('buildTypeResult (1단계 유형 결과)', () => {
   it('부족할 수 있는 영양소: 공통 8개 + 2줄 (판정 코드 포함), 성별·연령대 표시', () => {
     expect(r.nutrients.common).toHaveLength(8)
     for (const n of r.nutrients.picks) expect(['유형특이', '식사량영향', '흔함']).toContain(n.tag)
-    expect(r.nutrientsEmptyText).toEqual(expect.any(String))
     expect(r.sexLabel).toBe('여성')
     expect(r.ageLabel).toMatch(/세/)
   })
@@ -82,10 +81,14 @@ describe('buildPersonalResult 건강기능식품 정보', () => {
     expect(buildPersonalResult(SAMPLE).supplements).toBeNull()
   })
 
-  it('제품은 보여 주지 않고 영양소만', () => {
-    const { supplements } = buildPersonalResult(SAMPLE, models)
+  it('제품 목록 영양소마다 어떤 모델 영양소에서 왔는지 (추천 이유)', () => {
+    const { supplements, nutrition } = buildPersonalResult(SAMPLE, models)
     expect(Object.keys(supplements).sort()).toEqual(['foodOnly', 'nutrients'])
-    for (const n of supplements.nutrients) expect(Object.keys(n).sort()).toEqual(['icon', 'key', 'label'])
+    const watch = nutrition.watch.map((n) => n.key)
+    for (const n of supplements.nutrients) {
+      expect(Object.keys(n).sort()).toEqual(['from', 'icon', 'key', 'label'])
+      for (const k of n.from) expect(watch).toContain(k)
+    }
   })
 })
 

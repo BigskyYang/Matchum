@@ -3,6 +3,7 @@ import MobileFrame from './components/MobileFrame.jsx'
 import PersonalResultPage from './pages/PersonalResultPage.jsx'
 import ResultPage from './pages/ResultPage.jsx'
 import StartPage from './pages/StartPage.jsx'
+import SupplementsPage from './pages/SupplementsPage.jsx'
 import SurveyPage from './pages/SurveyPage.jsx'
 import { loadSurvey } from './lib/storage.js'
 
@@ -20,6 +21,7 @@ export default function App() {
         <Route path="/result" element={<ResultPage />} />
         <Route path="/survey2" element={<Stage2Survey />} />
         <Route path="/result2" element={<PersonalResultPage />} />
+        <Route path="/supplements" element={<SupplementsPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </MobileFrame>

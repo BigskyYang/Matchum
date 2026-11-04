@@ -1,4 +1,6 @@
 import { useCallback, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { PRODUCT_NUTRIENTS } from '../../data/supplementInfo.js'
 import BottomSheet from '../BottomSheet.jsx'
 
 // 개인 결과의 '내가 챙겨야 할 영양소' (데이터는 lib/result.js의 buildPersonalResult → nutrition)
@@ -52,10 +54,13 @@ function RiskSheet({ n, onClose }) {
       )}
       {n.tip && <p className="mt-4 rounded-card bg-cream px-4 py-3 text-sm leading-relaxed">{n.tip}</p>}
       {n.supplement === 'product' && (
-        <p className="mt-4 rounded-card bg-lavender/60 px-4 py-3 text-sm leading-relaxed">
-          💊 이 영양소의 건강기능식품 정보는 준비하고 있어요.
-          <span className="mt-1 block text-xs text-ink-soft">건강기능식품은 질병의 예방 및 치료를 위한 의약품이 아닙니다.</span>
-        </p>
+        <Link
+          to={`/supplements?n=${PRODUCT_NUTRIENTS.find((x) => x.from.includes(n.key)).key}`}
+          className="mt-4 flex items-center justify-between rounded-card bg-lavender/60 px-4 py-3 text-sm font-bold"
+        >
+          💊 도움이 될 수 있는 건강기능식품 보기
+          <span aria-hidden="true">›</span>
+        </Link>
       )}
       {n.supplement === 'food' && (
         <p className="mt-4 rounded-card bg-lavender/60 px-4 py-3 text-sm leading-relaxed">
