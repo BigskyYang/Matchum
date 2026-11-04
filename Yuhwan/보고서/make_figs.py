@@ -211,20 +211,20 @@ save(fig, 'f08_2024검증.png')
 
 # 그림 2. 전체 분석 흐름 (도식)
 fig, ax = plt.subplots(figsize=(10, 2.5)); ax.axis('off'); ax.set_xlim(0, 10); ax.set_ylim(0, 2.5)
-steps = [('데이터 준비', 'KNHANES 2022–24\n성인 15,062명\nKDRI 2025 기준', '#e8f1fc'),
-         ('고객 군집화', '생활습관 7개 지표\nPCA → 2단계 k-medoids\n4 대분류 × 3 = 12유형', '#e8f1fc'),
-         ('부족 확률 예측', '유형+성별+연령대\n→ 영양소 15개\n가중 로지스틱 회귀', '#fdece5'),
-         ('검증', '2022–23 학습\n→ 2024 평가\n민감도 분석', '#fdece5'),
-         ('서비스 표시', '공통 영양소 +\n유형 영양소 2단 표시\n웹 JSON 120조합', '#e5f6ef')]
+steps = [('데이터 준비', 'KNHANES 2022–24\n성인 15,062명\nKDRI 2025 기준', '#f2f2f2'),
+         ('고객 군집화', '생활습관 7개 지표\nPCA → 2단계 k-medoids\n4 대분류 × 3 = 12유형', '#f2f2f2'),
+         ('부족 확률 예측', '유형+성별+연령대\n→ 영양소 15개\n가중 로지스틱 회귀', '#f2f2f2'),
+         ('검증', '2022–23 학습\n→ 2024 평가\n민감도 분석', '#f2f2f2'),
+         ('서비스 표시', '공통 영양소 +\n유형 영양소 2단 표시\n웹 JSON 120조합', '#f2f2f2')]
 for i, (t, b, c) in enumerate(steps):
     x = 0.1 + i * 2
-    ax.add_patch(FancyBboxPatch((x, 0.3), 1.75, 2.05, boxstyle='round,pad=0.02,rounding_size=0.12', fc=c, ec='none'))
+    ax.add_patch(FancyBboxPatch((x, 0.3), 1.75, 2.05, boxstyle='square,pad=0.02', fc=c, ec='#8c8c8c', lw=0.8))
     ax.text(x + 0.875, 2.0, t, ha='center', va='center', fontsize=11, weight='bold', color=INK)
     ax.text(x + 0.875, 1.12, b, ha='center', va='center', fontsize=8.8, color=INK2, linespacing=1.5)
     if i < 4:
         ax.annotate('', xy=(x + 2.03, 1.3), xytext=(x + 1.8, 1.3), arrowprops=dict(arrowstyle='-|>', color=INK2, lw=1.4))
-ax.text(1.95, 0.05, '비지도 학습', ha='center', fontsize=8.5, color=BLUE, weight='bold')
-ax.text(5.05, 0.05, '지도 학습', ha='center', fontsize=8.5, color=ORANGE, weight='bold')
+ax.text(1.95, 0.05, '비지도 학습', ha='center', fontsize=8.5, color=INK2)
+ax.text(5.05, 0.05, '지도 학습', ha='center', fontsize=8.5, color=INK2)
 save(fig, 'f03_분석흐름.png')
 
 # 범주형 빈도와 12유형 교차표 (인원 + 조사 가중 비율)

@@ -18,7 +18,7 @@ MATCHUM = HERE.parents[1] / 'Matchum'
 OUT8 = HERE.parent / '영양분석' / 'output'
 S = json.load(open(FIG / 'stats.json', encoding='utf-8'))
 
-NAVY, BLUE, INK, INK2 = '1F3A5F', '2A78D6', '1A1A1A', '52514E'
+NAVY, BLUE, INK, INK2 = '1A1A1A', '404040', '1A1A1A', '595959'   # 강조색 없이 검정·회색만 사용
 FONT = '맑은 고딕'
 doc = Document()
 
@@ -30,12 +30,17 @@ st = doc.styles['Normal']
 st.font.name = FONT; st.font.size = Pt(10); st.font.color.rgb = RGBColor.from_string(INK)
 st.element.rPr.rFonts.set(qn('w:eastAsia'), FONT)
 st.paragraph_format.line_spacing = 1.35; st.paragraph_format.space_after = Pt(4)
-for name, size, color, before, after in [('Heading 1', 16, NAVY, 18, 8), ('Heading 2', 12.5, NAVY, 14, 5), ('Heading 3', 11, BLUE, 10, 3)]:
+for name, size, color, before, after in [('Heading 1', 15, INK, 18, 8), ('Heading 2', 12, INK, 14, 5), ('Heading 3', 10.5, INK, 10, 3)]:
     h = doc.styles[name]
     h.font.name = FONT; h.font.size = Pt(size); h.font.bold = True; h.font.color.rgb = RGBColor.from_string(color)
     h.element.rPr.rFonts.set(qn('w:eastAsia'), FONT)
     h.paragraph_format.space_before = Pt(before); h.paragraph_format.space_after = Pt(after)
     h.paragraph_format.keep_with_next = True
+# 1단계 제목 아래에 가는 선
+pBdr = OxmlElement('w:pBdr'); bt = OxmlElement('w:bottom')
+for k, v in dict(val='single', sz='6', space='3', color='1A1A1A').items():
+    bt.set(qn(f'w:{k}'), v)
+pBdr.append(bt); doc.styles['Heading 1'].element.get_or_add_pPr().append(pBdr)
 for name in ['List Bullet', 'List Number']:
     doc.styles[name].font.name = FONT; doc.styles[name].paragraph_format.space_after = Pt(2)
 
@@ -49,11 +54,14 @@ def shade(cell, hex_):
     tcPr.append(sh)
 
 
-def borders(table, color='D5DCE6', size=4, inside=True):
+def borders(table):
     tblPr = table._tbl.tblPr
     b = OxmlElement('w:tblBorders')
-    for edge in ['top', 'left', 'bottom', 'right'] + (['insideH', 'insideV'] if inside else []):
-        e = OxmlElement(f'w:{edge}'); e.set(qn('w:val'), 'single'); e.set(qn('w:sz'), str(size)); e.set(qn('w:color'), color)
+    for edge, sz, color in [('top', 12, '1A1A1A'), ('bottom', 12, '1A1A1A'), ('insideH', 4, 'BFBFBF'),
+                            ('left', 0, 'auto'), ('right', 0, 'auto'), ('insideV', 0, 'auto')]:
+        e = OxmlElement(f'w:{edge}'); e.set(qn('w:val'), 'single' if sz else 'nil')
+        if sz:
+            e.set(qn('w:sz'), str(sz)); e.set(qn('w:color'), color)
         b.append(e)
     tblPr.append(b)
 
@@ -161,14 +169,12 @@ def T(rows, cap=None, widths=None, size=8.5, first_col_bold=False, align_num=Tru
             c.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
             margins(c, 50, 50, 90, 90)
             p = c.paragraphs[0]; p.paragraph_format.space_after = Pt(0); p.paragraph_format.line_spacing = 1.15
-            rich(p, str(val), size, 'FFFFFF' if i == 0 else None, True if i == 0 or (first_col_bold and j == 0) else None)
+            rich(p, str(val), size, None, True if i == 0 or (first_col_bold and j == 0) else None)
             if i == 0:
-                shade(c, NAVY); p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                shade(c, 'EDEDED'); cell_border(c, 'bottom', '1A1A1A', 6); p.alignment = WD_ALIGN_PARAGRAPH.CENTER
             else:
                 if i in hl_rows:
-                    shade(c, 'E3EEFB')
-                elif i % 2 == 0:
-                    shade(c, 'F6F8FB')
+                    shade(c, 'F2F2F2')
                 if align_num and re.fullmatch(r'[\s+\-−0-9.,%~×≤≥()\[\]배명개/✓]+', str(val) or 'x'):
                     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
     # 머리글 반복, 행이 쪽 경계에서 갈라지지 않게. 18행 이하 표는 통째로 한 쪽에 묶는다
@@ -195,10 +201,12 @@ def nosplit(t):
         trPr = row._tr.get_or_add_trPr(); e = OxmlElement('w:cantSplit'); e.set(qn('w:val'), 'true'); trPr.append(e)
 
 
-def callout(title, lines, fill='EEF4FC', bar=BLUE):
+def callout(title, lines, *_):
     t = doc.add_table(rows=1, cols=1); t.alignment = WD_TABLE_ALIGNMENT.CENTER; no_borders(t); nosplit(t)
-    c = t.cell(0, 0); shade(c, fill); cell_border(c, 'left', bar, 36); margins(c, 120, 120, 220, 180)
-    p = c.paragraphs[0]; rich(p, title, 10.5, bar if bar != BLUE else NAVY, True); p.paragraph_format.space_after = Pt(3)
+    c = t.cell(0, 0); margins(c, 120, 120, 200, 200)
+    for e in ['top', 'left', 'bottom', 'right']:
+        cell_border(c, e, '8C8C8C', 6)
+    p = c.paragraphs[0]; rich(p, title, 10, INK, True); p.paragraph_format.space_after = Pt(3)
     for ln in lines:
         q = c.add_paragraph(); q.paragraph_format.space_after = Pt(2); q.paragraph_format.line_spacing = 1.3
         rich(q, ('•  ' if not ln.startswith('→') else '') + ln, 9.5)
@@ -234,13 +242,13 @@ def screen_card(title, common, rows, empty=None):
     for e in ['top', 'left', 'bottom', 'right']:
         cell_border(c, e, 'C9D6E8', 8)
     p = c.paragraphs[0]; rich(p, title, 10, NAVY, True)
-    q = c.add_paragraph(); rich(q, '많은 사람에게 부족하기 쉬워요', 9, 'B5502A', True); q.paragraph_format.space_after = Pt(1)
+    q = c.add_paragraph(); rich(q, '많은 사람에게 부족하기 쉬워요', 9, INK, True); q.paragraph_format.space_after = Pt(1)
     q = c.add_paragraph(); rich(q, common, 9, INK2)
     q = c.add_paragraph(); rich(q, '내 유형에서 살펴볼 것', 9, BLUE, True); q.paragraph_format.space_after = Pt(1); q.paragraph_format.space_before = Pt(4)
     if rows:
         for n, a, b, msg in rows:
             q = c.add_paragraph(); q.paragraph_format.space_after = Pt(1)
-            rich(q, f'**{n}**  내 유형 10명 중 {a}명 · 같은 성별·나이 평균 {b}명  —  {msg}', 9)
+            rich(q, f'**{n}**  내 유형 10명 중 {a}명 · 같은 성별·나이 평균 {b}명  ·  {msg}', 9)
     else:
         q = c.add_paragraph(); rich(q, empty, 9)
     doc.add_paragraph().paragraph_format.space_after = Pt(2)
@@ -288,24 +296,25 @@ def field(p, code):
 # ════════════════════════════ 표지 ════════════════════════════
 sec = doc.sections[0]
 sec.different_first_page_header_footer = True
-for _ in range(5):
+for _ in range(6):
     doc.add_paragraph()
-t = doc.add_table(rows=1, cols=1); no_borders(t); c = t.cell(0, 0); shade(c, NAVY); margins(c, 500, 500, 500, 400)
-p = c.paragraphs[0]; r = p.add_run('머신러닝 팀 프로젝트 최종 결과 보고서'); r.font.size = Pt(11); r.font.color.rgb = RGBColor.from_string('9EC5F4'); r.bold = True
-p = c.add_paragraph(); r = p.add_run('생활습관으로 찾는\n나의 부족 영양소'); r.font.size = Pt(28); r.bold = True; r.font.color.rgb = RGBColor.from_string('FFFFFF')
-p.paragraph_format.line_spacing = 1.15; p.paragraph_format.space_before = Pt(8)
-p = c.add_paragraph(); r = p.add_run('국민건강영양조사 기반 생활습관 고객 군집화와 유형별 부족 영양소 안내 모델')
-r.font.size = Pt(12); r.font.color.rgb = RGBColor.from_string('DCE8F7'); p.paragraph_format.space_before = Pt(10)
-for _ in range(3):
+P('머신러닝 팀 프로젝트 최종 결과 보고서', 11, INK2, WD_ALIGN_PARAGRAPH.CENTER, 14)
+P('생활습관으로 찾는 나의 부족 영양소', 24, INK, WD_ALIGN_PARAGRAPH.CENTER, 8, bold=True)
+P('국민건강영양조사 기반 생활습관 고객 군집화와 유형별 부족 영양소 안내 모델', 11.5, INK2, WD_ALIGN_PARAGRAPH.CENTER, 0)
+for _ in range(7):
     doc.add_paragraph()
-meta = [('프로젝트', 'Matchum (맞춤) — 생활습관 기반 영양 안내 서비스'), ('팀', '2조 머신2러닝'),
-        ('팀원', '대천(팀장) · 지연 · 유환 · 재준 · 준혁'), ('보고 범위', '고객 군집화, 유형별 부족 영양소 안내'),
+meta = [('프로젝트', 'Matchum (맞춤): 생활습관 기반 영양 안내 서비스'), ('팀', '2조 머신2러닝'),
+        ('팀원', '대천(팀장), 지연, 유환, 재준, 준혁'), ('보고 범위', '고객 군집화, 유형별 부족 영양소 안내'),
         ('기간', '2026. 10. 29. ~ 11. 10.'), ('작성일', '2026. 11. 9.')]
 t = doc.add_table(rows=len(meta), cols=2); no_borders(t); t.alignment = WD_TABLE_ALIGNMENT.CENTER
 for i, (k, v) in enumerate(meta):
-    a, b_ = t.cell(i, 0), t.cell(i, 1); a.width, b_.width = Cm(3.2), Cm(12)
-    cell_border(a, 'bottom', 'D5DCE6', 4); cell_border(b_, 'bottom', 'D5DCE6', 4); margins(a, 70, 70, 100, 100); margins(b_, 70, 70, 100, 100)
-    rich(a.paragraphs[0], k, 9.5, NAVY, True); rich(b_.paragraphs[0], v, 9.5)
+    a_, b_ = t.cell(i, 0), t.cell(i, 1); a_.width, b_.width = Cm(3), Cm(9)
+    if i == 0:
+        cell_border(a_, 'top', '1A1A1A', 12); cell_border(b_, 'top', '1A1A1A', 12)
+    if i == len(meta) - 1:
+        cell_border(a_, 'bottom', '1A1A1A', 12); cell_border(b_, 'bottom', '1A1A1A', 12)
+    margins(a_, 60, 60, 100, 100); margins(b_, 60, 60, 100, 100)
+    rich(a_.paragraphs[0], k, 9.5, INK, True); rich(b_.paragraphs[0], v, 9.5)
 page_break()
 
 # 머리글·바닥글 (본문)
@@ -326,13 +335,14 @@ H('1. 요약')
 P('이 보고서는 국민건강영양조사(KNHANES) 2022–2024년 성인 15,062명의 자료로 **생활습관이 비슷한 사람들을 12개 유형으로 묶고**, '
   '각 유형에서 **부족하기 쉬운 영양소를 머신러닝으로 판단**해 서비스 첫 화면에 안내하는 과정과 결과를 정리합니다. '
   '혈액검사나 식사 기록 없이 설문 몇 문항만으로 "나와 비슷한 사람들은 무엇이 부족한가"를 알려 주는 것이 목표입니다.')
-kpis([('15,062명', 'KNHANES 2022–2024\n분석 대상 성인'), ('12개', '생활습관 유형\n(4 대분류 × 3)'),
-      ('13 / 15', '성별·연령 대비 예측이\n유의하게 좋아진 영양소'), ('1.09배', '2024년 검증: 안내 항목의\n실제 부족 배수')])
+T([['분석 대상', '생활습관 유형', '예측이 유의하게 좋아진 영양소', '2024년 검증: 안내 항목의 실제 부족 배수'],
+   ['15,062명 (KNHANES 2022–2024 성인)', '12개 (4 대분류 × 3)', '15개 중 13개 (성별·연령 모델 대비)', '1.09배']],
+  '핵심 지표', widths=[4.1, 3.6, 4.4, 4.4], align_num=False)
 callout('핵심 결과', [
-    '**고객 군집화** — 운동·식사·좌식·스트레스 7개 지표로 4개 대분류를 만들고 대분류마다 3개씩 나눠 12개 유형을 확정함. 대분류 안정성(시드 간 ARI' + fn('ARI') + ') 0.945, 웹 재배정 일치율 100%.',
-    '**부족 확률 예측** — 유형·성별·연령대로 영양소 15개의 부족 확률을 예측함. 2022–23년으로 학습하고 2024년으로 평가했을 때, 성별·연령만 사용한 모델보다 AUC' + fn('AUC') + '가 +0.014~+0.040 높고 15개 중 13개에서 통계적으로 유의함.',
-    '**화면 안내 규칙** — 많은 사람에게 부족한 공통 영양소 8개는 한 줄로 묶고, 그 밖에서 유형 사람들에게 특히 많은 영양소만 따로 보여 주는 2단 표시 규칙을 정함. 학습 자료만으로 고른 안내 항목이 2024년에도 같은 성별·나이보다 1.09배(95% CI' + fn('CI') + ' 1.06~1.12) 더 부족했음.',
-    '**한계** — 유형은 자연적으로 뚜렷한 집단이 아니라 재현 가능한 분할이고(실루엣' + fn('실루엣') + ' 0.163), 예측력도 중간 수준임(AUC 0.56~0.70). 그래서 진단이 아닌 경향 안내로만 사용함.'])
+    '**고객 군집화**: 운동·식사·좌식·스트레스 7개 지표로 4개 대분류를 만들고 대분류마다 3개씩 나눠 12개 유형을 확정함. 대분류 안정성(시드 간 ARI' + fn('ARI') + ') 0.945, 웹 재배정 일치율 100%.',
+    '**부족 확률 예측**: 유형·성별·연령대로 영양소 15개의 부족 확률을 예측함. 2022–23년으로 학습하고 2024년으로 평가했을 때, 성별·연령만 사용한 모델보다 AUC' + fn('AUC') + '가 +0.014~+0.040 높고 15개 중 13개에서 통계적으로 유의함.',
+    '**화면 안내 규칙**: 많은 사람에게 부족한 공통 영양소 8개는 한 줄로 묶고, 그 밖에서 유형 사람들에게 특히 많은 영양소만 따로 보여 주는 2단 표시 규칙을 정함. 학습 자료만으로 고른 안내 항목이 2024년에도 같은 성별·나이보다 1.09배(95% CI' + fn('CI') + ' 1.06~1.12) 더 부족했음.',
+    '**한계**: 유형은 자연적으로 뚜렷한 집단이 아니라 재현 가능한 분할이고(실루엣' + fn('실루엣') + ' 0.163), 예측력도 중간 수준임(AUC 0.56~0.70). 그래서 진단이 아닌 경향 안내로만 사용함.'])
 
 H('프로젝트 개요', 3)
 T([['항목', '내용'],
@@ -353,11 +363,11 @@ P('건강기능식품을 고르는 소비자 대부분은 **자신에게 무엇�
 P('반면 운동, 끼니, 외식, 앉아 있는 시간, 스트레스 같은 **생활습관은 몇 문항이면 답할 수 있습니다.** '
   '생활습관이 비슷한 사람들의 실제 영양 섭취를 대규모 국가 조사로 미리 분석해 두면, 설문만으로도 "나와 비슷한 사람들은 무엇이 부족하기 쉬운지"라는 첫 단서를 줄 수 있습니다.')
 H('2.2 왜 생활습관 "유형"인가', 2)
-B(['**이해하기 쉬움** — "끼니를 자주 거르는 비활동형"처럼 이름이 붙은 유형은 사용자가 자기 생활을 돌아보게 함. 숫자 15개보다 기억에 남음.',
-   '**행동으로 이어짐** — 유형을 가르는 축(운동, 끼니, 좌식, 스트레스)이 곧 바꿀 수 있는 습관임.',
-   '**공정한 비교 기준이 됨** — 같은 성별·나이대 사람과 비교해 "이 유형에서 특히 많은 부족"을 보여 줄 수 있음.'])
+B(['**이해하기 쉬움**: "끼니를 자주 거르는 비활동형"처럼 이름이 붙은 유형은 사용자가 자기 생활을 돌아보게 함. 숫자 15개보다 기억에 남음.',
+   '**행동으로 이어짐**: 유형을 가르는 축(운동, 끼니, 좌식, 스트레스)이 곧 바꿀 수 있는 습관임.',
+   '**공정한 비교 기준이 됨**: 같은 성별·나이대 사람과 비교해 "이 유형에서 특히 많은 부족"을 보여 줄 수 있음.'])
 H('2.3 서비스 안에서의 위치', 2)
-F(FIG / 'f03_분석흐름.png', '분석 흐름 — 데이터 준비부터 서비스 표시까지', 16)
+F(FIG / 'f03_분석흐름.png', '분석 흐름: 데이터 준비부터 서비스 표시까지', 16)
 P('설문을 마친 모든 사용자는 먼저 **내 유형과 유형별 부족 영양소**를 봅니다(이 보고서의 범위). '
   '더 자세히 알고 싶은 사용자만 개인 맞춤 분석 단계로 넘어가 본인 응답으로 예측한 부족 영양소와 영양제 안내를 받습니다. '
   '첫 화면에서는 영양제 제품을 추천하지 않습니다. 유형 결과는 개인 진단이 아니라 같은 조건 사람들의 경향이기 때문입니다.')
@@ -377,7 +387,7 @@ B(['**대상**: 19세 이상 성인. 임신·수유부 등 별도 기준이 필�
    '**제외**: 개인 맞춤 예측과 영양제 제품 추천은 이 보고서에서 다루지 않음.'])
 
 # ════════════════════════════ 4. 현황 ════════════════════════════
-H('4. 현황 — 데이터로 본 성인 영양 섭취')
+H('4. 현황: 데이터로 본 성인 영양 섭취')
 F(FIG / 'f01_부족률.png', '영양소별 기준 미만 비율 (KNHANES 2022–2024 성인 15,062명, 조사 가중)', 14.5)
 r = S['rate']
 P(f'성인 대부분이 여러 영양소에서 기준에 못 미칩니다. 비타민D({r["비타민D"]}%), 비타민E({r["비타민E"]}%), 칼륨({r["칼륨"]}%), '
@@ -441,7 +451,7 @@ T([['구분', '내용'],
    ['대상', f'19세 이상 성인 중 생활습관 변수에 결측이 없는 15,062명 (2022년 {ny["2022.0"]:,} · 2023년 {ny["2023.0"]:,} · 2024년 {ny["2024.0"]:,}명), 가중 남성 비율 {S["male_pct"]:.1f}%, 가중 평균 나이 {S["age_mean"]:.1f}세'],
    ['생활습관 변수 (14)', '유산소 실천, 근력운동 일수, 좌식 시간, 수면 시간, 스트레스 인지, 아침·점심·저녁 식사 빈도, 외식 빈도, 현재 흡연, 하루 흡연량, 월 음주, 음주 빈도, 1회 음주량'],
    ['영양 변수 (15)', '단백질, 비타민A·D·E·C, 티아민, 리보플라빈, 엽산, 칼슘, 인, 칼륨, 마그네슘, 철, 아연, 식이섬유의 하루 섭취량'],
-   ['기준', '2025 한국인 영양소 섭취기준(KDRI) — 성별 2 × 연령대 5(19–29, 30–49, 50–64, 65–74, 75세 이상)'],
+   ['기준', '2025 한국인 영양소 섭취기준(KDRI): 성별 2 × 연령대 5(19–29, 30–49, 50–64, 65–74, 75세 이상)'],
    ['가중치', '조사 가중치 wt_tot ÷ 3 (3개년 통합, 이용지침서 방식). 비율 계산과 모델 학습에 사용']],
   '데이터 개요', widths=[3.3, 13.2], first_col_bold=True, align_num=False)
 
@@ -511,14 +521,14 @@ T([['변수', '개선 전 (k=7)', '개선 후 (k=4)'],
    ['흡연 여부', '0.964', '0.011'], ['월 음주', '0.916', '0.030'], ['음주 빈도', '0.774', '0.034'],
    ['스트레스', '0.110', '**0.661**'], ['유산소 실천', '0.157', '**0.404**'], ['외식 빈도', '0.239', '**0.308**'],
    ['근력운동', '0.148', '**0.296**'], ['좌식 시간', '0.126', '**0.187**']],
-  '변수별 η²' + fn('η²') + ' (군집 간 분산 비율) — 개선 전후', widths=[4.5, 3.5, 3.5],
+  '변수별 η²' + fn('η²') + ' (군집 간 분산 비율), 개선 전후', widths=[4.5, 3.5, 3.5],
   note='개선 후에는 서비스가 안내하려는 스트레스·운동·외식·좌식이 군집을 결정합니다.')
 H('(2) 대분류 개수(k) 선택', 3)
 T([['k', '총거리 (엘보우)', '실루엣', '시드 간 평균 ARI', '최소 ARI'],
    ['3', '27,918', '**0.182**', '**1.000**', '1.000'], ['**4 (선택)**', '**26,436**', '0.163', '**0.945**', '0.725'],
    ['5', '25,257', '0.154', '0.857', '0.773'], ['6', '24,280', '0.162', '0.572', '—']],
   '대분류 개수별 비교 (7개 지표 PCA 5성분, 전체 15,062명)', widths=[2.6, 3.2, 2.4, 3.4, 2.4], hl_rows=(2,))
-F(MATCHUM / 'Jiyeon' / 'k_selection.png', '대분류 개수 선택 — 엘보우·실루엣·안정성', 15)
+F(MATCHUM / 'Jiyeon' / 'k_selection.png', '대분류 개수 선택: 엘보우·실루엣·안정성', 15)
 B(['안정성 기준(평균 ARI ≥ 0.8)을 만족하는 것은 k = 3, 4, 5이고 k = 6에서 0.57로 급락함.',
    'k = 3은 실루엣이 가장 높지만 유형이 3개뿐이라 서비스 유형으로는 너무 거칢.',
    'k = 4는 안정성을 유지하면서 세분화가 가능한 최소 지점임. k = 5는 평균 ARI(0.857)와 실루엣(0.154) 모두 k = 4보다 낮음. 최소 ARI는 k = 5(0.773)가 k = 4(0.725)보다 높지만, 판단은 시드 10개의 평균 ARI 기준으로 함.'])
@@ -577,10 +587,10 @@ T([['항목', '내용'],
    ['기준 모델', '성별 + 연령대만 사용한 로지스틱 회귀. 유형을 더했을 때의 향상으로 유형의 가치를 판단']],
   '예측 문제 설정', widths=[3, 13.5], first_col_bold=True, align_num=False)
 H('(2) 평가 전략', 3)
-B(['**연도 분할** — 2022–23년(9,742명)으로 학습하고 2024년(5,320명)으로 평가함. 무작위 분할보다 엄격하며, 내년 사용자에게도 통하는지를 봄.',
-   '**하이퍼파라미터** — 학습 자료 안에서만 5겹 교차검증으로 고름. 지표는 조사 가중 로그 손실' + fn('로그 손실') + '(확률의 정확도)임.',
-   '**1-SE 규칙' + fn('1-SE') + '** — 손실이 가장 작은 모델과 1 표준오차 안에서 차이가 나지 않으면 더 단순한 모델을 고름. 작은 차이를 좇다 과적합하는 것을 막음.',
-   '**유의성** — 2024년 AUC 향상의 95% 신뢰구간을 부트스트랩 2,000회로 구하고, 하한이 0보다 크면 "유형이 도움이 된다"고 판단함.'])
+B(['**연도 분할**: 2022–23년(9,742명)으로 학습하고 2024년(5,320명)으로 평가함. 무작위 분할보다 엄격하며, 내년 사용자에게도 통하는지를 봄.',
+   '**하이퍼파라미터**: 학습 자료 안에서만 5겹 교차검증으로 고름. 지표는 조사 가중 로그 손실' + fn('로그 손실') + '(확률의 정확도)임.',
+   '**1-SE 규칙' + fn('1-SE') + '**: 손실이 가장 작은 모델과 1 표준오차 안에서 차이가 나지 않으면 더 단순한 모델을 고름. 작은 차이를 좇다 과적합하는 것을 막음.',
+   '**유의성**: 2024년 AUC 향상의 95% 신뢰구간을 부트스트랩 2,000회로 구하고, 하한이 0보다 크면 "유형이 도움이 된다"고 판단함.'])
 H('(3) 모델 후보와 하이퍼파라미터', 3)
 T([['모델', '특징', '하이퍼파라미터', '탐색 범위'],
    ['로지스틱 회귀 (가법)', '해석이 쉽고 확률이 안정적', 'C (규제 강도의 역수)', '0.01, 0.1, 1, 10'],
@@ -593,7 +603,7 @@ nm = lambda s: (s.replace('LR가법_C', '로지스틱 C=').replace('LR교호_C',
 rows = [['후보', 'CV 로그 손실', '표준오차', 'CV AUC', '선택']]
 for r in tune[tune['영양소'] == '단백질'].itertuples():
     rows.append([nm(r.후보), f'{r.CV로그손실:.4f}', f'{r.SE:.4f}', f'{r.CV_AUC:.3f}', '✓' if r.선택 else ''])
-T(rows, '하이퍼파라미터 선정 과정 예시 — 단백질 (2022–23년 5겹 교차검증)', widths=[6, 2.8, 2.4, 2.4, 1.6], hl_rows=(2,),
+T(rows, '하이퍼파라미터 선정 과정 예시: 단백질 (2022–23년 5겹 교차검증)', widths=[6, 2.8, 2.4, 2.4, 1.6], hl_rows=(2,),
   note='손실 최소는 C=0.1(0.5161)입니다. 더 단순한 C=0.01(0.5190)은 최소 + 1 표준오차(0.5189)를 넘어 선택되지 않았습니다. '
        '15개 영양소 결과는 C=0.01이 10개, C=0.1이 4개(단백질·엽산·마그네슘·식이섬유), 부스팅이 1개(철)이며, 영양소별 최종값은 첨부 D에 정리했습니다.')
 H('(4) 2024년 평가 결과', 3)
@@ -635,7 +645,7 @@ T([['조건', '설명', '안내 일치율', '확률 차이 평균 (최대)', '�
    ['둘 다', '두 조건 모두 적용', '98.7%', '1.2%p (12.0%p)', '칼륨 경계에서 바뀜']],
   '민감도 분석 (120개 조합 × 15개 영양소 = 1,800개 판정 비교)', widths=[2.6, 4.6, 2.2, 3.5, 3.6], align_num=False,
   note='특이한 날의 기록을 빼도 안내 결과는 98.7% 이상 같았습니다. 다만 비타민E·칼륨은 유형 효과가 조건에 따라 뒤집혀, 비타민D와 함께 유형별 안내 없이 공통 안내로만 사용합니다.')
-H('(7) 개선 실험 — 변수 추가와 모델 결합', 3)
+H('(7) 개선 실험: 변수 추가와 모델 결합', 3)
 F(FIG / 'f07_피처모델.png', '변수 묶음·모델별 2024년 평가 AUC (영양소 15개 평균)', 14)
 fe = S['feat']
 T([['변수 묶음', '로지스틱 회귀', '그래디언트 부스팅', '앙상블 (평균)'],
@@ -663,11 +673,11 @@ B(['**확률 기준 표시**는 규칙이 가장 단순하지만 화면당 8~9�
    f'**상위 3개 표시**는 화면이 일정하지만, 평균보다 오히려 덜 부족한 영양소를 "부족"으로 보여 주는 경우가 절반 가까이({ru["상위 3개"]["below1"]}/360) 됨.',
    f'**2단 표시**는 유형 차이를 보여 주면서 과장을 막고(평균보다 덜 부족한 항목 {ru["2단 표시"]["below1"]}/{ru["2단 표시"]["total"]}), 부족이 적은 유형에는 "특히 더 부족한 것은 없다"는 좋은 소식도 줄 수 있어 팀 논의 끝에 채택함.'])
 callout('채택한 2단 표시 규칙', [
-    '**공통 영역** — 공통 주의 영양소 8개는 확률과 상관없이 항상 "많은 사람에게 부족하기 쉬워요"로 표시. 조합에 따라 10명 중 3명 정도인 영양소도 있어(최저 0.26) "대부분"이라고 표현하지 않음',
-    '**유형 영역** — 그 밖의 영양소 중 ① 부족 확률 ≥ 0.5, 또는 ② 같은 성별·연령대 대비 1.2배 이상이면서 부족 확률 ≥ 0.3',
-    '**표시 형식** — "내 유형 10명 중 N명 · 같은 성별·나이 평균 10명 중 M명" + 근거 문구',
-    '**근거 문구** — 유형 고유 → "이 유형에서 특히 많아요" / 식사량 관련 → "식사량 점검이 먼저예요" / 그 외 → "같은 성별·나이대에서 흔해요"',
-    '**유형 영역이 비면** — "공통 영양소 외에 특히 더 부족한 영양소는 없어요"',
+    '**공통 영역**: 공통 주의 영양소 8개는 확률과 상관없이 항상 "많은 사람에게 부족하기 쉬워요"로 표시. 조합에 따라 10명 중 3명 정도인 영양소도 있어(최저 0.26) "대부분"이라고 표현하지 않음',
+    '**유형 영역**: 그 밖의 영양소 중 ① 부족 확률 ≥ 0.5, 또는 ② 같은 성별·연령대 대비 1.2배 이상이면서 부족 확률 ≥ 0.3',
+    '**표시 형식**: "내 유형 10명 중 N명 · 같은 성별·나이 평균 10명 중 M명" + 근거 문구',
+    '**근거 문구**: 유형 고유 → "이 유형에서 특히 많아요" / 식사량 관련 → "식사량 점검이 먼저예요" / 그 외 → "같은 성별·나이대에서 흔해요"',
+    '**유형 영역이 비면**: "공통 영양소 외에 특히 더 부족한 영양소는 없어요"',
     '→ 기준값(1.2배, 0.3)은 결과를 보기 전에 팀 문서로 정하고 고정함. 0.3은 "1.2배지만 10명 중 2명" 같은 과장을 막는 하한임.'], 'F1F8F4', '1BAF7A')
 H('2024년 검증', 3)
 F(FIG / 'f08_2024검증.png', '2022–23년 자료로만 고른 안내 항목의 2024년 관측/기대 부족 비 (근거 문구별, 95% CI)', 14)
@@ -695,7 +705,8 @@ ins = [('영양 부족은 "누구나"의 문제입니다', '비타민D·E, 칼�
        ('같은 유형 안에서도 사람마다 다릅니다', '유형은 부족 비율을 바꿀 뿐 모두를 부족하게 만들지 않음. 그래서 "당신은 철이 부족합니다"가 아니라 "10명 중 6명"처럼 비율로 말함.'),
        ('유형은 설명, 정확도는 개인 분석이 맡습니다', '개인 응답을 더 사용하면 AUC가 더 오름(+0.030). 유형은 사용자가 자기 생활을 이해하는 입구이고, 정밀한 판단은 개인 맞춤 분석의 몫임.')]
 for i, (t_, d_) in enumerate(ins, 1):
-    callout(f'인사이트 {i}. {t_}', [d_])
+    P(f'({i}) {t_}', 10.5, INK, after=2, bold=True)
+    B([d_])
 H('9.2 비즈니스 제언', 2)
 T([['제언', '근거', '기대 효과'],
    ['첫 화면은 유형과 부족 영양소까지만 보여 주고, 영양제는 개인 맞춤 단계에서 안내', '유형 결과는 경향이지 진단이 아님', '처방처럼 보이는 표현을 피하고 신뢰를 얻음'],
