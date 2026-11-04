@@ -3,7 +3,7 @@
 //   - 영양소마다 등급 하나: 평소 식사 기준이 있으면 그것, 없으면 생활습관 기준 (두 확률은 평균하지 않는다)
 //   - 확률 숫자는 보여 주지 않고 '높은 편·보통·낮은 편'만
 //   - 두 기준이 다르면 생활습관 기준 등급을 작게 같이 적는다
-//   살펴볼 영양소(최대 5개)만 펼쳐 두고, 나머지는 접어 둔다
+//   살펴볼 영양소(최대 5개)는 한 묶음 목록으로 펼쳐 두고(모두 '높은 편'이라 등급 표시는 제목에 한 번만), 나머지는 접어 둔 2열 칸으로
 const BAND = {
   High: { label: '높은 편', cls: 'bg-primary-soft text-primary-shade' },
   Mid: { label: '보통', cls: 'bg-butter text-ink' },
@@ -11,25 +11,36 @@ const BAND = {
 }
 const SOURCE = { habitual: '평소 식사 기준', lifestyle: '생활습관 기준' }
 
-function Row({ n, showSource, detail = false }) {
+const sourceText = (n) => `${SOURCE[n.source]}${n.differ ? ` · 생활습관 기준으로는 '${BAND[n.lifestyle].label}'` : ''}`
+
+function WatchRow({ n, showSource }) {
   return (
-    <li className={`rounded-card px-3.5 py-3 ${detail ? 'border-2 border-primary bg-white' : 'bg-cream'}`}>
-      <div className="flex items-center gap-2">
-        <span className="flex min-w-0 flex-1 items-center gap-2 font-bold">
-          <span aria-hidden="true" className="text-xl">
-            {n.icon}
-          </span>
-          {n.label}
-        </span>
-        <span className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-bold ${BAND[n.band].cls}`}>{BAND[n.band].label}</span>
-      </div>
-      {showSource && (
-        <p className="mt-1 text-[0.7rem] text-ink-faint">
-          {SOURCE[n.source]}
-          {n.differ && ` · 생활습관 기준으로는 '${BAND[n.lifestyle].label}'`}
+    <li className="flex items-start gap-3 px-3.5 py-3">
+      <span aria-hidden="true" className="text-2xl leading-none">
+        {n.icon}
+      </span>
+      <div className="min-w-0 flex-1">
+        <p className="flex flex-wrap items-baseline gap-x-2">
+          <b>{n.label}</b>
+          {showSource && <span className="text-[0.7rem] text-ink-faint">{sourceText(n)}</span>}
         </p>
-      )}
-      {detail && <p className="mt-1.5 text-xs leading-relaxed text-ink-soft">{n.guide}</p>}
+        <p className="mt-0.5 text-xs leading-relaxed text-ink-soft">{n.guide}</p>
+      </div>
+    </li>
+  )
+}
+
+function RestItem({ n, showSource }) {
+  return (
+    <li className="rounded-card bg-cream px-3 py-2.5">
+      <p className="flex items-start gap-1.5 text-sm leading-tight font-bold">
+        <span aria-hidden="true">{n.icon}</span>
+        <span className="min-w-0 flex-1">{n.label}</span>
+      </p>
+      <p className="mt-1 flex items-center gap-1.5">
+        <span className={`rounded-full px-2 py-0.5 text-[0.7rem] font-bold ${BAND[n.band].cls}`}>{BAND[n.band].label}</span>
+        {showSource && <span className="text-[0.65rem] text-ink-faint">{n.source === 'habitual' ? '평소 식사' : '생활습관'}</span>}
+      </p>
     </li>
   )
 }
@@ -44,23 +55,28 @@ export default function NutritionRisk({ nutrition, ffqAsked }) {
         내 응답으로 영양소마다 섭취가 부족할 위험을 예측했어요. 국민건강영양조사 참여자들과 비교해 높은 편인지 낮은 편인지예요.
       </p>
 
-      <h3 className="mt-4 text-sm font-bold">🔺 살펴볼 영양소</h3>
       {watch.length ? (
-        <ul className="mt-2 space-y-2">
-          {watch.map((n) => (
-            <Row key={n.key} n={n} showSource={habitualAvailable} detail />
-          ))}
-        </ul>
+        <>
+          <h3 className="mt-4 flex items-center gap-2 text-sm font-bold">
+            🔺 살펴볼 영양소
+            <span className={`rounded-full px-2 py-0.5 text-[0.7rem] ${BAND.High.cls}`}>부족 위험 높은 편 {watch.length}개</span>
+          </h3>
+          <ul className="mt-2 divide-y-2 divide-cream overflow-hidden rounded-card border-2 border-primary-soft bg-white">
+            {watch.map((n) => (
+              <WatchRow key={n.key} n={n} showSource={habitualAvailable} />
+            ))}
+          </ul>
+        </>
       ) : (
-        <p className="mt-2 text-sm text-ink-soft">부족 위험이 높은 편인 영양소는 없어요 👍</p>
+        <p className="mt-4 text-sm text-ink-soft">부족 위험이 높은 편인 영양소는 없어요 👍</p>
       )}
 
       {rest.length > 0 && (
         <details className="mt-3">
           <summary className="cursor-pointer text-sm font-semibold text-ink-soft">나머지 영양소 {rest.length}개 보기</summary>
-          <ul className="mt-2 space-y-1.5">
+          <ul className="mt-2 grid grid-cols-2 gap-1.5">
             {rest.map((n) => (
-              <Row key={n.key} n={n} showSource={habitualAvailable} />
+              <RestItem key={n.key} n={n} showSource={habitualAvailable} />
             ))}
           </ul>
         </details>

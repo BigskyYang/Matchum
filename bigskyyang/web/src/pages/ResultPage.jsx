@@ -50,7 +50,7 @@ export default function ResultPage() {
             ))}
           </ul>
         )}
-        <p className="mt-4 max-w-80 leading-relaxed text-ink-soft">{r.summary}</p>
+        <p className="mt-4 max-w-80 leading-relaxed whitespace-pre-line text-ink-soft">{r.summary}</p>
         <p className="mt-3 text-sm text-ink-soft">
           조사 대상 성인 중 <b className="text-primary-strong">{r.sharePct.toFixed(1)}%</b>가 이 유형이에요
         </p>
@@ -77,7 +77,7 @@ export default function ResultPage() {
       </Card>
 
       <Card title="같이 다니면 좋은 유형" icon="🤝">
-        <PartnerCard me={r.mainType} partner={r.partner.type} helps={r.partner.helps} />
+        <PartnerCard fill={r.partners.fill} together={r.partners.together} />
       </Card>
 
       <section className="rounded-card bg-primary-soft p-5 text-center">

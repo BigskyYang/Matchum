@@ -1,60 +1,46 @@
-// 받침 여부에 따라 조사 고르기: josa('담백형', '은', '는') → '은'
-const josa = (word, withFinal, withoutFinal) => {
-  const code = word.charCodeAt(word.length - 1) - 0xac00
-  return code >= 0 && code <= 11171 && code % 28 ? withFinal : withoutFinal
-}
+import Mascot from '../Mascot.jsx'
 
-// 같이 다니면 좋은 유형
-export default function PartnerCard({ me, partner, helps }) {
-  const helpText = helps.map((a) => `‘${a.label}’`).join('·')
+// 같이 다니면 좋은 유형 2개를 나란히 (데이터는 lib/profile.js의 partnerTypes)
+//   채워 주는 짝꿍: 내가 약한 습관을 잘 챙기는 유형
+//   같이 크는 짝꿍: 나처럼 약한 습관이 있어 함께 바꿔 보기 좋은 유형 (내 유형 제외)
+function Partner({ caption, p, text }) {
   return (
-    <div>
-      <div className="flex items-center justify-center gap-3">
-        <TypeBadge emoji={me.emoji} name={me.name} caption="나" />
-        <span aria-hidden="true" className="text-2xl text-primary-strong">
-          ♥
-        </span>
-        <TypeBadge emoji={partner.emoji} name={partner.name} caption="짝꿍" highlight />
-      </div>
-      <p className="mt-4 text-center text-sm leading-relaxed text-ink-soft">
-        {helps.length ? (
-          <>
-            <b className="text-ink">{partner.name}</b>
-            {josa(partner.name, '은', '는')} 내가 약한 {helpText}
-            {josa(helps[helps.length - 1].label, '을', '를')} 잘 챙기는 유형이에요.
-            <br />
-            함께 다니면 좋은 습관이 옮아요!
-          </>
-        ) : (
-          <>
-            <b className="text-ink">{partner.name}</b>
-            {josa(partner.name, '과', '와')} 함께라면 지금의 좋은 습관을 오래 지킬 수 있어요!
-          </>
-        )}
+    <li className="flex flex-col items-center rounded-card bg-cream px-2 pt-3 pb-4 text-center">
+      <span className="rounded-full bg-white px-2.5 py-0.5 text-[0.7rem] font-bold text-primary-strong">{caption}</span>
+      <Mascot name={`type_${p.id}`} size="sm" className="mt-2" />
+      <p className="mt-1 text-[0.7rem] font-semibold text-ink-soft">
+        <span aria-hidden="true">{p.main.emoji} </span>
+        {p.main.name}
       </p>
-      {helps.length > 0 && (
-        <ul className="mt-3 flex justify-center gap-2">
-          {helps.map((a) => (
-            <li key={a.key} className="rounded-full bg-mint px-3 py-1 text-xs font-bold">
-              {a.icon} {a.label}
+      <p className="mt-0.5 text-sm leading-tight font-bold">{p.name}</p>
+      {p.axes.length > 0 && (
+        <ul className="mt-2 flex flex-wrap justify-center gap-1">
+          {p.axes.map((a) => (
+            <li key={a.key} className="rounded-full bg-white px-2 py-0.5 text-[0.7rem] font-bold">
+              <span aria-hidden="true">{a.icon} </span>
+              {a.label}
             </li>
           ))}
         </ul>
       )}
-    </div>
+      <p className="mt-2 text-xs leading-relaxed whitespace-pre-line text-ink-soft">{text}</p>
+    </li>
   )
 }
 
-function TypeBadge({ emoji, name, caption, highlight = false }) {
+export default function PartnerCard({ fill, together }) {
   return (
-    <div
-      className={`flex w-32 flex-col items-center rounded-card px-2 py-3 text-center ${highlight ? 'bg-primary-soft' : 'bg-cream'}`}
-    >
-      <span className="text-[0.7rem] font-bold text-ink-soft">{caption}</span>
-      <span aria-hidden="true" className="mt-1 text-3xl">
-        {emoji}
-      </span>
-      <span className="mt-1 text-sm leading-tight font-bold">{name}</span>
-    </div>
+    <ul className="grid grid-cols-2 gap-2.5">
+      <Partner
+        caption="채워 주는 짝꿍"
+        p={fill}
+        text={fill.axes.length ? '내가 약한 습관을\n잘 챙기는 유형이에요' : '지금의 좋은 습관을\n함께 지켜 가요'}
+      />
+      <Partner
+        caption="같이 크는 짝꿍"
+        p={together}
+        text={together.axes.length ? '나처럼 이 습관이 약해요.\n같이 바꿔 봐요' : '생활습관이\n나와 가장 비슷해요'}
+      />
+    </ul>
   )
 }

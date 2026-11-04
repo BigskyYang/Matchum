@@ -99,8 +99,8 @@ const STAGE_1 = [
   {
     id: 'activity',
     section: 'activity',
-    title: '숨이 조금 찰 정도로 몸을 움직이는 시간이 일주일에 모두 얼마나 되나요?',
-    help: ['빠르게 걷기, 자전거, 계단 오르기, 달리기·등산, 몸을 쓰는 일까지 모두 합쳐 주세요.'],
+    title: '일주일에 운동을 얼마나 하시나요?',
+    help: ['숨이 찰 정도의 운동이에요. 천천히 걷기, 숨쉬기 운동은 빼 주세요.'],
     type: 'choice',
     // 값 3 = 주 150분 이상 → ML_aerobic 1
     options: [
@@ -187,7 +187,7 @@ const STAGE_1 = [
     id: 'eating_out',
     section: 'meal',
     title: '최근 1년 동안 평균적으로 외식을 얼마나 자주 하셨습니까?',
-    help: ['음식점 식사뿐 아니라 배달·포장 음식, 급식도 포함합니다.'],
+    help: ['집에서 만든 음식이 아니면 외식이에요. 음식점 식사, 배달·포장 음식, 회사·학교 급식도 포함해요.'],
     type: 'choice',
     // 값 = ML_eatingout_freq_ord
     options: [

@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { MAIN_CODES, mainProfile, model, toFeatures } from './classify.js'
+import { model, toFeatures } from './classify.js'
 import { encode } from './encode.js'
 import { SAMPLE } from './fixtures.js'
-import { SCORE_AXES, bestPartner, groupScores, hashtags, levelOf, scores } from './profile.js'
+import { SCORE_AXES, groupScores, hashtags, levelOf, partnerTypes, scores } from './profile.js'
 
-const MAIN_SCORES = Object.fromEntries(MAIN_CODES.map((code) => [code, groupScores(toFeatures(mainProfile(code)))]))
+const LEAF_SCORES = Object.fromEntries(model.types.map((t) => [t.id, groupScores(toFeatures(t.profile))]))
+const GOOD = 0.75
 
 describe('levelOf', () => {
   it('점수를 신호등 단계로 나눈다', () => {
@@ -23,20 +24,28 @@ describe('hashtags', () => {
   })
 })
 
-describe('bestPartner', () => {
-  it.each(MAIN_CODES)('%s 유형의 짝꿍은 다른 대분류 유형이다', (main) => {
-    const partner = bestPartner(MAIN_SCORES[main], main, MAIN_SCORES)
-    expect(partner.label).not.toBe(main)
-    expect(MAIN_CODES).toContain(partner.label)
+describe('partnerTypes (짝꿍 유형 2개)', () => {
+  it.each(Object.keys(LEAF_SCORES))('%s 유형: 두 짝꿍은 내 유형이 아니고 서로 다르다', (leaf) => {
+    const { fill, together } = partnerTypes(LEAF_SCORES[leaf], leaf, LEAF_SCORES)
+    expect([fill.id, together.id]).not.toContain(leaf)
+    expect(fill.id).not.toBe(together.id)
   })
 
-  it('이유로 드는 영역은 짝꿍 유형이 나보다 점수가 높은 영역이다', () => {
-    const mine = scores(encode(SAMPLE).features)
-    const partner = bestPartner(mine, 'N', MAIN_SCORES)
-    const theirs = MAIN_SCORES[partner.label]
-    for (const axis of partner.helps) {
+  const mine = scores(encode(SAMPLE).features)
+  const { fill, together } = partnerTypes(mine, 'N2', LEAF_SCORES)
+
+  it('채워 주는 짝꿍의 이유 영역은 그 유형이 나보다 점수가 높은 영역이다', () => {
+    for (const axis of fill.axes) {
       const i = SCORE_AXES.indexOf(axis)
-      expect(theirs[i]).toBeGreaterThan(mine[i])
+      expect(LEAF_SCORES[fill.id][i]).toBeGreaterThan(mine[i])
+    }
+  })
+
+  it('같이 크는 짝꿍의 이유 영역은 나와 그 유형 모두 좋아요(0.75)에 못 미치는 영역이다', () => {
+    for (const axis of together.axes) {
+      const i = SCORE_AXES.indexOf(axis)
+      expect(mine[i]).toBeLessThan(GOOD)
+      expect(LEAF_SCORES[together.id][i]).toBeLessThan(GOOD)
     }
   })
 })

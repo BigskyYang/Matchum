@@ -42,8 +42,15 @@ describe('buildTypeResult (1단계 유형 결과)', () => {
     expect(r.ageLabel).toMatch(/세/)
   })
 
-  it('짝꿍은 다른 대분류', () => {
-    expect(r.partner.type.name).not.toBe(r.mainType.name)
+  it('짝꿍 유형 2개: 내 유형이 아니고 서로 다르며, 마스코트용 세부 유형 ID와 이름이 있다', () => {
+    const { fill, together } = r.partners
+    expect([fill.id, together.id]).not.toContain(r.leafId)
+    expect(fill.id).not.toBe(together.id)
+    for (const p of [fill, together]) {
+      expect(p.name).toBe(LEAF_TYPES[p.id].name)
+      expect(p.main.emoji).toEqual(expect.any(String))
+      expect(p.axes.length).toBeLessThanOrEqual(2)
+    }
   })
 })
 
