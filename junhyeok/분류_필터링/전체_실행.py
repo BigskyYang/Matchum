@@ -11,8 +11,7 @@ import os, sys, subprocess, time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 STEPS = ["1단계_기본거르기.py", "2단계_성분확인.py", "3단계_목적충돌.py", "4단계_풀나누기.py",
-         "5단계_웹제품군.py", "6단계_1일환산.py", "7단계_상한거르기.py", "8단계_품질거르기.py", "9단계_점수.py",
-         "10단계_웹목록.py"]
+         "5단계_웹제품군.py", "6단계_1일환산.py", "7단계_상한거르기.py", "8단계_품질거르기.py", "9단계_점수.py"]
 
 if len(sys.argv) > 1 and sys.argv[1] == "최종본":
     STEPS = ["입력엑셀_최종본_만들기.py"] + STEPS
