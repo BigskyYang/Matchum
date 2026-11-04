@@ -3,6 +3,8 @@
 import { NUTRIENT_GUIDE, nutrientLevelOf } from '../data/nutrientGuide.js'
 
 const GUIDE = Object.fromEntries(NUTRIENT_GUIDE.map((n) => [n.key, n]))
+// 판정 문구를 화면에서 바꿔 쓸 것 ('흔함'은 유형이 아니라 성별·나이대 때문에 많이 부족한 영양소라 '챙겨야 할'로 쓴다)
+const TEXT = { 흔함: '같은 성별·나이대가 챙겨야 할 영양소예요' }
 
 export const ageGroup = (age) => (age < 30 ? '19-29' : age < 50 ? '30-49' : age < 65 ? '50-64' : age < 75 ? '65-74' : '75+')
 
@@ -12,6 +14,6 @@ export function typeNutrients(cells, type, sex, age) {
   if (!cell) return null
   return {
     common: cell.line1.map((x) => ({ ...GUIDE[x.key], ...x })),
-    picks: cell.line2.map((x) => ({ ...GUIDE[x.key], ...x, level: nutrientLevelOf(x.of10 / 10) })),
+    picks: cell.line2.map((x) => ({ ...GUIDE[x.key], ...x, ...(TEXT[x.tag] && { text: TEXT[x.tag] }), level: nutrientLevelOf(x.of10 / 10) })),
   }
 }

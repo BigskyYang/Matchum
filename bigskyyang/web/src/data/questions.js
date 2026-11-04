@@ -197,8 +197,8 @@ const STAGE_1 = [
     id: 'eating_out',
     section: 'meal',
     title: '외식은 얼마나 자주 하나요?',
-    note: '배달·포장 음식, 급식도 포함',
-    info: ['집에서 만든 음식이 아니면 외식이에요. 음식점 식사, 배달·포장 음식, 회사·학교 급식도 포함해요.'],
+    note: '배달·포장 음식도 포함',
+    info: ['집에서 만든 음식이 아니면 외식이에요. 음식점 식사, 배달·포장 음식도 포함해요.'],
     period: '최근 1년',
     type: 'choice',
     // 값 = ML_eatingout_freq_ord

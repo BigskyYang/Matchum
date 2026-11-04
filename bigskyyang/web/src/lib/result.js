@@ -75,7 +75,8 @@ const GUIDE = {
     ]),
   ),
   sodium_excess: {
-    label: '나트륨 (많이 먹을 위험)',
+    label: '나트륨',
+    excess: true,
     icon: '🧂',
     role: '국물·소스·가공식품에 많이 들어 있어요.',
     tip: '국물은 덜 먹고, 가공식품은 영양표시의 나트륨 양을 살펴보세요.',

@@ -13,7 +13,7 @@ import { clearSurvey, loadSurvey } from '../lib/storage.js'
 // 2단계 개인 결과 (나만 보기). 보여 줄 값은 lib/result.js의 buildPersonalResult가 계산한다
 // 개인 영양 위험은 재준님 모델(data/nutritionModels.json, 약 1.3MB)을 이 화면에서만 불러와 휴대폰에서 계산한다
 // 우울 점수·질환별 조언은 하지 않는다
-// 순서: 나의 영양소 부족 위험(높은 편 칩, 누르면 상세 창) → 흡연·음주 신호등·이번 주 해볼 것 → 음식
+// 순서: 내가 챙겨야 할 영양소(부족하기 쉬운 영양소 칩, 누르면 상세 창) → 흡연·음주 신호등·이번 주 해볼 것 → 음식
 // 건강기능식품 안내는 영양소 상세 창 안에, 근거·주의 안내는 맨 아래 '어떻게 만들었나요?' 창에 모았다
 
 function useModels() {
@@ -52,7 +52,7 @@ export default function PersonalResultPage() {
         <p className="mt-2 text-sm text-ink-soft">🔒 이 휴대폰에서만 볼 수 있어요</p>
       </header>
 
-      <Card title="나의 영양소 부족 위험" icon="🔍">
+      <Card title="내가 챙겨야 할 영양소" icon="🔍">
         <NutritionRisk nutrition={r.nutrition} ffqAsked={r.ffqAsked} />
       </Card>
 

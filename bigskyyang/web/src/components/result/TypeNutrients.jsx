@@ -4,7 +4,7 @@ import { BASIS_TEXT } from '../../data/nutrientGuide.js'
 
 // 유형 화면의 '부족할 수 있는 영양소' ((나)안, 데이터는 lib/nutrition.js의 typeNutrients)
 //   🔹 내 유형이 특히 챙길 영양소: 2줄 중 유형특이·식사량영향 (테두리 색 = 부족·주의). 내 유형 결과라 맨 위에 크게
-//   ▫️ 나와 같은 성별·나이대에서 흔한 영양소: 2줄 중 '흔함' (유형이 아니라 성별·나이 때문)
+//   ▫️ 나와 같은 성별·나이대가 챙겨야 할 영양소: 2줄 중 '흔함' (유형이 아니라 성별·나이 때문에 많이 부족한 영양소)
 //   🔸 모두가 챙겨야 할 영양소: 공통 8개 (유형과 상관없어 맨 아래 작은 칩으로)
 // 영양소를 누르면 화면 아래에서 올라오는 창(BottomSheet)으로 역할·대표 음식을 보여 준다. 근거 설명은 '어떻게 만들었나요?' 창에
 const BORDER = { poor: 'border-primary-strong', fair: 'border-[#f2c14e]' }
@@ -132,7 +132,7 @@ export default function TypeNutrients({ common, picks, emptyText, sexLabel, ageL
 
       {peerPicks.length > 0 && (
         <>
-          <h3 className="mt-5 text-sm font-bold text-ink-soft">▫️ 나와 같은 성별·나이대에서 흔한 영양소</h3>
+          <h3 className="mt-5 text-sm font-bold text-ink-soft">▫️ 나와 같은 성별·나이대가 챙겨야 할 영양소</h3>
           <ul className="mt-2 space-y-2">
             {peerPicks.map((n) => (
               <PickRow key={n.key} n={n} onOpen={setOpen} muted />
