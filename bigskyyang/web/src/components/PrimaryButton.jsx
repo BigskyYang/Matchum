@@ -1,14 +1,15 @@
 import { Link } from 'react-router-dom'
 
-// 화면 하단의 큰 버튼. to가 있으면 링크, 없으면 버튼으로 그린다
+// 화면 하단의 큰 버튼. to가 있으면 링크, 없으면 버튼으로 그린다. size: 'md'(기본) | 'sm'(하단 고정 줄)
 const BASE =
-  'block w-full rounded-button py-5 text-center text-xl font-bold select-none transition-[translate,box-shadow,background-color] duration-100'
+  'block w-full rounded-button text-center text-xl font-bold select-none transition-[translate,box-shadow,background-color] duration-100'
+const SIZE = { md: 'py-5', sm: 'py-3.5' }
 const ENABLED = 'bg-primary-strong text-white shadow-button active:translate-y-1 active:shadow-button-pressed'
 // 비활성: 활성 버튼(분홍)과 헷갈리지 않게 회색
 const DISABLED = 'bg-ink/10 text-ink-soft cursor-not-allowed'
 
-export default function PrimaryButton({ to, disabled = false, className = '', children, ...props }) {
-  const cls = `${BASE} ${disabled ? DISABLED : ENABLED} ${className}`
+export default function PrimaryButton({ to, disabled = false, size = 'md', className = '', children, ...props }) {
+  const cls = `${BASE} ${SIZE[size]} ${disabled ? DISABLED : ENABLED} ${className}`
   if (to) {
     return (
       <Link to={to} className={cls} {...props}>

@@ -25,6 +25,18 @@ function CommonChip({ n, onOpen }) {
   )
 }
 
+// 10명 중 몇 명인지 점 10개로 (색칠한 점 = 적게 먹는 사람)
+function Dots({ of10, tone }) {
+  const fill = tone === 'muted' ? 'bg-ink-soft' : tone === 'fair' ? 'bg-[#e0a92e]' : 'bg-primary-strong'
+  return (
+    <span aria-hidden="true" className="mt-1.5 flex gap-1">
+      {Array.from({ length: 10 }, (_, i) => (
+        <span key={i} className={`size-2.5 rounded-full ${i < of10 ? fill : 'bg-ink/10'}`} />
+      ))}
+    </span>
+  )
+}
+
 function PickRow({ n, onOpen, muted = false }) {
   return (
     <li>
@@ -40,7 +52,7 @@ function PickRow({ n, onOpen, muted = false }) {
         </span>
         <span className="min-w-0 flex-1">
           <span className="block font-bold">{n.label}</span>
-          {!muted && <span className="block text-xs text-ink-soft">{n.text}</span>}
+          <Dots of10={n.of10} tone={muted ? 'muted' : n.level.tone} />
         </span>
         <span className="shrink-0 text-right text-xs leading-tight text-ink-soft">
           <b className="block text-base text-ink">10명 중 {n.of10}명</b>
