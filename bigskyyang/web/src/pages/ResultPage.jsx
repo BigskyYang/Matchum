@@ -30,8 +30,9 @@ export default function ResultPage() {
   if (!r) return <Navigate to="/survey" replace />
 
   const retry = () => {
+    // 응답을 지우고 시작 화면으로 (다시 시작할지는 사용자가 고른다)
     clearSurvey()
-    navigate('/survey')
+    navigate('/')
   }
 
   return (
