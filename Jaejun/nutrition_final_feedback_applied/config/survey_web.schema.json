@@ -1,0 +1,408 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Nutrition survey v1.4-web-retrained",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "sex": {
+      "type": "string",
+      "enum": [
+        "남성",
+        "여성"
+      ]
+    },
+    "age": {
+      "type": "integer",
+      "minimum": 19,
+      "maximum": 120
+    },
+    "smoked_100_cigarettes": {
+      "type": "boolean"
+    },
+    "current_smoking": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "매일 피움",
+        "가끔 피움",
+        "과거에는 피웠으나 현재는 피우지 않음",
+        null
+      ]
+    },
+    "cigarettes_per_day": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 200
+    },
+    "ever_drink": {
+      "type": "boolean"
+    },
+    "drink_frequency": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "최근 1년간 마시지 않음",
+        "월 1회 미만",
+        "월 1회 정도",
+        "월 2~4회",
+        "주 2~3회",
+        "주 4회 이상",
+        null
+      ]
+    },
+    "drink_amount": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "1~2잔",
+        "3~4잔",
+        "5~6잔",
+        "7~9잔",
+        "10잔 이상",
+        null
+      ]
+    },
+    "moderate_hours": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 168
+    },
+    "moderate_minutes": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 59
+    },
+    "vigorous_hours": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 168
+    },
+    "vigorous_minutes": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 59
+    },
+    "sedentary_hours": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 24
+    },
+    "sedentary_minutes": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 59
+    },
+    "strength_days": {
+      "type": "string",
+      "enum": [
+        "0일",
+        "1일",
+        "2일",
+        "3일",
+        "4일",
+        "5일 이상"
+      ]
+    },
+    "workday_bedtime": {
+      "type": "string",
+      "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]$"
+    },
+    "workday_waketime": {
+      "type": "string",
+      "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]$"
+    },
+    "restday_bedtime": {
+      "type": "string",
+      "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]$"
+    },
+    "restday_waketime": {
+      "type": "string",
+      "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]$"
+    },
+    "stress": {
+      "type": "string",
+      "enum": [
+        "대단히 많이 느낀다",
+        "많이 느끼는 편이다",
+        "조금 느끼는 편이다",
+        "거의 느끼지 않는다"
+      ]
+    },
+    "breakfast_frequency": {
+      "type": "string",
+      "enum": [
+        "주 5~7회",
+        "주 3~4회",
+        "주 1~2회",
+        "주 0회"
+      ]
+    },
+    "lunch_frequency": {
+      "type": "string",
+      "enum": [
+        "주 5~7회",
+        "주 3~4회",
+        "주 1~2회",
+        "주 0회"
+      ]
+    },
+    "dinner_frequency": {
+      "type": "string",
+      "enum": [
+        "주 5~7회",
+        "주 3~4회",
+        "주 1~2회",
+        "주 0회"
+      ]
+    },
+    "eatingout_frequency": {
+      "type": "string",
+      "enum": [
+        "하루 2회 이상",
+        "하루 1회",
+        "주 5~6회",
+        "주 3~4회",
+        "주 1~2회",
+        "월 1~3회",
+        "거의 안 함"
+      ]
+    },
+    "fruit_frequency": {
+      "type": "string",
+      "enum": [
+        "하루 3회 이상",
+        "하루 2회",
+        "하루 1회",
+        "주 5~6회",
+        "주 2~4회",
+        "주 1회",
+        "월 2~3회",
+        "월 1회",
+        "거의 안 함"
+      ]
+    },
+    "vegetable_frequency": {
+      "type": "string",
+      "enum": [
+        "하루 3회 이상",
+        "하루 2회",
+        "하루 1회",
+        "주 5~6회",
+        "주 2~4회",
+        "주 1회",
+        "월 2~3회",
+        "월 1회",
+        "거의 안 함"
+      ]
+    },
+    "meat_frequency": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "거의 먹지 않음",
+        "월 1~3회",
+        "주 1~2회",
+        "주 3~4회",
+        "주 5~6회",
+        "하루 1회",
+        "하루 2회",
+        "하루 3회 이상",
+        null
+      ]
+    },
+    "fish_frequency": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "거의 먹지 않음",
+        "월 1~3회",
+        "주 1~2회",
+        "주 3~4회",
+        "주 5~6회",
+        "하루 1회",
+        "하루 2회",
+        "하루 3회 이상",
+        null
+      ]
+    },
+    "egg_frequency": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "거의 먹지 않음",
+        "월 1~3회",
+        "주 1~2회",
+        "주 3~4회",
+        "주 5~6회",
+        "하루 1회",
+        "하루 2회",
+        "하루 3회 이상",
+        null
+      ]
+    },
+    "legume_frequency": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "거의 먹지 않음",
+        "월 1~3회",
+        "주 1~2회",
+        "주 3~4회",
+        "주 5~6회",
+        "하루 1회",
+        "하루 2회",
+        "하루 3회 이상",
+        null
+      ]
+    },
+    "dairy_frequency": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "거의 먹지 않음",
+        "월 1~3회",
+        "주 1~2회",
+        "주 3~4회",
+        "주 5~6회",
+        "하루 1회",
+        "하루 2회",
+        "하루 3회 이상",
+        null
+      ]
+    }
+  },
+  "required": [
+    "sex",
+    "age",
+    "smoked_100_cigarettes",
+    "ever_drink",
+    "moderate_hours",
+    "moderate_minutes",
+    "vigorous_hours",
+    "vigorous_minutes",
+    "sedentary_hours",
+    "sedentary_minutes",
+    "strength_days",
+    "workday_bedtime",
+    "workday_waketime",
+    "restday_bedtime",
+    "restday_waketime",
+    "stress",
+    "breakfast_frequency",
+    "lunch_frequency",
+    "dinner_frequency",
+    "eatingout_frequency",
+    "fruit_frequency",
+    "vegetable_frequency"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "smoked_100_cigarettes": {
+            "const": true
+          }
+        },
+        "required": [
+          "smoked_100_cigarettes"
+        ]
+      },
+      "then": {
+        "required": [
+          "current_smoking"
+        ],
+        "properties": {
+          "current_smoking": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "current_smoking": {
+            "enum": [
+              "매일 피움",
+              "가끔 피움"
+            ]
+          }
+        },
+        "required": [
+          "current_smoking"
+        ]
+      },
+      "then": {
+        "required": [
+          "cigarettes_per_day"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "ever_drink": {
+            "const": true
+          }
+        },
+        "required": [
+          "ever_drink"
+        ]
+      },
+      "then": {
+        "required": [
+          "drink_frequency"
+        ],
+        "properties": {
+          "drink_frequency": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "drink_frequency": {
+            "enum": [
+              "월 1회 미만",
+              "월 1회 정도",
+              "월 2~4회",
+              "주 2~3회",
+              "주 4회 이상"
+            ]
+          }
+        },
+        "required": [
+          "drink_frequency"
+        ]
+      },
+      "then": {
+        "required": [
+          "drink_amount"
+        ],
+        "properties": {
+          "drink_amount": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  ]
+}
