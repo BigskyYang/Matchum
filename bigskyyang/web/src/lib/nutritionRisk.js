@@ -1,9 +1,9 @@
-// 개인 영양 위험 예측: 재준님 모델(v1.4-web-retrained)을 휴대폰에서 계산한다
+// 개인 영양 위험 예측: 재준님 모델(가중치 v1.4-web-retrained, 입력 규칙 v1.4.1-web-feedback)을 휴대폰에서 계산한다
 // 모델 값은 data/nutritionModels.json (scripts/export_nutrition_models.py가 재준님 joblib에서 옮긴 것)
 //   생활습관 모델(lifestyle): 영양소 14개, 입력 18개 (1·2단계 생활습관 + 채소·과일)
 //   평소 식사 모델(habitual, mini-FFQ): 영양소 10개, 19~64세만 (입력: 성별·나이 + 5문항)
 // 두 확률은 평균하지 않고 따로 보여 준다. 등급(낮음·보통·높음)은 학습 자료 안에서의 상대 등급이며 결핍 진단이 아니다
-import { ageFromYear } from './encode.js'
+import { ageFromBirth } from './encode.js'
 
 const sigmoid = (z) => 1 / (1 + Math.exp(-z))
 
@@ -33,14 +33,13 @@ const habitualBand = (c, p) => (p <= c.low_max ? 'Low' : p <= c.mid_max ? 'Mid' 
 // 생활습관 모델 입력 18개 (Jaejun/nutrition_final_feedback_applied/config/encoding_contract.json)
 //   features: encode.js의 ML_* (끼니·외식·음주 방향은 학습 자료와 같다)
 //   채소·과일: 웹은 클수록 자주(8 = 하루 3회 이상), 모델은 1 = 하루 3회 이상 … 9 = 거의 안 함
-//   수면: 시각으로 답했으면 encode.js와 같은 (주중×5 + 주말×2)/7. 평균 시간으로 답했으면 그 시간 그대로
-//         (재준님 학습 자료 2022–2023은 수면 시간을 직접 물었다. 지연님 군집 모델용 2024 척도 변환은 하지 않는다)
+//   수면: encode.js와 같은 (주중×5 + 주말×2)/7 (재준님 규칙과 같다)
+//   나이: 생년월일로 계산한 만 나이 (팀 합의, 재준님 파이프라인도 웹이 넘긴 값을 그대로 쓴다)
 export function lifestyleFeatures(answers, features) {
   return {
     설명_sex: answers.sex,
-    설명_age: ageFromYear(answers.birth_year),
+    설명_age: ageFromBirth(answers.birth_date),
     ...features,
-    ML_sleep_hours: answers.sleep_regular === 'no' ? answers.sleep_avg / 60 : features.ML_sleep_hours,
     식습관_LS_FRUIT: 9 - answers.fruit,
     식습관_LS_VEG2: 9 - answers.veg,
   }

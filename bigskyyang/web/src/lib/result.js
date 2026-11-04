@@ -20,9 +20,8 @@ import { supplementInfo } from './supplements.js'
 const MAX_MISSIONS = 3
 const MAX_FOODS = 6
 const AGE_LABELS = { '19-29': '19~29세', '30-49': '30~49세', '50-64': '50~64세', '65-74': '65~74세', '75+': '75세 이상' }
-const IRREGULAR_MISSION = { icon: '🌙', title: '잠·식사 시간 맞추기', detail: '근무나 일정이 바뀌어도 잠드는 시간과 식사 시간을 최대한 비슷하게!' }
 
-const missionsOf = (tips, first = []) => [...first, ...tips.flatMap((t) => (t.mission ? [t.mission] : []))].slice(0, MAX_MISSIONS)
+const missionsOf = (tips) => tips.flatMap((t) => (t.mission ? [t.mission] : [])).slice(0, MAX_MISSIONS)
 
 // 1단계 응답(+ 있으면 2단계)으로 유형 결과
 export function buildTypeResult(answers) {
@@ -45,7 +44,7 @@ export function buildTypeResult(answers) {
     tags: hashtags(type),
     sharePct: type.share * 100,
     habits: TYPE_AXES.map((axis, i) => ({ ...axis, score: myScores[i] })),
-    missions: missionsOf(pickTips(features, extras), extras.sleepIrregular ? [IRREGULAR_MISSION] : []),
+    missions: missionsOf(pickTips(features, extras)),
     // 부족할 수 있는 영양소: 유환님 (나)안 결과 (유형 × 성별 × 연령대)
     nutrients: typeNutrients(nutrientCells, leaf, extras.sex, extras.age),
     nutrientsEmptyText: nutrientCells.empty_line2_text,
@@ -63,29 +62,26 @@ const GUIDE = {
 const RANK = { Low: 0, Mid: 1, High: 2 }
 const MAX_WATCH = 5
 
-// 재준님 두 모델 결과 → 화면용 (확률은 평균하지 않는다)
-//   살펴볼 영양소(watch): 평소 식사 기준 '높은 편', 또는 생활습관 기준 '높은 편'이면서 평소 식사 기준이 '낮은 편'이 아닌 것
-//     (두 기준이 엇갈리면 더 정확한 평소 식사 기준을 따른다). 많으면 MAX_WATCH개까지, 나머지는 rest로 접는다
+// 재준님 두 모델 결과 → 화면용 (Jaejun/nutrition_final_feedback_applied/config/display_policy.json)
+//   대표 등급(band): 평소 식사 기준이 있으면 그것, 없으면 생활습관 기준. 확률은 평균하지 않고 화면에 숫자도 쓰지 않는다
+//   살펴볼 영양소(watch): 대표 등급이 '높은 편'인 것, 최대 MAX_WATCH개 (고르는 규칙은 웹이 정한다). 나머지는 rest로 접는다
 function personalNutrition(pred) {
   const rows = Object.keys(GUIDE)
     .filter((key) => pred.lifestyle[key])
     .map((key) => {
       const lifestyle = pred.lifestyle[key].band
       const habitual = pred.habitual?.[key]?.band ?? null
-      const bands = [lifestyle, habitual].filter(Boolean)
-      const high = habitual === 'High' || (lifestyle === 'High' && habitual !== 'Low')
-      return { key, ...GUIDE[key], lifestyle, habitual, high, mixed: bands.includes('High') && bands.includes('Low') }
+      const band = habitual ?? lifestyle
+      return { key, ...GUIDE[key], band, source: habitual ? 'habitual' : 'lifestyle', lifestyle, habitual, differ: habitual !== null && habitual !== lifestyle }
     })
-  // 둘 다 높은 편 → 평소 식사 기준 높은 편 → 생활습관 기준 높은 편
-  const score = (n) => (n.habitual === 'High' ? 2 : 0) + (n.lifestyle === 'High' ? 1 : 0) + (n.habitual === 'High' && n.lifestyle === 'High' ? 4 : 0)
+  // 같은 '높은 편'이면 두 기준이 모두 높은 편인 것 → 평소 식사 기준 → 생활습관 기준 순 (영양소끼리 확률은 비교하지 않는다)
+  const score = (n) => (n.habitual === 'High') * 2 + (n.lifestyle === 'High')
+  const high = rows.filter((n) => n.band === 'High').sort((a, b) => score(b) - score(a))
   return {
     version: pred.version,
     habitualAvailable: pred.habitual !== null,
-    watch: rows.filter((n) => n.high).sort((a, b) => score(b) - score(a)).slice(0, MAX_WATCH),
-    rest: [
-      ...rows.filter((n) => n.high).sort((a, b) => score(b) - score(a)).slice(MAX_WATCH),
-      ...rows.filter((n) => !n.high).sort((a, b) => RANK[b.lifestyle] - RANK[a.lifestyle]),
-    ],
+    watch: high.slice(0, MAX_WATCH),
+    rest: [...high.slice(MAX_WATCH), ...rows.filter((n) => n.band !== 'High').sort((a, b) => RANK[b.band] - RANK[a.band])],
   }
 }
 

@@ -20,7 +20,8 @@
   가격·판매처·점수·순위 열은 있어도 웹으로 옮기지 않는다 (v3 6절: 홍보처럼 보일 수 있음)
 
 실행 (bigskyyang 폴더에서)
-  python scripts/build_supplement_products.py 경로/영양제_웹표시목록.xlsx
+  python scripts/build_supplement_products.py                  # 준혁님 9단계 결과 junhyeok/output/web_products.csv
+  python scripts/build_supplement_products.py 경로/목록.xlsx    # 다른 파일
 """
 
 import json
@@ -31,6 +32,7 @@ from pathlib import Path
 import pandas as pd
 
 OUT = Path(__file__).resolve().parents[1] / 'web' / 'src' / 'data' / 'supplementProducts.json'
+DEFAULT_INPUT = Path(__file__).resolve().parents[2] / 'junhyeok' / 'output' / 'web_products.csv'   # 준혁님 9단계 결과
 SOURCE = '식품의약품안전처 건강기능식품 품목제조 신고사항(C003), 2022년 이후 신고분'
 
 # 영양소 이름 → 웹 키 (web/src/data/supplementInfo.js의 PRODUCT_NUTRIENTS)
@@ -109,6 +111,9 @@ def main(path):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) != 2:
-        sys.exit('사용법: python scripts/build_supplement_products.py 경로/영양제_웹표시목록.xlsx')
-    main(sys.argv[1])
+    if len(sys.argv) > 2:
+        sys.exit('사용법: python scripts/build_supplement_products.py [경로/영양제_웹표시목록.xlsx]')
+    path = Path(sys.argv[1]) if len(sys.argv) == 2 else DEFAULT_INPUT
+    if not path.exists():
+        sys.exit(f'입력 파일이 없어요: {path}')
+    main(path)

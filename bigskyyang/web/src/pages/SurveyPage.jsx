@@ -5,7 +5,7 @@ import PrimaryButton from '../components/PrimaryButton.jsx'
 import ChoiceInput from '../components/survey/ChoiceInput.jsx'
 import ProgressBar from '../components/survey/ProgressBar.jsx'
 import RowsInput from '../components/survey/RowsInput.jsx'
-import { DurationWheel, NumberWheel, TimeWheel } from '../components/survey/WheelInputs.jsx'
+import { DateWheel, DurationWheel, NumberWheel, TimeWheel } from '../components/survey/WheelInputs.jsx'
 import { SECTIONS, visibleQuestions } from '../data/questions.js'
 import { loadSurvey, saveSurvey } from '../lib/storage.js'
 import { resolveStep, resultPath, surveyPath } from '../lib/surveyFlow.js'
@@ -13,7 +13,9 @@ import { resolveStep, resultPath, surveyPath } from '../lib/surveyFlow.js'
 function QuestionStep({ q, answer, isLast, onAnswer }) {
   // 휠 입력은 이전 응답이 있으면 그 값, 없으면 문항의 initial 값에서 시작. 여러 줄 선택은 빈 값에서 시작
   const [draft, setDraft] = useState(() => answer ?? q.initial ?? (q.type === 'rows' ? {} : undefined))
-  const ready = q.type !== 'rows' || q.rows.every((row) => draft[row.id] !== undefined)
+  // check: 다음으로 넘어갈 수 없는 값이면 안내 문구 (예: 만 19세 미만)
+  const error = q.check?.(draft) ?? null
+  const ready = (q.type !== 'rows' || q.rows.every((row) => draft[row.id] !== undefined)) && !error
 
   return (
     <>
@@ -33,6 +35,12 @@ function QuestionStep({ q, answer, isLast, onAnswer }) {
           {q.type === 'number' && <NumberWheel value={draft} onChange={setDraft} unit={q.unit} min={q.min} max={q.max} />}
           {q.type === 'time' && <TimeWheel value={draft} onChange={setDraft} hourStart={q.hourStart} />}
           {q.type === 'duration' && <DurationWheel value={draft} onChange={setDraft} per={q.per} maxHours={q.maxHours} />}
+          {q.type === 'date' && <DateWheel value={draft} onChange={setDraft} minYear={q.minYear} maxYear={q.maxYear} />}
+          {error && (
+            <p role="alert" className="mt-3 text-center text-sm font-semibold text-primary-shade">
+              {error}
+            </p>
+          )}
         </div>
       </section>
 

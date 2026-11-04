@@ -1,42 +1,35 @@
 // 개인 결과의 '나의 영양소 부족 위험' (데이터는 lib/result.js의 buildPersonalResult → nutrition)
-//   두 기준(생활습관·평소 식사)을 평균하지 않고 나란히 보여 준다 (재준님 원칙)
-//   살펴볼 영양소(최대 5개)만 펼쳐 두고, 나머지는 접어 둔다. 평소 식사 모델이 다루지 않는 영양소는 그 칸을 비운다
+//   재준님 화면 규칙 (Jaejun/nutrition_final_feedback_applied/config/display_policy.json)
+//   - 영양소마다 등급 하나: 평소 식사 기준이 있으면 그것, 없으면 생활습관 기준 (두 확률은 평균하지 않는다)
+//   - 확률 숫자는 보여 주지 않고 '높은 편·보통·낮은 편'만
+//   - 두 기준이 다르면 생활습관 기준 등급을 작게 같이 적는다
+//   살펴볼 영양소(최대 5개)만 펼쳐 두고, 나머지는 접어 둔다
 const BAND = {
   High: { label: '높은 편', cls: 'bg-primary-soft text-primary-shade' },
   Mid: { label: '보통', cls: 'bg-butter text-ink' },
   Low: { label: '낮은 편', cls: 'bg-mint text-ink' },
 }
+const SOURCE = { habitual: '평소 식사 기준', lifestyle: '생활습관 기준' }
 
-function Signal({ name, band }) {
-  return (
-    <span className="flex items-center gap-1 text-[0.7rem] text-ink-soft">
-      {name}
-      <span className={`rounded-full px-2 py-0.5 font-bold ${BAND[band].cls}`}>{BAND[band].label}</span>
-    </span>
-  )
-}
-
-function Row({ n, showHabitual, detail = false }) {
+function Row({ n, showSource, detail = false }) {
   return (
     <li className={`rounded-card px-3.5 py-3 ${detail ? 'border-2 border-primary bg-white' : 'bg-cream'}`}>
-      <p className="flex items-center gap-2 font-bold">
-        <span aria-hidden="true" className="text-xl">
-          {n.icon}
+      <div className="flex items-center gap-2">
+        <span className="flex min-w-0 flex-1 items-center gap-2 font-bold">
+          <span aria-hidden="true" className="text-xl">
+            {n.icon}
+          </span>
+          {n.label}
         </span>
-        {n.label}
-      </p>
-      <p className="mt-1.5 flex flex-wrap gap-x-3 gap-y-1">
-        <Signal name="생활습관" band={n.lifestyle} />
-        {showHabitual && n.habitual && <Signal name="평소 식사" band={n.habitual} />}
-      </p>
-      {detail && (
-        <>
-          {n.mixed && (
-            <p className="mt-1.5 text-xs text-ink-soft">두 기준의 결과가 엇갈려요. 평소 식사 기준이 더 정확한 편이라 이쪽을 따랐어요.</p>
-          )}
-          <p className="mt-1.5 text-xs leading-relaxed text-ink-soft">{n.guide}</p>
-        </>
+        <span className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-bold ${BAND[n.band].cls}`}>{BAND[n.band].label}</span>
+      </div>
+      {showSource && (
+        <p className="mt-1 text-[0.7rem] text-ink-faint">
+          {SOURCE[n.source]}
+          {n.differ && ` · 생활습관 기준으로는 '${BAND[n.lifestyle].label}'`}
+        </p>
       )}
+      {detail && <p className="mt-1.5 text-xs leading-relaxed text-ink-soft">{n.guide}</p>}
     </li>
   )
 }
@@ -48,14 +41,14 @@ export default function NutritionRisk({ nutrition, ffqAsked }) {
   return (
     <div>
       <p className="text-sm leading-relaxed text-ink-soft">
-        내 응답으로 영양소마다 섭취가 부족할 위험을 예측했어요. 나와 비슷한 사람들 사이에서 높은 편인지 낮은 편인지예요.
+        내 응답으로 영양소마다 섭취가 부족할 위험을 예측했어요. 국민건강영양조사 참여자들과 비교해 높은 편인지 낮은 편인지예요.
       </p>
 
       <h3 className="mt-4 text-sm font-bold">🔺 살펴볼 영양소</h3>
       {watch.length ? (
         <ul className="mt-2 space-y-2">
           {watch.map((n) => (
-            <Row key={n.key} n={n} showHabitual={habitualAvailable} detail />
+            <Row key={n.key} n={n} showSource={habitualAvailable} detail />
           ))}
         </ul>
       ) : (
@@ -67,26 +60,26 @@ export default function NutritionRisk({ nutrition, ffqAsked }) {
           <summary className="cursor-pointer text-sm font-semibold text-ink-soft">나머지 영양소 {rest.length}개 보기</summary>
           <ul className="mt-2 space-y-1.5">
             {rest.map((n) => (
-              <Row key={n.key} n={n} showHabitual={habitualAvailable} />
+              <Row key={n.key} n={n} showSource={habitualAvailable} />
             ))}
           </ul>
         </details>
       )}
 
       <ul className="mt-4 space-y-1 text-[0.7rem] leading-relaxed text-ink-faint">
-        <li>· 생활습관 기준: 운동·수면·식사 습관 응답만으로 예측해 정확도가 높지 않아요. 참고로만 봐 주세요.</li>
         {habitualAvailable ? (
-          <li>· 평소 식사 기준: 고기·생선·달걀·콩·유제품을 먹는 횟수로 예측해 생활습관 기준보다 정확한 편이에요.</li>
+          <li>
+            · 평소 식사 기준(고기·생선·달걀·콩·유제품을 먹는 횟수)이 있는 영양소는 그 결과를 보여 줘요. 생활습관 기준보다 정확한
+            편이에요.
+          </li>
         ) : (
           <li>
             · 평소 식사 기준은 19~64세에서만 검증돼
             {ffqAsked ? ' 이번에는 계산하지 않았어요.' : ', 65세 이상은 생활습관 기준으로만 알려 드려요.'}
           </li>
         )}
-        <li>
-          · 국민건강영양조사 자료로 학습한 예측이에요. 위험이 '높은 편'이어도 부족하다고 진단한 결과가 아니고, 필요한 양을 알려
-          주지 않아요.
-        </li>
+        <li>· 생활습관 기준은 운동·수면·식사 습관 응답만으로 예측해 정확도가 높지 않아요. 참고로만 봐 주세요.</li>
+        <li>· 기준 자료 안에서의 상대 등급이에요. 부족을 진단한 결과가 아니고, 필요한 양을 알려 주지 않아요.</li>
       </ul>
     </div>
   )

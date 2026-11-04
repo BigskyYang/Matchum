@@ -13,9 +13,15 @@
 //   number   : 숫자 휠 { unit, min, max, initial }
 //   time     : 시각 'HH:MM' 휠 { initial, hourStart: 시 목록을 몇 시부터 보여줄지 }
 //   duration : 시간 + 분 → 분 단위 숫자 휠 { per: '일주일에' | '하루', maxHours, initial(분) }
+//   date     : 생년월일 'YYYY-MM-DD' 휠 (년·월·일) { minYear, maxYear, initial }
 // layout (choice): 'list' 한 줄에 하나 | 'grid' 2열 | 'row' 한 줄에 모두 (짧은 숫자 보기)
 // initial: 처음 화면에 맞춰져 있는 값 (많이 고르는 값을 기준으로)
 // showIf(answers): false면 해당 문항을 건너뛴다
+// check(value): 다음으로 넘어갈 수 없는 값이면 안내 문구, 괜찮으면 null
+//
+// 팀 합의 (2026-11-04): 흡연은 궐련·전자담배 구분 없이 지금 피우는지만, 유산소는 중강도·고강도를 나눠 묻지 않음,
+//   수면은 취침·기상 시각으로만 ('날마다 들쭉날쭉' 보기 없음), 나이는 생년월일로 계산한 만 나이
+import { ageFromBirth } from '../lib/encode.js'
 
 // 채소·과일 9단계 (값이 클수록 자주)
 const INTAKE_9 = [
@@ -42,11 +48,11 @@ const FOOD_FREQ_8 = [
   { label: '하루 3회 이상', value: 7 },
 ]
 
-const isCurrentSmoker = (a) => a.smoke_now === 'daily' || a.smoke_now === 'sometimes'
+const isCurrentSmoker = (a) => a.smoke_now === 'yes'
 const THIS_YEAR = new Date().getFullYear()
-const ageOf = (a) => THIS_YEAR - a.birth_year
-// mini-FFQ 모델은 19~64세에서만 검증됐다 → 65세 이상은 묻지 않는다 (재준님 모델 규칙)
-const ffqAge = (a) => ageOf(a) <= 64
+const ADULT = 19
+// mini-FFQ 모델은 19~64세에서만 검증됐다 → 만 65세 이상은 묻지 않는다 (재준님 모델 규칙)
+const ffqAge = (a) => ageFromBirth(a.birth_date) <= 64
 
 export const SECTIONS = {
   basic: '기본정보',
@@ -61,8 +67,7 @@ export const SECTIONS = {
   food: '평소 식사',
 }
 
-const isRegularSleep = (a) => a.sleep_regular === 'yes'
-const weekendDiffers = (a) => a.sleep_regular === 'yes' && a.weekend_same === 'no'
+const weekendDiffers = (a) => a.weekend_same === 'no'
 
 // 1단계: 유형 분류 (지연님 모델 입력: 유산소·근력·좌식·수면·스트레스·세 끼·외식 + 성별·나이)
 const STAGE_1 = [
@@ -77,15 +82,25 @@ const STAGE_1 = [
       { label: '여성', value: 2 },
     ],
   },
-  // 만 나이는 출생연도로 계산 (lib/encode.js). 만 19세 이상 성인 대상
-  { id: 'birth_year', section: 'basic', title: '태어난 해를 선택해주세요.', type: 'number', unit: '년', min: 1930, max: THIS_YEAR - 19, initial: 1995 },
+  // 만 나이는 생년월일로 계산 (lib/encode.js ageFromBirth). 만 19세 이상 성인 대상
+  {
+    id: 'birth_date',
+    section: 'basic',
+    title: '생년월일을 선택해주세요.',
+    help: ['만 나이로 계산해요.'],
+    type: 'date',
+    minYear: 1930,
+    maxYear: THIS_YEAR - ADULT,
+    initial: '1995-01-01',
+    check: (v) => (ageFromBirth(v) < ADULT ? `만 ${ADULT}세 이상만 참여할 수 있어요.` : null),
+  },
 
-  // 4. 신체활동: 모델은 '중강도 + 고강도×2 ≥ 주 150분'(KNHANES 유산소 신체활동 실천)만 쓰므로 한 문항으로 묻는다
+  // 4. 신체활동: 팀 합의로 중강도·고강도를 나눠 묻지 않고, 모두 합친 시간이 주 150분 이상인지만 본다 (고강도 ×2 없음)
   {
     id: 'activity',
     section: 'activity',
     title: '숨이 조금 찰 정도로 몸을 움직이는 시간이 일주일에 모두 얼마나 되나요?',
-    help: ['빠르게 걷기, 자전거, 계단 오르기, 몸을 쓰는 일도 포함해요.', '달리기·등산처럼 숨이 많이 차는 운동은 2배로 쳐 주세요 (1시간 15분이면 2시간 반).'],
+    help: ['빠르게 걷기, 자전거, 계단 오르기, 달리기·등산, 몸을 쓰는 일까지 모두 합쳐 주세요.'],
     type: 'choice',
     // 값 3 = 주 150분 이상 → ML_aerobic 1
     options: [
@@ -121,19 +136,9 @@ const STAGE_1 = [
     maxHours: 20,
     initial: 8 * 60,
   },
-  // 수면: 시간이 일정한 사람은 취침·기상 시각(주말도 비슷하면 주중만), 들쭉날쭉한 사람은 평균 수면 시간
-  {
-    id: 'sleep_regular',
-    section: 'sleep',
-    title: '잠자리에 드는 시각과 일어나는 시각이 대체로 일정한 편인가요?',
-    type: 'choice',
-    options: [
-      { label: '네, 대체로 일정해요', value: 'yes' },
-      { label: '아니요, 날마다 들쭉날쭉해요', value: 'no' },
-    ],
-  },
-  { id: 'weekday_bed', section: 'sleep', title: '평소 주중(또는 주로 일하는 날)에 잠자리에 드는 시각은 언제입니까?', type: 'time', initial: '22:00', hourStart: 18, showIf: isRegularSleep },
-  { id: 'weekday_wake', section: 'sleep', title: '평소 주중(또는 주로 일하는 날)에 일어나는 시각은 언제입니까?', type: 'time', initial: '07:00', hourStart: 3, showIf: isRegularSleep },
+  // 수면: 취침·기상 시각 (주말도 비슷하면 주중만). 팀 합의로 '날마다 들쭉날쭉' 보기는 두지 않는다
+  { id: 'weekday_bed', section: 'sleep', title: '평소 주중(또는 주로 일하는 날)에 잠자리에 드는 시각은 언제입니까?', type: 'time', initial: '22:00', hourStart: 18 },
+  { id: 'weekday_wake', section: 'sleep', title: '평소 주중(또는 주로 일하는 날)에 일어나는 시각은 언제입니까?', type: 'time', initial: '07:00', hourStart: 3 },
   {
     id: 'weekend_same',
     section: 'sleep',
@@ -143,21 +148,9 @@ const STAGE_1 = [
       { label: '네, 비슷해요', value: 'yes' },
       { label: '아니요, 달라요', value: 'no' },
     ],
-    showIf: isRegularSleep,
   },
   { id: 'weekend_bed', section: 'sleep', title: '주말(또는 쉬는 날)에 잠자리에 드는 시각은 언제입니까?', type: 'time', initial: '22:00', hourStart: 18, showIf: weekendDiffers },
   { id: 'weekend_wake', section: 'sleep', title: '주말(또는 쉬는 날)에 일어나는 시각은 언제입니까?', type: 'time', initial: '07:00', hourStart: 3, showIf: weekendDiffers },
-  {
-    id: 'sleep_avg',
-    section: 'sleep',
-    title: '하루에 평균 몇 시간 정도 주무시나요?',
-    help: ['요즘 일주일을 떠올려 평균으로 골라 주세요. 낮잠은 빼 주세요.'],
-    type: 'duration',
-    per: '하루 평균',
-    maxHours: 14,
-    initial: 7 * 60,
-    showIf: (a) => a.sleep_regular === 'no',
-  },
   // 7. 스트레스
   {
     id: 'stress',
@@ -221,18 +214,16 @@ const FFQ_ITEMS = [
 ]
 
 const STAGE_2 = [
-  // 흡연 (값 → ML_smoker: 매일·가끔 = 1). 전자담배도 포함한다 (KNHANES 학습 자료는 궐련 기준이라 약간 다르다)
+  // 흡연 (값 'yes' → ML_smoker 1). 팀 합의: 궐련(일반 담배)·전자담배를 구분하지 않고 지금 피우는지만 묻는다
   {
     id: 'smoke_now',
     section: 'smoke',
-    title: '담배를 피우시나요?',
-    help: ['전자담배도 포함해요.'],
+    title: '요즘 담배를 피우시나요?',
+    help: ['일반 담배와 전자담배를 똑같이 봐요. 가끔 피워도 \'네\'예요.', '끊었으면 \'아니요\'를 골라 주세요.'],
     type: 'choice',
     options: [
-      { label: '매일 피워요', value: 'daily' },
-      { label: '가끔 피워요', value: 'sometimes' },
-      { label: '끊었어요', value: 'past' },
-      { label: '피운 적 없어요', value: 'never' },
+      { label: '네, 피워요', value: 'yes' },
+      { label: '아니요, 안 피워요', value: 'no' },
     ],
   },
   {

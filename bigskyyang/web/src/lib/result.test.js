@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import models from '../data/nutritionModels.json'
 import { LEAF_TYPES } from '../data/types.js'
-import { SAMPLE, STAGE1_SAMPLE } from './fixtures.js'
+import { SAMPLE, STAGE1_SAMPLE, bornAt } from './fixtures.js'
 import { PERSONAL_AXES, TYPE_AXES } from './profile.js'
 import { buildPersonalResult, buildTypeResult } from './result.js'
 
@@ -34,11 +34,6 @@ describe('buildTypeResult (1단계 유형 결과)', () => {
     expect(r.missions.map((m) => m.icon)).not.toContain('🚭')
   })
 
-  it('수면이 들쭉날쭉하면 잠·식사 시간 미션이 먼저 나온다', () => {
-    const irregular = buildTypeResult({ ...STAGE1_SAMPLE, sleep_regular: 'no', sleep_avg: 7 * 60 })
-    expect(irregular.missions[0].title).toBe('잠·식사 시간 맞추기')
-  })
-
   it('부족할 수 있는 영양소: 공통 8개 + 2줄 (판정 코드 포함), 성별·연령대 표시', () => {
     expect(r.nutrients.common).toHaveLength(8)
     for (const n of r.nutrients.picks) expect(['유형특이', '식사량영향', '흔함']).toContain(n.tag)
@@ -63,14 +58,13 @@ describe('buildPersonalResult (2단계 개인 결과)', () => {
   })
 
   it('흡연자면 금연 미션', () => {
-    const smoker = buildPersonalResult({ ...SAMPLE, smoke_now: 'daily', cigarettes: 10 })
+    const smoker = buildPersonalResult({ ...SAMPLE, smoke_now: 'yes', cigarettes: 10 })
     expect(smoker.missions.map((m) => m.icon)).toContain('🚭')
   })
 
   it('mini-FFQ에 답했는지 (65세 이상은 묻지 않음)', () => {
     expect(r.ffqAsked).toBe(true)
-    const year = new Date().getFullYear()
-    const older = { ...SAMPLE, birth_year: year - 70 }
+    const older = { ...SAMPLE, birth_date: bornAt(70) }
     for (const k of ['meat', 'fish', 'egg', 'legume', 'dairy']) delete older[`ffq_${k}`]
     expect(buildPersonalResult(older).ffqAsked).toBe(false)
   })
@@ -99,18 +93,19 @@ describe('buildPersonalResult 개인 영양 위험 (재준님 모델)', () => {
     const { watch, rest } = r.nutrition
     expect(watch.length + rest.length).toBe(14)
     expect(watch.length).toBeLessThanOrEqual(5)
-    // 평소 식사 기준 높은 편, 또는 생활습관 높은 편 + 평소 식사가 낮은 편이 아님
-    for (const n of watch) expect(n.habitual === 'High' || (n.lifestyle === 'High' && n.habitual !== 'Low')).toBe(true)
-    for (const n of rest.filter((x) => !x.high)) expect(n.habitual !== 'High' && !(n.lifestyle === 'High' && n.habitual !== 'Low')).toBe(true)
+    // 대표 등급 = 평소 식사 기준이 있으면 그것, 없으면 생활습관 기준. 살펴볼 것은 대표 등급 '높은 편'
+    for (const n of [...watch, ...rest]) expect(n.band).toBe(n.habitual ?? n.lifestyle)
+    for (const n of watch) expect(n.band).toBe('High')
+    if (watch.length < 5) for (const n of rest) expect(n.band).not.toBe('High')
     expect(r.nutrition.habitualAvailable).toBe(true)
   })
 
   it('65세 이상은 생활습관 기준만', () => {
-    const older = { ...SAMPLE, birth_year: new Date().getFullYear() - 70 }
+    const older = { ...SAMPLE, birth_date: bornAt(70) }
     for (const k of ['meat', 'fish', 'egg', 'legume', 'dairy']) delete older[`ffq_${k}`]
     const o = buildPersonalResult(older, models).nutrition
     expect(o.habitualAvailable).toBe(false)
-    for (const n of [...o.watch, ...o.rest]) expect(n.habitual).toBeNull()
+    for (const n of [...o.watch, ...o.rest]) expect([n.habitual, n.source, n.band]).toEqual([null, 'lifestyle', n.lifestyle])
   })
 
   it('건강기능식품 정보는 부족 위험이 높은 편인 영양소로 (나트륨 제외)', () => {

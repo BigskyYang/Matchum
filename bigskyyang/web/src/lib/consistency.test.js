@@ -88,14 +88,14 @@ describe('부족할 수 있는 영양소 결과표 (nutrientCells.json, 유환�
 //   문자열: 같은 문항 / { merged: 웹 문항 }: 웹에서 다른 문항과 합침 / { removed: 이유 }: 웹에서 뺌
 const SCHEMA_TO_WEB = {
   Q1: 'sex',
-  Q2: { merged: 'birth_year' }, // v3는 만 나이, 웹은 출생연도
-  Q3: { merged: 'smoke_now' }, // '평생 100개비'를 먼저 묻지 않고 지금 흡연 상태만 (모델은 현재 흡연만 쓴다)
-  Q4: { merged: 'smoke_now' }, // 보기에 '피운 적 없어요'를 더함
+  Q2: { merged: 'birth_date' }, // 생년월일로 만 나이를 계산 (팀 합의: 웹은 항상 만 나이)
+  Q3: { merged: 'smoke_now' }, // '평생 100개비'를 먼저 묻지 않고 지금 피우는지만 (팀 합의: 궐련·전자담배 구분 없음)
+  Q4: { merged: 'smoke_now' }, // 매일·가끔 → '네', 끊음·안 피움 → '아니요' (재준님 currently_smoking)
   Q5: 'cigarettes',
   Q6: { merged: 'drink_freq' }, // '평생 1잔'을 먼저 묻지 않고 빈도에 '최근 1년 안 마셨어요'
   Q7: 'drink_freq',
   Q8: 'drink_amount',
-  Q9: { merged: 'activity' }, // 중강도·고강도 시간 → 주 150분 이상인지 한 문항 (모델은 그것만 쓴다)
+  Q9: { merged: 'activity' }, // 팀 합의: 중강도·고강도를 나누지 않고 합친 시간이 주 150분 이상인지 한 문항 (재준님 aerobic_150min)
   Q10: { merged: 'activity' },
   Q11: 'strength_days',
   Q12: 'sedentary_min',
@@ -103,7 +103,7 @@ const SCHEMA_TO_WEB = {
   Q14: 'weekday_wake',
   Q15: 'weekend_bed',
   Q16: 'weekend_wake',
-  Q17: { removed: '교대근무는 모델 입력이 아님. 수면이 들쭉날쭉한지(sleep_regular) 묻고 미션으로 안내' },
+  Q17: { removed: '교대근무는 모델 입력이 아님. 팀 합의로 수면이 들쭉날쭉한 경우는 따로 묻지 않음' },
   Q18: 'stress',
   Q19: { merged: 'meals' }, // 아침·점심·저녁을 한 화면에서
   Q20: { merged: 'meals' },

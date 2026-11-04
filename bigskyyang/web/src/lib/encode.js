@@ -1,5 +1,10 @@
 // 설문 응답 → 모델 입력 변수(ML_*) + 결과 해석용 값
 // 변환 규칙은 bigskyyang/사용자_설문조사_초안.html, docs/KNHANES_2022_2024_데이터명세서.pdf 기준
+// 팀 합의 (2026-11-04, 지연님 군집 모델·재준님 영양 모델에 같은 값을 넣는다)
+//   흡연: 궐련(일반 담배)·전자담배를 구분하지 않고 지금 피우는지만
+//   유산소: 중강도·고강도를 나눠 묻지 않고, 합친 시간이 주 150분 이상인지만 (고강도 ×2 계산 없음)
+//   수면: 취침·기상 시각으로만 계산 ('날마다 들쭉날쭉' 보기는 두지 않는다)
+//   나이: 생년월일로 계산한 만 나이
 // 1단계만 답한 상태에서도 쓸 수 있다: 2단계 문항(흡연·음주·채소·과일·식품)에 답하지 않았으면 0 또는 null
 
 const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v))
@@ -16,35 +21,29 @@ export const sleepHours = (bed, wake) => {
   return diff / 60
 }
 
-// 출생연도 → 나이 (올해 생일이 지났다고 본다. 나이대만 쓰므로 1살 차이는 괜찮다)
-export const ageFromYear = (year, today = new Date()) => today.getFullYear() - year
-
-// '평균 몇 시간'으로 답한 수면을 모델 척도로 바꾼다.
-// KNHANES 2022·2023은 수면 시간을 직접 물었고(평균 0.5시간 짧게 나옴) 2024는 취침·기상 시각으로 물었다.
-// 지연님 모델은 2024 척도로 맞춰 학습했으므로, 직접 답한 시간은 2022–23 분포 → 2024 분포로 옮긴다
-// (Jiyeon/kmedoids_model.json sleep_year_adjust의 2022·2023 평균, 2024 값)
-const SLEEP_ASKED = { mean: (6.968 + 6.816) / 2, std: (1.262 + 1.237) / 2 }
-const SLEEP_2024 = { mean: 7.408, std: 1.225 }
-export const sleepFromAverage = (hours) =>
-  ((hours - SLEEP_ASKED.mean) / SLEEP_ASKED.std) * SLEEP_2024.std + SLEEP_2024.mean
+// 생년월일 'YYYY-MM-DD' → 만 나이 (올해 생일이 아직 지나지 않았으면 한 살 적게)
+export function ageFromBirth(birth, today = new Date()) {
+  const [y, m, d] = birth.split('-').map(Number)
+  const month = today.getMonth() + 1
+  const passed = month > m || (month === m && today.getDate() >= d)
+  return today.getFullYear() - y - (passed ? 0 : 1)
+}
 
 const FFQ_KEYS = ['meat', 'fish', 'egg', 'legume', 'dairy']
 
+// 평균 수면 = (주중×5 + 주말×2) / 7. 주말도 비슷하다고 했으면 주중 값 그대로 (재준님 v1.4.1 규칙과 같다)
 function sleepOf(a) {
-  if (a.sleep_regular === 'no') return { hours: sleepFromAverage(a.sleep_avg / 60), irregular: true }
   const weekday = sleepHours(a.weekday_bed, a.weekday_wake)
   const weekend = a.weekend_same === 'no' ? sleepHours(a.weekend_bed, a.weekend_wake) : weekday
-  return { hours: (weekday * 5 + weekend * 2) / 7, irregular: false }
+  return (weekday * 5 + weekend * 2) / 7
 }
 
 export function encode(a) {
   // 앞 문항 응답을 바꿔 건너뛰게 된 문항의 옛 응답은 무시한다
-  // 현재 흡연 = 요즘 매일·가끔 피움, 전자담배 포함
-  // (KNHANES 학습 자료는 '궐련 평생 100개비 이상 + 현재 흡연'. 지금 피우는 사람은 거의 모두 해당하고, 전자담배만 피우는 사람만 다르다)
-  const smoker = a.smoke_now === 'daily' || a.smoke_now === 'sometimes' ? 1 : 0
+  // 현재 흡연 = 요즘 피움 (매일·가끔, 궐련·전자담배 모두)
+  const smoker = a.smoke_now === 'yes' ? 1 : 0
   const drinkFreq = a.drink_freq ?? 0
   const drinkAmount = drinkFreq > 0 ? a.drink_amount : 0
-  const sleep = sleepOf(a)
   const meals = a.meals ?? {}
 
   const features = {
@@ -53,11 +52,11 @@ export function encode(a) {
     ML_drink_month: drinkFreq >= 2 ? 1 : 0,
     ML_drink_freq_ord: drinkFreq,
     ML_drink_amount_ord: drinkAmount,
-    // 유산소 신체활동: 중강도 + 고강도×2 가 주 150분 이상 (KNHANES pa_aerobic 기준) = 보기 '2시간 반 이상'
+    // 유산소 신체활동: 숨이 조금 찰 정도로 움직인 시간을 모두 합쳐 주 150분 이상 = 보기 '2시간 반 이상'
     ML_aerobic: a.activity === 3 ? 1 : 0,
     ML_strength_days: a.strength_days,
     ML_sedentary_min: clamp(a.sedentary_min, 0, 24 * 60),
-    ML_sleep_hours: sleep.hours,
+    ML_sleep_hours: sleepOf(a),
     ML_stress: a.stress <= 2 ? 1 : 0,
     ML_breakfast_freq_ord: meals.breakfast,
     ML_lunch_freq_ord: meals.lunch,
@@ -67,9 +66,7 @@ export function encode(a) {
 
   const extras = {
     sex: a.sex,
-    age: ageFromYear(a.birth_year),
-    // 수면 시간이 들쭉날쭉하다고 답함 (교대·야간 근무 포함) → 수면·식사 시간 미션
-    sleepIrregular: sleep.irregular,
+    age: ageFromBirth(a.birth_date),
     // 2단계 문항 (답하지 않았으면 null)
     veg: a.veg ?? null,
     fruit: a.fruit ?? null,

@@ -2,13 +2,13 @@ import { describe, expect, it } from 'vitest'
 import { visibleQuestions } from '../data/questions.js'
 import { resolveStep, resultPath, surveyPath } from './surveyFlow.js'
 
-const answers = { sex: 2, birth_year: 2000, activity: 1 }
+const answers = { sex: 2, birth_date: '2000-05-01', activity: 1 }
 const list = visibleQuestions(answers, 1)
 const idx = (id) => list.findIndex((q) => q.id === id)
 
 describe('resolveStep', () => {
   it('주소의 문항으로 뒤로 갈 수 있다', () => {
-    expect(resolveStep(list, answers, 'birth_year', 3)).toBe(idx('birth_year'))
+    expect(resolveStep(list, answers, 'birth_date', 3)).toBe(idx('birth_date'))
     expect(resolveStep(list, answers, 'sex', 3)).toBe(0)
   })
 
@@ -22,8 +22,8 @@ describe('resolveStep', () => {
     expect(resolveStep(list, answers, null, 99)).toBe(idx('strength_days'))
   })
 
-  it('지금은 숨겨진 문항(수면 일정 여부를 답하기 전 평균 수면)을 요청하면 저장 위치로 간다', () => {
-    expect(resolveStep(list, answers, 'sleep_avg', 1)).toBe(1)
+  it('지금은 숨겨진 문항(주말이 다른지 답하기 전 주말 취침 시각)을 요청하면 저장 위치로 간다', () => {
+    expect(resolveStep(list, answers, 'weekend_bed', 1)).toBe(1)
   })
 
   it('모두 답했으면 마지막 문항까지 갈 수 있다', () => {
@@ -35,7 +35,7 @@ describe('resolveStep', () => {
 
 describe('surveyPath', () => {
   it('단계와 문항 ID로 주소를 만든다', () => {
-    expect(surveyPath({ id: 'birth_year' })).toBe('/survey?q=birth_year')
+    expect(surveyPath({ id: 'birth_date' })).toBe('/survey?q=birth_date')
     expect(surveyPath({ id: 'veg' }, 2)).toBe('/survey2?q=veg')
     expect(resultPath(1)).toBe('/result')
     expect(resultPath(2)).toBe('/result2')
