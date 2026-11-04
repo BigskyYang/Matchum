@@ -18,9 +18,8 @@ def build_food_guidance(lifestyle,habitual):
  items=[]
  for n,ls in lifestyle.items():
   ffq=habitual.get(n) if habitual else None
-  bands=[ls['risk_band']]+([ffq['risk_band']] if ffq else [])
-  state=('different_signals' if 'High' in bands and 'Low' in bands else
-         'review_food_sources' if 'High' in bands else 'general_information')
+  chosen=ffq if ffq else ls
+  state='review_food_sources' if chosen['risk_band']=='High' else 'general_information'
   name,foods=FOODS[n]
   target='above_CDRR' if n=='sodium_excess' else ('below_AI' if n in ('fiber','potassium') else 'below_EAR')
   message='나트륨 섭취를 점검할 때는 국물·소스·가공식품의 영양표시를 살펴볼 수 있습니다.' if n=='sodium_excess' else f'{name}을 제공하는 일반적인 식품 예시입니다. 개인의 필요 섭취량이나 추가 섭취 필요를 확정한 결과는 아닙니다.'

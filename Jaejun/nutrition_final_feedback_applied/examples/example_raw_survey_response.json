@@ -1,16 +1,10 @@
 {
   "sex": "여성",
   "age": 35,
-  "smoked_100_cigarettes": false,
-  "current_smoking": null,
   "cigarettes_per_day": 0,
   "ever_drink": true,
   "drink_frequency": "월 1회 미만",
   "drink_amount": "1~2잔",
-  "moderate_hours": 6,
-  "moderate_minutes": 40,
-  "vigorous_hours": 1,
-  "vigorous_minutes": 40,
   "strength_days": "1일",
   "sedentary_hours": 10,
   "sedentary_minutes": 0,
@@ -29,5 +23,8 @@
   "meat_frequency": "주 3~4회",
   "fish_frequency": "주 1~2회",
   "egg_frequency": "주 3~4회",
-  "legume_frequency": "주 3~4회"
+  "legume_frequency": "주 3~4회",
+  "currently_smoking": false,
+  "aerobic_150min": true,
+  "regular_sleep_schedule": true
 }

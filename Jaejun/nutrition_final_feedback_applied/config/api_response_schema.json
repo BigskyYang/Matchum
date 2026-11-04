@@ -31,11 +31,13 @@
     "nutrition",
     "food_guidance",
     "lifestyle_cluster",
-    "model_data_quality"
+    "model_data_quality",
+    "model_version",
+    "display_summary"
   ],
   "properties": {
     "version": {
-      "const": "v1.4-web-retrained"
+      "const": "v1.4.1-web-feedback"
     },
     "nutrition": {
       "type": "object",
@@ -194,6 +196,12 @@
       "type": "object"
     },
     "model_data_quality": {
+      "type": "object"
+    },
+    "model_version": {
+      "const": "v1.4-web-retrained"
+    },
+    "display_summary": {
       "type": "object"
     }
   }

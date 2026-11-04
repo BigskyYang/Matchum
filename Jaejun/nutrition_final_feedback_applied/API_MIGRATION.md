@@ -1,49 +1,42 @@
-# v1.2 → v1.4-web-retrained API 변경
+# v1.4 → v1.4.1 원시 설문·표시 규칙 변경
 
-## 권장 원시 설문 경로
+가중치는 v1.4 그대로임. 숫자로 이미 코딩한 18개 특성 입력은 변경하지 않음.
 
-```python
-from src.pipeline_web import predict_from_survey_web
-result=predict_from_survey_web(survey)
-```
+## 원시 설문 함수
 
-문자열 보기의 원시 설문을 받음. 기존 제거 문항이 포함되면 ValueError로 거부하여 웹 수집 범위를 명확히 함. 잘못된 요청은 서버에서 HTTP 400 등으로 변환하여 표시하면 됨. API 서버·CORS·인증·배포 자체는 이 Python 패키지에 포함되지 않음.
+`predict_from_survey_web(survey)`는 다음 새 키를 사용함.
 
-## 숫자로 이미 변환한 웹 입력 경로
+- currently_smoking: bool. 평생 100개비·담배 종류 분기 없음.
+- cigarettes_per_day: 기존 흡연량 입력. 현재 흡연 시 필요함.
+- aerobic_150min: bool. 통합 주150분 기준.
+- regular_sleep_schedule: bool.
+- 일정한 수면이면 workday_bedtime/workday_waketime/restday_bedtime/restday_waketime 필요.
+- 불규칙하면 average_sleep_hours 필요.
 
-```python
-from src.pipeline_web import predict_from_features_web
-result=predict_from_features_web(
-    feature_row,
-    mini_ffq_survey=mini_ffq_answers_with_sex_and_age,
-)
-```
+기존 smoked_100_cigarettes/current_smoking, moderate_* / vigorous_* 원시 키는 새 계약에서 제거됨. 이 키를 새 원시 함수에 그대로 전달하면 오류가 발생하므로 기존 설문 요청을 교체해야 함.
 
-`feature_row`는 `config/service_features.json`의 18개 키와 `encoding_contract.json`의 방향을 사용함. mini-FFQ에는 sex·age와 5개 응답을 전달함. 웹에서 이미 숫자로 변환한 끼니·외식 값을 다시 역코딩하지 않음. 기존 encode.js의 실제 소스는 이번 작업에서 확인하지 못했으므로 제공한 계약·예시와 비교해야 함.
+웹이 자체 encode.js로 18개 숫자를 만드는 경우 `predict_from_features_web(feature_row, mini_ffq_survey=...)`를 사용함. 기존 encode.js가 이미 합의된 방향이면 다시 반전하거나 가중하지 않음.
 
 ## 응답
 
-- 생활습관: `nutrition.lifestyle_risk.calcium.probability`, `.risk_band`.
-- 식품빈도: `nutrition.habitual_diet_risk.calcium.probability`, `.risk_band`.
-- v1.2의 식품빈도 별도 `habitual_diet_risk_band` 딕셔너리는 제거됨. 해당 모듈도 확률+등급 객체로 통일됨.
-- 식품빈도가 없으면 딕셔너리 자체가 null임. `habitual_diet_available`과 `habitual_diet_fallback_reason`으로 분기함.
-- `food_guidance`는 영양소 공급 식품 예시·나트륨 점검 정보만 제공함. 질환별 식사·제품·용량 안내 없음.
-- `profile_summary`, `dietary_context`, `supplement_safety`는 제거됨.
-- `model_data_quality`는 개발·검수용 상태 정보임. 사용자 결과 화면에 그대로 표시할 구현 지침은 아님.
-- 두 확률을 평균하지 않으며 미제공을 Low로 대체하지 않음.
+- version: v1.4.1-web-feedback.
+- model_version: v1.4-web-retrained.
+- nutrition: 기존 두 신호 확률+등급 객체 유지. 원시 확률을 평균하거나 화면에 표시하지 않음.
+- display_summary: 숫자 없는 화면 투영. 공통 영양소는 평소 식사 기준 우선, 그 결과가 없으면 생활습관 기준. 두 원시 신호는 nutrition에 보존됨.
+- food_guidance: 화면에서 선택한 기준의 High 여부를 따라 음식 정보 강조. 실제 부족량이나 필요한 양을 생성하지 않음.
+- lifestyle_cluster: managed_by_web 상태만 유지함. cluster_id를 이 함수에 전달하거나 nbti12.json을 요구하지 않음.
 
-기존 `pipeline.py`, `pipeline_v1_2.py`, `pipeline_v1_2_final.py`의 함수 이름은 가져오기 호환 별칭으로 남겼으나 반환값은 모두 v1.4-web-retrained임. 응답 형식은 호환되지 않으므로 프런트 경로 수정이 필요함.
+화면 선택은 웹의 기존 최대5개 규칙을 사용함. 이 패키지가 새로운 선정·동점·정렬 알고리즘을 만들지 않으므로 기본 selected_nutrients는 빈 목록이며 selection_status=managed_by_web임.
 
-## NBTI 연결
+웹이 고른 목록을 검증하려면:
 
 ```python
-result=predict_from_survey_web(
-    survey,
-    cluster_id='N1',
-    nbti12_path='/actual/path/to/web/src/data/nbti12.json',
+from src.display_policy import build_display_summary
+ui=build_display_summary(
+    result['nutrition']['lifestyle_risk'],
+    result['nutrition']['habitual_diet_risk'],
+    selected_ids=['calcium','vitamin_b2'],
 )
 ```
 
-실제 JSON에 그 ID가 있어야 연결됨. N1은 호출 형태를 보여주는 예시이며 기존 G0 세부군집과 대응시킨 값이 아님. 훅은 ID를 검증해 첨부하며 군집을 계산하거나 N1~O3 이름·분류를 새로 만들지 않음. 원본 JSON에 ID/code 열 대신 다른 구조가 있으면 해당 파일을 받은 후 추출기를 맞춰야 함.
-
-웹의 군집 결과는 영양확률을 변경하지 않음.
+최대 5개·중복 없음·유효 영양소 ID만 검사하고 웹의 순서를 유지함. 빈 목록을 ‘살펴볼 영양소 없음’으로 자동 해석하지 않으며 selection_status를 확인함.

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Nutrition survey v1.4-web-retrained",
+  "title": "Nutrition survey v1.4.1-web-feedback",
   "type": "object",
   "additionalProperties": false,
   "properties": {
@@ -15,21 +15,6 @@
       "type": "integer",
       "minimum": 19,
       "maximum": 120
-    },
-    "smoked_100_cigarettes": {
-      "type": "boolean"
-    },
-    "current_smoking": {
-      "type": [
-        "string",
-        "null"
-      ],
-      "enum": [
-        "매일 피움",
-        "가끔 피움",
-        "과거에는 피웠으나 현재는 피우지 않음",
-        null
-      ]
     },
     "cigarettes_per_day": {
       "type": "number",
@@ -67,26 +52,6 @@
         "10잔 이상",
         null
       ]
-    },
-    "moderate_hours": {
-      "type": "number",
-      "minimum": 0,
-      "maximum": 168
-    },
-    "moderate_minutes": {
-      "type": "number",
-      "minimum": 0,
-      "maximum": 59
-    },
-    "vigorous_hours": {
-      "type": "number",
-      "minimum": 0,
-      "maximum": 168
-    },
-    "vigorous_minutes": {
-      "type": "number",
-      "minimum": 0,
-      "maximum": 59
     },
     "sedentary_hours": {
       "type": "number",
@@ -285,75 +250,41 @@
         "하루 3회 이상",
         null
       ]
+    },
+    "currently_smoking": {
+      "type": "boolean"
+    },
+    "aerobic_150min": {
+      "type": "boolean"
+    },
+    "regular_sleep_schedule": {
+      "type": "boolean"
+    },
+    "average_sleep_hours": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 24
     }
   },
   "required": [
     "sex",
     "age",
-    "smoked_100_cigarettes",
     "ever_drink",
-    "moderate_hours",
-    "moderate_minutes",
-    "vigorous_hours",
-    "vigorous_minutes",
     "sedentary_hours",
     "sedentary_minutes",
     "strength_days",
-    "workday_bedtime",
-    "workday_waketime",
-    "restday_bedtime",
-    "restday_waketime",
     "stress",
     "breakfast_frequency",
     "lunch_frequency",
     "dinner_frequency",
     "eatingout_frequency",
     "fruit_frequency",
-    "vegetable_frequency"
+    "vegetable_frequency",
+    "currently_smoking",
+    "aerobic_150min",
+    "regular_sleep_schedule"
   ],
   "allOf": [
-    {
-      "if": {
-        "properties": {
-          "smoked_100_cigarettes": {
-            "const": true
-          }
-        },
-        "required": [
-          "smoked_100_cigarettes"
-        ]
-      },
-      "then": {
-        "required": [
-          "current_smoking"
-        ],
-        "properties": {
-          "current_smoking": {
-            "type": "string"
-          }
-        }
-      }
-    },
-    {
-      "if": {
-        "properties": {
-          "current_smoking": {
-            "enum": [
-              "매일 피움",
-              "가끔 피움"
-            ]
-          }
-        },
-        "required": [
-          "current_smoking"
-        ]
-      },
-      "then": {
-        "required": [
-          "cigarettes_per_day"
-        ]
-      }
-    },
     {
       "if": {
         "properties": {
@@ -402,6 +333,60 @@
             "type": "string"
           }
         }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "currently_smoking": {
+            "const": true
+          }
+        },
+        "required": [
+          "currently_smoking"
+        ]
+      },
+      "then": {
+        "required": [
+          "cigarettes_per_day"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "regular_sleep_schedule": {
+            "const": true
+          }
+        },
+        "required": [
+          "regular_sleep_schedule"
+        ]
+      },
+      "then": {
+        "required": [
+          "workday_bedtime",
+          "workday_waketime",
+          "restday_bedtime",
+          "restday_waketime"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "regular_sleep_schedule": {
+            "const": false
+          }
+        },
+        "required": [
+          "regular_sleep_schedule"
+        ]
+      },
+      "then": {
+        "required": [
+          "average_sleep_hours"
+        ]
       }
     }
   ]

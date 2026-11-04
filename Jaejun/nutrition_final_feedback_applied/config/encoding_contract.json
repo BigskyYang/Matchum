@@ -1,5 +1,5 @@
 {
-  "version": "v1.4-web-retrained",
+  "version": "v1.4.1-web-feedback",
   "raw_answer_type": "Korean label strings",
   "encoded_training_features": {
     "설명_sex": {
@@ -73,8 +73,10 @@
   },
   "derived": {
     "ML_drink_month": "int(ML_drink_freq_ord >= 2)",
-    "ML_aerobic": "int(weekly_moderate_minutes + 2*weekly_vigorous_minutes >= 150)",
-    "ML_sleep_hours": "(workday_sleep*5 + restday_sleep*2)/7"
+    "ML_aerobic": "int(aerobic_150min); combined weekly 150-minute question; no intensity multiplier",
+    "ML_sleep_hours": "regular: (workday_sleep*5+restday_sleep*2)/7; irregular: average_sleep_hours",
+    "ML_smoker": "int(currently_smoking)",
+    "설명_age": "use numeric age supplied by web unchanged; no birth-year or birthday conversion"
   },
   "mini_ffq_frequency": {
     "거의 먹지 않음": 0,
@@ -89,5 +91,6 @@
   "unknown_codes": [
     99
   ],
-  "unknown_policy": "reject_web_input; clean_training_data_before_retraining"
+  "unknown_policy": "reject_web_input; clean_training_data_before_retraining",
+  "compatibility_note": "Simplified web questions are team-agreed serving conventions, not a new validation of equivalence to the training questionnaire."
 }

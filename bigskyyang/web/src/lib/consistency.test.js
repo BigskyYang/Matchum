@@ -2,7 +2,8 @@
 // 군집화를 다시 돌리거나 설문(Jaejun/config)이 바뀌었는데 웹을 안 맞췄으면 여기서 실패한다.
 import { existsSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
-import targets from '../../../../Jaejun/config/targets.json'
+import targets from '../../../../Jaejun/nutrition_final_feedback_applied/config/targets.json'
+import contract from '../../../../Jaejun/nutrition_final_feedback_applied/config/encoding_contract.json'
 import surveySchema from '../../../../Jaejun/config/survey_schema_v3.json'
 import nutrientCells from '../data/nutrientCells.json'
 import { NUTRIENT_GUIDE } from '../data/nutrientGuide.js'
@@ -37,7 +38,7 @@ describe('군집 모델 ↔ 유형 설명 (types.js) ↔ 마스코트 그림', (
   })
 })
 
-describe('개인화용 영양소 정의 (nutrients.js) ↔ 재준 모델 (Jaejun/config/targets.json)', () => {
+describe('개인화용 영양소 정의 (nutrients.js) ↔ 재준 모델 (Jaejun/nutrition_final_feedback_applied/config/targets.json)', () => {
   it('14개 영양소 키가 같다', () => {
     expect(NUTRIENTS.map((n) => n.key).sort()).toEqual(Object.keys(targets).sort())
   })
@@ -88,10 +89,10 @@ describe('부족할 수 있는 영양소 결과표 (nutrientCells.json, 유환�
 const SCHEMA_TO_WEB = {
   Q1: 'sex',
   Q2: { merged: 'birth_year' }, // v3는 만 나이, 웹은 출생연도
-  Q3: 'smoke_100',
-  Q4: 'smoke_now',
+  Q3: { merged: 'smoke_now' }, // '평생 100개비'를 먼저 묻지 않고 지금 흡연 상태만 (모델은 현재 흡연만 쓴다)
+  Q4: { merged: 'smoke_now' }, // 보기에 '피운 적 없어요'를 더함
   Q5: 'cigarettes',
-  Q6: 'drink_ever',
+  Q6: { merged: 'drink_freq' }, // '평생 1잔'을 먼저 묻지 않고 빈도에 '최근 1년 안 마셨어요'
   Q7: 'drink_freq',
   Q8: 'drink_amount',
   Q9: { merged: 'activity' }, // 중강도·고강도 시간 → 주 150분 이상인지 한 문항 (모델은 그것만 쓴다)
@@ -110,12 +111,14 @@ const SCHEMA_TO_WEB = {
   Q22: 'eating_out',
   Q23: 'veg',
   Q24: 'fruit',
-  Q25: 'protein',
-  Q26: 'dairy',
-  ...Object.fromEntries(Array.from({ length: 9 }, (_, i) => [`Q${27 + i}`, `phq${i + 1}`])),
-  Q36: 'dx_hypertension',
-  Q37: 'dx_diabetes',
-  Q38: 'dx_dyslipidemia',
+  Q25: { removed: '재준님 최종 설문(SURVEY_FINAL)의 mini-FFQ 5문항(ffq_meat … ffq_dairy)으로 바꿈' },
+  Q26: { removed: '재준님 최종 설문(SURVEY_FINAL)의 mini-FFQ 5문항으로 바꿈' },
+  // PHQ-9·대사질환 진단은 묻지 않는다: 점수 해석이나 질환별 조언이 진단·처방처럼 보일 소지가 있고(의료법),
+  // 영양 예측 모델에도 쓰지 않는다. 건강 정보(민감정보)도 꼭 필요한 만큼만 받는다
+  ...Object.fromEntries(Array.from({ length: 9 }, (_, i) => [`Q${27 + i}`, { removed: 'PHQ-9: 우울 점수 해석이 진단처럼 보일 소지' }])),
+  Q36: { removed: '대사질환 진단: 질환별 식사 조언이 처방처럼 보일 소지' },
+  Q37: { removed: '대사질환 진단' },
+  Q38: { removed: '대사질환 진단' },
 }
 
 describe('설문 문항 ↔ 설문 v3 (Jaejun/config/survey_schema_v3.json)', () => {
@@ -144,5 +147,43 @@ describe('설문 문항 ↔ 설문 v3 (Jaejun/config/survey_schema_v3.json)', ()
   it('세 끼는 v3와 같은 보기 수로 한 화면에서 묻는다', () => {
     const meal = schemaQuestions.find((q) => q.id === 'Q19')
     expect(web.meals.options).toHaveLength(meal.options.length)
+  })
+})
+
+// 재준님 최종 설문(Jaejun/SURVEY_FINAL.md)의 mini-FFQ ↔ 웹
+// (제품 추천 안전 문항 4가지는 웹에서 건강기능식품 제품을 추천하지 않으므로 묻지 않는다)
+describe('설문 ↔ 재준님 최종 설문 (mini-FFQ)', () => {
+  const web = Object.fromEntries(QUESTIONS.map((q) => [q.id, q]))
+
+  it('mini-FFQ 5문항, 보기 8단계 0~7 (Jaejun/src/mini_ffq.py FOOD_FREQ_ORD)', () => {
+    for (const id of ['ffq_meat', 'ffq_fish', 'ffq_egg', 'ffq_legume', 'ffq_dairy']) {
+      expect(web[id].options.map((o) => o.value)).toEqual([0, 1, 2, 3, 4, 5, 6, 7])
+    }
+  })
+
+})
+
+// 재준님 v1.4 입력 계약(encoding_contract.json) ↔ 웹 보기 값: 보기 순서대로 같은 코드인지 (방향이 뒤집히면 실패)
+describe('설문 보기 값 ↔ 재준님 v1.4 입력 계약 (encoding_contract.json)', () => {
+  const web = Object.fromEntries(QUESTIONS.map((q) => [q.id, q]))
+  const codes = (key) => Object.values(contract.encoded_training_features[key])
+  const values = (id) => web[id].options.map((o) => o.value)
+
+  it('끼니(주 5~7회 = 3)·외식(하루 2회 이상 = 6)·음주 빈도·음주량', () => {
+    expect(values('meals')).toEqual(codes('ML_breakfast_freq_ord'))
+    expect(values('eating_out')).toEqual(codes('ML_eatingout_freq_ord'))
+    expect(values('drink_freq')).toEqual(codes('ML_drink_freq_ord'))
+    expect(values('drink_amount')).toEqual(codes('ML_drink_amount_ord'))
+  })
+
+  it('채소·과일: 웹 값 v → 모델 9 − v (1 = 하루 3회 이상 … 9 = 거의 안 함)', () => {
+    expect(values('veg').map((v) => 9 - v)).toEqual(codes('식습관_LS_VEG2'))
+    expect(values('fruit').map((v) => 9 - v)).toEqual(codes('식습관_LS_FRUIT'))
+  })
+
+  it('mini-FFQ 5문항 (거의 먹지 않음 = 0 … 하루 3회 이상 = 7)', () => {
+    for (const id of ['ffq_meat', 'ffq_fish', 'ffq_egg', 'ffq_legume', 'ffq_dairy']) {
+      expect(values(id)).toEqual(Object.values(contract.mini_ffq_frequency))
+    }
   })
 })

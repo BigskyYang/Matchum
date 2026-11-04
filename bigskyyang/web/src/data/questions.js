@@ -1,7 +1,10 @@
 // 설문 문항 정의. 응답 → 모델 변수 변환은 lib/encode.js에서 한다.
 // 문항 구성은 Jaejun/SURVEY_V3.md(설문 v3)를 바탕으로, 두 단계로 나눴다.
 //   stage 1: 유형 분류에 쓰는 생활습관 (지연님 12개 유형 모델 입력 + 성별·나이) → 유형 결과
-//   stage 2: 개인 결과에 쓰는 문항 (흡연·음주·채소·과일·식품, 선택 문항 PHQ-9·대사건강) → 개인 결과
+//   stage 2: 개인 결과에 쓰는 문항 (흡연·음주·채소·과일, mini-FFQ 5문항) → 개인 결과
+//            문항은 재준님 최종 설문(Jaejun/SURVEY_FINAL.md)을 따르되, 답하기 쉽게 줄였다 (흡연·음주 첫 문항 생략)
+//            진단처럼 보이거나 건강기능식품 제품 추천에만 쓰이는 문항(PHQ-9, 질환·임신·약물, 지금 먹는 영양제)은 묻지 않는다
+//            (의료법상 진단·처방으로 보일 소지, 건강기능식품 광고 규제, 민감정보 최소 수집)
 //            2단계는 1단계 응답을 그대로 이어 쓴다 (재준님 개인 예측 모델도 1단계 변수를 입력으로 쓴다)
 //
 // type
@@ -24,11 +27,26 @@ const INTAKE_9 = [
   { label: '주 1회', value: 3 },
   { label: '월 2~3회', value: 2 },
   { label: '월 1회', value: 1 },
-  { label: '거의 안 한다 (월 1회 미만)', value: 0 },
+  { label: '거의 안 먹어요', value: 0 },
+]
+
+// mini-FFQ 8단계 (값 = 재준님 Jaejun/src/mini_ffq.py의 FOOD_FREQ_ORD 0~7)
+const FOOD_FREQ_8 = [
+  { label: '거의 안 먹어요', value: 0 },
+  { label: '월 1~3회', value: 1 },
+  { label: '주 1~2회', value: 2 },
+  { label: '주 3~4회', value: 3 },
+  { label: '주 5~6회', value: 4 },
+  { label: '하루 1회', value: 5 },
+  { label: '하루 2회', value: 6 },
+  { label: '하루 3회 이상', value: 7 },
 ]
 
 const isCurrentSmoker = (a) => a.smoke_now === 'daily' || a.smoke_now === 'sometimes'
 const THIS_YEAR = new Date().getFullYear()
+const ageOf = (a) => THIS_YEAR - a.birth_year
+// mini-FFQ 모델은 19~64세에서만 검증됐다 → 65세 이상은 묻지 않는다 (재준님 모델 규칙)
+const ffqAge = (a) => ageOf(a) <= 64
 
 export const SECTIONS = {
   basic: '기본정보',
@@ -40,42 +58,8 @@ export const SECTIONS = {
   stress: '스트레스',
   meal: '식사습관',
   veg: '채소·과일',
-  food: '주요 식품',
-  extra: '선택 문항',
-  mind: '마음 건강',
-  metabolic: '대사 건강',
+  food: '평소 식사',
 }
-
-// 선택 문항 영역 (진행률을 핵심 문항과 따로 센다)
-export const OPTIONAL_SECTIONS = ['mind', 'metabolic']
-
-const wantsExtra = (a) => a.extra === 'more'
-
-// PHQ-9 응답 (값 = 점수 0~3)
-const PHQ_OPTIONS = [
-  { label: '전혀 아니다', value: 0 },
-  { label: '여러 날 동안', value: 1 },
-  { label: '일주일 이상', value: 2 },
-  { label: '거의 매일', value: 3 },
-]
-
-// 국민건강영양조사 PHQ-9 한국어판 문항
-const PHQ_ITEMS = [
-  '일 또는 여가 활동을 하는 데 흥미나 즐거움을 느끼지 못함',
-  '기분이 가라앉거나, 우울하거나, 희망이 없음',
-  '잠이 들거나 계속 잠을 자는 것이 어려움, 또는 잠을 너무 많이 잠',
-  '피곤하다고 느끼거나 기운이 거의 없음',
-  '입맛이 없거나 과식을 함',
-  '자신을 부정적으로 봄. 혹은 자신이 실패자라고 느끼거나 자신 또는 가족을 실망시킴',
-  '신문을 읽거나 텔레비전을 보는 것과 같은 일에 집중하는 것이 어려움',
-  '다른 사람들이 주목할 정도로 너무 느리게 움직이거나 말을 함. 또는 반대로 평상시보다 많이 움직여서 너무 안절부절못하거나 들떠 있음',
-  '차라리 죽는 것이 더 낫겠다고 생각하거나 어떤 식으로든 자신을 해칠 것이라고 생각함',
-]
-
-const YES_NO = [
-  { label: '예', value: 'yes' },
-  { label: '아니오', value: 'no' },
-]
 
 const isRegularSleep = (a) => a.sleep_regular === 'yes'
 const weekendDiffers = (a) => a.sleep_regular === 'yes' && a.weekend_same === 'no'
@@ -220,40 +204,42 @@ const STAGE_1 = [
       { label: '주 3~4회', value: 3 },
       { label: '주 1~2회', value: 2 },
       { label: '월 1~3회', value: 1 },
-      { label: '거의 안 한다 (월 1회 미만)', value: 0 },
+      { label: '거의 안 해요 (월 1회 미만)', value: 0 },
     ],
   },
 ]
 
-// 2단계: 개인 결과 (재준님 개인 예측 모델의 나머지 입력, 결과 안내용 선택 문항)
+// 2단계: 개인 결과 (재준님 개인 예측 모델의 나머지 입력 + 건강기능식품 안전 문항, 선택 문항)
+// 흡연·음주는 KNHANES처럼 '평생 100개비'·'평생 1잔' 문항을 먼저 묻지 않고 바로 지금 상태를 묻는다.
+// 모델 입력(현재 흡연, 하루 개비 수, 음주 빈도·양)은 같고, 답하기만 쉬워진다.
+const FFQ_ITEMS = [
+  { id: 'ffq_meat', name: '고기를', help: '돼지·소·닭·오리고기, 햄·소시지 포함' },
+  { id: 'ffq_fish', name: '생선·해산물을', help: '생선, 오징어, 게, 멸치, 어묵 등' },
+  { id: 'ffq_egg', name: '달걀을', help: '프라이, 찜, 삶은 달걀 등' },
+  { id: 'ffq_legume', name: '두부·콩을', help: '두부, 콩자반, 두유 등' },
+  { id: 'ffq_dairy', name: '우유·유제품을', help: '우유, 요구르트, 가공우유 등' },
+]
+
 const STAGE_2 = [
-  // 2. 흡연
-  {
-    id: 'smoke_100',
-    section: 'smoke',
-    title: '지금까지 살아오는 동안 일반담배(궐련)를 총 5갑(100개비) 이상 피운 적이 있습니까?',
-    type: 'choice',
-    options: [
-      { label: '예', value: 'yes' },
-      { label: '아니오', value: 'no' },
-    ],
-  },
+  // 흡연 (값 → ML_smoker: 매일·가끔 = 1). 전자담배도 포함한다 (KNHANES 학습 자료는 궐련 기준이라 약간 다르다)
   {
     id: 'smoke_now',
     section: 'smoke',
-    title: '현재 담배를 피우십니까?',
+    title: '담배를 피우시나요?',
+    help: ['전자담배도 포함해요.'],
     type: 'choice',
     options: [
-      { label: '매일 피움', value: 'daily' },
-      { label: '가끔 피움', value: 'sometimes' },
-      { label: '과거에는 피웠으나 현재 피우지 않음', value: 'past' },
+      { label: '매일 피워요', value: 'daily' },
+      { label: '가끔 피워요', value: 'sometimes' },
+      { label: '끊었어요', value: 'past' },
+      { label: '피운 적 없어요', value: 'never' },
     ],
-    showIf: (a) => a.smoke_100 === 'yes',
   },
   {
     id: 'cigarettes',
     section: 'smoke',
-    title: '담배를 피우는 날에는 하루 평균 몇 개비 정도 피우십니까?',
+    title: '담배를 피우는 날에는 하루 평균 몇 개비 정도 피우시나요?',
+    help: ['전자담배는 담배 1개비를 피우는 정도를 1개비로 세어 주세요.'],
     type: 'number',
     unit: '개비',
     min: 1,
@@ -261,50 +247,38 @@ const STAGE_2 = [
     initial: 10,
     showIf: isCurrentSmoker,
   },
-  // 3. 음주
-  {
-    id: 'drink_ever',
-    section: 'drink',
-    title: '지금까지 살아오면서 1잔 이상의 술을 마신 적이 있습니까?',
-    help: ['제사·차례 때 몇 모금 마셔본 것은 제외합니다.'],
-    type: 'choice',
-    options: [
-      { label: '있음', value: 'yes' },
-      { label: '술을 마셔 본 적 없음', value: 'no' },
-    ],
-  },
+  // 음주 (값 = ML_drink_freq_ord, ML_drink_amount_ord)
   {
     id: 'drink_freq',
     section: 'drink',
-    title: '최근 1년 동안 술을 얼마나 자주 마셨습니까?',
+    title: '최근 1년 동안 술을 얼마나 자주 마셨나요?',
     type: 'choice',
-    // 값 = ML_drink_freq_ord
     options: [
-      { label: '최근 1년간 전혀 마시지 않았다', value: 0 },
+      { label: '최근 1년 안 마셨어요', value: 0 },
       { label: '한 달에 1번 미만', value: 1 },
       { label: '한 달에 1번 정도', value: 2 },
       { label: '한 달에 2~4번', value: 3 },
-      { label: '일주일에 2~3번 정도', value: 4 },
+      { label: '일주일에 2~3번', value: 4 },
       { label: '일주일에 4번 이상', value: 5 },
     ],
-    showIf: (a) => a.drink_ever === 'yes',
   },
   {
     id: 'drink_amount',
     section: 'drink',
-    title: '술을 마시는 날에는 한 번에 보통 얼마나 마십니까?',
-    help: ['술 종류에 관계없이 그 술의 일반적인 잔을 기준으로 합니다.', '캔맥주 1개(355mL)는 약 1.5잔, 소주 1병은 약 7잔입니다.'],
+    title: '마시는 날에는 한 번에 보통 얼마나 마시나요?',
+    help: ['술 종류와 상관없이 그 술의 잔 기준이에요. 맥주 1캔은 약 1.5잔, 소주 1병은 약 7잔이에요.'],
     type: 'choice',
-    // 값 = ML_drink_amount_ord
+    layout: 'list',
     options: [
-      { label: '1~2잔', value: 1 },
-      { label: '3~4잔', value: 2 },
+      { label: '1~2잔 (맥주 1캔 정도)', value: 1 },
+      { label: '3~4잔 (소주 반 병 정도)', value: 2 },
       { label: '5~6잔', value: 3 },
-      { label: '7~9잔', value: 4 },
+      { label: '7~9잔 (소주 1병 정도)', value: 4 },
       { label: '10잔 이상', value: 5 },
     ],
-    showIf: (a) => a.drink_ever === 'yes' && a.drink_freq > 0,
+    showIf: (a) => a.drink_freq > 0,
   },
+
   // 9. 채소·과일
   {
     id: 'veg',
@@ -315,71 +289,16 @@ const STAGE_2 = [
     options: INTAKE_9,
   },
   { id: 'fruit', section: 'veg', title: '최근 1년 동안 평균적으로 과일을 얼마나 자주 드셨습니까?', type: 'choice', options: INTAKE_9 },
-  // 10. 주요 식품 (값 = 하루 평균 섭취 횟수 servings/day)
-  {
-    id: 'protein',
+  // 평소 식사 mini-FFQ 5문항 (재준님 mini-FFQ 모델 입력, 65세 이상은 생략)
+  ...FFQ_ITEMS.map(({ id, name, help }) => ({
+    id,
     section: 'food',
-    title: '평소 일주일 동안 고기·생선·달걀·콩류를 몇 회 정도 드십니까?',
-    help: ['1회 기준: 고기 1접시, 생선 1토막, 달걀 1~2개, 두부 1/5모, 콩류 1/2컵'],
+    title: `최근 1년 동안 ${name} 얼마나 자주 드셨나요?`,
+    help: [help],
     type: 'choice',
-    options: [
-      { label: '거의 먹지 않는다', value: 0 },
-      { label: '주 1~2회', value: 0.21 },
-      { label: '주 3~4회', value: 0.5 },
-      { label: '주 5~7회', value: 0.86 },
-      { label: '하루 1회 정도', value: 1 },
-      { label: '하루 2회 정도', value: 2 },
-      { label: '하루 3회 이상', value: 3 },
-    ],
-  },
-  {
-    id: 'dairy',
-    section: 'food',
-    title: '평소 일주일 동안 우유 및 유제품을 몇 회 정도 드십니까?',
-    help: ['1회 기준: 우유 1컵, 요구르트 1개, 떠먹는 요구르트 1개, 치즈 1~2장'],
-    type: 'choice',
-    options: [
-      { label: '거의 먹지 않는다', value: 0 },
-      { label: '주 1~2회', value: 0.21 },
-      { label: '주 3~4회', value: 0.5 },
-      { label: '주 5~7회', value: 0.86 },
-      { label: '하루 1회 정도', value: 1 },
-      { label: '하루 2회 이상', value: 2 },
-    ],
-  },
-  // 11. 선택 문항 여부
-  {
-    id: 'extra',
-    section: 'extra',
-    title: '거의 다 왔어요! 마음 건강·대사 건강 질문도 답해 볼까요?',
-    help: ['선택 문항 12개예요. 결과 화면에서 간단한 안내만 드려요.', '응답은 이 휴대폰에만 잠시 저장되고 어디에도 전송되지 않아요.'],
-    type: 'choice',
-    options: [
-      { label: '결과 바로 보기', value: 'skip' },
-      { label: '추가 질문 답하기 (선택)', value: 'more' },
-    ],
-  },
-  // 12. 마음 건강 (PHQ-9)
-  ...PHQ_ITEMS.map((text, i) => ({
-    id: `phq${i + 1}`,
-    section: 'mind',
-    title: text,
-    help: ['지난 2주 동안 이런 문제를 얼마나 자주 겪었는지 골라 주세요.'],
-    type: 'choice',
-    options: PHQ_OPTIONS,
-    showIf: wantsExtra,
+    options: FOOD_FREQ_8,
+    showIf: ffqAge,
   })),
-  // 13. 대사 건강 (결과 해석용)
-  { id: 'dx_hypertension', section: 'metabolic', title: '의사에게 고혈압 진단을 받은 적이 있습니까?', type: 'choice', options: YES_NO, showIf: wantsExtra },
-  { id: 'dx_diabetes', section: 'metabolic', title: '의사에게 당뇨병 진단을 받은 적이 있습니까?', type: 'choice', options: YES_NO, showIf: wantsExtra },
-  {
-    id: 'dx_dyslipidemia',
-    section: 'metabolic',
-    title: '의사에게 이상지질혈증(고지혈증) 진단을 받은 적이 있습니까?',
-    type: 'choice',
-    options: YES_NO,
-    showIf: wantsExtra,
-  },
 ]
 
 export const QUESTIONS = [...STAGE_1.map((q) => ({ ...q, stage: 1 })), ...STAGE_2.map((q) => ({ ...q, stage: 2 }))]

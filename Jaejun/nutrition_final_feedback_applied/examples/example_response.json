@@ -1,5 +1,6 @@
 {
-  "version": "v1.4-web-retrained",
+  "version": "v1.4.1-web-feedback",
+  "model_version": "v1.4-web-retrained",
   "nutrition": {
     "lifestyle_risk": {
       "potassium": {
@@ -110,7 +111,7 @@
       "nutrient_id": "potassium",
       "nutrient_name": "칼륨",
       "target": "below_AI",
-      "display_state": "different_signals",
+      "display_state": "general_information",
       "food_examples": [
         "채소",
         "과일",
@@ -171,7 +172,7 @@
       "nutrient_id": "vitamin_c",
       "nutrient_name": "비타민 C",
       "target": "below_EAR",
-      "display_state": "different_signals",
+      "display_state": "general_information",
       "food_examples": [
         "과일",
         "파프리카",
@@ -240,7 +241,7 @@
       "nutrient_id": "iron",
       "nutrient_name": "철",
       "target": "below_EAR",
-      "display_state": "review_food_sources",
+      "display_state": "general_information",
       "food_examples": [
         "육류",
         "콩류",
@@ -273,10 +274,145 @@
       "message": "아연을 제공하는 일반적인 식품 예시입니다. 개인의 필요 섭취량이나 추가 섭취 필요를 확정한 결과는 아닙니다."
     }
   ],
+  "display_summary": {
+    "show_probability_numbers": false,
+    "max_selected_nutrients": 5,
+    "disagreement_policy": "prefer_habitual_diet_when_available",
+    "selection_status": "managed_by_web",
+    "nutrients": {
+      "potassium": {
+        "nutrient_id": "potassium",
+        "risk_band": "Low",
+        "display_label": "낮은 편",
+        "display_source": "habitual_diet",
+        "signals_differ": true,
+        "lifestyle_label": "높은 편",
+        "habitual_diet_label": "낮은 편"
+      },
+      "phosphorus": {
+        "nutrient_id": "phosphorus",
+        "risk_band": "Low",
+        "display_label": "낮은 편",
+        "display_source": "habitual_diet",
+        "signals_differ": true,
+        "lifestyle_label": "보통",
+        "habitual_diet_label": "낮은 편"
+      },
+      "protein": {
+        "nutrient_id": "protein",
+        "risk_band": "Low",
+        "display_label": "낮은 편",
+        "display_source": "habitual_diet",
+        "signals_differ": false,
+        "lifestyle_label": "낮은 편",
+        "habitual_diet_label": "낮은 편"
+      },
+      "folate": {
+        "nutrient_id": "folate",
+        "risk_band": "High",
+        "display_label": "높은 편",
+        "display_source": "lifestyle",
+        "signals_differ": false,
+        "lifestyle_label": "높은 편",
+        "habitual_diet_label": null
+      },
+      "vitamin_b1": {
+        "nutrient_id": "vitamin_b1",
+        "risk_band": "Low",
+        "display_label": "낮은 편",
+        "display_source": "habitual_diet",
+        "signals_differ": true,
+        "lifestyle_label": "보통",
+        "habitual_diet_label": "낮은 편"
+      },
+      "vitamin_c": {
+        "nutrient_id": "vitamin_c",
+        "risk_band": "Low",
+        "display_label": "낮은 편",
+        "display_source": "habitual_diet",
+        "signals_differ": true,
+        "lifestyle_label": "높은 편",
+        "habitual_diet_label": "낮은 편"
+      },
+      "vitamin_b2": {
+        "nutrient_id": "vitamin_b2",
+        "risk_band": "Low",
+        "display_label": "낮은 편",
+        "display_source": "habitual_diet",
+        "signals_differ": false,
+        "lifestyle_label": "낮은 편",
+        "habitual_diet_label": "낮은 편"
+      },
+      "vitamin_a": {
+        "nutrient_id": "vitamin_a",
+        "risk_band": "Mid",
+        "display_label": "보통",
+        "display_source": "lifestyle",
+        "signals_differ": false,
+        "lifestyle_label": "보통",
+        "habitual_diet_label": null
+      },
+      "fiber": {
+        "nutrient_id": "fiber",
+        "risk_band": "Low",
+        "display_label": "낮은 편",
+        "display_source": "habitual_diet",
+        "signals_differ": true,
+        "lifestyle_label": "보통",
+        "habitual_diet_label": "낮은 편"
+      },
+      "sodium_excess": {
+        "nutrient_id": "sodium_excess",
+        "risk_band": "High",
+        "display_label": "높은 편",
+        "display_source": "habitual_diet",
+        "signals_differ": true,
+        "lifestyle_label": "보통",
+        "habitual_diet_label": "높은 편"
+      },
+      "calcium": {
+        "nutrient_id": "calcium",
+        "risk_band": "Low",
+        "display_label": "낮은 편",
+        "display_source": "habitual_diet",
+        "signals_differ": false,
+        "lifestyle_label": "낮은 편",
+        "habitual_diet_label": "낮은 편"
+      },
+      "iron": {
+        "nutrient_id": "iron",
+        "risk_band": "Mid",
+        "display_label": "보통",
+        "display_source": "habitual_diet",
+        "signals_differ": true,
+        "lifestyle_label": "높은 편",
+        "habitual_diet_label": "보통"
+      },
+      "magnesium": {
+        "nutrient_id": "magnesium",
+        "risk_band": "Mid",
+        "display_label": "보통",
+        "display_source": "lifestyle",
+        "signals_differ": false,
+        "lifestyle_label": "보통",
+        "habitual_diet_label": null
+      },
+      "zinc": {
+        "nutrient_id": "zinc",
+        "risk_band": "Mid",
+        "display_label": "보통",
+        "display_source": "lifestyle",
+        "signals_differ": false,
+        "lifestyle_label": "보통",
+        "habitual_diet_label": null
+      }
+    },
+    "selected_nutrients": [],
+    "disclaimer": "기준 자료 안에서의 상대 등급이며, 부족을 진단한 결과가 아니고 필요한 양을 알려주지 않습니다."
+  },
   "lifestyle_cluster": {
-    "status": "awaiting_web_cluster",
-    "cluster_id": null,
-    "source": "bigskyyang/web/src/data/nbti12.json"
+    "status": "managed_by_web",
+    "cluster_id": null
   },
   "model_data_quality": {
     "status": "invalid_training_codes_removed",

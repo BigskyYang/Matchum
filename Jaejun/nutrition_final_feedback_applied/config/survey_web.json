@@ -1,5 +1,5 @@
 {
-  "version": "v1.4-web-retrained",
+  "version": "v1.4.1-web-feedback",
   "scope": "nutrition_and_general_food_information",
   "questions": [
     {
@@ -27,46 +27,20 @@
       "maximum": 120
     },
     {
-      "id": "smoked_100_cigarettes",
-      "label": "평생 담배를 100개비 이상 피운 적이 있습니까?",
+      "id": "currently_smoking",
+      "label": "현재 흡연하고 있습니까?",
       "type": "boolean",
       "required": true
     },
     {
-      "id": "current_smoking",
-      "label": "현재 흡연 상태",
-      "type": "select",
-      "required": false,
-      "show_if": {
-        "smoked_100_cigarettes": true
-      },
-      "options": [
-        {
-          "value": "매일 피움",
-          "label": "매일 피움"
-        },
-        {
-          "value": "가끔 피움",
-          "label": "가끔 피움"
-        },
-        {
-          "value": "과거에는 피웠으나 현재는 피우지 않음",
-          "label": "과거에는 피웠으나 현재는 피우지 않음"
-        }
-      ]
-    },
-    {
       "id": "cigarettes_per_day",
-      "label": "현재 하루 평균 흡연량(개비)",
+      "label": "하루 평균 흡연량",
       "type": "number",
       "required": false,
       "minimum": 0,
       "maximum": 200,
       "show_if": {
-        "current_smoking": [
-          "매일 피움",
-          "가끔 피움"
-        ]
+        "currently_smoking": true
       }
     },
     {
@@ -148,36 +122,10 @@
       ]
     },
     {
-      "id": "moderate_hours",
-      "label": "최근 일주일 총 중강도 신체활동(시간)",
-      "type": "number",
-      "required": true,
-      "minimum": 0,
-      "maximum": 168
-    },
-    {
-      "id": "moderate_minutes",
-      "label": "최근 일주일 총 중강도 신체활동(분)",
-      "type": "number",
-      "required": true,
-      "minimum": 0,
-      "maximum": 59
-    },
-    {
-      "id": "vigorous_hours",
-      "label": "최근 일주일 총 고강도 신체활동(시간)",
-      "type": "number",
-      "required": true,
-      "minimum": 0,
-      "maximum": 168
-    },
-    {
-      "id": "vigorous_minutes",
-      "label": "최근 일주일 총 고강도 신체활동(분)",
-      "type": "number",
-      "required": true,
-      "minimum": 0,
-      "maximum": 59
+      "id": "aerobic_150min",
+      "label": "숨이 조금 찰 정도로 움직인 시간이 일주일에 총 2시간 30분 이상입니까?",
+      "type": "boolean",
+      "required": true
     },
     {
       "id": "sedentary_hours",
@@ -194,6 +142,23 @@
       "required": true,
       "minimum": 0,
       "maximum": 59
+    },
+    {
+      "id": "regular_sleep_schedule",
+      "label": "잠자는 시각이 일정한 편입니까?",
+      "type": "boolean",
+      "required": true
+    },
+    {
+      "id": "average_sleep_hours",
+      "label": "하루 평균 수면시간(시간)",
+      "type": "number",
+      "required": false,
+      "minimum": 0,
+      "maximum": 24,
+      "show_if": {
+        "regular_sleep_schedule": false
+      }
     },
     {
       "id": "strength_days",
@@ -231,25 +196,37 @@
       "id": "workday_bedtime",
       "label": "평일 취침 시각",
       "type": "time",
-      "required": true
+      "required": false,
+      "show_if": {
+        "regular_sleep_schedule": true
+      }
     },
     {
       "id": "workday_waketime",
       "label": "평일 기상 시각",
       "type": "time",
-      "required": true
+      "required": false,
+      "show_if": {
+        "regular_sleep_schedule": true
+      }
     },
     {
       "id": "restday_bedtime",
       "label": "휴일 취침 시각",
       "type": "time",
-      "required": true
+      "required": false,
+      "show_if": {
+        "regular_sleep_schedule": true
+      }
     },
     {
       "id": "restday_waketime",
       "label": "휴일 기상 시각",
       "type": "time",
-      "required": true
+      "required": false,
+      "show_if": {
+        "regular_sleep_schedule": true
+      }
     },
     {
       "id": "stress",
