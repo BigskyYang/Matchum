@@ -57,23 +57,21 @@ function RiskSheet({ n, onClose }) {
   )
 }
 
-// 나머지 영양소 (보통·잘 챙기는 편, 또는 5개를 넘은 부족하기 쉬운 영양소)
+// 나머지 영양소 (보통·잘 챙기는 편, 또는 5개를 넘은 부족하기 쉬운 영양소). 위 카드와 같은 모양, 등급은 누르면
 function RestSheet({ rest, onPick, onClose }) {
   return (
     <BottomSheet title="나머지 영양소" onClose={onClose}>
-      <ul className="grid grid-cols-2 gap-1.5">
+      <ul className="grid grid-cols-3 gap-2">
         {rest.map((n) => (
           <li key={n.key}>
             <button
               type="button"
               onClick={() => onPick(n)}
-              className="flex h-full w-full flex-col items-start gap-1.5 rounded-card bg-cream px-3 py-2.5 text-left active:scale-[0.98]"
+              aria-label={`${n.label} 자세히 보기`}
+              className="flex h-full w-full flex-col items-center gap-1.5 rounded-card bg-cream px-1 py-3 text-center text-sm leading-tight font-bold active:scale-95"
             >
-              <span className="flex items-start gap-1.5 text-sm leading-tight font-bold">
-                <NutrientArt n={n} className="size-6" />
-                {n.label}
-              </span>
-              <Badge n={n} />
+              <NutrientArt n={n} className="size-10" emojiClass="text-2xl" />
+              {n.label}
             </button>
           </li>
         ))}
