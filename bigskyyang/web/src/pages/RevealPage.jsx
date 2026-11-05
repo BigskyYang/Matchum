@@ -139,12 +139,12 @@ function cardsOf(r, s) {
     // 4. 영양소
     s.nutrient.kind === 'common' ? (
       <>
-        <Title>조사에서 섭취가 적었던 영양소</Title>
+        <Title>대체로 섭취가 부족했던 영양소</Title>
         <p className="mt-2 text-ink-soft">유형과 상관없이 성인 절반 이상이 적게 먹어요</p>
-        <ul className="mt-6 flex flex-wrap justify-center gap-2">
+        <ul className="mt-6 grid w-full grid-cols-3 gap-2">
           {s.nutrient.items.map((n) => (
-            <li key={n.key} className="inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-2 font-bold shadow-soft">
-              <NutrientArt n={n} className="size-7" />
+            <li key={n.key} className="flex flex-col items-center gap-1.5 rounded-card bg-white px-2 py-4 text-sm font-bold shadow-soft">
+              <NutrientArt n={n} className="size-12 animate-pop motion-reduce:animate-none" emojiClass="text-3xl" />
               {n.label}
             </li>
           ))}

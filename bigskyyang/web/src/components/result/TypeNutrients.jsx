@@ -6,7 +6,7 @@ import NutrientArt from '../NutrientArt.jsx'
 // 유형 화면의 '부족할 수 있는 영양소' ((나)안, 데이터는 lib/nutrition.js의 typeNutrients)
 //   🔹 나와 비슷한 사람들이 적게 먹은 영양소: 2줄 전부를 한 목록으로 (테두리 색 = 부족·주의)
 //      내 유형이라 적은 것(유형특이·식사량영향)을 먼저, 같은 성별·나이대라 적은 것('흔함')을 뒤에. 항목마다 이유 표시
-//   🔸 조사에서 섭취가 적었던 영양소: 공통 8개 (유형과 상관없어 맨 아래 작은 칩으로)
+//   🔸 대체로 섭취가 부족했던 영양소: 공통 8개 (유형과 상관없어 맨 아래, 같은 크기의 작은 카드 4열)
 // 영양소를 누르면 화면 아래에서 올라오는 창(BottomSheet)으로 역할·대표 음식을 보여 준다. 근거 설명은 '어떻게 만들었나요?' 창에
 const BORDER = { poor: 'border-primary-strong', fair: 'border-[#f2c14e]' }
 const CHIP = { poor: 'bg-primary-soft text-primary-shade', fair: 'bg-butter text-ink' }
@@ -17,9 +17,9 @@ function CommonChip({ n, onOpen }) {
       <button
         type="button"
         onClick={() => onOpen(n)}
-        className="flex items-center gap-1 rounded-full bg-cream px-3 py-2 text-sm font-bold active:scale-95"
+        className="flex h-full w-full flex-col items-center gap-1 rounded-card bg-cream px-1 py-2.5 text-center text-xs leading-tight font-bold active:scale-95"
       >
-        <NutrientArt n={n} className="size-6" />
+        <NutrientArt n={n} className="size-8" emojiClass="text-2xl" />
         {n.label}
       </button>
     </li>
@@ -138,9 +138,9 @@ export default function TypeNutrients({ common, picks, sexLabel, ageLabel }) {
 
       <section>
         <h3 className="flex items-center gap-2 text-sm font-bold">
-          <span aria-hidden="true" className="size-2.5 rounded-full bg-[#e0a92e]" />조사에서 섭취가 적었던 영양소 {common.length}개
+          <span aria-hidden="true" className="size-2.5 rounded-full bg-[#e0a92e]" />대체로 섭취가 부족했던 영양소
         </h3>
-        <ul className="mt-2 flex flex-wrap gap-1.5">
+        <ul className="mt-2 grid grid-cols-4 gap-1.5">
           {common.map((n) => (
             <CommonChip key={n.key} n={n} onOpen={setOpen} />
           ))}
