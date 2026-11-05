@@ -193,7 +193,7 @@ export function buildPersonalResult(answers, models = null) {
 
   // 음식은 이름이 겹치지 않게 모은다
   const foods = []
-  for (const f of tips.flatMap((t) => t.foods ?? [])) {
+  for (const f of tips.flatMap((t) => (t.foods ?? []).map((food) => ({ ...food, reason: t.reason })))) {
     if (!foods.some((x) => x.label === f.label)) foods.push(f)
   }
 

@@ -119,7 +119,7 @@ export default function SimulatePage() {
         >
           <Icon name="back" size={26} />
         </button>
-        <h1 className="py-2 font-display text-xl font-normal">응답을 바꾸면 예측은 어떻게 달라질까?</h1>
+        <h1 className="py-2 font-display text-xl font-normal">내 습관을 개선하면 결과는 어떻게 달라질까?</h1>
       </header>
 
       {!changes ? (

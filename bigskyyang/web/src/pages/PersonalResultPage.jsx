@@ -56,7 +56,7 @@ export default function PersonalResultPage() {
         <NutritionRisk nutrition={r.nutrition} ffqAsked={r.ffqAsked} />
         {r.supplements?.nutrients.length > 0 && (
           <Link to="/supplements" className="mt-3 block rounded-button bg-cream py-3 text-center text-sm font-bold text-primary-shade active:scale-[0.99]">
-            성분별 제품 표시 정보 보기 ›
+            관련 제품 찾아보기 ›
           </Link>
         )}
       </Card>
@@ -66,7 +66,7 @@ export default function PersonalResultPage() {
       </Card>
 
       <Card title="챙겨 먹으면 좋은 음식" icon="salad">
-        <FoodGrid foods={r.foods} />
+        <FoodGrid foods={r.foods} watchKeys={r.nutrition?.watch.map((n) => n.key) ?? []} />
       </Card>
 
       <Card title="흡연·음주 신호등" icon="traffic">
@@ -83,7 +83,7 @@ export default function PersonalResultPage() {
         className="flex items-center gap-3 rounded-card bg-lavender/60 p-5 shadow-soft active:scale-[0.99]"
       >
         <Icon name="sparkles" size={28} className="shrink-0 text-primary-shade" />
-        <span className="flex-1 font-display text-xl">응답을 바꿔 예측 비교하기</span>
+        <span className="flex-1 font-display text-xl">내 습관을 개선했을 때 확인하기</span>
         <Icon name="next" size={20} className="shrink-0 text-ink-faint" />
       </Link>
 
