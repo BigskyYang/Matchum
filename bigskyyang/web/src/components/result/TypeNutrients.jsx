@@ -126,7 +126,7 @@ export default function TypeNutrients({ common, picks, sexLabel, ageLabel }) {
         <section>
           <h3 className="flex items-center gap-2 text-sm font-bold">
             <span aria-hidden="true" className="size-2.5 rounded-full bg-primary-strong" />
-            같은 유형·{sexLabel}·{ageLabel}에서 섭취가 적었던 영양소
+            같은 유형에서 섭취가 적었던 영양소
           </h3>
           <ul className="mt-2 space-y-2">
             {sorted.map((n) => (
