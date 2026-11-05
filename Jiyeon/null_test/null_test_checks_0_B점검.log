@@ -1,0 +1,55 @@
+﻿변수별 고유값 수와 최빈값 비율
+  aerobic: 고유값 2, 최빈 54.3%
+  strength_days: 고유값 6, 최빈 71.3%
+  sedentary_min: 고유값 151, 최빈 14.1%
+  sleep_hours: 고유값 468, 최빈 5.9%
+  stress: 고유값 2, 최빈 75.8%
+  eatingout_freq_ord: 고유값 7, 최빈 24.1%
+  meal_score: 고유값 51, 최빈 51.0%
+
+순위상관 재현 (실제와의 차이)
+  B: 평균 |차이| 0.0159, 최대 |차이| 0.0735, 부호 있는 평균 -0.0015
+  B2: 평균 |차이| 0.0036, 최대 |차이| 0.0087, 부호 있는 평균 -0.0000
+  실제 |순위상관| 평균 0.0743 최대 0.2286
+    aerobic-strength_days: 실제 +0.229
+    aerobic-sedentary_min: 실제 -0.088
+    aerobic-sleep_hours: 실제 +0.012
+    aerobic-stress: 실제 +0.017
+    aerobic-eatingout_freq_ord: 실제 +0.145
+    aerobic-meal_score: 실제 -0.044
+    strength_days-sedentary_min: 실제 -0.026
+    strength_days-sleep_hours: 실제 +0.017
+    strength_days-stress: 실제 -0.049
+    strength_days-eatingout_freq_ord: 실제 +0.055
+    strength_days-meal_score: 실제 +0.049
+    sedentary_min-sleep_hours: 실제 -0.087
+    sedentary_min-stress: 실제 +0.063
+    sedentary_min-eatingout_freq_ord: 실제 +0.072
+    sedentary_min-meal_score: 실제 -0.077
+    sleep_hours-stress: 실제 -0.061
+    sleep_hours-eatingout_freq_ord: 실제 +0.039
+    sleep_hours-meal_score: 실제 -0.032
+    stress-eatingout_freq_ord: 실제 +0.098
+    stress-meal_score: 실제 -0.146
+    eatingout_freq_ord-meal_score: 실제 -0.156
+
+PCA 설명분산 비율 (1~7축)
+  실제 [0.187 0.182 0.152 0.135 0.125 0.118 0.103]
+  A   [0.147 0.145 0.144 0.143 0.142 0.141 0.138]
+  B   [0.184 0.173 0.15  0.137 0.126 0.12  0.11 ]
+  B2   [0.194 0.184 0.151 0.135 0.119 0.114 0.102]
+
+변수 쌍 결합분포 차이: 실제 vs B (상위 8, 총변동거리)
+  참고: 표본 잡음 수준(B끼리) 평균 0.0124
+  eatingout_freq_ord-meal_score: 0.0491
+  sleep_hours-eatingout_freq_ord: 0.0460
+  aerobic-strength_days: 0.0357
+  sedentary_min-sleep_hours: 0.0339
+  aerobic-eatingout_freq_ord: 0.0244
+  strength_days-eatingout_freq_ord: 0.0222
+  sedentary_min-eatingout_freq_ord: 0.0220
+  sleep_hours-meal_score: 0.0199
+
+실제 vs B 첨도형 차이: PCA1·2 점수 사분위 폭 / 표준편차
+  실제:  [1.393, 1.439]
+  B:  [1.424, 1.341]

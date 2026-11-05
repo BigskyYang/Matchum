@@ -1,0 +1,19 @@
+{
+  "README.md": "8aa296be3627a94df32ce0b82304bcac0f25d744d9641ca51999bcced1e45f2f",
+  "VALIDATION.md": "33353f3a31a75a5a0d0a6353901e08f232a11c62e19bd12465e09f4844b7acc2",
+  "DROPDOWN_SPEC.md": "e99c4040009a020df1774e8138a5a3863311aee2e5569a2447129cae27e9264e",
+  "CHANGELOG.md": "c49f7d4fb56e0958da211d0a6d3ee1ed392d231d98c9d39fd0c3c4e86baf610a",
+  "HANDOFF.md": "b388124adff355835825ed4b2882ebdcc74bfb77fab178a85ef22c13c6b6f653",
+  "tests/productBridge.test.mjs": "a34535c99579b37321a43521ea3f7fa2dcd1154c7aa38c22b4f28cdc6b1d216c",
+  "scripts/makeExamples.mjs": "b1c099ed03444e0bdee915120bb96e295c28c820f786e93e0f3636b0a78d4111",
+  "scripts/buildCatalog.py": "451c65d3a29333ec70431ceae10f7abce733eb6d5146c898550244cd31d0fb49",
+  "config/dropdown_labels.ko.json": "ed12d533e367880e67a497538552c43fdaeedf914ebbb874a882a768ed4ada81",
+  "src/productBridge.mjs": "f43fb786263aca250465424ed7e847c77c4e7b1a2f8091f9915f41e391c95c7b",
+  "data/nutritionProducts.json": "3ad657ea0fcbd43644fc157b47dd84cb7c8de3551a226b1bc692dc89aeffc5d1",
+  "data/catalog_summary.json": "378f21411fad3ac0382172b7a0ae7e28e30418890332ad73eae0ac85427ece4d",
+  "source/stage9_final.csv": "1c9c13ca9820f4eee61383f3d82e36e50df0023f287acea511d358ef088c2173",
+  "examples/calcium_page_1.json": "73f0a36f5c8a2b0cebcf6c32aff8c9c24a309b3d4e7e318349ad94e58228bc40",
+  "examples/multiple_nutrients.json": "dd89b30e1f59fe3f08cff0550cf6aa3e48ebed84f3caec23b6cc25ea6fe158f1",
+  "examples/personal_dropdown.json": "ee74d5559b759cc471e0aeed173283aaf2dd5c9df5b9ba41ce6db08ae12bf032",
+  "examples/general_information.json": "49ca47000b7b8245e4bf792797fc909b38bc804032ec03084bedf3e828d17ed3"
+}
