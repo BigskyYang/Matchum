@@ -95,25 +95,13 @@
     }
   }
 
-  /* 설문 통계 말풍선 (components/survey/PeerFactToast.jsx): 아래에서 스르륵 올라왔다가 내려간다 */
-  --animate-peek-in: peek-in 0.45s cubic-bezier(0.2, 1.2, 0.4, 1) both;
-  --animate-peek-out: peek-out 0.3s ease-in both;
+  /* 설문 통계 말풍선 (components/survey/SurveyMascot.jsx): 톡 나왔다가(pop) 흐려지며 사라진다 */
+  --animate-fade-out: fade-out 0.25s ease-in both;
 
-  @keyframes peek-in {
-    from {
-      transform: translateY(110%);
-    }
+  @keyframes fade-out {
     to {
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes peek-out {
-    from {
-      transform: translateY(0);
-    }
-    to {
-      transform: translateY(110%);
+      opacity: 0;
+      transform: scale(0.9);
     }
   }
 

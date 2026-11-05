@@ -2,12 +2,11 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import BottomSheet from '../components/BottomSheet.jsx'
 import Icon from '../components/Icon.jsx'
-import Mascot from '../components/Mascot.jsx'
 import PrimaryButton from '../components/PrimaryButton.jsx'
 import ChoiceInput from '../components/survey/ChoiceInput.jsx'
 import ProgressBar from '../components/survey/ProgressBar.jsx'
 import RowsInput from '../components/survey/RowsInput.jsx'
-import PeerFactToast from '../components/survey/PeerFactToast.jsx'
+import SurveyMascot from '../components/survey/SurveyMascot.jsx'
 import { DateWheel, DurationWheel, NumberWheel, TimeWheel } from '../components/survey/WheelInputs.jsx'
 import { SECTIONS, visibleQuestions } from '../data/questions.js'
 import { loadSurvey, saveSurvey } from '../lib/storage.js'
@@ -95,7 +94,7 @@ export default function SurveyPage({ stage = 1 }) {
   const [state, setState] = useState(loadSurvey)
   const busy = useRef(false)
   const timer = useRef(null)
-  // 방금 답한 문항의 같은 성별·나이대 통계 (다음 문항 화면 아래에서 잠깐 보여 준다)
+  // 방금 답한 문항의 같은 성별·나이대 통계 (다음 문항 위쪽 마스코트 옆에 잠깐 보여 준다)
   const [fact, setFact] = useState(null)
   const hideFact = useCallback(() => setFact(null), [])
 
@@ -192,7 +191,8 @@ export default function SurveyPage({ stage = 1 }) {
         </div>
       </header>
 
-      <div className="mt-4 flex justify-center"><Mascot name="thinking" size="sm" /></div>
+      {/* 위쪽 마스코트: 운동·앉는 시간·스트레스·끼니에 답하면 옆에 조사 통계 말풍선 */}
+      <SurveyMascot fact={fact} onDone={hideFact} />
 
       <div className="mt-4 flex flex-1 flex-col">
         <QuestionStep
@@ -205,7 +205,6 @@ export default function SurveyPage({ stage = 1 }) {
           onSkip={skipRest}
         />
       </div>
-      {fact && <PeerFactToast key={fact.id} fact={fact} onDone={hideFact} raised={q.type !== 'choice'} />}
     </main>
   )
 }
