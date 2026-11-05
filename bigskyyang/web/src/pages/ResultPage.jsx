@@ -5,18 +5,20 @@ import Icon from '../components/Icon.jsx'
 import Mascot from '../components/Mascot.jsx'
 import PrimaryButton, { SecondaryButton } from '../components/PrimaryButton.jsx'
 import Card from '../components/result/Card.jsx'
-import HabitSignals from '../components/result/HabitSignals.jsx'
+import HabitTabs from '../components/result/HabitTabs.jsx'
 import MissionList from '../components/result/MissionList.jsx'
 import AboutLink from '../components/result/AboutLink.jsx'
 import PartnerCard from '../components/result/PartnerCard.jsx'
 import ShareButton from '../components/result/ShareButton.jsx'
 import ShareImageButton from '../components/result/ShareImageButton.jsx'
+import TypeBoundary from '../components/result/TypeBoundary.jsx'
 import TypeNutrients from '../components/result/TypeNutrients.jsx'
 import { buildTypeResult } from '../lib/result.js'
 import { clearSurvey, loadSurvey } from '../lib/storage.js'
 
 // 1단계 유형 결과 (공유용). 보여 줄 값은 lib/result.js의 buildTypeResult가 계산한다
-// 첫 화면은 유형 카드만 (마스코트·이름·해시태그·한 줄 설명·비율), 내리면 생활습관 신호등·이번 주 해볼 것 → 부족할 수 있는 영양소 → 짝꿍 유형
+// 첫 화면은 유형 카드만 (마스코트·이름·해시태그·한 줄 설명·비율), 내리면 생활습관(내 신호등 / 평균과 비교)·이번 주 해볼 것
+//   → 내 유형 위치(경계) → 부족할 수 있는 영양소 → 짝꿍 유형
 // '공유'와 '나에게 맞는 결과'는 맨 아래 (다시 검사하기 위)
 const PENDING = '영양 분석 결과가 준비되면 이곳에 표시돼요.'
 
@@ -70,13 +72,17 @@ export default function ResultPage() {
         </button>
       </header>
 
-      <Card title="나의 생활습관 신호등" icon="traffic">
-        <HabitSignals habits={r.habits} />
+      <Card title="나의 생활습관" icon="traffic">
+        <HabitTabs habits={r.habits} code={r.leafId[0]} />
         <h3 className="mt-5 mb-2 flex items-center gap-1.5 text-sm font-bold">
           <Icon name="target" size={18} className="text-primary-shade" />
           이번 주 해볼 것
         </h3>
         <MissionList missions={r.missions} />
+      </Card>
+
+      <Card title="내 유형 위치" icon="compass">
+        <TypeBoundary leafId={r.leafId} name={r.name} boundary={r.boundary} />
       </Card>
 
       <Card title="부족할 수 있는 영양소" icon="apple">
