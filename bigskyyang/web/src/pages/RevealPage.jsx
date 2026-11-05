@@ -5,6 +5,7 @@ import Icon from '../components/Icon.jsx'
 import Mascot from '../components/Mascot.jsx'
 import PrimaryButton, { SecondaryButton } from '../components/PrimaryButton.jsx'
 import ShareButton from '../components/result/ShareButton.jsx'
+import ShareImageButton from '../components/result/ShareImageButton.jsx'
 import { model } from '../lib/classify.js'
 import { buildTypeResult, revealStory } from '../lib/result.js'
 import { loadSurvey } from '../lib/storage.js'
@@ -270,12 +271,13 @@ export default function RevealPage() {
           </div>
         ) : (
           <>
-            <div className="relative flex gap-2">
-              <ShareButton typeName={r.name} />
-              <PrimaryButton size="sm" className="flex-1" onClick={toResult}>
-                결과 자세히 보기
-              </PrimaryButton>
+            <div className="relative grid grid-cols-2 gap-2">
+              <ShareButton typeName={r.name} className="py-3.5" />
+              <ShareImageButton r={r} className="py-3.5" />
             </div>
+            <PrimaryButton size="sm" onClick={toResult}>
+              결과 자세히 보기
+            </PrimaryButton>
             <SecondaryButton to={survey.done[2] ? '/result2' : '/survey2'}>나에게 맞는 결과 보기 (2분)</SecondaryButton>
           </>
         )}

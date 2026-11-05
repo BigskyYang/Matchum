@@ -10,6 +10,7 @@ import MissionList from '../components/result/MissionList.jsx'
 import AboutLink from '../components/result/AboutLink.jsx'
 import PartnerCard from '../components/result/PartnerCard.jsx'
 import ShareButton from '../components/result/ShareButton.jsx'
+import ShareImageButton from '../components/result/ShareImageButton.jsx'
 import TypeNutrients from '../components/result/TypeNutrients.jsx'
 import { buildTypeResult } from '../lib/result.js'
 import { clearSurvey, loadSurvey } from '../lib/storage.js'
@@ -100,12 +101,13 @@ export default function ResultPage() {
 
       <footer className="mt-2 flex flex-col gap-3">
         {/* 공유 + 2단계 개인 결과 (화면 맨 아래, 고정하지 않음) */}
-        <div className="relative flex gap-2">
-          <ShareButton typeName={r.name} />
-          <PrimaryButton to={r.personalDone ? '/result2' : '/survey2'} size="sm" className="flex-1">
-            {r.personalDone ? '나에게 맞는 결과' : '나에게 맞는 결과 (2분)'}
-          </PrimaryButton>
+        <div className="relative grid grid-cols-2 gap-2">
+          <ShareButton typeName={r.name} className="py-3.5" />
+          <ShareImageButton r={r} className="py-3.5" />
         </div>
+        <PrimaryButton to={r.personalDone ? '/result2' : '/survey2'} size="sm">
+          {r.personalDone ? '나에게 맞는 결과' : '나에게 맞는 결과 (2분)'}
+        </PrimaryButton>
         <SecondaryButton onClick={retry}>처음부터 다시 검사하기</SecondaryButton>
         <AboutLink />
       </footer>
