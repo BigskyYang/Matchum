@@ -1,0 +1,14 @@
+{
+  "DISPLAY_POLICY.md": "dbacbf437c16f9d33e83c5b2b7804ad52c699896f05046c691ec29bf525c59be",
+  "HANDOFF.md": "d0e268fcc5d4b4234a0557821d32a5fe69d5e1e36acf916b739d3c3313dcb8df",
+  "README.md": "e064d8cc548b7323761dca6fc3312ec75ffe6f7e5fd39841295d4d3410f95ad3",
+  "SOURCES.md": "2be4fe6ec9d77fff3ffe93b5cdfb2a063efef5fe8b9f891b530bba4c29eb74ba",
+  "VALIDATION.md": "cc626b6afce03c8f51fa89d2e3d426771b35c6532c6bd4fa14413301469eaa0f",
+  "config/survey.ko.json": "5f40172c535cf9f2fbe03abd58c4fee7b30fa503ca62ee853a0043fbceb0de9b",
+  "examples/answers.json": "cb5068dd99735f69c7078d1d4143ea3623461903f8c31378e409d4166b25db0d",
+  "examples/result.json": "48b1b1b6fd388617dea7560ebf95b08d694ad1d87719b4171c7f832f03ef5b09",
+  "examples/run.mjs": "26aec0ad8669b13d689e881b48be7029069ef074b8a798508ba574c501bd7a11",
+  "package.json": "7c37b85399b637618b289fdef59be98e2276327b5d96e8e2e719c802e80724b5",
+  "src/vitaminDInfo.mjs": "40753d3c0e08b8ece01e681d9cf2146d9863add2bb51aa0d1b5361f9730ec3f5",
+  "tests/vitaminDInfo.test.mjs": "47cca2ed1191d73a4d5e11cf5a75e43c4d66f7c3e29bc107a6ee278de74c0e36"
+}

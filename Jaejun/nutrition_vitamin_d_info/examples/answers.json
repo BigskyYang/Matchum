@@ -1,0 +1,8 @@
+{
+  "outdoor_days": "days_1_2",
+  "outdoor_duration": "min15_30",
+  "vitamin_d_foods": [
+    "fish",
+    "egg_yolk"
+  ]
+}

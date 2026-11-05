@@ -1,0 +1,14 @@
+{
+  "name": "nutrition-vitamin-d-info",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "example": "node examples/run.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "description": "Separate self-report information module; does not change trained nutrition models."
+}
