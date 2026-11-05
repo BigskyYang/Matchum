@@ -5,7 +5,7 @@ import Illust from '../Illust.jsx'
 import NutrientArt from '../NutrientArt.jsx'
 
 // 챙겨 먹으면 좋은 음식 타일: 그림과 이름만. 그림은 public/illust/food_{이름}
-//   누르면 아래 창에 왜 골랐는지(내 응답), 들어 있는 영양소(내 식사에서 살펴볼 영양소면 표시), 먹는 방법
+//   누르면 아래 창에 왜 골랐는지(내 응답), 들어 있는 영양소(내가 특히 살펴볼 영양소면 표시), 먹는 방법
 //   음식·이유·영양소는 data/tips.js의 foods (효능이 아니라 일반적인 식품 정보로만 쓴다)
 const FILE = {
   '귤·키위': 'tangerine_kiwi',
@@ -105,7 +105,6 @@ export default function FoodGrid({ foods, watchKeys = [] }) {
           </li>
         ))}
       </ul>
-      <p className="mt-2 text-center text-xs text-ink-faint">음식을 누르면 왜 좋은지 볼 수 있어요</p>
       {open && <FoodSheet f={open} watchKeys={watchKeys} onClose={() => setOpen(null)} />}
     </>
   )

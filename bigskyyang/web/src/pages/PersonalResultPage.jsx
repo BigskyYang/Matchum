@@ -52,7 +52,7 @@ export default function PersonalResultPage() {
         </p>
       </header>
 
-      <Card title="내 식사에서 살펴볼 영양소" icon="checklist">
+      <Card title="내가 특히 살펴볼 영양소" icon="checklist">
         <NutritionRisk nutrition={r.nutrition} ffqAsked={r.ffqAsked} />
         {r.supplements?.nutrients.length > 0 && (
           <Link to="/supplements" className="mt-3 block rounded-button bg-cream py-3 text-center text-sm font-bold text-primary-shade active:scale-[0.99]">
