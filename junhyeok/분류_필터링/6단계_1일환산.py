@@ -105,6 +105,7 @@ def find_amount(spec, name_pat):
     """기준규격에서 성분 표시량 → (값, 단위, 기준 무게 mg 또는 None) / 이름이 없으면 NOT_IN_SPEC / 못 읽으면 None
     예) '비타민D : 표시량(25 ㎍/1,200 mg)의 80~180%', '아연 : 표시량의 80~150% (표시량 : 8.5mg / 800mg)'"""
     s = nf(spec).replace("ug", "μg").replace("µg", "μg").replace("a-TE", "α-TE")   # 11-05: 'a-TE' 표기도 인식
+    s = re.sub(r"(?<=g)\s*R\.?E\b", " RAE", s)   # 11-05: 비타민 A 'μgRE'(레티놀 당량) 표기도 RAE처럼 읽음
     m = re.search(name_pat, s)
     if not m:
         return NOT_IN_SPEC
