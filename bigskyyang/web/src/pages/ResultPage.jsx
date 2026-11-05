@@ -22,6 +22,8 @@ import { clearSurvey, loadSurvey } from '../lib/storage.js'
 //   → 내 유형 위치(경계) → 부족할 수 있는 영양소 → 짝꿍 유형(메이트)
 // '나에게 맞는 결과'는 첫 화면과 맨 아래 두 곳, '공유'는 첫 화면
 const PENDING = '영양 분석 결과가 준비되면 이곳에 표시돼요.'
+// 2단계(식사 설문)로 가는 버튼 문구
+const PERSONAL_CTA = '나에게 부족할 수 있는 영양소는?'
 
 function useResult() {
   return useMemo(() => {
@@ -60,14 +62,14 @@ export default function ResultPage() {
         <p className="mt-3 text-sm text-ink-soft">
           조사 자료에서 성인 100명 중 약 <b className="text-primary-shade">{Math.round(r.sharePct)}명</b>이 이 유형이에요
         </p>
+        <PrimaryButton to={r.personalDone ? '/result2' : '/survey2'} size="sm" className="mt-5">
+          {r.personalDone ? '내 식사 결과 다시 보기' : PERSONAL_CTA}
+        </PrimaryButton>
         {/* 공유: '너는 무슨 유형이야?' (링크 공유 문구·공유 이미지에 내 유형을 담는다) */}
-        <div className="relative mt-5 grid w-full grid-cols-2 gap-2">
+        <div className="relative mt-2 grid w-full grid-cols-2 gap-2">
           <ShareButton typeName={r.name} className="py-3.5" />
           <ShareImageButton r={r} className="py-3.5" />
         </div>
-        <PrimaryButton to={r.personalDone ? '/result2' : '/survey2'} size="sm" className="mt-2">
-          {r.personalDone ? '내 식사 결과 다시 보기' : '식사 설문하고 내 영양소 보기'}
-        </PrimaryButton>
         {/* 누르면 첫 카드(생활습관 신호등)로 내려간다 */}
         <button
           type="button"
@@ -121,7 +123,7 @@ export default function ResultPage() {
       <footer className="mt-2 flex flex-col gap-3">
         {/* 2단계 개인 결과 (화면 맨 아래, 고정하지 않음). 공유는 첫 화면에 */}
         <PrimaryButton to={r.personalDone ? '/result2' : '/survey2'} size="sm">
-          {r.personalDone ? '내 식사 결과 다시 보기' : '식사 설문하고 내 영양소 보기'}
+          {r.personalDone ? '내 식사 결과 다시 보기' : PERSONAL_CTA}
         </PrimaryButton>
         <SecondaryButton onClick={retry}>처음부터 다시 검사하기</SecondaryButton>
         <AboutLink />
