@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import Mascot from '../components/Mascot.jsx'
 import PrimaryButton from '../components/PrimaryButton.jsx'
 import RotatingNotes from '../components/RotatingNotes.jsx'
@@ -50,6 +51,9 @@ export default function StartPage() {
           <br />
           챙기면 좋을 영양소를 알려드려요
         </p>
+        <Link to="/types" className="mt-2 px-3 py-2 text-sm font-bold text-primary-shade">
+          {model.types.length}가지 유형 미리 보기 ›
+        </Link>
       </section>
 
       <footer>

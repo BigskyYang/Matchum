@@ -3,9 +3,24 @@ import models from '../data/nutritionModels.json'
 import { LEAF_TYPES } from '../data/types.js'
 import { SAMPLE, STAGE1_SAMPLE, bornAt } from './fixtures.js'
 import { PERSONAL_AXES, TYPE_AXES } from './profile.js'
-import { buildPersonalResult, buildTypeResult } from './result.js'
+import { allTypes, buildPersonalResult, buildTypeResult } from './result.js'
 
 // 설문 응답으로 결과 화면에 필요한 값이 모두 나오는지 (화면 없이 확인)
+describe('allTypes (전체 유형 보기)', () => {
+  const groups = allTypes()
+  it('대분류 4개 × 세부 유형 3개, 이름·설명·신호등이 있고 비율 합은 100%', () => {
+    expect(groups).toHaveLength(4)
+    for (const g of groups) {
+      expect(g.types).toHaveLength(3)
+      for (const t of g.types) {
+        expect(t.name).toBe(LEAF_TYPES[t.id].name)
+        expect(t.habits).toHaveLength(TYPE_AXES.length)
+      }
+    }
+    expect(groups.reduce((s, g) => s + g.sharePct, 0)).toBeCloseTo(100, 5)
+  })
+})
+
 describe('buildTypeResult (1단계 유형 결과)', () => {
   const r = buildTypeResult(STAGE1_SAMPLE)
 

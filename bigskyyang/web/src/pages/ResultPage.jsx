@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import Mascot from '../components/Mascot.jsx'
 import PrimaryButton, { SecondaryButton } from '../components/PrimaryButton.jsx'
 import Card from '../components/result/Card.jsx'
@@ -89,6 +89,9 @@ export default function ResultPage() {
 
       <Card title="같이 다니면 좋은 유형" icon="🤝">
         <PartnerCard fill={r.partners.fill} together={r.partners.together} />
+        <Link to="/types" className="mt-3 block py-2 text-center text-sm font-bold text-primary-shade">
+          12가지 유형 모두 보기 ›
+        </Link>
       </Card>
 
       <footer className="mt-2 flex flex-col gap-3">
