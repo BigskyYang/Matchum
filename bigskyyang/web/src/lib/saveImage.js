@@ -4,11 +4,12 @@ export const imageFile = (blob, fileName) => new File([blob], fileName, { type: 
 export const canShareFile = (file) => Boolean(file && navigator.canShare?.({ files: [file] }))
 
 // → 'shared' | 'cancelled' | 'saved'
-export async function shareOrSave(blob, fileName, title) {
+//   파일만 넘긴다. title·text를 같이 넘기면 카카오톡 등에서 이미지와 별도로 글 메시지가 한 번 더 보내진다
+export async function shareOrSave(blob, fileName) {
   const file = imageFile(blob, fileName)
   if (canShareFile(file)) {
     try {
-      await navigator.share({ files: [file], title })
+      await navigator.share({ files: [file] })
       return 'shared'
     } catch {
       return 'cancelled'
