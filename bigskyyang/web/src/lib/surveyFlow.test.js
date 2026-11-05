@@ -37,7 +37,7 @@ describe('surveyPath', () => {
   it('단계와 문항 ID로 주소를 만든다', () => {
     expect(surveyPath({ id: 'birth_date' })).toBe('/survey?q=birth_date')
     expect(surveyPath({ id: 'veg' }, 2)).toBe('/survey2?q=veg')
-    expect(resultPath(1)).toBe('/result')
+    expect(resultPath(1)).toBe('/reveal')
     expect(resultPath(2)).toBe('/result2')
   })
 })

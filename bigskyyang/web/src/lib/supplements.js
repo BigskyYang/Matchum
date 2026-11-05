@@ -56,6 +56,19 @@ export function formsOf(catalog, key, targets) {
 // 제품 정보 원문 (기능성·섭취 시 주의사항은 같은 문구를 한 번만 저장해 번호로 가리킨다)
 export const productTexts = (catalog, p) => ({ function: catalog.texts[p.function], caution: catalog.texts[p.caution] })
 
+// 내가 먹는 제품 찾기: 제품명·업체명에 검색어가 들어 있는 제품 (띄어쓰기·대소문자 무시, 목록 순서대로 limit개)
+//   → { items: [{ id, ...제품 }], total: 찾은 전체 개수 }
+const norm = (s) => s.replace(/\s+/g, '').toLowerCase()
+export function searchProducts(catalog, query, limit = 20) {
+  const q = norm(query)
+  if (q.length < 2) return { items: [], total: 0 }
+  const found = Object.entries(catalog.products).filter(([, p]) => norm(p.name).includes(q) || norm(p.maker).includes(q))
+  return { items: found.slice(0, limit).map(([id, p]) => ({ id, ...p })), total: found.length }
+}
+
+// 하루 합계에 넣을 제품: 내가 먹는 제품(목록에 있는 것) + 고른 제품, 같은 제품은 한 번만
+export const combinedIds = (mine, picked) => [...new Set([...mine.filter((m) => m.id).map((m) => m.id), ...picked])]
+
 // 고른 제품을 함께 먹을 때 하루 합계와 상한섭취량 (2025 KDRI 성인). 하루 함량을 아는 성분만 더한다
 //   → [{ key, label, unit, total, ul, over, count: 그 성분이 든 고른 제품 수 }]
 export function dailyTotals(catalog, ids, sex) {

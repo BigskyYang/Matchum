@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import BottomSheet from '../BottomSheet.jsx'
+import GroupChip from '../GroupChip.jsx'
+import Icon from '../Icon.jsx'
 import Mascot from '../Mascot.jsx'
 
 // 같이 다니면 좋은 유형 2개를 나란히 (데이터는 lib/profile.js의 partnerTypes)
@@ -9,13 +11,11 @@ import Mascot from '../Mascot.jsx'
 const KIND = {
   fill: {
     caption: '채워 주는 짝꿍',
-    short: '내가 약한 습관을\n잘 챙겨요',
     why: (axes) => `이 유형은 ${axes} 점수가 나보다 높아요. 함께 있으면 좋은 습관이 옮아요.`,
     none: '지금의 좋은 습관을 함께 지켜 가기 좋은 유형이에요.',
   },
   together: {
     caption: '같이 크는 짝꿍',
-    short: '나처럼 이 습관이\n약해요',
     why: (axes) => `나와 이 유형 모두 ${axes} 점수가 아직 '좋아요'에 못 미쳐요. 같은 목표로 같이 바꿔 봐요.`,
     none: '생활습관이 나와 가장 비슷한 유형이에요.',
   },
@@ -36,16 +36,13 @@ function Partner({ kind, p, onOpen }) {
         {p.axes.length > 0 && (
           <span className="mt-2 flex flex-wrap justify-center gap-1">
             {p.axes.map((a) => (
-              <span key={a.key} className="rounded-full bg-white px-2 py-0.5 text-xs font-bold">
-                <span aria-hidden="true">{a.icon} </span>
+              <span key={a.key} className="inline-flex items-center gap-1 rounded-full bg-white px-2 py-0.5 text-xs font-bold">
+                <Icon name={a.icon} size={14} />
                 {a.label}
               </span>
             ))}
           </span>
         )}
-        <span className="mt-2 text-xs leading-relaxed whitespace-pre-line text-ink-soft">
-          {p.axes.length ? KIND[kind].short : KIND[kind].none}
-        </span>
       </button>
     </li>
   )
@@ -65,9 +62,9 @@ export default function PartnerCard({ fill, together }) {
         <BottomSheet title={p.name} onClose={() => setOpen(null)}>
           <div className="flex flex-col items-center text-center">
             <Mascot name={`type_${p.id}`} />
-            <p className="mt-1 text-sm font-bold text-ink-soft">
-              <span aria-hidden="true">{p.main.emoji} </span>
-              {p.main.name} · {KIND[open].caption}
+            <p className="mt-1 flex items-center gap-1.5 text-sm font-bold text-ink-soft">
+              <GroupChip code={p.id[0]} name={p.main.name} />
+              {KIND[open].caption}
             </p>
             <p className="mt-3 leading-relaxed whitespace-pre-line">{p.summary}</p>
             <p className="mt-4 w-full rounded-card bg-cream px-4 py-3 text-sm leading-relaxed">

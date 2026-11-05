@@ -1,6 +1,7 @@
 import { levelOf } from '../../lib/profile.js'
+import Icon from '../Icon.jsx'
 
-// 생활습관 신호등: 영역마다 작은 타일 (아이콘, 이름 아래 단계 배지). 2열로 놓아 짧게 보이게 한다
+// 생활습관 신호등: 2열 타일의 위쪽은 아이콘·상태, 아래쪽은 항목 이름
 // habits: [{ key, icon, label, score(0~1) }]
 const TONE = {
   good: { tile: 'bg-mint', chip: 'bg-white text-mint-strong' },
@@ -15,14 +16,12 @@ export default function HabitSignals({ habits }) {
         const level = levelOf(h.score)
         const tone = TONE[level.tone]
         return (
-          <li key={h.key} className={`flex items-center gap-2.5 rounded-card px-3 py-2.5 ${tone.tile}`}>
-            <span aria-hidden="true" className="text-2xl">
-              {h.icon}
+          <li key={h.key} className={`flex flex-col gap-2 rounded-card px-3 py-2.5 ${tone.tile}`}>
+            <span className="flex items-center justify-between gap-1">
+              <Icon name={h.icon} size={24} className="shrink-0" />
+              <span className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-bold ${tone.chip}`}>{level.label}</span>
             </span>
-            <span className="min-w-0 flex-1">
-              <span className="block text-sm leading-tight font-bold">{h.label}</span>
-              <span className={`mt-1 inline-block rounded-full px-2 py-0.5 text-xs font-bold ${tone.chip}`}>{level.label}</span>
-            </span>
+            <span className="text-sm leading-tight font-bold">{h.label}</span>
           </li>
         )
       })}

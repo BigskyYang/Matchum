@@ -3,9 +3,39 @@ import models from '../data/nutritionModels.json'
 import { LEAF_TYPES } from '../data/types.js'
 import { SAMPLE, STAGE1_SAMPLE, bornAt } from './fixtures.js'
 import { PERSONAL_AXES, TYPE_AXES } from './profile.js'
-import { buildPersonalResult, buildTypeResult } from './result.js'
+import { allTypes, buildPersonalResult, buildTypeResult, revealStory } from './result.js'
 
 // 설문 응답으로 결과 화면에 필요한 값이 모두 나오는지 (화면 없이 확인)
+describe('revealStory (결과 공개 스토리)', () => {
+  const r = buildTypeResult(STAGE1_SAMPLE)
+  const s = revealStory(r)
+  it('잘 챙기는 습관은 좋아요(0.75 이상), 챙겨 볼 습관은 그 아래에서 낮은 순', () => {
+    for (const h of s.strong) expect(h.score).toBeGreaterThanOrEqual(0.75)
+    for (const h of s.weak) expect(h.score).toBeLessThan(0.75)
+    if (s.weak.length === 2) expect(s.weak[0].score).toBeLessThanOrEqual(s.weak[1].score)
+  })
+  it('영양소 카드는 내 유형 → 같은 성별·나이대 → 공통 순서로 하나를 고른다', () => {
+    expect(['type', 'peer', 'common']).toContain(s.nutrient.kind)
+    expect(s.nutrient.items.length).toBeGreaterThan(0)
+    expect(s.share).toBe(Math.round(r.sharePct))
+  })
+})
+
+describe('allTypes (전체 유형 보기)', () => {
+  const groups = allTypes()
+  it('대분류 4개 × 세부 유형 3개, 이름·설명·신호등이 있고 비율 합은 100%', () => {
+    expect(groups).toHaveLength(4)
+    for (const g of groups) {
+      expect(g.types).toHaveLength(3)
+      for (const t of g.types) {
+        expect(t.name).toBe(LEAF_TYPES[t.id].name)
+        expect(t.habits).toHaveLength(TYPE_AXES.length)
+      }
+    }
+    expect(groups.reduce((s, g) => s + g.sharePct, 0)).toBeCloseTo(100, 5)
+  })
+})
+
 describe('buildTypeResult (1단계 유형 결과)', () => {
   const r = buildTypeResult(STAGE1_SAMPLE)
 
@@ -31,7 +61,7 @@ describe('buildTypeResult (1단계 유형 결과)', () => {
 
   it('이번 주 해볼 것은 3개 이하이고, 흡연·음주 미션은 없다', () => {
     expect(r.missions.length).toBeLessThanOrEqual(3)
-    expect(r.missions.map((m) => m.icon)).not.toContain('🚭')
+    expect(r.missions.map((m) => m.icon)).not.toContain('smoke')
   })
 
   it('부족할 수 있는 영양소: 공통 8개 + 2줄 (판정 코드 포함), 성별·연령대 표시', () => {
@@ -65,7 +95,7 @@ describe('buildPersonalResult (2단계 개인 결과)', () => {
 
   it('흡연자면 금연 미션', () => {
     const smoker = buildPersonalResult({ ...SAMPLE, smoke_now: 'yes', cigarettes: 10 })
-    expect(smoker.missions.map((m) => m.icon)).toContain('🚭')
+    expect(smoker.missions.map((m) => m.icon)).toContain('smoke')
   })
 
   it('mini-FFQ에 답했는지 (65세 이상은 묻지 않음)', () => {

@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
 import { productCount, productSections, targetsFor } from '../../lib/supplements.js'
 import { useCatalog } from '../../lib/useCatalog.js'
+import Icon from '../Icon.jsx'
+import NutrientArt from '../NutrientArt.jsx'
 
 // 개인 결과 '내가 챙겨야 할 영양소' 카드 아래: 왜 추천하는지 한 줄 + 도움이 될 수 있는 건강기능식품이 몇 개 있는지
 //   모든 제품을 보고 고르는 것은 건강기능식품 화면(/supplements)에서 한다
@@ -30,7 +32,10 @@ export default function SupplementPreview({ supplements, watch, sex, age }) {
 
   return (
     <div className="mt-5 border-t-2 border-cream pt-4">
-      <h3 className="text-sm font-bold">💊 도움이 될 수 있는 건강기능식품</h3>
+      <h3 className="flex items-center gap-1.5 text-sm font-bold">
+        <Icon name="pill" size={18} className="text-primary-shade" />
+        도움이 될 수 있는 건강기능식품
+      </h3>
       <ul className="mt-2 space-y-2">
         {supplements.nutrients.map((n) => {
           const count = catalog && productCount(catalog, n.key, targets)
@@ -41,9 +46,7 @@ export default function SupplementPreview({ supplements, watch, sex, age }) {
                 to={`/supplements?n=${n.key}`}
                 className="flex items-center gap-3 rounded-card bg-lavender/50 px-3.5 py-3 active:scale-[0.98]"
               >
-                <span aria-hidden="true" className="text-2xl">
-                  {n.icon}
-                </span>
+                <NutrientArt n={n} className="size-10" emojiClass="text-2xl" />
                 <span className="min-w-0 flex-1">
                   <span className="block font-bold">{n.label}</span>
                   <span className="block text-xs text-ink-soft">{reasonOf(n, watch)}</span>

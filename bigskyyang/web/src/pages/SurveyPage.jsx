@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import BottomSheet from '../components/BottomSheet.jsx'
+import Icon from '../components/Icon.jsx'
 import Mascot from '../components/Mascot.jsx'
 import PrimaryButton from '../components/PrimaryButton.jsx'
 import ChoiceInput from '../components/survey/ChoiceInput.jsx'
@@ -10,6 +11,7 @@ import { DateWheel, DurationWheel, NumberWheel, TimeWheel } from '../components/
 import { SECTIONS, visibleQuestions } from '../data/questions.js'
 import { loadSurvey, saveSurvey } from '../lib/storage.js'
 import { resolveStep, resultPath, surveyPath } from '../lib/surveyFlow.js'
+import { surveyFact } from '../lib/surveyStats.js'
 
 function QuestionStep({ q, answer, isLast, onAnswer }) {
   // 휠 입력은 이전 응답이 있으면 그 값, 없으면 문항의 initial 값에서 시작. 여러 줄 선택은 빈 값에서 시작
@@ -23,8 +25,8 @@ function QuestionStep({ q, answer, isLast, onAnswer }) {
     <>
       <section className="flex-1">
         {q.period && (
-          <p className="mb-2 inline-block rounded-full bg-white px-2.5 py-1 text-xs font-bold text-ink-soft shadow-soft">
-            📅 {q.period} 기준
+          <p className="mb-2 inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1 text-xs font-bold text-ink-soft shadow-soft">
+            <Icon name="calendar" size={14} /> {q.period} 기준
           </p>
         )}
         <h1 className="text-xl leading-snug font-bold">{q.title}</h1>
@@ -33,7 +35,9 @@ function QuestionStep({ q, answer, isLast, onAnswer }) {
             {q.note}
             {q.info && (
               <button type="button" onClick={() => setInfo(true)} className="py-1.5 font-semibold text-primary-shade">
-                ⓘ 자세히
+                <span className="inline-flex items-center gap-1">
+                  <Icon name="info" size={16} /> 자세히
+                </span>
               </button>
             )}
           </p>
@@ -76,6 +80,23 @@ function QuestionStep({ q, answer, isLast, onAnswer }) {
   )
 }
 
+// 방금 답한 문항의 국건영 통계 (마스코트 옆 말풍선). 내용은 lib/surveyStats.js
+function FactBubble({ fact }) {
+  return (
+    <div className="flex animate-rise items-center gap-2 motion-reduce:animate-none">
+      <Mascot name="thinking" size="sm" />
+      <p role="status" className="relative flex-1 rounded-card bg-white px-4 py-3 text-sm leading-relaxed shadow-soft">
+        <span className="mb-1 block text-xs font-bold text-primary-shade">
+          이전 답변 · {fact.label}
+        </span>
+        {fact.lead} 약 <b className="text-base text-primary-shade">{fact.pct}</b>
+        {fact.tail}
+        <span className="mt-1 block text-[11px] text-ink-faint">국민건강영양조사 기준</span>
+      </p>
+    </div>
+  )
+}
+
 // 문항마다 주소(/survey?q=문항ID, 2단계는 /survey2?q=)를 하나씩 쌓아서, 휴대폰의 뒤로·앞으로 가기로 문항을 오갈 수 있다
 // stage 1: 유형 분류 문항 → /result, stage 2: 개인 결과 문항 → /result2 (1단계 응답을 이어 쓴다)
 export default function SurveyPage({ stage = 1 }) {
@@ -101,6 +122,7 @@ export default function SurveyPage({ stage = 1 }) {
   const inSection = list.filter((x) => x.section === q.section)
   const position = inSection.indexOf(q) + 1
   const percent = Math.round((step / list.length) * 100)
+  const fact = step > 0 ? surveyFact(list[step - 1].id, state.answers) : null
 
   const answer = (value) => {
     if (busy.current) return
@@ -144,7 +166,7 @@ export default function SurveyPage({ stage = 1 }) {
           aria-label="이전 문항"
           className="-ml-2 flex size-10 items-center justify-center rounded-full text-2xl text-ink-soft active:bg-primary-soft"
         >
-          ‹
+          <Icon name="back" size={26} />
         </button>
         <div className="flex-1">
           <div className="mb-1.5 flex justify-between text-xs font-semibold text-ink-soft">
@@ -165,8 +187,8 @@ export default function SurveyPage({ stage = 1 }) {
         </div>
       </header>
 
-      <div className="mt-6 flex justify-center">
-        <Mascot name="thinking" size="sm" />
+      <div className={`mt-6 flex min-h-24 justify-center ${fact ? 'mb-2 border-b border-ink/10 pb-5' : ''}`}>
+        {fact ? <FactBubble key={list[step - 1].id} fact={fact} /> : <Mascot name="thinking" size="sm" />}
       </div>
 
       <div className="mt-4 flex flex-1 flex-col">

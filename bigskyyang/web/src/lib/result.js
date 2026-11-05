@@ -10,7 +10,7 @@ import { NUTRIENT_GUIDE } from '../data/nutrientGuide.js'
 import { FOOD_ONLY, PRODUCT_NUTRIENTS } from '../data/supplementInfo.js'
 import { BALANCED_FOODS, pickTips } from '../data/tips.js'
 import { LEAF_TYPES, MAIN_TYPES } from '../data/types.js'
-import { classify, model, toFeatures, typeOf } from './classify.js'
+import { MAIN_CODES, classify, classifyDetail, mainProfile, model, toFeatures, typeOf } from './classify.js'
 import { encode } from './encode.js'
 import { ageGroup, typeNutrients } from './nutrition.js'
 import { habitualFeatures, lifestyleFeatures, predictNutrition } from './nutritionRisk.js'
@@ -23,15 +23,85 @@ const AGE_LABELS = { '19-29': '19~29세', '30-49': '30~49세', '50-64': '50~64�
 
 // 세부 유형 12개 평균의 신호등 점수 (짝꿍 유형 고르기)
 const LEAF_SCORES = Object.fromEntries(model.types.map((t) => [t.id, groupScores(toFeatures(t.profile), TYPE_AXES)]))
+// 성인 전체 평균의 신호등 점수 (평균 생활습관에 점수 식을 적용한 값. 유형 평균도 같은 방식)
+const ALL_SCORES = groupScores(toFeatures(mainProfile()), TYPE_AXES)
 const partnerOf = ({ id, axes }) => ({ id, name: LEAF_TYPES[id].name, summary: LEAF_TYPES[id].summary, main: MAIN_TYPES[id[0]], axes })
 
 const missionsOf = (tips) => tips.flatMap((t) => (t.mission ? [t.mission] : [])).slice(0, MAX_MISSIONS)
+
+// 전체 유형 보기 (/types): 대분류마다 세부 유형 3개 (이름·설명·해시태그·비율·유형 평균의 생활습관 신호등)
+export function allTypes() {
+  return MAIN_CODES.map((code) => {
+    const types = model.types
+      .filter((t) => t.id[0] === code)
+      .sort((a, b) => a.id.localeCompare(b.id))
+      .map((t) => ({
+        id: t.id,
+        name: LEAF_TYPES[t.id].name,
+        summary: LEAF_TYPES[t.id].summary,
+        main: MAIN_TYPES[code],
+        tags: hashtags(t),
+        sharePct: t.share * 100,
+        habits: TYPE_AXES.map((axis, i) => ({ ...axis, score: LEAF_SCORES[t.id][i] })),
+      }))
+    return { code, ...MAIN_TYPES[code], sharePct: types.reduce((s, t) => s + t.sharePct, 0), types }
+  })
+}
+
+// 결과 공개 스토리 (/reveal) 카드에 쓸 값: 유형 결과에서 고른다
+//   strong: '좋아요'(0.75 이상)인 습관 2개까지, weak: 그 아래 습관 중 점수 낮은 2개
+//   nutrient: 내 유형 영양소 → 없으면 같은 성별·나이대 영양소 → 없으면 공통 영양소 3개
+export function revealStory(r) {
+  const strong = r.habits.filter((h) => h.score >= 0.75).sort((a, b) => b.score - a.score).slice(0, 2)
+  const weak = r.habits.filter((h) => h.score < 0.75).sort((a, b) => a.score - b.score).slice(0, 2)
+  const picks = r.nutrients?.picks ?? []
+  const typePicks = picks.filter((n) => n.tag !== '흔함')
+  const peerPicks = picks.filter((n) => n.tag === '흔함')
+  const nutrient = typePicks.length
+    ? { kind: 'type', items: typePicks }
+    : peerPicks.length
+      ? { kind: 'peer', items: peerPicks }
+      : { kind: 'common', items: (r.nutrients?.common ?? []).slice(0, 3) }
+  return { strong, weak, mission: r.missions[0] ?? null, nutrient, share: Math.round(r.sharePct) }
+}
+
+// 나 vs 우리 유형 평균: 점수 차이가 gap 이상인 습관 (큰 순서로 2개까지)
+//   ahead: 내가 유형 평균보다 잘 챙기는 습관, behind: 유형 평균보다 덜 챙기는 습관
+export function compareHabits(habits, gap = 0.15) {
+  const pick = (diff) =>
+    habits
+      .map((h) => ({ ...h, diff: diff(h) }))
+      .filter((h) => h.diff >= gap)
+      .sort((a, b) => b.diff - a.diff)
+      .slice(0, 2)
+  return { ahead: pick((h) => h.score - h.typeAvg), behind: pick((h) => h.typeAvg - h.score) }
+}
+
+// 유형 경계: 대분류·세부 경계 여유 중 작은 쪽의 이웃 유형 (07_boundary.py와 같은 기준)
+//   level: 'edge' 경계 여유 10% 미만 (두 유형 거의 가운데, 성인 약 20%), 'near' 10~30%, 'core' 30% 이상 (중심 가까이)
+//   pos: 그림에서 내 위치. 0 = 내 유형 쪽 끝, 0.5 = 두 유형의 경계.
+//        경계 여유 0~60%를 0.5~0으로 곧게 옮긴다 (60% 이상은 끝에 붙인다: 성인 대부분이 60% 안이라 그림이 경계 쪽에 몰리지 않게)
+export const BOUNDARY_LEVELS = { edge: 0.1, near: 0.3 }
+const POS_FULL = 0.6
+export function typeBoundary(d) {
+  const viaMain = d.mainMargin <= d.leafMargin
+  const margin = Math.min(d.mainMargin, d.leafMargin)
+  const id = viaMain ? d.mainNeighbor : d.leafNeighbor
+  return {
+    margin,
+    level: margin < BOUNDARY_LEVELS.edge ? 'edge' : margin < BOUNDARY_LEVELS.near ? 'near' : 'core',
+    pos: 0.5 * (1 - Math.min(margin, POS_FULL) / POS_FULL),
+    neighbor: { id, name: LEAF_TYPES[id].name, summary: LEAF_TYPES[id].summary, main: MAIN_TYPES[id[0]] },
+    sameMain: id[0] === d.main,
+  }
+}
 
 // 1단계 응답(+ 있으면 2단계)으로 유형 결과
 export function buildTypeResult(answers) {
   const { features, extras } = encode(answers)
   // main: 대분류 코드 (N·A·S·O), leaf: 세부 유형 ID (N1~O3). 이름(types.js)·영양소 결과표도 이 ID로 찾는다
-  const { main, leaf } = classify(features)
+  const detail = classifyDetail(features)
+  const { main, leaf } = detail
   const mainType = MAIN_TYPES[main]
   const leafType = LEAF_TYPES[leaf]
   const type = typeOf(leaf)
@@ -46,7 +116,9 @@ export function buildTypeResult(answers) {
     summary: leafType.summary,
     tags: hashtags(type),
     sharePct: type.share * 100,
-    habits: TYPE_AXES.map((axis, i) => ({ ...axis, score: myScores[i] })),
+    // typeAvg: 우리 유형 평균, allAvg: 성인 전체 평균 (같은 점수 식)
+    habits: TYPE_AXES.map((axis, i) => ({ ...axis, score: myScores[i], typeAvg: LEAF_SCORES[leaf][i], allAvg: ALL_SCORES[i] })),
+    boundary: typeBoundary(detail),
     missions: missionsOf(pickTips(features, extras)),
     // 부족할 수 있는 영양소: 유환님 (나)안 결과 (유형 × 성별 × 연령대)
     nutrients: typeNutrients(nutrientCells, leaf, extras.sex, extras.age),

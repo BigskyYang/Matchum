@@ -8,7 +8,7 @@ import { model } from '../lib/classify.js'
 function Title() {
   const [head, ...rest] = SERVICE_NAME
   return (
-    <h1 className="text-[2.25rem] leading-tight font-extrabold tracking-tight">
+    <h1 className="font-display text-[2.25rem] leading-tight font-normal">
       {head === 'N' ? (
         <>
           <span className="text-mint-strong">N</span>
@@ -41,9 +41,13 @@ export default function StartPage() {
         </div>
         {/* NBTI = Nutrient + MBTI */}
         <p className="mt-2.5 flex items-center gap-1.5 text-xs font-bold" aria-label="Nutrient와 MBTI를 합친 말">
-          <span className="rounded-full bg-mint px-2.5 py-1">🥗 Nutrient</span>
+          <span className="inline-flex items-center gap-1 rounded-full bg-mint px-2.5 py-1">
+            <span aria-hidden="true">🥗</span> Nutrient
+          </span>
           <span className="text-ink-faint">+</span>
-          <span className="rounded-full bg-lavender px-2.5 py-1">🧩 MBTI</span>
+          <span className="inline-flex items-center gap-1 rounded-full bg-lavender px-2.5 py-1">
+            <span aria-hidden="true">🧩</span> MBTI
+          </span>
         </p>
         <p className="mt-5 text-sm leading-relaxed text-ink-soft">
           나의 생활습관 기반 유형을 확인하고
@@ -58,14 +62,14 @@ export default function StartPage() {
           className="mb-3 text-center text-xs text-ink-soft"
           items={[
             <>
-              🤖 머신러닝으로 <b className="text-ink">유형별 부족 영양소</b>를 찾아 두었어요
+              <span aria-hidden="true" className="mr-1">✨</span>머신러닝으로 <b className="text-ink">유형별 부족 영양소</b>를 찾아 두었어요
             </>,
             <>
-              📊 국민건강영양조사 성인 <b className="text-ink">{sampleSize}명</b>(2022–2024) 분석
+              <span aria-hidden="true" className="mr-1">📊</span>국민건강영양조사 성인 <b className="text-ink">{sampleSize}명</b>(2022–2024) 분석
             </>,
             // 응답은 sessionStorage에만 잠시 두고 서버로 보내지 않는다 (lib/storage.js)
             <>
-              🔒 응답은 <b className="text-ink">서버에 저장되지 않고</b>, 창을 닫으면 사라져요
+              <span aria-hidden="true" className="mr-1">🔒</span>응답은 <b className="text-ink">서버에 저장되지 않고</b>, 창을 닫으면 사라져요
             </>,
           ]}
         />

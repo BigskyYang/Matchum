@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
+import Icon from '../components/Icon.jsx'
 import { SecondaryButton } from '../components/PrimaryButton.jsx'
 import Card from '../components/result/Card.jsx'
 import FoodGrid from '../components/result/FoodGrid.jsx'
@@ -15,7 +16,7 @@ import { useModels } from '../lib/useCatalog.js'
 // 2단계 개인 결과 (나만 보기). 보여 줄 값은 lib/result.js의 buildPersonalResult가 계산한다
 // 개인 영양 위험은 재준님 모델(data/nutritionModels.json, 약 1.3MB)을 이 화면에서만 불러와 휴대폰에서 계산한다
 // 우울 점수·질환별 조언은 하지 않는다
-// 순서: 내가 챙겨야 할 영양소(부족하기 쉬운 영양소 칩, 누르면 상세 창) → 흡연·음주 신호등·이번 주 해볼 것 → 음식
+// 순서: 내가 챙겨야 할 영양소(부족하기 쉬운 영양소 칩, 누르면 상세 창) → 흡연·음주 신호등·이번 주 해볼 것 → 음식 → 습관을 바꾸면 어떻게 될까?(/simulate)
 // 영양소 칩 아래에 도움이 될 수 있는 건강기능식품(추천 이유·제품 수) → 모두 보고 고르기는 /supplements
 // 근거·주의 안내는 맨 아래 '어떻게 만들었나요?' 창에 모았다
 
@@ -44,24 +45,38 @@ export default function PersonalResultPage() {
     <main className="flex flex-1 flex-col gap-4 px-5 pt-8 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
       <header className="text-center">
         <p className="text-sm font-semibold text-ink-soft">{r.typeName}의</p>
-        <h1 className="mt-1 text-[1.75rem] leading-tight font-extrabold">나에게 맞는 결과</h1>
-        <p className="mt-2 text-sm text-ink-soft">🔒 이 휴대폰에서만 볼 수 있어요</p>
+        <h1 className="mt-1 font-display text-[1.75rem] leading-tight font-normal">나에게 맞는 결과</h1>
+        <p className="mt-2 inline-flex items-center gap-1 text-sm text-ink-soft">
+          <Icon name="lock" size={16} />이 휴대폰에서만 볼 수 있어요
+        </p>
       </header>
 
-      <Card title="내가 챙겨야 할 영양소" icon="🔍">
+      <Card title="내가 챙겨야 할 영양소" icon="checklist">
         <NutritionRisk nutrition={r.nutrition} ffqAsked={r.ffqAsked} />
         {r.nutrition && <SupplementPreview supplements={r.supplements} watch={r.nutrition.watch} sex={r.sex} age={r.age} />}
       </Card>
 
-      <Card title="흡연·음주 신호등" icon="🚦">
+      <Card title="흡연·음주 신호등" icon="traffic">
         <HabitSignals habits={r.habits} />
-        <h3 className="mt-5 mb-2 text-sm font-bold">🎯 이번 주 해볼 것</h3>
-        <MissionList missions={r.missions} empty="흡연·음주 습관은 지금처럼 유지해 주세요! 🎉" />
+        <h3 className="mt-5 mb-2 flex items-center gap-1.5 text-sm font-bold">
+          <Icon name="target" size={18} className="text-primary-shade" />
+          이번 주 해볼 것
+        </h3>
+        <MissionList missions={r.missions} empty="흡연·음주 습관은 지금처럼 유지해 주세요." />
       </Card>
 
-      <Card title="챙겨 먹으면 좋은 음식" icon="🥗">
+      <Card title="챙겨 먹으면 좋은 음식" icon="salad">
         <FoodGrid foods={r.foods} />
       </Card>
+
+      <Link
+        to="/simulate"
+        className="flex items-center gap-3 rounded-card bg-lavender/60 p-5 shadow-soft active:scale-[0.99]"
+      >
+        <Icon name="sparkles" size={28} className="shrink-0 text-primary-shade" />
+        <span className="flex-1 font-display text-xl">습관을 바꾸면 어떻게 될까?</span>
+        <Icon name="next" size={20} className="shrink-0 text-ink-faint" />
+      </Link>
 
       <footer className="mt-2 flex flex-col gap-3">
         <SecondaryButton to="/result">내 유형 결과로 돌아가기</SecondaryButton>
