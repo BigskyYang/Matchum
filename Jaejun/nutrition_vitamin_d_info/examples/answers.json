@@ -1,8 +1,6 @@
 {
-  "outdoor_days": "days_1_2",
-  "outdoor_duration": "min15_30",
-  "vitamin_d_foods": [
-    "fish",
-    "egg_yolk"
-  ]
+  "commute": "transit",
+  "lunch_outing": "rarely",
+  "exercise_setting": "indoor",
+  "day_off_outing": "sometimes"
 }
