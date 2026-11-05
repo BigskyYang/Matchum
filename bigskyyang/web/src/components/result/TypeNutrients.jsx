@@ -147,7 +147,6 @@ export default function TypeNutrients({ common, picks, sexLabel, ageLabel }) {
         <h3 className="flex items-center gap-2 text-sm font-bold">
           <span aria-hidden="true" className="size-2.5 rounded-full bg-[#e0a92e]" />모두가 챙겨야 할 영양소 {common.length}개
         </h3>
-        <p className="mt-1 text-xs text-ink-soft">유형과 상관없이 성인 절반 이상이 적게 먹는 영양소예요.</p>
         <ul className="mt-2 flex flex-wrap gap-1.5">
           {common.map((n) => (
             <CommonChip key={n.key} n={n} onOpen={setOpen} />

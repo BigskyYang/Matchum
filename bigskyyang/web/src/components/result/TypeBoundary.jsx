@@ -9,33 +9,17 @@ import Mascot from '../Mascot.jsx'
 // 막대 반쪽 색: 그쪽 유형의 대분류 색 (연하게)
 const HALF = { N: 'bg-group-n/40', O: 'bg-group-o/40', S: 'bg-group-s/40', A: 'bg-group-a/40' }
 
-const hasBatchim = (word) => {
-  const c = word.charCodeAt(word.length - 1) - 0xac00
-  return c >= 0 && c <= 11171 && c % 28 !== 0
-}
-const gwa = (word) => `${word}${hasBatchim(word) ? '과' : '와'}`
-const iga = (word) => `${word}${hasBatchim(word) ? '이' : '가'}`
-
-const TEXT = {
-  core: (me) => ({ title: `${me}의 중심 가까이에 있어요`, sub: '응답이 조금 달라져도 같은 유형이 나오기 쉬워요.' }),
-  near: (me, n) => ({ title: `${gwa(n)}도 조금 닮았어요`, sub: `${me} 다음으로 가까운 유형이에요.` }),
-  edge: (me, n) => ({
-    title: `${gwa(n)}의 경계에 있어요`,
-    sub: `응답이 조금만 달라도 ${iga(n)} 나올 수 있어요. 성인 10명 중 2명쯤이 이렇게 경계에 있어요.`,
-  }),
-}
+const POSITION = { core: '내 유형 중심에 가까움', near: '이웃 유형과도 닮음', edge: '두 유형의 경계에 가까움' }
 
 export default function TypeBoundary({ leafId, name, boundary }) {
   const [open, setOpen] = useState(false)
   const n = boundary.neighbor
-  const text = TEXT[boundary.level](name, n.name)
 
   return (
     <div>
-      <p className="font-bold">{text.title}</p>
-      <p className="mt-1 text-sm leading-relaxed text-ink-soft">{text.sub}</p>
+      <p className="sr-only">{name} / {n.name} 사이의 내 위치: {POSITION[boundary.level]}</p>
 
-      <div className="mt-4 flex items-end gap-2">
+      <div className="flex items-end gap-2">
         <span className="flex w-16 shrink-0 flex-col items-center text-center">
           <Mascot name={`type_${leafId}`} size="xs" />
           <span className="mt-1 text-xs leading-tight font-bold">{name}</span>

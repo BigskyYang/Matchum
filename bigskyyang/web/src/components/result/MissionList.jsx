@@ -10,10 +10,7 @@ export default function MissionList({ missions, empty = '지금의 생활습관�
           <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-white text-primary-shade shadow-soft">
             <Icon name={m.icon} size={22} />
           </span>
-          <span className="min-w-0 flex-1">
-            <span className="block font-bold">{m.title}</span>
-            <span className="block text-xs leading-relaxed text-ink-soft">{m.detail}</span>
-          </span>
+          <span className="min-w-0 flex-1 font-bold">{m.title}</span>
         </li>
       ))}
     </ul>

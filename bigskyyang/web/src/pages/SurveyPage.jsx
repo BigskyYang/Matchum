@@ -86,11 +86,12 @@ function FactBubble({ fact }) {
     <div className="flex animate-rise items-center gap-2 motion-reduce:animate-none">
       <Mascot name="thinking" size="sm" />
       <p role="status" className="relative flex-1 rounded-card bg-white px-4 py-3 text-sm leading-relaxed shadow-soft">
-        <span className="flex items-center gap-1 text-xs font-bold text-ink-faint">
-          <Icon name="chart" size={14} /> 국민건강영양조사
+        <span className="mb-1 block text-xs font-bold text-primary-shade">
+          이전 답변 · {fact.label}
         </span>
         {fact.lead} 약 <b className="text-base text-primary-shade">{fact.pct}</b>
         {fact.tail}
+        <span className="mt-1 block text-[11px] text-ink-faint">국민건강영양조사 기준</span>
       </p>
     </div>
   )
@@ -186,7 +187,7 @@ export default function SurveyPage({ stage = 1 }) {
         </div>
       </header>
 
-      <div className="mt-6 flex min-h-24 justify-center">
+      <div className={`mt-6 flex min-h-24 justify-center ${fact ? 'mb-2 border-b border-ink/10 pb-5' : ''}`}>
         {fact ? <FactBubble key={list[step - 1].id} fact={fact} /> : <Mascot name="thinking" size="sm" />}
       </div>
 

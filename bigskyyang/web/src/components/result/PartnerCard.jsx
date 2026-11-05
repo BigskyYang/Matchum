@@ -11,13 +11,11 @@ import Mascot from '../Mascot.jsx'
 const KIND = {
   fill: {
     caption: '채워 주는 짝꿍',
-    short: '내가 약한 습관을\n잘 챙겨요',
     why: (axes) => `이 유형은 ${axes} 점수가 나보다 높아요. 함께 있으면 좋은 습관이 옮아요.`,
     none: '지금의 좋은 습관을 함께 지켜 가기 좋은 유형이에요.',
   },
   together: {
     caption: '같이 크는 짝꿍',
-    short: '나처럼 이 습관이\n약해요',
     why: (axes) => `나와 이 유형 모두 ${axes} 점수가 아직 '좋아요'에 못 미쳐요. 같은 목표로 같이 바꿔 봐요.`,
     none: '생활습관이 나와 가장 비슷한 유형이에요.',
   },
@@ -45,9 +43,6 @@ function Partner({ kind, p, onOpen }) {
             ))}
           </span>
         )}
-        <span className="mt-2 text-xs leading-relaxed whitespace-pre-line text-ink-soft">
-          {p.axes.length ? KIND[kind].short : KIND[kind].none}
-        </span>
       </button>
     </li>
   )

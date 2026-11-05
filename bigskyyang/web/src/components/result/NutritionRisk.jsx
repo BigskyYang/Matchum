@@ -114,11 +114,7 @@ export default function NutritionRisk({ nutrition, ffqAsked }) {
     <div>
       {watch.length ? (
         <>
-          <p className="flex items-center gap-3 text-sm text-ink-soft">
-            <Mascot name="worry" fallback="thinking" size="xs" />
-            지금 응답으로 보면 특히 챙겨야 할 영양소예요
-          </p>
-          <ul className="mt-3 flex flex-wrap gap-2">
+          <ul className="flex flex-wrap gap-2">
             {watch.map((n) => (
               <li key={n.key}>
                 <button
