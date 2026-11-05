@@ -1,4 +1,5 @@
 import { QUESTIONS, visibleQuestions } from '../data/questions.js'
+import { SKIP } from './vitaminD.js'
 
 // 설문에서 지금 보여줄 문항 고르기.
 // 주소의 ?q=문항ID를 따르되(휴대폰 뒤로·앞으로 가기), 아직 답하지 않은 문항을 건너뛰어 앞으로 갈 수는 없다.
@@ -6,6 +7,8 @@ import { QUESTIONS, visibleQuestions } from '../data/questions.js'
 function answered(q, answers) {
   const value = answers[q.id]
   if (value == null || q.check?.(value, answers)) return false
+  // 선택 문항(비타민 D)은 '건너뛰기'도 답한 것으로 본다
+  if (q.optional && value === SKIP) return true
   if (q.type === 'rows') return q.rows.every((row) => q.options.some((o) => o.value === value[row.id]))
   if (q.type === 'choice') return q.options.some((o) => o.value === value)
   if (q.type === 'number') return Number.isInteger(value) && value >= q.min && value <= q.max

@@ -24,6 +24,11 @@ export const SAMPLE = {
   ffq_egg: 3,
   ffq_legume: 2,
   ffq_dairy: 2,
+  // 비타민 D 생활 (선택)
+  vitd_commute: 'transit',
+  vitd_lunch_outing: 'rarely',
+  vitd_exercise_setting: 'indoor',
+  vitd_day_off_outing: 'sometimes',
 }
 
 // 오늘 기준 만 나이가 age인 생년월일 (1월 1일생이라 올해 생일은 항상 지났다)
@@ -32,6 +37,6 @@ export const bornAt = (age, today = new Date()) => `${today.getFullYear() - age}
 // 1단계까지만 답한 상태
 export const STAGE1_SAMPLE = Object.fromEntries(
   Object.entries(SAMPLE).filter(
-    ([k]) => !['smoke_now', 'drink_freq', 'veg', 'fruit'].includes(k) && !k.startsWith('ffq_'),
+    ([k]) => !['smoke_now', 'drink_freq', 'veg', 'fruit'].includes(k) && !k.startsWith('ffq_') && !k.startsWith('vitd_'),
   ),
 )
