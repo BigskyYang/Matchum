@@ -3,7 +3,7 @@ import { model } from '../../lib/classify.js'
 import BottomSheet from '../BottomSheet.jsx'
 import Icon from '../Icon.jsx'
 
-// 결과 화면 맨 아래 한 줄 '참고용 정보예요 · 어떻게 만들었나요?' → 근거·한계·주의를 한곳에 모은 창
+// 결과 화면 맨 아래 'ⓘ 어떻게 만들었나요?' 버튼 하나 → 근거·한계·주의(참고용 정보라는 안내 포함)를 한곳에 모은 창
 //   카드마다 흩어져 있던 안내문(진단 아님, 정확도, 상담 권고, 의약품 아님)을 여기로 모았다
 //   personal: 개인 결과면 영양 위험 예측과 건강기능식품 안내를 더한다
 function Section({ icon, title, children }) {
@@ -24,8 +24,13 @@ export default function AboutLink({ personal = false }) {
 
   return (
     <>
-      <button type="button" onClick={() => setOpen(true)} className="mx-auto block px-2 py-3 text-center text-xs text-ink-faint">
-        ⓘ 참고용 정보예요 · <span className="underline underline-offset-2">어떻게 만들었나요?</span>
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="mx-auto flex items-center gap-1 px-2 py-3 text-xs text-ink-faint underline underline-offset-2"
+      >
+        <Icon name="info" size={14} />
+        어떻게 만들었나요?
       </button>
       {open && (
         <BottomSheet title="이 결과는 어떻게 만들었나요?" onClose={() => setOpen(false)}>
@@ -52,7 +57,7 @@ export default function AboutLink({ personal = false }) {
               </Section>
             )}
             <Section icon="alert" title="꼭 알아 두세요">
-              <p>나의 영양 상태를 진단한 결과가 아니고, 필요한 양을 알려 주지 않아요.</p>
+              <p>참고용 정보예요. 나의 영양 상태를 진단한 결과가 아니고, 필요한 양을 알려 주지 않아요.</p>
               {personal && <p>건강기능식품은 질병의 예방 및 치료를 위한 의약품이 아닙니다.</p>}
               <p>임신·수유 중이거나 질환이 있거나 약을 먹고 있다면 식단과 건강기능식품은 의사·약사와 먼저 상의하세요.</p>
               <p>응답은 서버에 저장되지 않고, 창을 닫으면 사라져요.</p>
