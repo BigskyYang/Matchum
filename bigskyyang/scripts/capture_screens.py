@@ -144,10 +144,10 @@ with sync_playwright() as p:
     page.wait_for_timeout(2400)
     settle(page, 700)
     axe(page, '공개 카드')
-    for i in range(5):
+    for i in range(4):
         shot(page, f'공개_카드{i + 1}')
-        if i < 4:
-            page.get_by_role('button', name='다음').click()
+        if i < 3:
+            page.keyboard.press('ArrowRight')  # 카드는 밀기·좌우 누르기·←→로 넘긴다 (다음 버튼 없음)
             page.wait_for_timeout(700)
 
     page.goto(BASE + '/result')
