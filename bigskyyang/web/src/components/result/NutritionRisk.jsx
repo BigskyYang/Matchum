@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { PRODUCT_NUTRIENTS } from '../../data/supplementInfo.js'
 import BottomSheet from '../BottomSheet.jsx'
+import Icon from '../Icon.jsx'
 
 // 개인 결과의 '내가 챙겨야 할 영양소' (데이터는 lib/result.js의 buildPersonalResult → nutrition)
 //   재준님 화면 규칙 (Jaejun/nutrition_final_feedback_applied/config/display_policy.json)
@@ -58,13 +59,16 @@ function RiskSheet({ n, onClose }) {
           to={`/supplements?n=${PRODUCT_NUTRIENTS.find((x) => x.from.includes(n.key)).key}`}
           className="mt-4 flex items-center justify-between rounded-card bg-lavender/60 px-4 py-3 text-sm font-bold"
         >
-          💊 도움이 될 수 있는 건강기능식품 보기
+          <span className="flex items-center gap-1.5">
+            <Icon name="pill" size={18} />
+            도움이 될 수 있는 건강기능식품 보기
+          </span>
           <span aria-hidden="true">›</span>
         </Link>
       )}
       {n.supplement === 'food' && (
         <p className="mt-4 rounded-card bg-lavender/60 px-4 py-3 text-sm leading-relaxed">
-          🍽️ 건강기능식품보다 음식으로 챙기는 영양소예요.
+          건강기능식품보다 음식으로 챙기는 영양소예요.
         </p>
       )}
     </BottomSheet>
@@ -126,7 +130,7 @@ export default function NutritionRisk({ nutrition, ffqAsked }) {
           </ul>
         </>
       ) : (
-        <p className="text-sm text-ink-soft">특히 부족하기 쉬운 영양소는 없어요 👍</p>
+        <p className="text-sm text-ink-soft">특히 부족하기 쉬운 영양소는 없어요. 지금처럼 골고루 드세요.</p>
       )}
 
       {rest.length > 0 && (

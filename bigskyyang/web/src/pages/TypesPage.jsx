@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import BottomSheet from '../components/BottomSheet.jsx'
+import GroupChip, { GroupDot } from '../components/GroupChip.jsx'
+import Icon from '../components/Icon.jsx'
 import Mascot from '../components/Mascot.jsx'
 import HabitSignals from '../components/result/HabitSignals.jsx'
 import { allTypes, buildTypeResult } from '../lib/result.js'
@@ -21,9 +23,8 @@ function TypeSheet({ t, mine, onClose }) {
     <BottomSheet title={t.name} onClose={onClose}>
       <div className="flex flex-col items-center text-center">
         <Mascot name={`type_${t.id}`} />
-        <p className="mt-1 text-sm font-bold text-ink-soft">
-          <span aria-hidden="true">{t.main.emoji} </span>
-          {t.main.name}
+        <p className="mt-1 flex items-center gap-1.5 text-sm font-bold text-ink-soft">
+          <GroupChip code={t.id[0]} name={t.main.name} />
           {mine && <span className="ml-1.5 rounded-full bg-primary-soft px-2 py-0.5 text-xs text-primary-shade">내 유형</span>}
         </p>
         <p className="mt-3 leading-relaxed whitespace-pre-line">{t.summary}</p>
@@ -40,7 +41,10 @@ function TypeSheet({ t, mine, onClose }) {
           성인 100명 중 <b className="text-primary-shade">{Math.round(t.sharePct)}명</b>이 이 유형이에요
         </p>
       </div>
-      <h4 className="mt-5 mb-2 text-sm font-bold">🚦 이 유형의 평균 생활습관</h4>
+      <h4 className="mt-5 mb-2 flex items-center gap-1.5 text-sm font-bold">
+        <Icon name="traffic" size={18} className="text-primary-shade" />
+        이 유형의 평균 생활습관
+      </h4>
       <HabitSignals habits={t.habits} />
     </BottomSheet>
   )
@@ -66,9 +70,9 @@ export default function TypesPage() {
           aria-label="뒤로"
           className="-ml-2 flex size-11 items-center justify-center rounded-full text-2xl text-ink-soft active:bg-primary-soft"
         >
-          ‹
+          <Icon name="back" size={26} />
         </button>
-        <h1 className="text-xl font-bold">NBTI 유형 모두 보기</h1>
+        <h1 className="font-display text-xl font-normal">NBTI 유형 모두 보기</h1>
       </header>
       <p className="-mt-2 text-sm leading-relaxed text-ink-soft">
         국민건강영양조사 성인들의 생활습관을 비슷한 사람끼리 묶은 {groups.reduce((n, g) => n + g.types.length, 0)}가지 유형이에요.
@@ -76,10 +80,10 @@ export default function TypesPage() {
 
       {groups.map((g) => (
         <section key={g.code} className="rounded-card bg-white p-4 shadow-soft">
-          <h2 className="flex items-center gap-2 text-lg font-bold">
-            <span aria-hidden="true">{g.emoji}</span>
+          <h2 className="flex items-center gap-2 font-display text-xl font-normal">
+            <GroupDot code={g.code} className="size-3" />
             {g.name}
-            <span className="text-sm font-semibold text-ink-soft">100명 중 {Math.round(g.sharePct)}명</span>
+            <span className="font-sans text-sm font-semibold text-ink-soft">100명 중 {Math.round(g.sharePct)}명</span>
           </h2>
           <p className="mt-1 text-sm text-ink-soft">{g.summary}</p>
           <ul className="mt-3 space-y-2">

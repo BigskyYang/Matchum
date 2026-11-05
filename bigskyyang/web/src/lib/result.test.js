@@ -46,7 +46,7 @@ describe('buildTypeResult (1단계 유형 결과)', () => {
 
   it('이번 주 해볼 것은 3개 이하이고, 흡연·음주 미션은 없다', () => {
     expect(r.missions.length).toBeLessThanOrEqual(3)
-    expect(r.missions.map((m) => m.icon)).not.toContain('🚭')
+    expect(r.missions.map((m) => m.icon)).not.toContain('smoke')
   })
 
   it('부족할 수 있는 영양소: 공통 8개 + 2줄 (판정 코드 포함), 성별·연령대 표시', () => {
@@ -80,7 +80,7 @@ describe('buildPersonalResult (2단계 개인 결과)', () => {
 
   it('흡연자면 금연 미션', () => {
     const smoker = buildPersonalResult({ ...SAMPLE, smoke_now: 'yes', cigarettes: 10 })
-    expect(smoker.missions.map((m) => m.icon)).toContain('🚭')
+    expect(smoker.missions.map((m) => m.icon)).toContain('smoke')
   })
 
   it('mini-FFQ에 답했는지 (65세 이상은 묻지 않음)', () => {

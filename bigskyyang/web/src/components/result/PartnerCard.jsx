@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import BottomSheet from '../BottomSheet.jsx'
+import GroupChip from '../GroupChip.jsx'
+import Icon from '../Icon.jsx'
 import Mascot from '../Mascot.jsx'
 
 // 같이 다니면 좋은 유형 2개를 나란히 (데이터는 lib/profile.js의 partnerTypes)
@@ -36,8 +38,8 @@ function Partner({ kind, p, onOpen }) {
         {p.axes.length > 0 && (
           <span className="mt-2 flex flex-wrap justify-center gap-1">
             {p.axes.map((a) => (
-              <span key={a.key} className="rounded-full bg-white px-2 py-0.5 text-xs font-bold">
-                <span aria-hidden="true">{a.icon} </span>
+              <span key={a.key} className="inline-flex items-center gap-1 rounded-full bg-white px-2 py-0.5 text-xs font-bold">
+                <Icon name={a.icon} size={14} />
                 {a.label}
               </span>
             ))}
@@ -65,9 +67,9 @@ export default function PartnerCard({ fill, together }) {
         <BottomSheet title={p.name} onClose={() => setOpen(null)}>
           <div className="flex flex-col items-center text-center">
             <Mascot name={`type_${p.id}`} />
-            <p className="mt-1 text-sm font-bold text-ink-soft">
-              <span aria-hidden="true">{p.main.emoji} </span>
-              {p.main.name} · {KIND[open].caption}
+            <p className="mt-1 flex items-center gap-1.5 text-sm font-bold text-ink-soft">
+              <GroupChip code={p.id[0]} name={p.main.name} />
+              {KIND[open].caption}
             </p>
             <p className="mt-3 leading-relaxed whitespace-pre-line">{p.summary}</p>
             <p className="mt-4 w-full rounded-card bg-cream px-4 py-3 text-sm leading-relaxed">

@@ -12,25 +12,41 @@
 @theme {
   --font-sans: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, 'Apple SD Gothic Neo',
     'Noto Sans KR', 'Malgun Gothic', sans-serif;
+  /* 제목 글꼴 (디자인 시안 A안): 화면 제목·유형 이름·카드 제목에만. 굵기가 하나라 font-normal과 함께 쓴다 */
+  --font-display: 'Jua', 'Pretendard Variable', Pretendard, system-ui, sans-serif;
 
   /* 배경 */
-  --color-cream: #fff9f2; /* 앱 화면 */
+  --color-cream: #fff8f1; /* 앱 화면 */
   --color-backdrop: #fbeee6; /* PC에서 앱 양옆 */
 
   /* 파스텔 포인트 */
   --color-primary: #f8b4bf;
-  --color-primary-soft: #fde4e8;
-  --color-primary-strong: #e06a80; /* 버튼 바탕·테두리 (흰 글씨는 20px 굵게만: 큰 글씨 기준 3:1) */
+  --color-primary-soft: #fce3e8;
+  --color-primary-strong: #e2647c; /* 버튼 바탕·테두리 (흰 글씨는 20px 굵게만: 큰 글씨 기준 3:1) */
   --color-primary-shade: #a8425a; /* 분홍 글씨 + 버튼 아래 입체 그림자. 흰·크림 5.6:1, 연분홍 4.9:1 */
-  --color-mint: #cdeee0;
+  --color-mint: #ddf2e7;
   --color-mint-strong: #2e8063; /* 초록 글씨 (흰 배경 4.8:1) */
-  --color-butter: #ffeeb8;
+  --color-butter: #fff0c2;
   --color-lavender: #e3dbf8;
 
   /* 글자: 모든 배경에서 명암비 4.5:1 이상 (WCAG AA) */
-  --color-ink: #4a3f3f;
+  --color-ink: #3d3333;
   --color-ink-soft: #6b5d59; /* 보조 글씨 (크림 6.0:1, 라벤더 4.7:1) */
   --color-ink-faint: #766864; /* 안내문·출처 (크림 5.1:1, 연분홍 4.4:1) */
+
+  /* 대분류 4색 (디자인 시안 A안): 점·띠는 기본, 칩 바탕은 soft, 글씨는 deep (soft 위 명암비 5:1 이상) */
+  --color-group-n: #7db38a; /* 나무늘보 */
+  --color-group-n-soft: #e3f1e6;
+  --color-group-n-deep: #2f6b3d;
+  --color-group-o: #6f93c7; /* 워커홀릭 */
+  --color-group-o-soft: #e3ecf8;
+  --color-group-o-deep: #2f5a96;
+  --color-group-s: #a28ae0; /* 예민보스 */
+  --color-group-s-soft: #ece6fb;
+  --color-group-s-deep: #5a45a8;
+  --color-group-a: #f2a23b; /* 갓생러 */
+  --color-group-a-soft: #fdeed6;
+  --color-group-a-deep: #8a5300;
 
   --radius-card: 1.75rem;
   --radius-button: 1.25rem;

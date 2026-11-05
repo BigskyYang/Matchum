@@ -1,4 +1,5 @@
 import { useEffect, useId, useRef } from 'react'
+import Icon from './Icon.jsx'
 
 // 화면 아래에서 올라오는 창 (자세한 설명·근거는 화면에 늘어놓지 않고 여기서 보여 준다)
 //   닫기: ✕ 버튼, 어두운 바깥 누르기, Esc. 열려 있는 동안 뒤 화면은 스크롤되지 않는다
@@ -35,7 +36,7 @@ export default function BottomSheet({ title, aside, onClose, children }) {
       >
         <div aria-hidden="true" className="mx-auto mb-3 h-1 w-10 rounded-full bg-ink/15" />
         <div className="flex items-center gap-2">
-          <h3 id={titleId} className="flex min-w-0 flex-1 items-center gap-2 text-xl font-extrabold">
+          <h3 id={titleId} className="flex min-w-0 flex-1 items-center gap-2 font-display text-xl font-normal">
             {title}
           </h3>
           {aside}
@@ -46,7 +47,7 @@ export default function BottomSheet({ title, aside, onClose, children }) {
             aria-label="닫기"
             className="flex size-11 shrink-0 items-center justify-center rounded-full text-xl text-ink-soft active:bg-cream"
           >
-            ✕
+            <Icon name="close" size={22} />
           </button>
         </div>
         <div className="mt-3">{children}</div>

@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
+import Icon from '../components/Icon.jsx'
 import { SecondaryButton } from '../components/PrimaryButton.jsx'
 import Card from '../components/result/Card.jsx'
 import FoodGrid from '../components/result/FoodGrid.jsx'
@@ -44,22 +45,27 @@ export default function PersonalResultPage() {
     <main className="flex flex-1 flex-col gap-4 px-5 pt-8 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
       <header className="text-center">
         <p className="text-sm font-semibold text-ink-soft">{r.typeName}의</p>
-        <h1 className="mt-1 text-[1.75rem] leading-tight font-extrabold">나에게 맞는 결과</h1>
-        <p className="mt-2 text-sm text-ink-soft">🔒 이 휴대폰에서만 볼 수 있어요</p>
+        <h1 className="mt-1 font-display text-[1.75rem] leading-tight font-normal">나에게 맞는 결과</h1>
+        <p className="mt-2 inline-flex items-center gap-1 text-sm text-ink-soft">
+          <Icon name="lock" size={16} />이 휴대폰에서만 볼 수 있어요
+        </p>
       </header>
 
-      <Card title="내가 챙겨야 할 영양소" icon="🔍">
+      <Card title="내가 챙겨야 할 영양소" icon="checklist">
         <NutritionRisk nutrition={r.nutrition} ffqAsked={r.ffqAsked} />
         {r.nutrition && <SupplementPreview supplements={r.supplements} watch={r.nutrition.watch} sex={r.sex} age={r.age} />}
       </Card>
 
-      <Card title="흡연·음주 신호등" icon="🚦">
+      <Card title="흡연·음주 신호등" icon="traffic">
         <HabitSignals habits={r.habits} />
-        <h3 className="mt-5 mb-2 text-sm font-bold">🎯 이번 주 해볼 것</h3>
-        <MissionList missions={r.missions} empty="흡연·음주 습관은 지금처럼 유지해 주세요! 🎉" />
+        <h3 className="mt-5 mb-2 flex items-center gap-1.5 text-sm font-bold">
+          <Icon name="target" size={18} className="text-primary-shade" />
+          이번 주 해볼 것
+        </h3>
+        <MissionList missions={r.missions} empty="흡연·음주 습관은 지금처럼 유지해 주세요." />
       </Card>
 
-      <Card title="챙겨 먹으면 좋은 음식" icon="🥗">
+      <Card title="챙겨 먹으면 좋은 음식" icon="salad">
         <FoodGrid foods={r.foods} />
       </Card>
 
