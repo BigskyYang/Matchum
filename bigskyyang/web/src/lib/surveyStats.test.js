@@ -14,7 +14,7 @@ describe('설문 중간 통계 카드', () => {
   })
 
   it('나이대는 19~29세를 20대로, 70세 이상을 한 칸으로', () => {
-    expect(peerGroup({ sex: 2, birth_date: '2006-01-01' }, TODAY).label).toBe('20대 여성')
+    expect(peerGroup({ sex: 2, birth_date: '2006-01-01' }, TODAY).label).toBe('19~29세 여성')
     expect(peerGroup({ sex: 1, birth_date: '1990-06-01' }, TODAY).label).toBe('30대 남성')
     expect(peerGroup({ sex: 1, birth_date: '1940-01-01' }, TODAY).label).toBe('70대 이상 남성')
     expect(peerGroup({ sex: 1 }, TODAY)).toBeNull()

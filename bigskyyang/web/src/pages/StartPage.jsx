@@ -50,9 +50,9 @@ export default function StartPage() {
           </span>
         </p>
         <p className="mt-5 text-sm leading-relaxed text-ink-soft">
-          나의 생활습관 기반 유형을 확인하고
+          내 생활습관 유형을 알아보고,
           <br />
-          챙기면 좋을 영양소를 알려드려요
+          식사에서 살펴볼 점을 확인해요
         </p>
       </section>
 
@@ -62,14 +62,14 @@ export default function StartPage() {
           className="mb-3 text-center text-xs text-ink-soft"
           items={[
             <>
-              <span aria-hidden="true" className="mr-1">✨</span>머신러닝으로 <b className="text-ink">유형별 부족 영양소</b>를 찾아 두었어요
+              <span aria-hidden="true" className="mr-1">✨</span>먼저 <b className="text-ink">생활습관 유형</b>을 보고, 개인 식사 설문은 이어서 선택해요
             </>,
             <>
               <span aria-hidden="true" className="mr-1">📊</span>국민건강영양조사 성인 <b className="text-ink">{sampleSize}명</b>(2022–2024) 분석
             </>,
             // 응답은 sessionStorage에만 잠시 두고 서버로 보내지 않는다 (lib/storage.js)
             <>
-              <span aria-hidden="true" className="mr-1">🔒</span>응답은 <b className="text-ink">서버에 저장되지 않고</b>, 창을 닫으면 사라져요
+              <span aria-hidden="true" className="mr-1">🔒</span>응답과 결과는 <b className="text-ink">이 브라우저 탭</b>에서 계산하고 보관해요
             </>,
           ]}
         />

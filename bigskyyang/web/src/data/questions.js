@@ -55,7 +55,7 @@ const isCurrentSmoker = (a) => a.smoke_now === 'yes'
 const THIS_YEAR = new Date().getFullYear()
 const ADULT = 19
 // mini-FFQ 모델은 19~64세에서만 검증됐다 → 만 65세 이상은 묻지 않는다 (재준님 모델 규칙)
-const ffqAge = (a) => ageFromBirth(a.birth_date) <= 64
+const ffqAge = (a) => Boolean(a.birth_date) && ageFromBirth(a.birth_date) >= 19 && ageFromBirth(a.birth_date) <= 64
 
 export const SECTIONS = {
   basic: '기본정보',
@@ -79,6 +79,7 @@ const STAGE_1 = [
     id: 'sex',
     section: 'basic',
     title: '성별을 알려 주세요',
+    note: '조사 자료에서 같은 성별·나이대의 식사와 비교할 때 사용해요.',
     type: 'choice',
     options: [
       { label: '남성', value: 1 },
@@ -92,26 +93,29 @@ const STAGE_1 = [
     title: '생년월일을 알려 주세요',
     note: '만 나이로 계산해요',
     type: 'date',
-    minYear: 1930,
+    minYear: THIS_YEAR - 121,
     maxYear: THIS_YEAR - ADULT,
-    initial: '1995-01-01',
-    check: (v) => (ageFromBirth(v) < ADULT ? `만 ${ADULT}세 이상만 참여할 수 있어요.` : null),
+    check: (v) => {
+      if (!v || typeof v !== 'string') return '생년월일을 선택해 주세요.'
+      const day = new Date(v + 'T00:00:00Z')
+      if (!Number.isFinite(day.getTime()) || day.toISOString().slice(0, 10) !== v) return '날짜를 다시 확인해 주세요.'
+      const age = ageFromBirth(v)
+      return age >= ADULT && age <= 120 ? null : '만 19세 이상 120세 이하가 참여할 수 있어요.'
+    },
   },
 
   // 4. 신체활동: 팀 합의로 중강도·고강도를 나눠 묻지 않고, 모두 합친 시간이 주 150분 이상인지만 본다 (고강도 ×2 없음)
   {
     id: 'activity',
     section: 'activity',
-    title: '일주일에 운동을 얼마나 하시나요?',
-    note: '숨이 찰 정도의 운동만 세요',
+    title: '숨이 찰 정도로 움직인 시간은 일주일에 얼마나 되나요?',
+    note: '운동·이동·일할 때 몸을 쓴 시간을 합쳐 주세요.',
     info: ['빠르게 걷기, 자전거, 계단 오르기, 달리기·등산, 몸을 쓰는 일도 모두 합쳐 주세요.', '천천히 걷기, 숨쉬기 운동은 빼 주세요.'],
     period: '최근 1주일',
     type: 'choice',
     // 값 3 = 주 150분 이상 → ML_aerobic 1
     options: [
-      { label: '거의 없어요', value: 0 },
-      { label: '1시간 미만', value: 1 },
-      { label: '1시간 ~ 2시간 반 미만', value: 2 },
+      { label: '2시간 반 미만 (0분 포함)', value: 0 },
       { label: '2시간 반 이상', value: 3 },
     ],
   },
@@ -141,12 +145,12 @@ const STAGE_1 = [
     info: ['책상·이동·TV·게임·인터넷 등 하루 전체를 생각해 주세요.'],
     type: 'duration',
     per: '하루',
-    maxHours: 20,
+    maxHours: 24,
     initial: 8 * 60,
   },
   // 수면: 취침·기상 시각 (주말도 비슷하면 주중만). 팀 합의로 '날마다 들쭉날쭉' 보기는 두지 않는다
   { id: 'weekday_bed', section: 'sleep', title: '평일에는 몇 시에 잠자리에 드나요?', note: '주로 일하는 날 기준', type: 'time', initial: '22:00', hourStart: 18 },
-  { id: 'weekday_wake', section: 'sleep', title: '평일에는 몇 시에 일어나나요?', note: '주로 일하는 날 기준', type: 'time', initial: '07:00', hourStart: 3 },
+  { id: 'weekday_wake', section: 'sleep', title: '평일에는 몇 시에 일어나나요?', note: '주로 일하는 날 기준', type: 'time', initial: '07:00', hourStart: 3, check: (v, a) => v === a.weekday_bed ? '잠든 시각과 일어난 시각을 다시 확인해 주세요.' : null },
   {
     id: 'weekend_same',
     section: 'sleep',
@@ -159,7 +163,7 @@ const STAGE_1 = [
     ],
   },
   { id: 'weekend_bed', section: 'sleep', title: '주말에는 몇 시에 잠자리에 드나요?', note: '쉬는 날 기준', type: 'time', initial: '22:00', hourStart: 18, showIf: weekendDiffers },
-  { id: 'weekend_wake', section: 'sleep', title: '주말에는 몇 시에 일어나나요?', note: '쉬는 날 기준', type: 'time', initial: '07:00', hourStart: 3, showIf: weekendDiffers },
+  { id: 'weekend_wake', section: 'sleep', title: '주말에는 몇 시에 일어나나요?', note: '쉬는 날 기준', type: 'time', initial: '07:00', hourStart: 3, check: (v, a) => v === a.weekend_bed ? '잠든 시각과 일어난 시각을 다시 확인해 주세요.' : null, showIf: weekendDiffers },
   // 7. 스트레스
   {
     id: 'stress',
@@ -178,7 +182,7 @@ const STAGE_1 = [
   {
     id: 'meals',
     section: 'meal',
-    title: '아침·점심·저녁은 일주일에 몇 번 먹나요?',
+    title: '평균적인 한 주에 아침·점심·저녁을 각각 며칠 먹었나요?',
     period: '최근 1년',
     type: 'rows',
     rows: [
@@ -187,10 +191,10 @@ const STAGE_1 = [
       { id: 'dinner', label: '저녁' },
     ],
     options: [
-      { label: '5~7회', value: 3 },
-      { label: '3~4회', value: 2 },
-      { label: '1~2회', value: 1 },
-      { label: '거의 안 먹어요', value: 0 },
+      { label: '5~7일', value: 3 },
+      { label: '3~4일', value: 2 },
+      { label: '1~2일', value: 1 },
+      { label: '0일', value: 0 },
     ],
   },
   {

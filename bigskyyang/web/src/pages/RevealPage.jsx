@@ -66,6 +66,7 @@ function cardsOf(r, s) {
       <Mascot name={`type_${r.leafId}`} className="mt-2 animate-pop motion-reduce:animate-none" />
       <GroupChip code={code} name={r.mainType.name} className="mt-2" />
       <h1 className="mt-2 font-display text-[1.75rem] leading-tight font-normal">{r.name}</h1>
+      <p className="mt-2 text-sm text-ink-soft">{r.summary}</p>
       <ul className="mt-3 flex flex-wrap justify-center gap-1.5">
         {r.tags.map((tag) => (
           <li key={tag} className="rounded-full bg-white px-3 py-1 text-sm font-bold text-primary-shade shadow-soft">
@@ -77,13 +78,13 @@ function cardsOf(r, s) {
     // 2. 비율
     <>
       <Title>
-        성인 100명 중 <span className="text-primary-shade">{s.share}명</span>
+        조사 자료에서 성인 100명 중 약 <span className="text-primary-shade">{s.share}명</span>
       </Title>
       <p className="mt-2 text-ink-soft">나와 같은 유형이에요</p>
       <div className="mt-6">
         <Dots count={s.share} total={100} code={code} />
       </div>
-      <p className="mt-4 text-sm whitespace-pre-line text-ink-soft">{r.summary}</p>
+
     </>,
     // 3. 습관
     <>
@@ -116,7 +117,7 @@ function cardsOf(r, s) {
     // 4. 영양소
     s.nutrient.kind === 'common' ? (
       <>
-        <Title>모두가 챙겨야 할 영양소</Title>
+        <Title>조사에서 섭취가 적었던 영양소</Title>
         <p className="mt-2 text-ink-soft">유형과 상관없이 성인 절반 이상이 적게 먹어요</p>
         <ul className="mt-6 flex flex-wrap justify-center gap-2">
           {s.nutrient.items.map((n) => (
@@ -129,7 +130,7 @@ function cardsOf(r, s) {
       </>
     ) : (
       <>
-        <Title>{s.nutrient.kind === 'type' ? '내 유형이 특히 챙길 영양소' : '같은 성별·나이대가 챙길 영양소'}</Title>
+        <Title>{s.nutrient.kind === 'type' ? '같은 유형에서 섭취가 적었던 영양소' : '같은 성별·나이대의 섭취 경향'}</Title>
         <NutrientArt
           n={s.nutrient.items[0]}
           className="mt-6 size-28 animate-pop motion-reduce:animate-none"
@@ -145,23 +146,6 @@ function cardsOf(r, s) {
         </p>
       </>
     ),
-    // 5. 짝꿍
-    <>
-      <Title>같이 다니면 좋은 유형</Title>
-      <ul className="mt-6 grid w-full grid-cols-2 gap-3">
-        {[
-          ['채워 주는 짝꿍', r.partners.fill],
-          ['같이 크는 짝꿍', r.partners.together],
-        ].map(([caption, p]) => (
-          <li key={caption} className="flex flex-col items-center rounded-card bg-white px-2 pt-3 pb-4 shadow-soft">
-            <span className="text-xs font-bold text-primary-shade">{caption}</span>
-            <Mascot name={`type_${p.id}`} size="sm" className="mt-1 animate-pop motion-reduce:animate-none" />
-            <span className="mt-1 text-sm leading-tight font-bold">{p.name}</span>
-            <GroupChip code={p.id[0]} name={p.main.name} className="mt-2 text-xs" />
-          </li>
-        ))}
-      </ul>
-    </>,
     // 6. 마무리
     <>
       <Mascot name="cheer" fallback="happy" className="animate-pop motion-reduce:animate-none" />
@@ -260,6 +244,7 @@ export default function RevealPage() {
       </section>
 
       <footer className="grid gap-2">
+        {card === 0 && <SecondaryButton to={survey.done[2] ? '/result2' : '/survey2'}>{survey.done[2] ? '내 식사 결과 다시 보기' : '내 식사 응답으로 영양소 살펴보기'}</SecondaryButton>}
         {card < last ? (
           <div className="flex gap-2">
             {card > 0 && (
@@ -285,7 +270,7 @@ export default function RevealPage() {
             <PrimaryButton size="sm" onClick={toResult}>
               결과 자세히 보기
             </PrimaryButton>
-            <SecondaryButton to={survey.done[2] ? '/result2' : '/survey2'}>나에게 맞는 결과 보기 (2분)</SecondaryButton>
+            <SecondaryButton to={survey.done[2] ? '/result2' : '/survey2'}>내 식사 결과 살펴보기</SecondaryButton>
           </>
         )}
       </footer>

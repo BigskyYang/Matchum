@@ -30,7 +30,7 @@ export function peerGroup(answers, today = new Date()) {
   const age = ageFromBirth(answers.birth_date, today)
   const decade = Math.max(20, Math.floor(Math.min(age, 79) / 10) * 10)
   const key = `${sex}-${decade}`
-  if (stats.groups[key]) return { key, label: `${decade === 70 ? '70대 이상' : `${decade}대`} ${SEX[sex]}` }
+  if (stats.groups[key]) return { key, label: `${decade === 20 ? '19~29세' : decade === 70 ? '70대 이상' : `${decade}대`} ${SEX[sex]}` }
   return { key: `${sex}`, label: `성인 ${SEX[sex]}` }
 }
 

@@ -1,8 +1,5 @@
 import { useCallback, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { PRODUCT_NUTRIENTS } from '../../data/supplementInfo.js'
 import BottomSheet from '../BottomSheet.jsx'
-import Icon from '../Icon.jsx'
 import Mascot from '../Mascot.jsx'
 import NutrientArt from '../NutrientArt.jsx'
 import { BAND_CLS, bandLabel } from '../../data/bands.js'
@@ -51,18 +48,6 @@ function RiskSheet({ n, onClose }) {
         </div>
       )}
       {n.tip && <p className="mt-4 rounded-card bg-cream px-4 py-3 text-sm leading-relaxed">{n.tip}</p>}
-      {n.supplement === 'product' && (
-        <Link
-          to={`/supplements?n=${PRODUCT_NUTRIENTS.find((x) => x.from.includes(n.key)).key}`}
-          className="mt-4 flex items-center justify-between rounded-card bg-lavender/60 px-4 py-3 text-sm font-bold"
-        >
-          <span className="flex items-center gap-1.5">
-            <Icon name="pill" size={18} />
-            도움이 될 수 있는 건강기능식품 보기
-          </span>
-          <span aria-hidden="true">›</span>
-        </Link>
-      )}
       {n.supplement === 'food' && (
         <p className="mt-4 rounded-card bg-lavender/60 px-4 py-3 text-sm leading-relaxed">
           건강기능식품보다 음식으로 챙기는 영양소예요.
@@ -123,7 +108,7 @@ export default function NutritionRisk({ nutrition, ffqAsked }) {
                   className="flex items-center gap-1.5 rounded-full bg-primary-soft px-3.5 py-2.5 font-bold text-primary-shade active:scale-95"
                 >
                   <NutrientArt n={n} className="size-6" />
-                  {n.label}
+                  {n.excess ? "나트륨 · 많이 먹는 편인지 확인" : n.label}
                   <span aria-hidden="true">›</span>
                 </button>
               </li>
@@ -133,7 +118,7 @@ export default function NutritionRisk({ nutrition, ffqAsked }) {
       ) : (
         <p className="flex items-center gap-3 text-sm text-ink-soft">
           <Mascot name="cheer" fallback="happy" size="xs" />
-          특히 부족하기 쉬운 영양소는 없어요. 지금처럼 골고루 드세요.
+          이번 응답에서 상대 등급이 높은 영양소는 없어요.
         </p>
       )}
 

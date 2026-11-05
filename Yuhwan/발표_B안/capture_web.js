@@ -5,12 +5,12 @@ const path = require('path');
 const fs = require('fs');
 const os = require('os');
 
-const URL = 'https://matchum.vercel.app';
+const URL = process.argv[2] || 'http://127.0.0.1:4173';
 const OUT = path.join(__dirname, 'img', 'web');
 fs.mkdirSync(OUT, { recursive: true });
 const SAMPLE = {
-  sex: 2, birth_date: '2001-01-01', activity: 2, strength_days: 0, sedentary_min: 600,
-  weekday_bed: '01:00', weekday_wake: '07:00', weekend_same: 'no', weekend_bed: '02:00', weekend_wake: '10:00',
+  sex: 2, birth_date: '2001-01-01', activity: 2, strength_days: 0, sedentary_min: 480,
+  weekday_bed: '22:00', weekday_wake: '07:00', weekend_same: 'no', weekend_bed: '22:00', weekend_wake: '07:00',
   stress: 2, meals: { breakfast: 0, lunch: 3, dinner: 3 }, eating_out: 4,
   smoke_now: 'no', drink_freq: 0, veg: 5, fruit: 3, ffq_meat: 3, ffq_fish: 2, ffq_egg: 3, ffq_legume: 2, ffq_dairy: 2,
 };
@@ -39,6 +39,9 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
     await page.screenshot({ path: path.join(OUT, `${name}_top.png`) });
     await page.screenshot({ path: path.join(OUT, `${name}_full.png`), fullPage: true });
   }
+  await page.goto(URL + '/result', { waitUntil: 'networkidle2' });
+  await (await page.waitForSelector('main header')).screenshot({path: path.join(OUT, 'r_type.png')});
+  await (await page.waitForSelector('main > section')).screenshot({path: path.join(OUT, 'r_signal.png')});
   await browser.close();
   console.log('saved', fs.readdirSync(OUT));
 })();

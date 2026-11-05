@@ -4,6 +4,7 @@ import GroupChip from '../components/GroupChip.jsx'
 import Icon from '../components/Icon.jsx'
 import Mascot from '../components/Mascot.jsx'
 import PrimaryButton, { SecondaryButton } from '../components/PrimaryButton.jsx'
+import { FACTS, surveyFact } from '../lib/surveyStats.js'
 import Card from '../components/result/Card.jsx'
 import HabitTabs from '../components/result/HabitTabs.jsx'
 import MissionList from '../components/result/MissionList.jsx'
@@ -25,7 +26,7 @@ const PENDING = '영양 분석 결과가 준비되면 이곳에 표시돼요.'
 function useResult() {
   return useMemo(() => {
     const { answers, done } = loadSurvey()
-    return done[1] ? { ...buildTypeResult(answers), personalDone: done[2] } : null
+    return done[1] ? { ...buildTypeResult(answers), personalDone: done[2], peerFacts: Object.keys(FACTS).map((id) => surveyFact(id, answers)).filter(Boolean) } : null
   }, [])
 }
 
@@ -47,6 +48,7 @@ export default function ResultPage() {
         <Mascot name={`type_${r.leafId}`} className="mt-3" />
         <GroupChip code={r.leafId[0]} name={r.mainType.name} className="mt-3" />
         <h1 className="mt-2 font-display text-[1.75rem] leading-tight font-normal">{r.name}</h1>
+        <p className="mt-4 max-w-80 leading-relaxed whitespace-pre-line text-ink-soft">{r.summary}</p>
         {r.tags.length > 0 && (
           <ul className="mt-3 flex flex-wrap justify-center gap-1.5">
             {r.tags.map((tag) => (
@@ -56,10 +58,12 @@ export default function ResultPage() {
             ))}
           </ul>
         )}
-        <p className="mt-4 max-w-80 leading-relaxed whitespace-pre-line text-ink-soft">{r.summary}</p>
         <p className="mt-3 text-sm text-ink-soft">
-          성인 100명 중 <b className="text-primary-shade">{Math.round(r.sharePct)}명</b>이 이 유형이에요
+          조사 자료에서 성인 100명 중 약 <b className="text-primary-shade">{Math.round(r.sharePct)}명</b>이 이 유형이에요
         </p>
+        <PrimaryButton to={r.personalDone ? '/result2' : '/survey2'} size="sm" className="mt-5">
+          {r.personalDone ? '내 식사 결과 다시 보기' : '내 식사 응답으로 영양소 살펴보기'}
+        </PrimaryButton>
         {/* 누르면 첫 카드(생활습관 신호등)로 내려간다 */}
         <button
           type="button"
@@ -74,6 +78,11 @@ export default function ResultPage() {
 
       <Card title="나의 생활습관" icon="traffic">
         <HabitTabs habits={r.habits} code={r.leafId[0]} />
+        {r.peerFacts.length > 0 && <details className="mt-3 text-sm text-ink-soft">
+          <summary className="cursor-pointer py-2 font-bold">같은 성별·나이대의 조사 통계</summary>
+          <ul className="space-y-2">{r.peerFacts.map((f) => <li key={f.label}>{f.lead} 약 {f.pct}{f.tail}.</li>)}</ul>
+          <p className="mt-2 text-xs">국민건강영양조사 2022–2024 가중 비율을 약 5% 단위로 표시했어요.</p>
+        </details>}
         <h3 className="mt-5 mb-2 flex items-center gap-1.5 text-sm font-bold">
           <Icon name="target" size={18} className="text-primary-shade" />
           이번 주 해볼 것
@@ -98,8 +107,11 @@ export default function ResultPage() {
         )}
       </Card>
 
-      <Card title="같이 다니면 좋은 유형" icon="users">
-        <PartnerCard fill={r.partners.fill} together={r.partners.together} />
+      <Card title="다른 유형 둘러보기" icon="users">
+        <details>
+          <summary className="cursor-pointer py-2 text-sm font-bold">내 습관과 비교할 유형</summary>
+          <PartnerCard fill={r.partners.fill} together={r.partners.together} />
+        </details>
         <Link to="/types" className="mt-3 block py-2 text-center text-sm font-bold text-primary-shade">
           12가지 유형 모두 보기 ›
         </Link>
@@ -111,9 +123,6 @@ export default function ResultPage() {
           <ShareButton typeName={r.name} className="py-3.5" />
           <ShareImageButton r={r} className="py-3.5" />
         </div>
-        <PrimaryButton to={r.personalDone ? '/result2' : '/survey2'} size="sm">
-          {r.personalDone ? '나에게 맞는 결과' : '나에게 맞는 결과 (2분)'}
-        </PrimaryButton>
         <SecondaryButton onClick={retry}>처음부터 다시 검사하기</SecondaryButton>
         <AboutLink />
       </footer>
