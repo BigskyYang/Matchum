@@ -6,25 +6,26 @@
 //                    건강기능식품 정보(재준님 결과 중 준혁님 제품 분류로 넘기는 영양소. 제품 표시는 팀 합의 후)
 //   진단·처방처럼 보일 수 있는 안내(우울 점수, 질환별 식사 조언)는 하지 않는다
 import nutrientCells from '../data/nutrientCells.json'
+import habitAverages from '../data/habitAverages.json'
 import { NUTRIENT_GUIDE } from '../data/nutrientGuide.js'
 import { FOOD_ONLY, PRODUCT_NUTRIENTS } from '../data/supplementInfo.js'
 import { BALANCED_FOODS, pickTips } from '../data/tips.js'
 import { LEAF_TYPES, MAIN_TYPES } from '../data/types.js'
-import { MAIN_CODES, classify, classifyDetail, mainProfile, model, toFeatures, typeOf } from './classify.js'
+import { MAIN_CODES, classify, classifyDetail, model, typeOf } from './classify.js'
 import { encode } from './encode.js'
 import { ageGroup, typeNutrients } from './nutrition.js'
 import { habitualFeatures, lifestyleFeatures, predictNutrition } from './nutritionRisk.js'
-import { PERSONAL_AXES, TYPE_AXES, groupScores, hashtags, partnerTypes, scores } from './profile.js'
+import { PERSONAL_AXES, TYPE_AXES, hashtags, partnerTypes, scores } from './profile.js'
 import { supplementTargets } from './supplements.js'
 
 const MAX_MISSIONS = 3
 const MAX_FOODS = 6
 const AGE_LABELS = { '19-29': '19~29세', '30-49': '30~49세', '50-64': '50~64세', '65-74': '65~74세', '75+': '75세 이상' }
 
-// 세부 유형 12개 평균의 신호등 점수 (짝꿍 유형 고르기)
-const LEAF_SCORES = Object.fromEntries(model.types.map((t) => [t.id, groupScores(toFeatures(t.profile), TYPE_AXES)]))
-// 성인 전체 평균의 신호등 점수 (평균 생활습관에 점수 식을 적용한 값. 유형 평균도 같은 방식)
-const ALL_SCORES = groupScores(toFeatures(mainProfile()), TYPE_AXES)
+// 지연님 제공: 개인별 점수를 낸 뒤 wt_tot/3으로 가중 평균. 비교·유형 신호등·짝꿍에 같은 값을 쓴다.
+const axisOrder = TYPE_AXES.map((axis) => habitAverages.axes.indexOf(axis.key))
+const LEAF_SCORES = Object.fromEntries(Object.entries(habitAverages.types).map(([id, values]) => [id, axisOrder.map((i) => values[i])]))
+const ALL_SCORES = axisOrder.map((i) => habitAverages.all[i])
 const partnerOf = ({ id, axes }) => ({ id, name: LEAF_TYPES[id].name, summary: LEAF_TYPES[id].summary, main: MAIN_TYPES[id[0]], axes })
 
 const missionsOf = (tips) => tips.flatMap((t) => (t.mission ? [t.mission] : [])).slice(0, MAX_MISSIONS)

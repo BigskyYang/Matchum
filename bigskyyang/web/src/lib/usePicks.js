@@ -1,10 +1,12 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { loadPicks, savePicks } from './storage.js'
+import { reconcilePicks } from './supplements.js'
 
 // 건강기능식품 화면들이 같이 쓰는 상태 (이 휴대폰 sessionStorage에만): 고른 제품, 확인 답, 내가 먹는 제품
-export function usePicks() {
+export function usePicks(catalog) {
   const [picks, setPicks] = useState(loadPicks)
-  useEffect(() => savePicks(picks), [picks])
+  const current = useMemo(() => catalog ? reconcilePicks(catalog, picks) : picks, [catalog, picks])
+  useEffect(() => savePicks(current), [current])
   const toggle = useCallback(
     (id) => setPicks((p) => ({ ...p, ids: p.ids.includes(id) ? p.ids.filter((x) => x !== id) : [...p.ids, id] })),
     [],
@@ -19,5 +21,5 @@ export function usePicks() {
     [],
   )
   const removeMine = useCallback((i) => setPicks((p) => ({ ...p, mine: p.mine.filter((_, j) => j !== i) })), [])
-  return { picks, toggle, setGate, addMine, removeMine }
+  return { picks: current, toggle, setGate, addMine, removeMine }
 }

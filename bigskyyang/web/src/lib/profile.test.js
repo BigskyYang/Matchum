@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { model, toFeatures } from './classify.js'
+import { model } from './classify.js'
+import averages from '../data/habitAverages.json'
 import { encode } from './encode.js'
 import { SAMPLE } from './fixtures.js'
-import { SCORE_AXES, groupScores, hashtags, levelOf, partnerTypes, scores } from './profile.js'
+import { TYPE_AXES, hashtags, levelOf, partnerTypes, scores } from './profile.js'
 
-const LEAF_SCORES = Object.fromEntries(model.types.map((t) => [t.id, groupScores(toFeatures(t.profile))]))
+const LEAF_SCORES = averages.types
 const GOOD = 0.75
 
 describe('levelOf', () => {
@@ -26,24 +27,24 @@ describe('hashtags', () => {
 
 describe('partnerTypes (짝꿍 유형 2개)', () => {
   it.each(Object.keys(LEAF_SCORES))('%s 유형: 두 짝꿍은 내 유형이 아니고 서로 다르다', (leaf) => {
-    const { fill, together } = partnerTypes(LEAF_SCORES[leaf], leaf, LEAF_SCORES)
+    const { fill, together } = partnerTypes(LEAF_SCORES[leaf], leaf, LEAF_SCORES, TYPE_AXES)
     expect([fill.id, together.id]).not.toContain(leaf)
     expect(fill.id).not.toBe(together.id)
   })
 
-  const mine = scores(encode(SAMPLE).features)
-  const { fill, together } = partnerTypes(mine, 'N2', LEAF_SCORES)
+  const mine = scores(encode(SAMPLE).features, TYPE_AXES)
+  const { fill, together } = partnerTypes(mine, 'N2', LEAF_SCORES, TYPE_AXES)
 
   it('채워 주는 짝꿍의 이유 영역은 그 유형이 나보다 점수가 높은 영역이다', () => {
     for (const axis of fill.axes) {
-      const i = SCORE_AXES.indexOf(axis)
+      const i = TYPE_AXES.indexOf(axis)
       expect(LEAF_SCORES[fill.id][i]).toBeGreaterThan(mine[i])
     }
   })
 
   it('같이 크는 짝꿍의 이유 영역은 나와 그 유형 모두 좋아요(0.75)에 못 미치는 영역이다', () => {
     for (const axis of together.axes) {
-      const i = SCORE_AXES.indexOf(axis)
+      const i = TYPE_AXES.indexOf(axis)
       expect(mine[i]).toBeLessThan(GOOD)
       expect(LEAF_SCORES[together.id][i]).toBeLessThan(GOOD)
     }

@@ -71,13 +71,35 @@ export const combinedIds = (mine, picked) => [...new Set([...mine.filter((m) => 
 
 // 고른 제품을 함께 먹을 때 하루 합계와 상한섭취량 (2025 KDRI 성인). 하루 함량을 아는 성분만 더한다
 //   → [{ key, label, unit, total, ul, over, count: 그 성분이 든 고른 제품 수 }]
-export function dailyTotals(catalog, ids, sex) {
+export function dailyTotals(catalog, ids, sex, age = 30) {
   return catalog.daily
     .map((d) => {
-      const values = ids.map((id) => catalog.products[id]?.daily[d.key]).filter((v) => v !== undefined)
+      const values = [...new Set(ids)].map((id) => catalog.products[id]?.daily[d.key]).filter((v) => v !== undefined)
       const total = Math.round(values.reduce((s, v) => s + v, 0) * 100) / 100
-      const ul = sex === 1 && d.ulMale ? d.ulMale : d.ul
+      const ul = age >= 19 && age < 30 && d.ulUnder30 ? d.ulUnder30[sex === 1 ? 'male' : 'female'] : sex === 1 && d.ulMale ? d.ulMale : d.ul
       return { key: d.key, label: d.label, unit: d.unit, total, ul, over: ul != null && total > ul, count: values.length }
     })
     .filter((x) => x.count > 0)
+}
+
+// 목록 갱신으로 제외된 제품은 합계에서 빼고, 이미 등록한 제품은 메모용 이름으로 남긴다.
+export function reconcilePicks(catalog, picks) {
+  if (picks.ids.every((id) => catalog.products[id]) && picks.mine.every((m) => !m.id || catalog.products[m.id])) return picks
+  return {
+    ...picks,
+    ids: picks.ids.filter((id) => catalog.products[id]),
+    mine: picks.mine.map((m) => m.id && !catalog.products[m.id] ? { name: m.name || `목록에서 제외된 제품 (신고번호 ${m.id})` } : m),
+  }
+}
+
+export function headroomProducts(catalog, ids) {
+  if (new Set(ids).size < 2) return []
+  return [...new Set(ids)].filter((id) => catalog.products[id]?.headroom === '적음').map((id) => ({ id, ...catalog.products[id] }))
+}
+
+export const totalsMessage = (totals) => {
+  const over = totals.filter((x) => x.over)
+  if (over.length) return `${over.map((x) => x.label).join('·')} 상한섭취량을 넘어요. 함께 먹기 전에 약사와 상의하세요.`
+  if (!totals.length) return '하루 함량을 알 수 없어 상한섭취량과 비교할 수 없어요.'
+  return '계산할 수 있는 성분 중에는 상한섭취량을 넘는 것이 없어요. 음식으로 먹는 양과 함량을 모르는 제품은 빠져 있으니, 여러 제품을 함께 먹을 때는 약사와 확인해 보세요.'
 }
