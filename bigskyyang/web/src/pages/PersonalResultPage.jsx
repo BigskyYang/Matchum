@@ -52,6 +52,11 @@ export default function PersonalResultPage() {
 
       <Card title="내 식사에서 살펴볼 영양소" icon="checklist">
         <NutritionRisk nutrition={r.nutrition} ffqAsked={r.ffqAsked} />
+        {r.supplements?.nutrients.length > 0 && (
+          <Link to="/supplements" className="mt-3 block rounded-button bg-cream py-3 text-center text-sm font-bold text-primary-shade active:scale-[0.99]">
+            성분별 제품 표시 정보 보기 ›
+          </Link>
+        )}
       </Card>
 
       <Card title="챙겨 먹으면 좋은 음식" icon="salad">
@@ -78,7 +83,6 @@ export default function PersonalResultPage() {
 
       <Card title="제품 확인과 약사 상담" icon="pill">
         <SecondaryButton to="/my-supplements">먹는 제품 등록 · 상담 메모 만들기</SecondaryButton>
-        {r.supplements?.nutrients.length > 0 && <Link to="/supplements" className="mt-2 block py-2 text-center text-sm font-semibold text-ink-soft">성분별 제품 표시 정보 보기 ›</Link>}
       </Card>
 
       <footer className="mt-2 flex flex-col gap-3">
