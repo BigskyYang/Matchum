@@ -27,14 +27,15 @@ export function saveSurvey(state) {
   }
 }
 
-// 건강기능식품 화면: 고른 제품(신고번호)과 '임신·질환·복용약' 확인 답 ('ok' | 'consult' | null)
+// 건강기능식품 화면: 고른 제품(신고번호), '임신·질환·복용약' 확인 답 ('ok' | 'consult' | null),
+//   내가 먹는 제품 mine: [{ id: 신고번호 } | { name: 목록에 없어 이름만 적은 제품 }]
 const PICKS_KEY = 'nbti-picks-v1'
-const NO_PICKS = { ids: [], gate: null }
+const NO_PICKS = { ids: [], gate: null, mine: [] }
 
 export function loadPicks() {
   try {
     const saved = JSON.parse(sessionStorage.getItem(PICKS_KEY))
-    if (Array.isArray(saved?.ids)) return { ...NO_PICKS, ...saved }
+    if (Array.isArray(saved?.ids)) return { ...NO_PICKS, ...saved, mine: Array.isArray(saved.mine) ? saved.mine : [] }
   } catch {
     // 저장소 접근 불가 또는 손상된 값
   }

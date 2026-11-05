@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { SERVICE_NAME } from '../../config.js'
 import { FORMATS, drawShareImage } from '../../lib/shareImage.js'
+import { canShareFile, imageFile, shareOrSave } from '../../lib/saveImage.js'
 import BottomSheet from '../BottomSheet.jsx'
 import Icon from '../Icon.jsx'
 
@@ -31,27 +32,13 @@ function PreviewSheet({ r, onClose }) {
   // 비율을 바꾸면 새로 그리는 동안은 '만들고 있어요'
   const image = drawn?.format === format ? drawn : null
   const fileName = `NBTI_${r.name.replace(/\s+/g, '_')}_${format}.png`
-  const file = image && new File([image.blob], fileName, { type: 'image/png' })
-  const canShareFile = Boolean(file && navigator.canShare?.({ files: [file] }))
+  const sharable = Boolean(image && canShareFile(imageFile(image.blob, fileName)))
 
   const save = async () => {
     if (!image) return
     setNote('')
-    if (canShareFile) {
-      try {
-        await navigator.share({ files: [file], title: SERVICE_NAME })
-      } catch {
-        // 공유 창을 닫은 경우
-      }
-      return
-    }
-    const a = document.createElement('a')
-    a.href = image.url
-    a.download = fileName
-    document.body.appendChild(a)
-    a.click()
-    a.remove()
-    setNote('이미지를 저장했어요. 저장이 안 되면 위 이미지를 길게 눌러 저장해 주세요.')
+    const result = await shareOrSave(image.blob, fileName, SERVICE_NAME)
+    if (result === 'saved') setNote('이미지를 저장했어요. 저장이 안 되면 위 이미지를 길게 눌러 저장해 주세요.')
   }
 
   return (
@@ -87,8 +74,8 @@ function PreviewSheet({ r, onClose }) {
         disabled={!image}
         className="mt-4 flex w-full items-center justify-center gap-2 rounded-button bg-primary-strong py-3.5 text-xl font-bold text-white shadow-button active:translate-y-1 active:shadow-button-pressed disabled:bg-ink/10 disabled:text-ink-soft disabled:shadow-none"
       >
-        <Icon name={canShareFile ? 'share' : 'download'} size={22} />
-        {canShareFile ? '이미지 공유하기' : '이미지 저장하기'}
+        <Icon name={sharable ? 'share' : 'download'} size={22} />
+        {sharable ? '이미지 공유하기' : '이미지 저장하기'}
       </button>
       {image && note && (
         <p role="status" className="mt-2 text-center text-xs text-ink-soft">

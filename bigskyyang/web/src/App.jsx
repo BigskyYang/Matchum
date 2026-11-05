@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import MobileFrame from './components/MobileFrame.jsx'
 import PersonalResultPage from './pages/PersonalResultPage.jsx'
+import MySupplementsPage from './pages/MySupplementsPage.jsx'
 import ResultPage from './pages/ResultPage.jsx'
 import SimulatePage from './pages/SimulatePage.jsx'
 import RevealPage from './pages/RevealPage.jsx'
@@ -28,6 +29,7 @@ export default function App() {
         <Route path="/supplements" element={<SupplementsPage />} />
         <Route path="/types" element={<TypesPage />} />
         <Route path="/simulate" element={<SimulatePage />} />
+        <Route path="/my-supplements" element={<MySupplementsPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </MobileFrame>
