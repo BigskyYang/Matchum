@@ -23,9 +23,35 @@ const SAMPLE = model.population.n.toLocaleString('ko-KR')
 const LINES = ['생활습관 응답을 정리하고 있어요', `국민건강영양조사 성인 ${SAMPLE}명과 비교하고 있어요`, '가장 가까운 유형을 찾았어요']
 const ANALYZE_MS = 2400
 
-// 영양소 카드의 이유 표시 (lib/result.js revealStory의 reason)
-const REASON = { type: '내 유형에서', peer: '내 성별·나이대에서' }
 const COLS = { 2: 'grid-cols-2', 3: 'grid-cols-3' }
+
+// '철을' / '마그네슘을' / '비타민 B1을' (숫자·영문으로 끝나면 읽는 소리로)
+const eulReul = (word) => {
+  const code = word.charCodeAt(word.length - 1) - 0xac00
+  const final = code >= 0 && code <= 11171 ? code % 28 !== 0 : /[136780LMNR]$/i.test(word)
+  return final ? '을' : '를'
+}
+
+// 10명 중 N명: 회색 점 10개 위에 색 점이 하나씩 차례로 채워진다 (동작 줄이기를 켜면 바로 채워진 채로)
+const FILL_START = 300
+const FILL_STEP = 130
+function FillDots({ count, code, delay = FILL_START, size, gap }) {
+  return (
+    <span aria-hidden="true" className={`grid grid-cols-10 ${gap}`}>
+      {Array.from({ length: 10 }, (_, i) => (
+        <span key={i} className={`relative ${size} rounded-full bg-ink/10`}>
+          {i < count && (
+            <GroupDot
+              code={code}
+              className="absolute inset-0 size-full animate-pop motion-reduce:animate-none"
+              style={{ animationDelay: `${delay + i * FILL_STEP}ms` }}
+            />
+          )}
+        </span>
+      ))}
+    </span>
+  )
+}
 
 function Dots({ count, total, code, size = 'size-3.5' }) {
   return (
@@ -129,35 +155,35 @@ function cardsOf(r, s) {
       </>
     ) : (
       <>
-        <Title>
-          같은 유형·성별·나이대의
-          <br />
-          섭취 경향
-        </Title>
-        {/* 영양소마다: 이유(내 유형에서 / 내 성별·나이대에서) → 그림 → 이름 → 적게 먹어요 → 10명 중 N명 */}
+        <Title>같은 유형의 섭취 경향</Title>
+        {/* 영양소마다: 그림 → '마그네슘을 적게 먹어요' → 점 10개가 차례로 채워짐 → 10명 중 N명 */}
         <ul className={`mt-6 grid w-full gap-2 ${COLS[s.nutrient.items.length] ?? ''}`}>
-          {s.nutrient.items.map((n) => {
+          {s.nutrient.items.map((n, i) => {
             const one = s.nutrient.items.length === 1
+            const delay = FILL_START + i * FILL_STEP * 3 // 여러 개면 칸마다 조금씩 늦게 시작
             return (
               <li key={n.key} className={`flex flex-col items-center rounded-card bg-white shadow-soft ${one ? 'px-6 py-6' : 'px-2 py-4'}`}>
-                <span className={`flex items-center rounded-full px-2.5 py-0.5 text-center text-xs leading-tight font-bold ${one ? '' : 'min-h-[2.6em]'} ${n.reason === 'type' ? 'bg-primary-soft text-primary-shade' : 'bg-cream text-ink-soft'}`}>
-                  {REASON[n.reason]}
-                </span>
                 <NutrientArt
                   n={n}
-                  className={`mt-3 animate-pop motion-reduce:animate-none ${one ? 'size-24' : 'size-14'}`}
-                  emojiClass={one ? 'mt-3 text-5xl' : 'mt-3 text-3xl'}
+                  className={`animate-pop motion-reduce:animate-none ${one ? 'size-24' : 'size-14'}`}
+                  emojiClass={one ? 'text-5xl' : 'text-3xl'}
                 />
-                <p className={`mt-2 font-display leading-tight font-normal ${one ? 'text-3xl' : 'text-lg'}`}>{n.label}</p>
-                <p className={`mt-0.5 font-bold text-ink-soft ${one ? 'text-base' : 'text-sm'}`}>적게 먹어요</p>
-                <p className={`mt-2 font-bold ${one ? 'text-xl' : 'text-sm'}`}>
+                <p className={`mt-2 text-center leading-tight ${one ? 'text-xl' : 'text-sm'}`}>
+                  <span className="whitespace-nowrap">
+                    <b className={`font-display font-normal ${one ? 'text-3xl' : 'text-lg'}`}>{n.label}</b>
+                    {eulReul(n.label)}
+                  </span>{' '}
+                  <span className="whitespace-nowrap font-bold text-ink-soft">적게 먹어요</span>
+                </p>
+                <div className={one ? 'mt-4' : 'mt-3'}>
+                  <FillDots count={n.of10} code={code} delay={delay} size={one ? 'size-4' : 'size-1.5'} gap={one ? 'gap-1.5' : 'gap-1'} />
+                </div>
+                <p
+                  className={`animate-rise font-bold motion-reduce:animate-none ${one ? 'mt-3 text-xl' : 'mt-2 text-sm'}`}
+                  style={{ animationDelay: `${delay + n.of10 * FILL_STEP}ms` }}
+                >
                   10명 중 <span className="text-primary-shade">{n.of10}명</span>
                 </p>
-                {one && (
-                  <div className="mt-3">
-                    <Dots count={n.of10} total={10} code={code} size="size-4" />
-                  </div>
-                )}
               </li>
             )
           })}
