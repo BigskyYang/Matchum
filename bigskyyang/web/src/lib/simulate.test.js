@@ -4,7 +4,7 @@ import pythonLegume from './simulationNutrition.fixtures.json'
 import { encode } from './encode.js'
 import { SAMPLE, bornAt } from './fixtures.js'
 import { habitualFeatures, lifestyleFeatures, predictNutrition } from './nutritionRisk.js'
-import { CHANGES, applyChanges, availableChanges, simulate } from './simulate.js'
+import { CHANGES, applyChanges, availableChanges, effectiveChanges, simulate } from './simulate.js'
 import { pickTips } from '../data/tips.js'
 
 // '이렇게 바꾸면?' 시뮬레이터 (lib/simulate.js)
@@ -104,6 +104,26 @@ describe('simulate', () => {
 
   it('모델을 불러오기 전에는 유형만', () => {
     expect(simulate(SAMPLE, ['aerobic'], null).nutrients).toBeNull()
+  })
+
+  it('보여 주는 습관은 하나만 켰을 때 유형이 바뀌거나 좋아지는 영양소가 있고, 나빠지는 영양소는 없다', () => {
+    const RANK = { Low: 0, Mid: 1, High: 2 }
+    for (const a of [SAMPLE, { ...SAMPLE, smoke_now: 'yes', cigarettes: 20, drink_freq: 5, drink_amount: 4 }, { ...SAMPLE, birth_date: bornAt(70) }]) {
+      const shown = effectiveChanges(a, models)
+      expect(shown.every((c) => availableChanges(a).some((x) => x.id === c.id))).toBe(true)
+      for (const c of shown) {
+        const sim = simulate(a, [c.id], models)
+        expect(sim.nutrients.some((n) => RANK[n.to] > RANK[n.from])).toBe(false)
+        expect(sim.type.changed || sim.nutrients.some((n) => RANK[n.to] < RANK[n.from])).toBe(true)
+      }
+      // 빠진 습관은 정말로 결과가 좋아지지 않거나 나빠지는 영양소가 있다
+      for (const c of availableChanges(a).filter((x) => !shown.some((s) => s.id === x.id))) {
+        const sim = simulate(a, [c.id], models)
+        const better = sim.type.changed || sim.nutrients.some((n) => RANK[n.to] < RANK[n.from])
+        const worse = sim.nutrients.some((n) => RANK[n.to] > RANK[n.from])
+        expect(!better || worse).toBe(true)
+      }
+    }
   })
 
   it('습관 id가 겹치지 않는다', () => {

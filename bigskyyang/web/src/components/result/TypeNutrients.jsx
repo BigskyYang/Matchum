@@ -4,8 +4,8 @@ import { BASIS_TEXT } from '../../data/nutrientGuide.js'
 import NutrientArt from '../NutrientArt.jsx'
 
 // 유형 화면의 '부족할 수 있는 영양소' ((나)안, 데이터는 lib/nutrition.js의 typeNutrients)
-//   🔹 같은 유형에서 섭취가 적었던 영양소: 2줄 중 유형특이·식사량영향 (테두리 색 = 부족·주의). 내 유형 결과라 맨 위에 크게
-//   ▫️ 같은 성별·나이대의 섭취 경향: 2줄 중 '흔함' (유형이 아니라 성별·나이 때문에 많이 부족한 영양소)
+//   🔹 나와 비슷한 사람들이 적게 먹은 영양소: 2줄 전부를 한 목록으로 (테두리 색 = 부족·주의)
+//      내 유형이라 적은 것(유형특이·식사량영향)을 먼저, 같은 성별·나이대라 적은 것('흔함')을 뒤에. 항목마다 이유 표시
 //   🔸 조사에서 섭취가 적었던 영양소: 공통 8개 (유형과 상관없어 맨 아래 작은 칩으로)
 // 영양소를 누르면 화면 아래에서 올라오는 창(BottomSheet)으로 역할·대표 음식을 보여 준다. 근거 설명은 '어떻게 만들었나요?' 창에
 const BORDER = { poor: 'border-primary-strong', fair: 'border-[#f2c14e]' }
@@ -28,7 +28,7 @@ function CommonChip({ n, onOpen }) {
 
 // 10명 중 몇 명인지 점 10개로 (색칠한 점 = 적게 먹는 사람)
 function Dots({ of10, tone }) {
-  const fill = tone === 'muted' ? 'bg-ink-soft' : tone === 'fair' ? 'bg-[#e0a92e]' : 'bg-primary-strong'
+  const fill = tone === 'fair' ? 'bg-[#e0a92e]' : 'bg-primary-strong'
   return (
     <span aria-hidden="true" className="mt-1.5 flex gap-1">
       {Array.from({ length: 10 }, (_, i) => (
@@ -38,20 +38,26 @@ function Dots({ of10, tone }) {
   )
 }
 
-function PickRow({ n, onOpen, muted = false }) {
+const REASON = { type: '내 유형', peer: '성별·나이대' }
+
+function PickRow({ n, onOpen }) {
+  const reason = n.tag === '흔함' ? 'peer' : 'type'
   return (
     <li>
       <button
         type="button"
         onClick={() => onOpen(n)}
-        className={`flex w-full items-center gap-3 rounded-card border-2 bg-white px-3.5 py-3 text-left active:scale-[0.98] ${
-          muted ? 'border-ink-faint/30' : BORDER[n.level.tone]
-        }`}
+        className={`flex w-full items-center gap-3 rounded-card border-2 bg-white px-3.5 py-3 text-left active:scale-[0.98] ${BORDER[n.level.tone]}`}
       >
         <NutrientArt n={n} className="size-10" emojiClass="text-2xl" />
         <span className="min-w-0 flex-1">
-          <span className="block font-bold">{n.label}</span>
-          <Dots of10={n.of10} tone={muted ? 'muted' : n.level.tone} />
+          <span className="flex flex-wrap items-center gap-x-1.5">
+            <b>{n.label}</b>
+            <span className={`rounded-full px-2 py-0.5 text-[11px] font-bold ${reason === 'type' ? 'bg-primary-soft text-primary-shade' : 'bg-cream text-ink-soft'}`}>
+              {REASON[reason]}
+            </span>
+          </span>
+          <Dots of10={n.of10} tone={n.level.tone} />
         </span>
         <span className="shrink-0 text-right text-xs leading-tight text-ink-soft">
           <b className="block text-base text-ink">10명 중 {n.of10}명</b>
@@ -111,33 +117,20 @@ function NutrientSheet({ n, sexLabel, ageLabel, onClose }) {
 export default function TypeNutrients({ common, picks, sexLabel, ageLabel }) {
   const [open, setOpen] = useState(null)
   const close = useCallback(() => setOpen(null), [])
-  const typePicks = picks.filter((n) => n.tag !== '흔함')
-  const peerPicks = picks.filter((n) => n.tag === '흔함')
+  const sorted = [...picks.filter((n) => n.tag !== '흔함'), ...picks.filter((n) => n.tag === '흔함')]
 
   // 해당 영양소가 없는 칸은 소제목째 숨긴다 (120칸 중 103칸이 '내 유형만 더 부족한 영양소 없음'이라 '없어요'만 보이게 되므로)
   return (
     <div className="space-y-5">
-      {typePicks.length > 0 && (
+      {sorted.length > 0 && (
         <section>
           <h3 className="flex items-center gap-2 text-sm font-bold">
-            <span aria-hidden="true" className="size-2.5 rounded-full bg-primary-strong" />같은 유형에서 섭취가 적었던 영양소
+            <span aria-hidden="true" className="size-2.5 rounded-full bg-primary-strong" />
+            같은 유형·{sexLabel}·{ageLabel}에서 섭취가 적었던 영양소
           </h3>
           <ul className="mt-2 space-y-2">
-            {typePicks.map((n) => (
+            {sorted.map((n) => (
               <PickRow key={n.key} n={n} onOpen={setOpen} />
-            ))}
-          </ul>
-        </section>
-      )}
-
-      {peerPicks.length > 0 && (
-        <section>
-          <h3 className="flex items-center gap-2 text-sm font-bold">
-            <span aria-hidden="true" className="size-2.5 rounded-full bg-ink-faint" />같은 성별·나이대의 섭취 경향
-          </h3>
-          <ul className="mt-2 space-y-2">
-            {peerPicks.map((n) => (
-              <PickRow key={n.key} n={n} onOpen={setOpen} muted />
             ))}
           </ul>
         </section>

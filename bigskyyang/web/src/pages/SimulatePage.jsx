@@ -3,13 +3,14 @@ import { Navigate, useNavigate } from 'react-router-dom'
 import Icon from '../components/Icon.jsx'
 import Mascot from '../components/Mascot.jsx'
 import NutrientArt from '../components/NutrientArt.jsx'
-import { availableChanges, simulate } from '../lib/simulate.js'
+import { effectiveChanges, simulate } from '../lib/simulate.js'
 import { loadSurvey } from '../lib/storage.js'
 import { useModels } from '../lib/useCatalog.js'
 
 // 응답 변경 비교 (/simulate): 결과 화면과 같은 대표 모델을 유지하고 생활습관 모델은 따로 비교한다.
 //   습관 버튼(2열) 바로 아래에 결과를 두어 한 화면에서 같이 보이게 한다 (고정 영역은 두지 않는다)
 //   실제 효과를 예측하지 않는다는 안내는 비교 결과 바로 위에 둔다.
+//   습관 버튼은 하나만 켰을 때 유형이 바뀌거나 영양소 등급이 좋아지는 것만 (lib/simulate.js effectiveChanges)
 const BAND = { High: '높은 편', Mid: '보통', Low: '낮은 편' }
 const SOURCE = { lifestyle: '생활습관', habitual: '평소 식사' }
 const NOTICE = '설문 응답을 바꿨을 때 모델의 예측을 비교하는 기능이며, 실제 영양 상태의 변화나 습관 개선 효과를 예측하는 것은 아닙니다.'
@@ -96,7 +97,7 @@ export default function SimulatePage() {
   const models = useModels()
   const [on, setOn] = useState([])
   const ready = survey.done[1] && survey.done[2]
-  const changes = useMemo(() => (ready ? availableChanges(survey.answers) : []), [ready, survey])
+  const changes = useMemo(() => (ready && models ? effectiveChanges(survey.answers, models) : null), [ready, survey, models])
   const sim = useMemo(() => (ready && on.length ? simulate(survey.answers, on, models) : null), [ready, survey, on, models])
   if (!survey.done[1]) return <Navigate to="/survey" replace />
   if (!survey.done[2]) return <Navigate to="/survey2" replace />
@@ -121,7 +122,12 @@ export default function SimulatePage() {
         <h1 className="py-2 font-display text-xl font-normal">응답을 바꾸면 예측은 어떻게 달라질까?</h1>
       </header>
 
-      {changes.length ? (
+      {!changes ? (
+        <p className="flex items-center gap-3 rounded-card bg-white p-5 text-sm text-ink-soft shadow-soft">
+          <Mascot name="rest" fallback="default" size="xs" />
+          결과가 달라지는 응답을 찾고 있어요…
+        </p>
+      ) : changes.length ? (
         <ul className="grid grid-cols-2 gap-2">
           {changes.map((c) => {
             const active = on.includes(c.id)
@@ -138,7 +144,9 @@ export default function SimulatePage() {
                   <Icon name={active ? 'check' : c.icon} size={20} className="shrink-0" />
                   <span>
                     {c.label}
-                    <span className={`mt-1 block text-[11px] font-normal ${active ? 'text-white' : 'text-ink-soft'}`}>{SOURCE[c.model]} 모델에 반영</span>
+                    <span className={`mt-1 block text-[11px] font-normal ${active ? 'text-white' : 'text-ink-soft'}`}>
+                      {[c.effect.typeChanged && '유형 변화', c.effect.improved > 0 && `영양소 ${c.effect.improved}개 등급 변화`].filter(Boolean).join(' · ')}
+                    </span>
                   </span>
                 </button>
               </li>
@@ -148,14 +156,14 @@ export default function SimulatePage() {
       ) : (
         <p className="flex items-center gap-3 rounded-card bg-white p-5 text-sm shadow-soft">
           <Mascot name="cheer" fallback="happy" size="xs" />
-          비교할 수 있는 응답 변경 항목이 없어요.
+          지금 응답에서는 하나만 바꿔서 유형이나 영양소 등급이 달라지는 항목이 없어요.
         </p>
       )}
 
       {sim ? (
-        <Result sim={sim} showLifestyle={changes.some((c) => on.includes(c.id) && c.model === 'lifestyle')} />
+        <Result sim={sim} showLifestyle={changes?.some((c) => on.includes(c.id) && c.model === 'lifestyle')} />
       ) : (
-        changes.length > 0 && (
+        changes?.length > 0 && (
           <p className="flex items-center gap-3 rounded-card bg-white p-5 text-sm text-ink-soft shadow-soft">
             <Mascot name="thinking" size="xs" />
             비교할 응답을 선택해 보세요.

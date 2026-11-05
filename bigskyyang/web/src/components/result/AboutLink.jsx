@@ -59,6 +59,11 @@ export default function AboutLink({ personal = false }) {
                 </p>
               </Section>
             )}
+            {personal && (
+              <Section icon="sunrise" title="비타민 D와 내 생활">
+                <p>출퇴근·점심 외출·운동·쉬는 날 외출 응답에 맞춰 식품 정보와 야외활동 정보의 순서만 정했어요. 비타민 D 상태를 측정하거나 예측한 결과가 아니고, 영양소 예측에는 쓰지 않아요.</p>
+              </Section>
+            )}
             <Section icon="alert" title="꼭 알아 두세요">
               <p>참고용 정보예요. 나의 영양 상태를 진단한 결과가 아니고, 필요한 양을 알려 주지 않아요.</p>
               {personal && <p>건강기능식품은 질병의 예방 및 치료를 위한 의약품이 아닙니다.</p>}

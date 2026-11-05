@@ -19,8 +19,8 @@ import { clearSurvey, loadSurvey } from '../lib/storage.js'
 
 // 1단계 유형 결과 (공유용). 보여 줄 값은 lib/result.js의 buildTypeResult가 계산한다
 // 첫 화면은 유형 카드만 (마스코트·이름·해시태그·한 줄 설명·비율), 내리면 생활습관(내 신호등 / 평균과 비교)·이번 주 해볼 것
-//   → 내 유형 위치(경계) → 부족할 수 있는 영양소 → 짝꿍 유형
-// '공유'와 '나에게 맞는 결과'는 맨 아래 (다시 검사하기 위)
+//   → 내 유형 위치(경계) → 부족할 수 있는 영양소 → 짝꿍 유형(메이트)
+// '나에게 맞는 결과'는 첫 화면과 맨 아래 두 곳, '공유'는 맨 아래 (다시 검사하기 위)
 const PENDING = '영양 분석 결과가 준비되면 이곳에 표시돼요.'
 
 function useResult() {
@@ -62,7 +62,7 @@ export default function ResultPage() {
           조사 자료에서 성인 100명 중 약 <b className="text-primary-shade">{Math.round(r.sharePct)}명</b>이 이 유형이에요
         </p>
         <PrimaryButton to={r.personalDone ? '/result2' : '/survey2'} size="sm" className="mt-5">
-          {r.personalDone ? '내 식사 결과 다시 보기' : '내 식사 응답으로 영양소 살펴보기'}
+          {r.personalDone ? '내 식사 결과 다시 보기' : '식사 설문하고 내 영양소 보기'}
         </PrimaryButton>
         {/* 누르면 첫 카드(생활습관 신호등)로 내려간다 */}
         <button
@@ -81,7 +81,7 @@ export default function ResultPage() {
         {r.peerFacts.length > 0 && <details className="mt-3 text-sm text-ink-soft">
           <summary className="cursor-pointer py-2 font-bold">같은 성별·나이대의 조사 통계</summary>
           <ul className="space-y-2">{r.peerFacts.map((f) => <li key={f.label}>{f.lead} 약 {f.pct}{f.tail}.</li>)}</ul>
-          <p className="mt-2 text-xs">국민건강영양조사 2022–2024 가중 비율을 약 5% 단위로 표시했어요.</p>
+          <p className="mt-2 text-xs">※ 국민건강영양조사 2022–2024 가중 비율을 약 5% 단위로 표시했어요.</p>
         </details>}
         <h3 className="mt-5 mb-2 flex items-center gap-1.5 text-sm font-bold">
           <Icon name="target" size={18} className="text-primary-shade" />
@@ -108,17 +108,17 @@ export default function ResultPage() {
       </Card>
 
       <Card title="다른 유형 둘러보기" icon="users">
-        <details>
-          <summary className="cursor-pointer py-2 text-sm font-bold">내 습관과 비교할 유형</summary>
-          <PartnerCard fill={r.partners.fill} together={r.partners.together} />
-        </details>
+        <PartnerCard fill={r.partners.fill} together={r.partners.together} />
         <Link to="/types" className="mt-3 block py-2 text-center text-sm font-bold text-primary-shade">
           12가지 유형 모두 보기 ›
         </Link>
       </Card>
 
       <footer className="mt-2 flex flex-col gap-3">
-        {/* 공유 + 2단계 개인 결과 (화면 맨 아래, 고정하지 않음) */}
+        {/* 2단계 개인 결과 + 공유 (화면 맨 아래, 고정하지 않음) */}
+        <PrimaryButton to={r.personalDone ? '/result2' : '/survey2'} size="sm">
+          {r.personalDone ? '내 식사 결과 다시 보기' : '식사 설문하고 내 영양소 보기'}
+        </PrimaryButton>
         <div className="relative grid grid-cols-2 gap-2">
           <ShareButton typeName={r.name} className="py-3.5" />
           <ShareImageButton r={r} className="py-3.5" />

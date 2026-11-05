@@ -23,6 +23,17 @@ describe('hashtags', () => {
     expect(tags.length).toBeLessThanOrEqual(4)
     expect(new Set(tags).size).toBe(tags.length)
   })
+
+  it.each(model.types.map((t) => [t.id, t]))('%s #아침패스와 #끼니패스는 함께 붙지 않는다', (_, type) => {
+    const tags = hashtags(type)
+    expect(tags.includes('#아침패스') && tags.includes('#끼니패스')).toBe(false)
+  })
+
+  it('아침만 거르면 #아침패스, 점심·저녁도 거르면 #끼니패스', () => {
+    const base = { breakfast: -0.9, meal_score: -0.9 }
+    expect(hashtags({ z: { ...base, lunch: 0, dinner: 0 } })).toEqual(['#아침패스'])
+    expect(hashtags({ z: { ...base, lunch: -0.4, dinner: 0 } })).toEqual(['#끼니패스'])
+  })
 })
 
 describe('partnerTypes (짝꿍 유형 2개)', () => {

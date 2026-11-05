@@ -51,6 +51,26 @@ export function TimeWheel({ value, onChange, hourStart = 0 }) {
   )
 }
 
+// 생년월일 'YYYY-MM-DD' 휠 (년·월·일). 일 목록은 그 달의 날 수만큼, 달을 바꿔 날이 넘치면 그 달 마지막 날로 맞춘다
+//   아이폰 기본 날짜 칸은 화면 밖으로 넘치고 달력 아이콘도 안 보여서 휠로 고르게 한다
+const daysIn = (y, m) => new Date(y, m, 0).getDate()
+const numbers = (from, to) => range(from, to).map((v) => ({ label: `${v}`, value: v }))
+export function DateWheel({ value, onChange, minYear, maxYear }) {
+  const [y, m, d] = value.split('-').map(Number)
+  const last = daysIn(y, m)
+  const set = (yy, mm, dd) => onChange(`${yy}-${pad(mm)}-${pad(Math.min(dd, daysIn(yy, mm)))}`)
+  return (
+    <Wheels>
+      <WheelPicker label="년" className="flex-[1.5]" options={numbers(minYear, maxYear)} value={y} onChange={(v) => set(v, m, d)} />
+      <Unit>년</Unit>
+      <WheelPicker label="월" className="flex-1" options={numbers(1, 12)} value={m} onChange={(v) => set(y, v, d)} />
+      <Unit>월</Unit>
+      <WheelPicker label="일" className="flex-1" options={numbers(1, last)} value={Math.min(d, last)} onChange={(v) => set(y, m, v)} />
+      <Unit>일</Unit>
+    </Wheels>
+  )
+}
+
 // 시간 + 분 → 분 단위 숫자
 export function DurationWheel({ value, onChange, per, maxHours }) {
   const h = Math.floor(value / 60)

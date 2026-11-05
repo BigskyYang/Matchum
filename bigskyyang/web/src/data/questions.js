@@ -1,7 +1,8 @@
 // 설문 문항 정의. 응답 → 모델 변수 변환은 lib/encode.js에서 한다.
 // 문항 구성은 Jaejun/SURVEY_V3.md(설문 v3)를 바탕으로, 두 단계로 나눴다.
 //   stage 1: 유형 분류에 쓰는 생활습관 (지연님 12개 유형 모델 입력 + 성별·나이) → 유형 결과
-//   stage 2: 개인 결과에 쓰는 문항 (흡연·음주·채소·과일, mini-FFQ 5문항) → 개인 결과
+//   stage 2: 개인 결과에 쓰는 문항 (흡연·음주·채소·과일, mini-FFQ 5문항, 비타민 D 생활 4문항) → 개인 결과
+//            비타민 D 4문항은 선택 문항(optional): '건너뛰기'로 넘어갈 수 있고, 영양 모델에는 넣지 않는다 (lib/vitaminD.js)
 //            문항은 재준님 최종 설문(Jaejun/SURVEY_FINAL.md)을 따르되, 답하기 쉽게 줄였다 (흡연·음주 첫 문항 생략)
 //            진단처럼 보이거나 건강기능식품 제품 추천에만 쓰이는 문항(PHQ-9, 질환·임신·약물, 지금 먹는 영양제)은 묻지 않는다
 //            (의료법상 진단·처방으로 보일 소지, 건강기능식품 광고 규제, 민감정보 최소 수집)
@@ -25,6 +26,7 @@
 // 팀 합의 (2026-11-04): 흡연은 궐련·전자담배 구분 없이 지금 피우는지만, 유산소는 중강도·고강도를 나눠 묻지 않음,
 //   수면은 취침·기상 시각으로만 ('날마다 들쭉날쭉' 보기 없음), 나이는 생년월일로 계산한 만 나이
 import { ageFromBirth } from '../lib/encode.js'
+import { VITD_PREFIX, VITD_SURVEY } from '../lib/vitaminD.js'
 
 // 채소·과일 9단계 (값이 클수록 자주)
 const INTAKE_9 = [
@@ -68,6 +70,7 @@ export const SECTIONS = {
   meal: '식사습관',
   veg: '채소·과일',
   food: '평소 식사',
+  vitd: '비타민 D',
 }
 
 const weekendDiffers = (a) => a.weekend_same === 'no'
@@ -95,6 +98,7 @@ const STAGE_1 = [
     type: 'date',
     minYear: THIS_YEAR - 121,
     maxYear: THIS_YEAR - ADULT,
+    initial: '1990-01-01',
     check: (v) => {
       if (!v || typeof v !== 'string') return '생년월일을 선택해 주세요.'
       const day = new Date(v + 'T00:00:00Z')
@@ -235,8 +239,6 @@ const STAGE_2 = [
     id: 'smoke_now',
     section: 'smoke',
     title: '요즘 담배를 피우나요?',
-    note: '전자담배도 포함, 가끔 피워도 \'네\'',
-    info: ['일반 담배와 전자담배를 똑같이 봐요.', '끊었으면 \'아니요\'를 골라 주세요.'],
     type: 'choice',
     options: [
       { label: '네, 피워요', value: 'yes' },
@@ -247,7 +249,6 @@ const STAGE_2 = [
     id: 'cigarettes',
     section: 'smoke',
     title: '피우는 날에는 하루 몇 개비 정도 피우나요?',
-    note: '전자담배는 1개비를 피우는 정도를 1개비로',
     type: 'number',
     unit: '개비',
     min: 1,
@@ -311,6 +312,17 @@ const STAGE_2 = [
     type: 'choice',
     options: FOOD_FREQ_8,
     showIf: ffqAge,
+  })),
+  // 비타민 D 생활 4문항 (재준님 v1.2.0, 선택). 음식·시간 계산 없이 생활 장면만
+  ...VITD_SURVEY.questions.map((q, i) => ({
+    id: VITD_PREFIX + q.id,
+    section: 'vitd',
+    title: q.label,
+    ...(i === 0 && { note: '선택 문항이에요. 정확한 시간은 몰라도 괜찮아요.' }),
+    type: 'choice',
+    layout: 'list',
+    optional: true,
+    options: q.options.map(({ label, value }) => ({ label, value })),
   })),
 ]
 
