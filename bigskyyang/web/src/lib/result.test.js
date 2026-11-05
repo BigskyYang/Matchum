@@ -14,10 +14,23 @@ describe('revealStory (결과 공개 스토리)', () => {
     for (const h of s.weak) expect(h.score).toBeLessThan(0.75)
     if (s.weak.length === 2) expect(s.weak[0].score).toBeLessThanOrEqual(s.weak[1].score)
   })
-  it('영양소 카드는 내 유형 → 같은 성별·나이대 → 공통 순서로 하나를 고른다', () => {
-    expect(['type', 'peer', 'common']).toContain(s.nutrient.kind)
+  it('영양소 카드는 내 유형·같은 성별·나이대 영양소를 합쳐 (유형 먼저, 3개까지), 없으면 공통 영양소', () => {
+    expect(['picks', 'common']).toContain(s.nutrient.kind)
     expect(s.nutrient.items.length).toBeGreaterThan(0)
+    expect(s.nutrient.items.length).toBeLessThanOrEqual(3)
     expect(s.share).toBe(Math.round(r.sharePct))
+  })
+
+  it('합친 영양소는 내 유형 이유가 같은 성별·나이대 이유보다 앞에 온다', () => {
+    const picks = [
+      { key: 'a', tag: '흔함', of10: 6 },
+      { key: 'b', tag: '유형특이', of10: 5 },
+      { key: 'c', tag: '흔함', of10: 7 },
+      { key: 'd', tag: '식사량영향', of10: 5 },
+    ]
+    const story = revealStory({ ...r, nutrients: { common: [], picks } })
+    expect(story.nutrient.kind).toBe('picks')
+    expect(story.nutrient.items.map((n) => [n.key, n.reason])).toEqual([['b', 'type'], ['d', 'type'], ['a', 'peer']])
   })
 })
 

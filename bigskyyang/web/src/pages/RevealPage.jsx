@@ -23,12 +23,9 @@ const SAMPLE = model.population.n.toLocaleString('ko-KR')
 const LINES = ['생활습관 응답을 정리하고 있어요', `국민건강영양조사 성인 ${SAMPLE}명과 비교하고 있어요`, '가장 가까운 유형을 찾았어요']
 const ANALYZE_MS = 2400
 
-// '철을' / '마그네슘을' / '비타민 C를' (숫자·영문으로 끝나면 읽는 소리로)
-const eulReul = (word) => {
-  const code = word.charCodeAt(word.length - 1) - 0xac00
-  const final = code >= 0 && code <= 11171 ? code % 28 !== 0 : /[136780LMNR]$/i.test(word)
-  return final ? '을' : '를'
-}
+// 영양소 카드의 이유 표시 (lib/result.js revealStory의 reason)
+const REASON = { type: '내 유형에서', peer: '내 성별·나이대에서' }
+const COLS = { 2: 'grid-cols-2', 3: 'grid-cols-3' }
 
 function Dots({ count, total, code, size = 'size-3.5' }) {
   return (
@@ -132,20 +129,39 @@ function cardsOf(r, s) {
       </>
     ) : (
       <>
-        <Title>{s.nutrient.kind === 'type' ? '같은 유형에서 섭취가 적었던 영양소' : '같은 성별·나이대의 섭취 경향'}</Title>
-        <NutrientArt
-          n={s.nutrient.items[0]}
-          className="mt-6 size-28 animate-pop motion-reduce:animate-none"
-          emojiClass="mt-6 text-5xl"
-        />
-        <p className="mt-2 font-display text-2xl font-normal">{s.nutrient.items.map((n) => n.label).join(' · ')}</p>
-        <div className="mt-5">
-          <Dots count={s.nutrient.items[0].of10} total={10} code={code} size="size-5" />
-        </div>
-        <p className="mt-3 text-sm text-ink-soft">
-          비슷한 사람 10명 중 {s.nutrient.items[0].of10}명이 {s.nutrient.items[0].label}
-          {eulReul(s.nutrient.items[0].label)} 적게 먹어요
-        </p>
+        <Title>
+          같은 유형·성별·나이대의
+          <br />
+          섭취 경향
+        </Title>
+        {/* 영양소마다: 이유(내 유형에서 / 내 성별·나이대에서) → 그림 → 이름 → 적게 먹어요 → 10명 중 N명 */}
+        <ul className={`mt-6 grid w-full gap-2 ${COLS[s.nutrient.items.length] ?? ''}`}>
+          {s.nutrient.items.map((n) => {
+            const one = s.nutrient.items.length === 1
+            return (
+              <li key={n.key} className={`flex flex-col items-center rounded-card bg-white shadow-soft ${one ? 'px-6 py-6' : 'px-2 py-4'}`}>
+                <span className={`flex items-center rounded-full px-2.5 py-0.5 text-center text-xs leading-tight font-bold ${one ? '' : 'min-h-[2.6em]'} ${n.reason === 'type' ? 'bg-primary-soft text-primary-shade' : 'bg-cream text-ink-soft'}`}>
+                  {REASON[n.reason]}
+                </span>
+                <NutrientArt
+                  n={n}
+                  className={`mt-3 animate-pop motion-reduce:animate-none ${one ? 'size-24' : 'size-14'}`}
+                  emojiClass={one ? 'mt-3 text-5xl' : 'mt-3 text-3xl'}
+                />
+                <p className={`mt-2 font-display leading-tight font-normal ${one ? 'text-3xl' : 'text-lg'}`}>{n.label}</p>
+                <p className={`mt-0.5 font-bold text-ink-soft ${one ? 'text-base' : 'text-sm'}`}>적게 먹어요</p>
+                <p className={`mt-2 font-bold ${one ? 'text-xl' : 'text-sm'}`}>
+                  10명 중 <span className="text-primary-shade">{n.of10}명</span>
+                </p>
+                {one && (
+                  <div className="mt-3">
+                    <Dots count={n.of10} total={10} code={code} size="size-4" />
+                  </div>
+                )}
+              </li>
+            )
+          })}
+        </ul>
       </>
     ),
     // 6. 마무리
