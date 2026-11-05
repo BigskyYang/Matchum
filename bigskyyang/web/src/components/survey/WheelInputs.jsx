@@ -51,7 +51,8 @@ export function TimeWheel({ value, onChange, hourStart = 0 }) {
   )
 }
 
-// 생년월일 'YYYY-MM-DD'. 일 목록은 그 달의 날 수만큼, 달을 바꿔 날이 넘치면 그 달 마지막 날로 맞춘다
+// 생년월일 'YYYY-MM-DD' 휠 (년·월·일). 일 목록은 그 달의 날 수만큼, 달을 바꿔 날이 넘치면 그 달 마지막 날로 맞춘다
+//   아이폰 기본 날짜 칸은 화면 밖으로 넘치고 달력 아이콘도 안 보여서 휠로 고르게 한다
 const daysIn = (y, m) => new Date(y, m, 0).getDate()
 const numbers = (from, to) => range(from, to).map((v) => ({ label: `${v}`, value: v }))
 export function DateWheel({ value, onChange, minYear, maxYear }) {

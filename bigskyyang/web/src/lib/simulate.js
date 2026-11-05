@@ -111,6 +111,28 @@ const changesOf = (before, after, field) =>
     .filter((n) => after[n.key] && after[n.key][field] !== n[field])
     .map((n) => ({ key: n.key, label: n.label, icon: n.icon, excess: !!n.excess, source: field === 'band' ? n.source : 'lifestyle', from: n[field], to: after[n.key][field] }))
 
+// 등급이 좋아졌는지: High(가능성 높은 편) → Mid → Low 쪽이 좋아진 것 (나트륨도 High = 초과 가능성 높은 편)
+const RANK = { Low: 0, Mid: 1, High: 2 }
+
+// 실제로 결과가 달라지는 습관만 (화면에 보여 줄 항목)
+//   하나만 켰을 때 유형이 바뀌거나, 화면에 보이는 대표 등급이 하나라도 좋아지고 나빠지는 영양소가 없는 것
+//   (예: 콩을 늘리면 나트륨이 '높은 편'이 되는 경우처럼 하나라도 나빠지면 뺀다)
+//   → [{ ...습관, effect: { typeChanged, improved: 좋아진 영양소 수 } }]
+export function effectiveChanges(answers, models) {
+  const base = buildTypeResult(answers).leafId
+  const b0 = bandsOf(buildPersonalResult(answers, models).nutrition)
+  return availableChanges(answers)
+    .map((c) => {
+      const next = applyChanges(answers, [c.id])
+      const diff = changesOf(b0, bandsOf(buildPersonalResult(next, models).nutrition), 'band')
+      const typeChanged = buildTypeResult(next).leafId !== base
+      const improved = diff.filter((n) => RANK[n.to] < RANK[n.from]).length
+      const worsened = diff.some((n) => RANK[n.to] > RANK[n.from])
+      return { ...c, effect: { typeChanged, improved, worsened } }
+    })
+    .filter((c) => !c.effect.worsened && (c.effect.typeChanged || c.effect.improved > 0))
+}
+
 // 현재 응답 vs 변경 응답. 개선·악화 순으로 정렬하지 않고 현재 결과의 영양소 순서로 비교한다.
 //   영양소는 화면과 같은 대표 등급(평소 식사 기준이 있으면 그것, 없으면 생활습관 기준)으로 비교한다
 export function simulate(answers, ids, models) {

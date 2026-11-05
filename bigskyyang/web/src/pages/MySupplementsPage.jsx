@@ -50,7 +50,7 @@ function MemoSheet({ memo, onClose }) {
   const sharable = image && canShareFile(imageFile(image.blob, fileName))
   const save = async () => {
     if (!image) return
-    const result = await shareOrSave(image.blob, fileName, '약사 상담 메모')
+    const result = await shareOrSave(image.blob, fileName)
     if (result === 'saved') setNote('이미지를 저장했어요. 저장이 안 되면 위 이미지를 길게 눌러 저장해 주세요.')
   }
 
@@ -89,7 +89,7 @@ function MemoSheet({ memo, onClose }) {
           {note}
         </p>
       )}
-      <p className="mt-2 text-center text-xs text-ink-faint">메모는 이 휴대폰에서만 만들고 어디에도 보내지 않아요.</p>
+      <p className="mt-2 text-center text-xs text-ink-faint">메모에는 제품과 직접 적은 질문이 담겨요. 저장하거나 공유하기 전에 내용을 확인해 주세요.</p>
     </BottomSheet>
   )
 }

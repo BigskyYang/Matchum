@@ -9,10 +9,10 @@ export default function ShareButton({ typeName, className = '' }) {
 
   const share = async () => {
     const url = window.location.origin
-    const text = `나는 '${typeName}'! 나의 생활습관 유형은? - ${SERVICE_NAME}`
+    const text = `나는 '${typeName}' 유형이래! 너는 무슨 유형이야? - ${SERVICE_NAME}`
     try {
       if (navigator.share) {
-        await navigator.share({ title: SERVICE_NAME, text, url })
+        await navigator.share({ text, url })
         return
       }
       await navigator.clipboard.writeText(`${text} ${url}`)

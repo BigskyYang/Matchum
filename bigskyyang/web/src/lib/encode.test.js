@@ -114,6 +114,10 @@ describe('visibleQuestions', () => {
       'ffq_egg',
       'ffq_legume',
       'ffq_dairy',
+      'vitd_commute',
+      'vitd_lunch_outing',
+      'vitd_exercise_setting',
+      'vitd_day_off_outing',
     ])
   })
 

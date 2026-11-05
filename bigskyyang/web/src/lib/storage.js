@@ -1,3 +1,5 @@
+import { restoreSurvey } from './surveyFlow.js'
+
 // 설문 응답을 브라우저(sessionStorage)에 임시 저장한다. 새로고침해도 이어서 할 수 있게.
 // 시크릿 창 등에서 저장소를 못 쓰면 조용히 무시한다. 응답은 서버로 보내지 않는다.
 // 응답(answers)은 1단계·2단계가 함께 쓰고, 진행 위치(step)와 완료 여부(done)는 단계마다 따로 둔다.
@@ -12,7 +14,7 @@ const EMPTY = { answers: {}, step: { 1: 0, 2: 0 }, done: { 1: false, 2: false } 
 export function loadSurvey() {
   try {
     const saved = JSON.parse(sessionStorage.getItem(KEY))
-    if (saved?.answers) return { ...EMPTY, ...saved }
+    if (saved?.answers) return restoreSurvey({ ...EMPTY, ...saved })
   } catch {
     // 저장소 접근 불가 또는 손상된 값
   }

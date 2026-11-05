@@ -104,7 +104,8 @@ NEXT_ITEM = re.compile(r"\s(?:\d{1,2}[\.\)]|[①-⑳]|\(\d{1,2}\))\s*[가-힣A-Z
 def find_amount(spec, name_pat):
     """기준규격에서 성분 표시량 → (값, 단위, 기준 무게 mg 또는 None) / 이름이 없으면 NOT_IN_SPEC / 못 읽으면 None
     예) '비타민D : 표시량(25 ㎍/1,200 mg)의 80~180%', '아연 : 표시량의 80~150% (표시량 : 8.5mg / 800mg)'"""
-    s = nf(spec).replace("ug", "μg").replace("µg", "μg")
+    s = nf(spec).replace("ug", "μg").replace("µg", "μg").replace("a-TE", "α-TE")   # 11-05: 'a-TE' 표기도 인식
+    s = re.sub(r"(?<=g)\s*R\.?E\b", " RAE", s)   # 11-05: 비타민 A 'μgRE'(레티놀 당량) 표기도 RAE처럼 읽음
     m = re.search(name_pat, s)
     if not m:
         return NOT_IN_SPEC
@@ -144,16 +145,10 @@ def main():
         rec = {"품목제조신고번호": no, "1일 섭취량": label}
         method = []
         for k, (pat, std) in NUTRIENTS.items():
-            if k in ("비타민 B6", "니아신"):
-                if "비타민 B군" not in ings:
-                    continue
-            elif k == "요오드":
-                pass                                # 가이드 성분이 아니라서 기준규격에 있으면 항상 확인
-            elif k not in ings:
-                continue
+            # 11-05 검증: 가이드 성분 목록에 없어도 기준규격에 적힌 성분은 모두 읽음 (예전엔 목록에 있는 성분만 읽어 E 등이 빠짐)
             found = find_amount(r["기준규격"], pat)
-            if found == NOT_IN_SPEC and k in ("비타민 B6", "니아신", "요오드"):
-                continue                            # B군 제품이어도 B6·니아신이 안 든 경우
+            if found == NOT_IN_SPEC and k not in ings:
+                continue                            # 기준규격에 없는 성분
             if found == NOT_IN_SPEC or not found or found[0] is None:
                 rec[k] = None
                 method.append(f"{k} 확인 불가")

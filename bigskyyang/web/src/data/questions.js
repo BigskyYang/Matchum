@@ -1,7 +1,8 @@
 // 설문 문항 정의. 응답 → 모델 변수 변환은 lib/encode.js에서 한다.
 // 문항 구성은 Jaejun/SURVEY_V3.md(설문 v3)를 바탕으로, 두 단계로 나눴다.
 //   stage 1: 유형 분류에 쓰는 생활습관 (지연님 12개 유형 모델 입력 + 성별·나이) → 유형 결과
-//   stage 2: 개인 결과에 쓰는 문항 (흡연·음주·채소·과일, mini-FFQ 5문항) → 개인 결과
+//   stage 2: 개인 결과에 쓰는 문항 (흡연·음주·채소·과일, mini-FFQ 5문항, 비타민 D 생활 4문항) → 개인 결과
+//            비타민 D 4문항은 선택 문항(optional): '건너뛰기'로 넘어갈 수 있고, 영양 모델에는 넣지 않는다 (lib/vitaminD.js)
 //            문항은 재준님 최종 설문(Jaejun/SURVEY_FINAL.md)을 따르되, 답하기 쉽게 줄였다 (흡연·음주 첫 문항 생략)
 //            진단처럼 보이거나 건강기능식품 제품 추천에만 쓰이는 문항(PHQ-9, 질환·임신·약물, 지금 먹는 영양제)은 묻지 않는다
 //            (의료법상 진단·처방으로 보일 소지, 건강기능식품 광고 규제, 민감정보 최소 수집)
@@ -25,6 +26,7 @@
 // 팀 합의 (2026-11-04): 흡연은 궐련·전자담배 구분 없이 지금 피우는지만, 유산소는 중강도·고강도를 나눠 묻지 않음,
 //   수면은 취침·기상 시각으로만 ('날마다 들쭉날쭉' 보기 없음), 나이는 생년월일로 계산한 만 나이
 import { ageFromBirth } from '../lib/encode.js'
+import { VITD_PREFIX, VITD_SURVEY } from '../lib/vitaminD.js'
 
 // 채소·과일 9단계 (값이 클수록 자주)
 const INTAKE_9 = [
@@ -55,7 +57,7 @@ const isCurrentSmoker = (a) => a.smoke_now === 'yes'
 const THIS_YEAR = new Date().getFullYear()
 const ADULT = 19
 // mini-FFQ 모델은 19~64세에서만 검증됐다 → 만 65세 이상은 묻지 않는다 (재준님 모델 규칙)
-const ffqAge = (a) => ageFromBirth(a.birth_date) <= 64
+const ffqAge = (a) => Boolean(a.birth_date) && ageFromBirth(a.birth_date) >= 19 && ageFromBirth(a.birth_date) <= 64
 
 export const SECTIONS = {
   basic: '기본정보',
@@ -68,6 +70,7 @@ export const SECTIONS = {
   meal: '식사습관',
   veg: '채소·과일',
   food: '평소 식사',
+  vitd: '비타민 D',
 }
 
 const weekendDiffers = (a) => a.weekend_same === 'no'
@@ -79,6 +82,7 @@ const STAGE_1 = [
     id: 'sex',
     section: 'basic',
     title: '성별을 알려 주세요',
+    note: '조사 자료에서 같은 성별·나이대의 식사와 비교할 때 사용해요.',
     type: 'choice',
     options: [
       { label: '남성', value: 1 },
@@ -92,26 +96,30 @@ const STAGE_1 = [
     title: '생년월일을 알려 주세요',
     note: '만 나이로 계산해요',
     type: 'date',
-    minYear: 1930,
+    minYear: THIS_YEAR - 121,
     maxYear: THIS_YEAR - ADULT,
-    initial: '1995-01-01',
-    check: (v) => (ageFromBirth(v) < ADULT ? `만 ${ADULT}세 이상만 참여할 수 있어요.` : null),
+    initial: '1990-01-01',
+    check: (v) => {
+      if (!v || typeof v !== 'string') return '생년월일을 선택해 주세요.'
+      const day = new Date(v + 'T00:00:00Z')
+      if (!Number.isFinite(day.getTime()) || day.toISOString().slice(0, 10) !== v) return '날짜를 다시 확인해 주세요.'
+      const age = ageFromBirth(v)
+      return age >= ADULT && age <= 120 ? null : '만 19세 이상 120세 이하가 참여할 수 있어요.'
+    },
   },
 
   // 4. 신체활동: 팀 합의로 중강도·고강도를 나눠 묻지 않고, 모두 합친 시간이 주 150분 이상인지만 본다 (고강도 ×2 없음)
   {
     id: 'activity',
     section: 'activity',
-    title: '일주일에 운동을 얼마나 하시나요?',
-    note: '숨이 찰 정도의 운동만 세요',
+    title: '숨이 찰 정도로 움직인 시간은 일주일에 얼마나 되나요?',
+    note: '운동·이동·일할 때 몸을 쓴 시간을 합쳐 주세요.',
     info: ['빠르게 걷기, 자전거, 계단 오르기, 달리기·등산, 몸을 쓰는 일도 모두 합쳐 주세요.', '천천히 걷기, 숨쉬기 운동은 빼 주세요.'],
     period: '최근 1주일',
     type: 'choice',
     // 값 3 = 주 150분 이상 → ML_aerobic 1
     options: [
-      { label: '거의 없어요', value: 0 },
-      { label: '1시간 미만', value: 1 },
-      { label: '1시간 ~ 2시간 반 미만', value: 2 },
+      { label: '2시간 반 미만 (0분 포함)', value: 0 },
       { label: '2시간 반 이상', value: 3 },
     ],
   },
@@ -141,12 +149,12 @@ const STAGE_1 = [
     info: ['책상·이동·TV·게임·인터넷 등 하루 전체를 생각해 주세요.'],
     type: 'duration',
     per: '하루',
-    maxHours: 20,
+    maxHours: 24,
     initial: 8 * 60,
   },
   // 수면: 취침·기상 시각 (주말도 비슷하면 주중만). 팀 합의로 '날마다 들쭉날쭉' 보기는 두지 않는다
   { id: 'weekday_bed', section: 'sleep', title: '평일에는 몇 시에 잠자리에 드나요?', note: '주로 일하는 날 기준', type: 'time', initial: '22:00', hourStart: 18 },
-  { id: 'weekday_wake', section: 'sleep', title: '평일에는 몇 시에 일어나나요?', note: '주로 일하는 날 기준', type: 'time', initial: '07:00', hourStart: 3 },
+  { id: 'weekday_wake', section: 'sleep', title: '평일에는 몇 시에 일어나나요?', note: '주로 일하는 날 기준', type: 'time', initial: '07:00', hourStart: 3, check: (v, a) => v === a.weekday_bed ? '잠든 시각과 일어난 시각을 다시 확인해 주세요.' : null },
   {
     id: 'weekend_same',
     section: 'sleep',
@@ -159,7 +167,7 @@ const STAGE_1 = [
     ],
   },
   { id: 'weekend_bed', section: 'sleep', title: '주말에는 몇 시에 잠자리에 드나요?', note: '쉬는 날 기준', type: 'time', initial: '22:00', hourStart: 18, showIf: weekendDiffers },
-  { id: 'weekend_wake', section: 'sleep', title: '주말에는 몇 시에 일어나나요?', note: '쉬는 날 기준', type: 'time', initial: '07:00', hourStart: 3, showIf: weekendDiffers },
+  { id: 'weekend_wake', section: 'sleep', title: '주말에는 몇 시에 일어나나요?', note: '쉬는 날 기준', type: 'time', initial: '07:00', hourStart: 3, check: (v, a) => v === a.weekend_bed ? '잠든 시각과 일어난 시각을 다시 확인해 주세요.' : null, showIf: weekendDiffers },
   // 7. 스트레스
   {
     id: 'stress',
@@ -178,7 +186,7 @@ const STAGE_1 = [
   {
     id: 'meals',
     section: 'meal',
-    title: '아침·점심·저녁은 일주일에 몇 번 먹나요?',
+    title: '평균적인 한 주에 아침·점심·저녁을 각각 며칠 먹었나요?',
     period: '최근 1년',
     type: 'rows',
     rows: [
@@ -187,10 +195,10 @@ const STAGE_1 = [
       { id: 'dinner', label: '저녁' },
     ],
     options: [
-      { label: '5~7회', value: 3 },
-      { label: '3~4회', value: 2 },
-      { label: '1~2회', value: 1 },
-      { label: '거의 안 먹어요', value: 0 },
+      { label: '5~7일', value: 3 },
+      { label: '3~4일', value: 2 },
+      { label: '1~2일', value: 1 },
+      { label: '0일', value: 0 },
     ],
   },
   {
@@ -231,8 +239,6 @@ const STAGE_2 = [
     id: 'smoke_now',
     section: 'smoke',
     title: '요즘 담배를 피우나요?',
-    note: '전자담배도 포함, 가끔 피워도 \'네\'',
-    info: ['일반 담배와 전자담배를 똑같이 봐요.', '끊었으면 \'아니요\'를 골라 주세요.'],
     type: 'choice',
     options: [
       { label: '네, 피워요', value: 'yes' },
@@ -243,7 +249,6 @@ const STAGE_2 = [
     id: 'cigarettes',
     section: 'smoke',
     title: '피우는 날에는 하루 몇 개비 정도 피우나요?',
-    note: '전자담배는 1개비를 피우는 정도를 1개비로',
     type: 'number',
     unit: '개비',
     min: 1,
@@ -307,6 +312,17 @@ const STAGE_2 = [
     type: 'choice',
     options: FOOD_FREQ_8,
     showIf: ffqAge,
+  })),
+  // 비타민 D 생활 4문항 (재준님 v1.2.0, 선택). 음식·시간 계산 없이 생활 장면만
+  ...VITD_SURVEY.questions.map((q, i) => ({
+    id: VITD_PREFIX + q.id,
+    section: 'vitd',
+    title: q.label,
+    ...(i === 0 && { note: '선택 문항이에요. 정확한 시간은 몰라도 괜찮아요.' }),
+    type: 'choice',
+    layout: 'list',
+    optional: true,
+    options: q.options.map(({ label, value }) => ({ label, value })),
   })),
 ]
 
