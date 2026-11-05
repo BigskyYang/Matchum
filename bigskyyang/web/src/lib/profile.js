@@ -3,16 +3,17 @@
 const clamp01 = (v) => Math.min(1, Math.max(0, v))
 
 // 생활습관 영역별 점수 (0~1, 높을수록 건강한 습관). 개인 응답과 유형 평균 모두에 쓴다
+// icon: components/Icon.jsx의 아이콘 이름
 export const SCORE_AXES = [
-  { key: 'smoke', icon: '🚭', label: '금연', score: (f) => clamp01(1 - 0.3 * f.ML_smoker - 0.7 * Math.min(f.ML_cigarettes_day / 20, 1)) },
-  { key: 'drink', icon: '🍶', label: '절주', score: (f) => clamp01(1 - (f.ML_drink_freq_ord + f.ML_drink_amount_ord) / 10) },
-  { key: 'exercise', icon: '🏋️', label: '운동', score: (f) => clamp01(0.5 * f.ML_aerobic + 0.5 * Math.min(f.ML_strength_days / 3, 1)) },
+  { key: 'smoke', icon: 'smoke', label: '금연', score: (f) => clamp01(1 - 0.3 * f.ML_smoker - 0.7 * Math.min(f.ML_cigarettes_day / 20, 1)) },
+  { key: 'drink', icon: 'drink', label: '절주', score: (f) => clamp01(1 - (f.ML_drink_freq_ord + f.ML_drink_amount_ord) / 10) },
+  { key: 'exercise', icon: 'exercise', label: '운동', score: (f) => clamp01(0.5 * f.ML_aerobic + 0.5 * Math.min(f.ML_strength_days / 3, 1)) },
   // 하루 4시간 이하 = 1, 12시간 이상 = 0
-  { key: 'active', icon: '🚶', label: '활동량', score: (f) => clamp01(1 - (f.ML_sedentary_min - 240) / 480) },
+  { key: 'active', icon: 'active', label: '활동량', score: (f) => clamp01(1 - (f.ML_sedentary_min - 240) / 480) },
   // 7~9시간 = 1, 벗어난 만큼 감점
   {
     key: 'sleep',
-    icon: '😴',
+    icon: 'sleep',
     label: '수면',
     score: (f) => {
       const s = f.ML_sleep_hours
@@ -20,9 +21,9 @@ export const SCORE_AXES = [
       return clamp01(1 - off / 3)
     },
   },
-  { key: 'mind', icon: '🧘', label: '마음 여유', score: (f) => clamp01(1 - f.ML_stress) },
-  { key: 'meal', icon: '🍚', label: '규칙적 식사', score: (f) => clamp01((f.ML_breakfast_freq_ord + f.ML_lunch_freq_ord + f.ML_dinner_freq_ord) / 9) },
-  { key: 'homeMeal', icon: '🏠', label: '집밥', score: (f) => clamp01(1 - f.ML_eatingout_freq_ord / 6) },
+  { key: 'mind', icon: 'mind', label: '마음 여유', score: (f) => clamp01(1 - f.ML_stress) },
+  { key: 'meal', icon: 'meal', label: '규칙적 식사', score: (f) => clamp01((f.ML_breakfast_freq_ord + f.ML_lunch_freq_ord + f.ML_dinner_freq_ord) / 9) },
+  { key: 'homeMeal', icon: 'homeMeal', label: '집밥', score: (f) => clamp01(1 - f.ML_eatingout_freq_ord / 6) },
 ]
 
 // 유형 결과에는 유형을 만든 생활습관 영역만, 흡연·음주는 개인 결과에 (유형이 흡연·음주를 거의 가르지 않는다)

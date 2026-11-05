@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import BottomSheet from '../components/BottomSheet.jsx'
+import Icon from '../components/Icon.jsx'
 import Mascot from '../components/Mascot.jsx'
 import PrimaryButton from '../components/PrimaryButton.jsx'
 import ChoiceInput from '../components/survey/ChoiceInput.jsx'
@@ -23,8 +24,8 @@ function QuestionStep({ q, answer, isLast, onAnswer }) {
     <>
       <section className="flex-1">
         {q.period && (
-          <p className="mb-2 inline-block rounded-full bg-white px-2.5 py-1 text-xs font-bold text-ink-soft shadow-soft">
-            📅 {q.period} 기준
+          <p className="mb-2 inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1 text-xs font-bold text-ink-soft shadow-soft">
+            <Icon name="calendar" size={14} /> {q.period} 기준
           </p>
         )}
         <h1 className="text-xl leading-snug font-bold">{q.title}</h1>
@@ -33,7 +34,9 @@ function QuestionStep({ q, answer, isLast, onAnswer }) {
             {q.note}
             {q.info && (
               <button type="button" onClick={() => setInfo(true)} className="py-1.5 font-semibold text-primary-shade">
-                ⓘ 자세히
+                <span className="inline-flex items-center gap-1">
+                  <Icon name="info" size={16} /> 자세히
+                </span>
               </button>
             )}
           </p>
@@ -144,7 +147,7 @@ export default function SurveyPage({ stage = 1 }) {
           aria-label="이전 문항"
           className="-ml-2 flex size-10 items-center justify-center rounded-full text-2xl text-ink-soft active:bg-primary-soft"
         >
-          ‹
+          <Icon name="back" size={26} />
         </button>
         <div className="flex-1">
           <div className="mb-1.5 flex justify-between text-xs font-semibold text-ink-soft">

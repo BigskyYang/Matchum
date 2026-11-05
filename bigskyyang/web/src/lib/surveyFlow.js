@@ -11,5 +11,6 @@ export function resolveStep(list, answers, requestedId, storedStep = 0) {
 
 // 단계마다 설문 주소가 다르다: 1단계 /survey, 2단계 /survey2
 export const surveyBase = (stage) => (stage === 2 ? '/survey2' : '/survey')
-export const resultPath = (stage) => (stage === 2 ? '/result2' : '/result')
+// 설문을 마치면: 1단계는 결과 공개 스토리(/reveal → /result), 2단계는 개인 결과
+export const resultPath = (stage) => (stage === 2 ? '/result2' : '/reveal')
 export const surveyPath = (q, stage = 1) => `${surveyBase(stage)}?q=${q.id}`

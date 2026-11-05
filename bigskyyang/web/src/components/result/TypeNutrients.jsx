@@ -120,7 +120,9 @@ export default function TypeNutrients({ common, picks, sexLabel, ageLabel }) {
     <div className="space-y-5">
       {typePicks.length > 0 && (
         <section>
-          <h3 className="text-sm font-bold">🔹 내 유형이 특히 챙길 영양소</h3>
+          <h3 className="flex items-center gap-2 text-sm font-bold">
+            <span aria-hidden="true" className="size-2.5 rounded-full bg-primary-strong" />내 유형이 특히 챙길 영양소
+          </h3>
           <ul className="mt-2 space-y-2">
             {typePicks.map((n) => (
               <PickRow key={n.key} n={n} onOpen={setOpen} />
@@ -131,7 +133,9 @@ export default function TypeNutrients({ common, picks, sexLabel, ageLabel }) {
 
       {peerPicks.length > 0 && (
         <section>
-          <h3 className="text-sm font-bold">▫️ 나와 같은 성별·나이대가 챙겨야 할 영양소</h3>
+          <h3 className="flex items-center gap-2 text-sm font-bold">
+            <span aria-hidden="true" className="size-2.5 rounded-full bg-ink-faint" />나와 같은 성별·나이대가 챙겨야 할 영양소
+          </h3>
           <ul className="mt-2 space-y-2">
             {peerPicks.map((n) => (
               <PickRow key={n.key} n={n} onOpen={setOpen} muted />
@@ -141,7 +145,9 @@ export default function TypeNutrients({ common, picks, sexLabel, ageLabel }) {
       )}
 
       <section>
-        <h3 className="text-sm font-bold">🔸 모두가 챙겨야 할 영양소 {common.length}개</h3>
+        <h3 className="flex items-center gap-2 text-sm font-bold">
+          <span aria-hidden="true" className="size-2.5 rounded-full bg-[#e0a92e]" />모두가 챙겨야 할 영양소 {common.length}개
+        </h3>
         <p className="mt-1 text-xs text-ink-soft">유형과 상관없이 성인 절반 이상이 적게 먹는 영양소예요.</p>
         <ul className="mt-2 flex flex-wrap gap-1.5">
           {common.map((n) => (

@@ -10,7 +10,7 @@ import { NUTRIENT_GUIDE } from '../data/nutrientGuide.js'
 import { FOOD_ONLY, PRODUCT_NUTRIENTS } from '../data/supplementInfo.js'
 import { BALANCED_FOODS, pickTips } from '../data/tips.js'
 import { LEAF_TYPES, MAIN_TYPES } from '../data/types.js'
-import { classify, model, toFeatures, typeOf } from './classify.js'
+import { MAIN_CODES, classify, model, toFeatures, typeOf } from './classify.js'
 import { encode } from './encode.js'
 import { ageGroup, typeNutrients } from './nutrition.js'
 import { habitualFeatures, lifestyleFeatures, predictNutrition } from './nutritionRisk.js'
@@ -26,6 +26,42 @@ const LEAF_SCORES = Object.fromEntries(model.types.map((t) => [t.id, groupScores
 const partnerOf = ({ id, axes }) => ({ id, name: LEAF_TYPES[id].name, summary: LEAF_TYPES[id].summary, main: MAIN_TYPES[id[0]], axes })
 
 const missionsOf = (tips) => tips.flatMap((t) => (t.mission ? [t.mission] : [])).slice(0, MAX_MISSIONS)
+
+// 전체 유형 보기 (/types): 대분류마다 세부 유형 3개 (이름·설명·해시태그·비율·유형 평균의 생활습관 신호등)
+export function allTypes() {
+  return MAIN_CODES.map((code) => {
+    const types = model.types
+      .filter((t) => t.id[0] === code)
+      .sort((a, b) => a.id.localeCompare(b.id))
+      .map((t) => ({
+        id: t.id,
+        name: LEAF_TYPES[t.id].name,
+        summary: LEAF_TYPES[t.id].summary,
+        main: MAIN_TYPES[code],
+        tags: hashtags(t),
+        sharePct: t.share * 100,
+        habits: TYPE_AXES.map((axis, i) => ({ ...axis, score: LEAF_SCORES[t.id][i] })),
+      }))
+    return { code, ...MAIN_TYPES[code], sharePct: types.reduce((s, t) => s + t.sharePct, 0), types }
+  })
+}
+
+// 결과 공개 스토리 (/reveal) 카드에 쓸 값: 유형 결과에서 고른다
+//   strong: '좋아요'(0.75 이상)인 습관 2개까지, weak: 그 아래 습관 중 점수 낮은 2개
+//   nutrient: 내 유형 영양소 → 없으면 같은 성별·나이대 영양소 → 없으면 공통 영양소 3개
+export function revealStory(r) {
+  const strong = r.habits.filter((h) => h.score >= 0.75).sort((a, b) => b.score - a.score).slice(0, 2)
+  const weak = r.habits.filter((h) => h.score < 0.75).sort((a, b) => a.score - b.score).slice(0, 2)
+  const picks = r.nutrients?.picks ?? []
+  const typePicks = picks.filter((n) => n.tag !== '흔함')
+  const peerPicks = picks.filter((n) => n.tag === '흔함')
+  const nutrient = typePicks.length
+    ? { kind: 'type', items: typePicks }
+    : peerPicks.length
+      ? { kind: 'peer', items: peerPicks }
+      : { kind: 'common', items: (r.nutrients?.common ?? []).slice(0, 3) }
+  return { strong, weak, mission: r.missions[0] ?? null, nutrient, share: Math.round(r.sharePct) }
+}
 
 // 1단계 응답(+ 있으면 2단계)으로 유형 결과
 export function buildTypeResult(answers) {

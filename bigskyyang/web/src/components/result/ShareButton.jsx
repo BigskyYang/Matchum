@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { SERVICE_NAME } from '../../config.js'
+import Icon from '../Icon.jsx'
 
 // 유형 결과 공유: 휴대폰 공유 창(Web Share API), 안 되면 링크를 복사하고 잠깐 알려 준다
 //   응답은 서버에 없어서 결과 화면 자체가 아니라 검사 첫 화면 주소와 내 유형 이름을 보낸다
@@ -29,7 +30,7 @@ export default function ShareButton({ typeName }) {
         onClick={share}
         className="flex shrink-0 items-center justify-center gap-1 rounded-button bg-white px-5 font-bold shadow-soft active:scale-[0.98]"
       >
-        <span aria-hidden="true">📤</span> 공유
+        <Icon name="share" size={20} /> 공유
       </button>
       <span role="status" className="sr-only">
         {copied ? '링크를 복사했어요' : ''}

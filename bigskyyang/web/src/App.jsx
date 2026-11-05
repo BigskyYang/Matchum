@@ -2,8 +2,10 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import MobileFrame from './components/MobileFrame.jsx'
 import PersonalResultPage from './pages/PersonalResultPage.jsx'
 import ResultPage from './pages/ResultPage.jsx'
+import RevealPage from './pages/RevealPage.jsx'
 import StartPage from './pages/StartPage.jsx'
 import SupplementsPage from './pages/SupplementsPage.jsx'
+import TypesPage from './pages/TypesPage.jsx'
 import SurveyPage from './pages/SurveyPage.jsx'
 import { loadSurvey } from './lib/storage.js'
 
@@ -18,10 +20,12 @@ export default function App() {
       <Routes>
         <Route path="/" element={<StartPage />} />
         <Route path="/survey" element={<SurveyPage key="stage1" stage={1} />} />
+        <Route path="/reveal" element={<RevealPage />} />
         <Route path="/result" element={<ResultPage />} />
         <Route path="/survey2" element={<Stage2Survey />} />
         <Route path="/result2" element={<PersonalResultPage />} />
         <Route path="/supplements" element={<SupplementsPage />} />
+        <Route path="/types" element={<TypesPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </MobileFrame>

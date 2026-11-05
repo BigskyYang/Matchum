@@ -1,5 +1,7 @@
 import { useMemo } from 'react'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
+import GroupChip from '../components/GroupChip.jsx'
+import Icon from '../components/Icon.jsx'
 import Mascot from '../components/Mascot.jsx'
 import PrimaryButton, { SecondaryButton } from '../components/PrimaryButton.jsx'
 import Card from '../components/result/Card.jsx'
@@ -40,11 +42,8 @@ export default function ResultPage() {
       <header className="flex min-h-[calc(100dvh-4rem)] flex-col items-center justify-center text-center">
         <p className="mt-auto text-sm font-semibold text-ink-soft">나의 NBTI 유형은</p>
         <Mascot name={`type_${r.leafId}`} className="mt-3" />
-        <p className="mt-3 text-sm font-bold text-ink-soft">
-          <span aria-hidden="true">{r.mainType.emoji} </span>
-          {r.mainType.name}
-        </p>
-        <h1 className="mt-1 text-[1.75rem] leading-tight font-extrabold">{r.name}</h1>
+        <GroupChip code={r.leafId[0]} name={r.mainType.name} className="mt-3" />
+        <h1 className="mt-2 font-display text-[1.75rem] leading-tight font-normal">{r.name}</h1>
         {r.tags.length > 0 && (
           <ul className="mt-3 flex flex-wrap justify-center gap-1.5">
             {r.tags.map((tag) => (
@@ -64,17 +63,22 @@ export default function ResultPage() {
           onClick={(e) => e.currentTarget.closest('header').nextElementSibling?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
           className="mt-auto animate-bounce px-4 pt-6 pb-2 text-sm font-semibold text-ink-faint motion-reduce:animate-none"
         >
-          자세히 보기 ⌄
+          <span className="inline-flex items-center gap-1">
+            자세히 보기 <Icon name="down" size={16} />
+          </span>
         </button>
       </header>
 
-      <Card title="나의 생활습관 신호등" icon="🚦">
+      <Card title="나의 생활습관 신호등" icon="traffic">
         <HabitSignals habits={r.habits} />
-        <h3 className="mt-5 mb-2 text-sm font-bold">🎯 이번 주 해볼 것</h3>
+        <h3 className="mt-5 mb-2 flex items-center gap-1.5 text-sm font-bold">
+          <Icon name="target" size={18} className="text-primary-shade" />
+          이번 주 해볼 것
+        </h3>
         <MissionList missions={r.missions} />
       </Card>
 
-      <Card title="부족할 수 있는 영양소" icon="🥄">
+      <Card title="부족할 수 있는 영양소" icon="apple">
         {r.nutrients ? (
           <TypeNutrients
             common={r.nutrients.common}
@@ -87,8 +91,11 @@ export default function ResultPage() {
         )}
       </Card>
 
-      <Card title="같이 다니면 좋은 유형" icon="🤝">
+      <Card title="같이 다니면 좋은 유형" icon="users">
         <PartnerCard fill={r.partners.fill} together={r.partners.together} />
+        <Link to="/types" className="mt-3 block py-2 text-center text-sm font-bold text-primary-shade">
+          12가지 유형 모두 보기 ›
+        </Link>
       </Card>
 
       <footer className="mt-2 flex flex-col gap-3">

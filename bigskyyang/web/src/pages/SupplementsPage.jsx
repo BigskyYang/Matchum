@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom'
 import BottomSheet from '../components/BottomSheet.jsx'
+import Icon from '../components/Icon.jsx'
 import { NUTRIENT_GUIDE } from '../data/nutrientGuide.js'
 import { PAGE_SIZE, SUPPLEMENT_NOTICES, TARGET_LABELS } from '../data/supplementInfo.js'
 import { buildPersonalResult } from '../lib/result.js'
@@ -98,7 +99,7 @@ function PickButton({ picked, onToggle, name }) {
         picked ? 'bg-primary-soft text-primary-shade' : 'bg-cream text-ink-soft'
       }`}
     >
-      {picked ? '♥' : '♡'}
+      <Icon name={picked ? 'heartFilled' : 'heart'} size={22} />
     </button>
   )
 }
@@ -138,7 +139,10 @@ function ProductSheet({ catalog, p, picked, onToggle, onClose }) {
         aria-pressed={picked}
         className={`mt-4 w-full rounded-button py-3.5 font-bold active:scale-[0.98] ${picked ? 'bg-primary-soft text-primary-shade' : 'bg-cream'}`}
       >
-        {picked ? '♥ 고른 제품에서 빼기' : '♡ 고른 제품에 담기'}
+        <span className="inline-flex items-center gap-1.5">
+          <Icon name={picked ? 'heartFilled' : 'heart'} size={20} />
+          {picked ? '고른 제품에서 빼기' : '고른 제품에 담기'}
+        </span>
       </button>
     </BottomSheet>
   )
@@ -159,7 +163,7 @@ function PicksSheet({ catalog, ids, sex, onToggle, onClose }) {
               aria-label={`${catalog.products[id].name} 빼기`}
               className="flex size-9 shrink-0 items-center justify-center rounded-full text-ink-soft active:bg-white"
             >
-              ✕
+              <Icon name="close" size={18} />
             </button>
           </li>
         ))}
@@ -253,9 +257,9 @@ export default function SupplementsPage() {
         aria-label="결과로 돌아가기"
         className="-ml-2 flex size-11 items-center justify-center rounded-full text-2xl text-ink-soft active:bg-primary-soft"
       >
-        ‹
+        <Icon name="back" size={26} />
       </button>
-      <h1 className="text-xl font-bold">건강기능식품 살펴보기</h1>
+      <h1 className="font-display text-xl font-normal">건강기능식품 살펴보기</h1>
     </header>
   )
   const wrap = (children) => (
@@ -273,7 +277,7 @@ export default function SupplementsPage() {
   if (!nutrients.length) {
     return wrap(
       <p className="rounded-card bg-white p-5 leading-relaxed shadow-soft">
-        지금 응답으로는 건강기능식품으로 챙길 영양소가 없어요. 결과 화면의 음식 안내를 참고해 주세요 👍
+        지금 응답으로는 건강기능식품으로 챙길 영양소가 없어요. 결과 화면의 음식 안내를 참고해 주세요.
       </p>,
     )
   }
@@ -366,7 +370,9 @@ export default function SupplementsPage() {
               onClick={() => setOpen('picks')}
               className="flex w-full items-center justify-between rounded-button bg-primary-strong px-5 py-3.5 text-xl font-bold text-white shadow-button active:translate-y-1 active:shadow-button-pressed"
             >
-              <span>♥ 고른 제품 {picks.ids.length}개</span>
+              <span className="inline-flex items-center gap-2">
+                <Icon name="heartFilled" size={22} />고른 제품 {picks.ids.length}개
+              </span>
               <span>함께 먹을 때 ›</span>
             </button>
           </div>
