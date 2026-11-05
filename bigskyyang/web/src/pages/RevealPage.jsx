@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import GroupChip, { GroupDot } from '../components/GroupChip.jsx'
 import Icon from '../components/Icon.jsx'
@@ -13,7 +13,9 @@ import NutrientArt from '../components/NutrientArt.jsx'
 
 // 결과 공개 (/reveal): 1단계 설문이 끝나면 '분석 중' → 유형 공개 스토리 카드 6장 → 자세한 유형 결과(/result)
 //   카드: 유형 공개 · 100명 중 N명 · 잘 챙기는/챙겨 볼 습관 · 챙길 영양소 · 짝꿍 · 마무리(공유)
-//   넘기기: 화면 오른쪽 2/3 누르기 또는 '다음', 왼쪽 1/3은 이전, 키보드 ←·→. '건너뛰기'는 바로 자세한 결과로
+//   넘기기: 옆으로 밀기(스와이프) 또는 화면 오른쪽 2/3 누르기 = 다음, 왼쪽 1/3 = 이전, 키보드 ←·→
+//   카드를 모두 보게 한다: '건너뛰기'·'다음' 버튼·첫 카드의 식사 설문 버튼은 두지 않는다
+//   화면 읽기 프로그램용 이전·다음 버튼은 눈에 보이지 않게 두고, 키보드로 가면 보인다
 //   '동작 줄이기'를 켠 사용자에게는 움직임 없이 바로 보여 준다
 //   마스코트: 분석 중 analyzing → 마지막 줄('찾았어요')에서 surprise, 마무리 카드 cheer (그림이 없으면 thinking·happy)
 const reducedMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
@@ -190,6 +192,7 @@ export default function RevealPage() {
   const last = cards.length - 1
   const go = useCallback((d) => setCard((c) => Math.min(Math.max(c + d, 0), last)), [last])
   const toResult = useCallback(() => navigate('/result', { replace: true }), [navigate])
+  const touch = useRef(null) // 밀기 시작점 { x, y }, 밀어서 넘겼으면 swiped
 
   useEffect(() => {
     if (phase !== 'analyzing') return undefined
@@ -209,8 +212,34 @@ export default function RevealPage() {
   if (!r) return <Navigate to="/survey" replace />
   if (phase === 'analyzing') return <Analyzing />
 
+  // 옆으로 50px 넘게 밀면 넘긴다 (세로로 더 많이 움직였으면 스크롤로 보고 넘기지 않는다)
+  const SWIPE = 50
+  const onTouchStart = (e) => {
+    const t = e.touches[0]
+    touch.current = { x: t.clientX, y: t.clientY, swiped: false }
+  }
+  const onTouchEnd = (e) => {
+    const start = touch.current
+    if (!start) return
+    const t = e.changedTouches[0]
+    const dx = t.clientX - start.x
+    const dy = t.clientY - start.y
+    if (Math.abs(dx) >= SWIPE && Math.abs(dx) > Math.abs(dy)) {
+      start.swiped = true
+      go(dx < 0 ? 1 : -1)
+      // 밀고 난 뒤 따라오는 click만 무시한다 (잠시 뒤 표시를 지운다)
+      setTimeout(() => {
+        if (touch.current === start) touch.current = null
+      }, 400)
+    }
+  }
+
   // 화면 왼쪽 1/3을 누르면 이전, 나머지는 다음 (마지막 카드에서는 넘기지 않는다)
   const onTap = (e) => {
+    if (touch.current?.swiped) {
+      touch.current = null
+      return
+    }
     const { left, width } = e.currentTarget.getBoundingClientRect()
     if (e.clientX - left < width / 3) go(-1)
     else if (card < last) go(1)
@@ -226,40 +255,34 @@ export default function RevealPage() {
             </span>
           ))}
         </div>
-        <button type="button" onClick={toResult} className="-mr-2 px-2 py-2 text-sm font-semibold text-ink-soft">
-          건너뛰기
-        </button>
       </header>
       <p className="sr-only" aria-live="polite">
         {cards.length}장 중 {card + 1}번째
       </p>
 
-      {/* 화면 누르기는 손가락용 지름길. 같은 일을 아래 버튼과 키보드 ←·→로도 할 수 있다 */}
+      {/* 밀기·누르기는 손가락용. 키보드는 ←·→ 또는 아래 숨은 이전·다음 버튼 */}
       <section
         key={card}
         onClick={onTap}
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
         className="flex flex-1 animate-rise cursor-pointer flex-col items-center justify-center py-6 text-center select-none motion-reduce:animate-none"
       >
         {cards[card]}
       </section>
 
       <footer className="grid gap-2">
-        {card === 0 && <SecondaryButton to={survey.done[2] ? '/result2' : '/survey2'}>{survey.done[2] ? '내 식사 결과 다시 보기' : '식사 설문하고 내 영양소 보기'}</SecondaryButton>}
         {card < last ? (
-          <div className="flex gap-2">
+          <div className="flex items-center justify-center gap-2 py-3 text-sm text-ink-faint">
             {card > 0 && (
-              <button
-                type="button"
-                onClick={() => go(-1)}
-                aria-label="이전 카드"
-                className="flex shrink-0 items-center justify-center rounded-button bg-white px-4 text-ink-soft shadow-soft"
-              >
-                <Icon name="back" size={24} />
+              <button type="button" onClick={() => go(-1)} className="sr-only rounded-button bg-white px-4 py-2 text-ink-soft focus:not-sr-only">
+                이전 카드
               </button>
             )}
-            <PrimaryButton size="sm" className="flex-1" onClick={() => go(1)}>
-              다음
-            </PrimaryButton>
+            <span aria-hidden="true">‹ 옆으로 넘겨 보세요 ›</span>
+            <button type="button" onClick={() => go(1)} className="sr-only rounded-button bg-white px-4 py-2 text-ink-soft focus:not-sr-only">
+              다음 카드
+            </button>
           </div>
         ) : (
           <>
