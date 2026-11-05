@@ -1,6 +1,6 @@
 # 웹 제품 원본
 
-`web_products_20261105.xlsx`는 준혁님 답변과 함께 받은 제품 목록의 원본 사본이다. 제품 2,220개이며, 하루 성분 함량이 모두 비어 있는 61개는 식이섬유 제품이다. 기존 `junhyeok/output/web_products.csv`는 11-04 자료이므로 이번 갱신에 사용하지 않는다.
+`web_products_20261105.xlsx`는 준혁님이 새로 전달한 11-05 수정본의 원본 사본이다. 제품 2,206개이며, 하루 성분 함량이 모두 비어 있는 61개는 식이섬유 제품이다. 기존 `junhyeok/output/web_products.csv`는 11-04 자료이므로 이번 갱신에 사용하지 않는다.
 
 저장소 루트에서 `python bigskyyang/scripts/build_supplement_catalog.py`를 실행하면 웹 제품 JSON을 다시 만든다. `--source`로 CSV 또는 엑셀을 지정할 수도 있다. 원본 파일은 수정하지 않으며, 웹 JSON에 원본 경로와 SHA-256을 기록한다. 제품 표시 문구와 같은 영양소·대상 안의 순서를 유지한다.
 

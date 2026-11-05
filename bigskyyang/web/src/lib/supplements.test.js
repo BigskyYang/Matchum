@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest'
+import { createHash } from 'node:crypto'
+import { readFileSync } from 'node:fs'
 import catalog from '../data/supplementCatalog.json'
 import { PRODUCT_NUTRIENTS } from '../data/supplementInfo.js'
 import { dailyTotals, formsOf, headroomProducts, productCount, productSections, productTexts, reconcilePicks, supplementTargets, targetsFor, totalsMessage } from './supplements.js'
@@ -24,9 +26,9 @@ describe('재준님 결과 → 제품 목록 영양소 (supplementTargets)', () 
 })
 
 describe('제품 목록 (준혁님 9단계 후보 전체)', () => {
-  it('11-05 최신 파일: 칼슘 일반 대상 319개 (자르지 않는다)', () => {
+  it('11-05 수정본: 칼슘 일반 대상 316개 (자르지 않는다)', () => {
     const [general] = productSections(catalog, 'calcium', ['일반'])
-    expect(general.items).toHaveLength(319)
+    expect(general.items).toHaveLength(316)
   })
 
   it('대상 칸을 섞지 않고, 원본 순서를 그대로 쓴다', () => {
@@ -40,7 +42,7 @@ describe('제품 목록 (준혁님 9단계 후보 전체)', () => {
     const [tablets] = productSections(catalog, 'calcium', ['일반'], ['정'])
     expect(tablets.items.every((p) => p.form === '정')).toBe(true)
     expect(tablets.items.map((p) => p.id)).toEqual(all.items.filter((p) => p.form === '정').map((p) => p.id))
-    expect(formsOf(catalog, 'calcium', ['일반']).reduce((s, f) => s + f.count, 0)).toBe(319)
+    expect(formsOf(catalog, 'calcium', ['일반']).reduce((s, f) => s + f.count, 0)).toBe(316)
   })
 
   it('제품 수는 같은 제품을 한 번만 센다', () => {
@@ -127,15 +129,20 @@ describe('제품 목록 파일 supplementCatalog.json 형식', () => {
     for (const p of Object.values(catalog.products)) expect(Object.keys(p).sort()).toEqual([...allowed].sort())
   })
 
-  it('첨부 최신 제품 2,220개이며 함량이 없는 61개는 모두 식이섬유다', () => {
-    expect(Object.keys(catalog.products)).toHaveLength(2220)
+  it('수정본 제품 2,206개이며 함량이 없는 61개는 모두 식이섬유다', () => {
+    expect(Object.keys(catalog.products)).toHaveLength(2206)
     const missing = Object.keys(catalog.products).filter((id) => !Object.keys(catalog.products[id].daily).length)
     expect(missing).toHaveLength(61)
     const fiber = new Set(Object.values(catalog.lists.fiber).flat().map(([id]) => id))
     expect(missing.every((id) => fiber.has(id))).toBe(true)
     const linked = Object.values(catalog.lists).flatMap((targets) => Object.values(targets).flat().map(([id]) => id))
-    expect(linked).toHaveLength(2220)
-    expect(new Set(linked).size).toBe(2220)
+    expect(linked).toHaveLength(2206)
+    expect(new Set(linked).size).toBe(2206)
+  })
+
+  it('웹 제품 목록의 원본 SHA-256이 현재 엑셀과 일치한다', () => {
+    const source = readFileSync(new URL(`../../../../${catalog.source}`, import.meta.url))
+    expect(createHash('sha256').update(source).digest('hex')).toBe(catalog.source_sha256)
   })
 
   it('목록 갱신 후 제외된 제품은 합계에서 빼고 기존 등록은 함량 모름으로 남긴다', () => {
