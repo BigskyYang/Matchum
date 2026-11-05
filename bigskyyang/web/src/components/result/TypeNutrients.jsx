@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react'
 import BottomSheet from '../BottomSheet.jsx'
 import { BASIS_TEXT } from '../../data/nutrientGuide.js'
+import NutrientArt from '../NutrientArt.jsx'
 
 // 유형 화면의 '부족할 수 있는 영양소' ((나)안, 데이터는 lib/nutrition.js의 typeNutrients)
 //   🔹 내 유형이 특히 챙길 영양소: 2줄 중 유형특이·식사량영향 (테두리 색 = 부족·주의). 내 유형 결과라 맨 위에 크게
@@ -18,7 +19,7 @@ function CommonChip({ n, onOpen }) {
         onClick={() => onOpen(n)}
         className="flex items-center gap-1 rounded-full bg-cream px-3 py-2 text-sm font-bold active:scale-95"
       >
-        <span aria-hidden="true">{n.icon}</span>
+        <NutrientArt n={n} className="size-6" />
         {n.label}
       </button>
     </li>
@@ -47,9 +48,7 @@ function PickRow({ n, onOpen, muted = false }) {
           muted ? 'border-ink-faint/30' : BORDER[n.level.tone]
         }`}
       >
-        <span aria-hidden="true" className="text-2xl">
-          {n.icon}
-        </span>
+        <NutrientArt n={n} className="size-10" emojiClass="text-2xl" />
         <span className="min-w-0 flex-1">
           <span className="block font-bold">{n.label}</span>
           <Dots of10={n.of10} tone={muted ? 'muted' : n.level.tone} />
@@ -72,7 +71,7 @@ function NutrientSheet({ n, sexLabel, ageLabel, onClose }) {
     <BottomSheet
       title={
         <>
-          <span aria-hidden="true">{n.icon}</span>
+          <NutrientArt n={n} className="size-6" />
           {n.label}
         </>
       }

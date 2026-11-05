@@ -9,12 +9,13 @@ import ShareImageButton from '../components/result/ShareImageButton.jsx'
 import { model } from '../lib/classify.js'
 import { buildTypeResult, revealStory } from '../lib/result.js'
 import { loadSurvey } from '../lib/storage.js'
+import NutrientArt from '../components/NutrientArt.jsx'
 
 // 결과 공개 (/reveal): 1단계 설문이 끝나면 '분석 중' → 유형 공개 스토리 카드 6장 → 자세한 유형 결과(/result)
 //   카드: 유형 공개 · 100명 중 N명 · 잘 챙기는/챙겨 볼 습관 · 챙길 영양소 · 짝꿍 · 마무리(공유)
 //   넘기기: 화면 오른쪽 2/3 누르기 또는 '다음', 왼쪽 1/3은 이전, 키보드 ←·→. '건너뛰기'는 바로 자세한 결과로
 //   '동작 줄이기'를 켠 사용자에게는 움직임 없이 바로 보여 준다
-//   마스코트: 새 그림(analyzing·cheer)을 public/mascot에 넣으면 그 그림을, 없으면 지금 있는 그림(thinking·happy)을 쓴다
+//   마스코트: 분석 중 analyzing → 마지막 줄('찾았어요')에서 surprise, 마무리 카드 cheer (그림이 없으면 thinking·happy)
 const reducedMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 const SAMPLE = model.population.n.toLocaleString('ko-KR')
 const LINES = ['생활습관 응답을 정리하고 있어요', `국민건강영양조사 성인 ${SAMPLE}명과 비교하고 있어요`, '가장 가까운 유형을 찾았어요']
@@ -120,7 +121,7 @@ function cardsOf(r, s) {
         <ul className="mt-6 flex flex-wrap justify-center gap-2">
           {s.nutrient.items.map((n) => (
             <li key={n.key} className="inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-2 font-bold shadow-soft">
-              <span aria-hidden="true">{n.icon}</span>
+              <NutrientArt n={n} className="size-7" />
               {n.label}
             </li>
           ))}
@@ -129,9 +130,11 @@ function cardsOf(r, s) {
     ) : (
       <>
         <Title>{s.nutrient.kind === 'type' ? '내 유형이 특히 챙길 영양소' : '같은 성별·나이대가 챙길 영양소'}</Title>
-        <p className="mt-6 text-5xl" aria-hidden="true">
-          {s.nutrient.items[0].icon}
-        </p>
+        <NutrientArt
+          n={s.nutrient.items[0]}
+          className="mt-6 size-28 animate-pop motion-reduce:animate-none"
+          emojiClass="mt-6 text-5xl"
+        />
         <p className="mt-2 font-display text-2xl font-normal">{s.nutrient.items.map((n) => n.label).join(' · ')}</p>
         <div className="mt-5">
           <Dots count={s.nutrient.items[0].of10} total={10} code={code} size="size-5" />
@@ -176,7 +179,11 @@ function Analyzing() {
   }, [])
   return (
     <main className="flex flex-1 flex-col items-center justify-center px-6 text-center">
-      <Mascot name="analyzing" fallback="thinking" float />
+      {line < LINES.length - 1 ? (
+        <Mascot key="analyzing" name="analyzing" fallback="thinking" float />
+      ) : (
+        <Mascot key="surprise" name="surprise" fallback="happy" className="animate-pop motion-reduce:animate-none" />
+      )}
       <p key={line} aria-live="polite" className="mt-4 animate-rise font-display text-xl font-normal motion-reduce:animate-none">
         {LINES[line]}
       </p>

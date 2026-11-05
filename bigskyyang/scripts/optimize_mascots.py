@@ -3,20 +3,26 @@
 
   start.png → start.webp   (정지 이미지: 화면 표시 176px의 2배인 352px)
   hello.gif → hello.webp   (움직이는 이미지: 화면 표시 256px의 2배인 512px, 프레임·속도 그대로)
+  illust/nutrient_protein.png → nutrient_protein.webp   (음식·영양소 그림: 가장 크게 쓰는 112px의 2배인 224px)
 
 웹(Mascot.jsx)은 WebP를 먼저 쓰고, WebP가 없거나 안 열리면 원본 PNG/GIF를 쓴다.
-원본은 지우지 않는다. 마스코트 이미지를 새로 넣거나 바꿨으면 다시 실행한다.
+원본은 지우지 않는다. 그림을 새로 넣거나 바꿨으면 다시 실행한다 (WebP가 원본보다 새것이면 건너뛴다. 모두 다시: --all).
 
 사용법 (bigskyyang 폴더에서)
   python scripts/optimize_mascots.py
 """
 
+import sys
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageSequence
 
-MASCOT = Path(__file__).resolve().parents[1] / 'web' / 'public' / 'mascot'
+PUBLIC = Path(__file__).resolve().parents[1] / 'web' / 'public'
+MASCOT = PUBLIC / 'mascot'
+ILLUST = PUBLIC / 'illust'
 STILL_PX = 352
+ILLUST_PX = 224
+FORCE = '--all' in sys.argv
 ANIM_PX = 512
 # 움직이는 이미지의 크림색 배경을 투명하게 바꿔, 어떤 화면 배경 위에서도 사각형 경계가 보이지 않게 한다.
 # (손실 압축은 배경색을 미세하게 바꾸므로, 색을 맞추는 대신 투명하게 한다)
@@ -43,13 +49,22 @@ def kb(path):
     return f'{path.stat().st_size / 1024:,.0f}KB'
 
 
-for src in sorted(MASCOT.glob('*.png')):
-    out = src.with_suffix('.webp')
-    fit(Image.open(src).convert('RGBA'), STILL_PX).save(out, 'WEBP', quality=88, method=6)
-    print(f'{src.name:14} {kb(src):>8} → {out.name:14} {kb(out):>7}')
+def fresh(src, out):
+    return not FORCE and out.exists() and out.stat().st_mtime >= src.stat().st_mtime
+
+
+for folder, px in [(MASCOT, STILL_PX), (ILLUST, ILLUST_PX)]:
+    for src in sorted(folder.glob('*.png')):
+        out = src.with_suffix('.webp')
+        if fresh(src, out):
+            continue
+        fit(Image.open(src).convert('RGBA'), px).save(out, 'WEBP', quality=88, method=6)
+        print(f'{src.name:24} {kb(src):>8} → {out.name:24} {kb(out):>7}')
 
 for src in sorted(MASCOT.glob('*.gif')):
     out = src.with_suffix('.webp')
+    if fresh(src, out):
+        continue
     gif = Image.open(src)
     frames, durations = [], []
     for frame in ImageSequence.Iterator(gif):

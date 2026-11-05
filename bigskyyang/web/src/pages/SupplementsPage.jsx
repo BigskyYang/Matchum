@@ -2,12 +2,14 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom'
 import BottomSheet from '../components/BottomSheet.jsx'
 import Icon from '../components/Icon.jsx'
+import Mascot from '../components/Mascot.jsx'
 import { NUTRIENT_GUIDE } from '../data/nutrientGuide.js'
 import { PAGE_SIZE, SUPPLEMENT_NOTICES, TARGET_LABELS } from '../data/supplementInfo.js'
 import { buildPersonalResult } from '../lib/result.js'
 import { loadPicks, loadSurvey, savePicks } from '../lib/storage.js'
 import { dailyTotals, formsOf, productCount, productSections, productTexts, targetsFor } from '../lib/supplements.js'
 import { useCatalog, useModels } from '../lib/useCatalog.js'
+import NutrientArt from '../components/NutrientArt.jsx'
 
 // 건강기능식품 살펴보기 (/supplements?n=영양소). 개인 결과에서 '부족하기 쉬워요'로 나온 영양소의 제품을 모두 보고 고른다
 //   제품: 준혁님 9단계 통과 후보 전체 (data/supplementCatalog.json). 대상 칸을 섞지 않고, 같은 칸 안의 순서는 그대로
@@ -57,7 +59,8 @@ function Gate({ onAnswer }) {
 function Consult({ onRetry }) {
   return (
     <div className="rounded-card bg-white p-5 shadow-soft">
-      <p className="text-lg font-bold">의사·약사와 먼저 이야기해 보세요</p>
+      <Mascot name="worry" fallback="thinking" size="sm" className="mx-auto" />
+      <p className="mt-2 text-lg font-bold">의사·약사와 먼저 이야기해 보세요</p>
       <p className="mt-2 leading-relaxed text-ink-soft">
         임신·수유 중이거나 질환·복용약이 있으면 건강기능식품은 전문가와 먼저 상의하는 게 좋아요. 결과 화면의 음식 안내는 그대로
         참고하셔도 좋아요.
@@ -271,7 +274,14 @@ export default function SupplementsPage() {
 
   if (picks.gate === null) return wrap(<Gate onAnswer={setGate} />)
   if (picks.gate === 'consult') return wrap(<Consult onRetry={() => setGate(null)} />)
-  if (!r || !catalog) return wrap(<p className="text-sm text-ink-soft">불러오고 있어요…</p>)
+  if (!r || !catalog) {
+    return wrap(
+      <p className="flex flex-col items-center gap-2 py-10 text-sm text-ink-soft">
+        <Mascot name="rest" fallback="default" size="sm" />
+        불러오고 있어요…
+      </p>,
+    )
+  }
 
   const { nutrients } = r.supplements
   if (!nutrients.length) {
@@ -311,7 +321,7 @@ export default function SupplementsPage() {
               n.key === active.key ? 'bg-primary-shade text-white' : 'bg-white text-ink shadow-soft'
             }`}
           >
-            <span aria-hidden="true">{n.icon}</span>
+            <NutrientArt n={n} className="size-6" />
             {n.label}
             <span className={`text-xs ${n.key === active.key ? 'text-white' : 'text-ink-soft'}`}>{productCount(catalog, n.key, targets)}</span>
           </button>

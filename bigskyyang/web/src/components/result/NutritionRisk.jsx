@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import { PRODUCT_NUTRIENTS } from '../../data/supplementInfo.js'
 import BottomSheet from '../BottomSheet.jsx'
 import Icon from '../Icon.jsx'
+import Mascot from '../Mascot.jsx'
+import NutrientArt from '../NutrientArt.jsx'
 
 // 개인 결과의 '내가 챙겨야 할 영양소' (데이터는 lib/result.js의 buildPersonalResult → nutrition)
 //   재준님 화면 규칙 (Jaejun/nutrition_final_feedback_applied/config/display_policy.json)
@@ -29,7 +31,7 @@ function RiskSheet({ n, onClose }) {
     <BottomSheet
       title={
         <>
-          <span aria-hidden="true">{n.icon}</span>
+          <NutrientArt n={n} className="size-6" />
           {n.label}
         </>
       }
@@ -88,7 +90,7 @@ function RestSheet({ rest, onPick, onClose }) {
               className="flex h-full w-full flex-col items-start gap-1.5 rounded-card bg-cream px-3 py-2.5 text-left active:scale-[0.98]"
             >
               <span className="flex items-start gap-1.5 text-sm leading-tight font-bold">
-                <span aria-hidden="true">{n.icon}</span>
+                <NutrientArt n={n} className="size-6" />
                 {n.label}
               </span>
               <Badge n={n} />
@@ -103,14 +105,22 @@ function RestSheet({ rest, onPick, onClose }) {
 export default function NutritionRisk({ nutrition, ffqAsked }) {
   const [open, setOpen] = useState(null) // 영양소 또는 'rest'
   const close = useCallback(() => setOpen(null), [])
-  if (!nutrition) return <p className="text-sm text-ink-soft">계산하고 있어요…</p>
+  if (!nutrition) {
+    return (
+      <p className="flex items-center gap-3 text-sm text-ink-soft">
+        <Mascot name="rest" fallback="default" size="xs" />
+        계산하고 있어요…
+      </p>
+    )
+  }
   const { watch, rest, habitualAvailable } = nutrition
 
   return (
     <div>
       {watch.length ? (
         <>
-          <p className="text-sm text-ink-soft">
+          <p className="flex items-center gap-3 text-sm text-ink-soft">
+            <Mascot name="worry" fallback="thinking" size="xs" />
             지금 응답으로 보면 특히 챙겨야 할 영양소예요
           </p>
           <ul className="mt-3 flex flex-wrap gap-2">
@@ -121,7 +131,7 @@ export default function NutritionRisk({ nutrition, ffqAsked }) {
                   onClick={() => setOpen(n)}
                   className="flex items-center gap-1.5 rounded-full bg-primary-soft px-3.5 py-2.5 font-bold text-primary-shade active:scale-95"
                 >
-                  <span aria-hidden="true">{n.icon}</span>
+                  <NutrientArt n={n} className="size-6" />
                   {n.label}
                   <span aria-hidden="true">›</span>
                 </button>
@@ -130,7 +140,10 @@ export default function NutritionRisk({ nutrition, ffqAsked }) {
           </ul>
         </>
       ) : (
-        <p className="text-sm text-ink-soft">특히 부족하기 쉬운 영양소는 없어요. 지금처럼 골고루 드세요.</p>
+        <p className="flex items-center gap-3 text-sm text-ink-soft">
+          <Mascot name="cheer" fallback="happy" size="xs" />
+          특히 부족하기 쉬운 영양소는 없어요. 지금처럼 골고루 드세요.
+        </p>
       )}
 
       {rest.length > 0 && (
