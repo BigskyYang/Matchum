@@ -2,7 +2,7 @@
 //   판정처럼 보이지 않게 경향으로: 부족하기 쉬워요 · 보통 · 잘 챙기는 편 (나트륨은 많이 먹을 위험이라 따로)
 export const BAND_CLS = { High: 'bg-primary-soft text-primary-shade', Mid: 'bg-butter text-ink', Low: 'bg-mint text-ink' }
 export const BAND_LABELS = {
-  lack: { High: '부족하기 쉬워요', Mid: '보통', Low: '잘 챙기는 편' },
-  excess: { High: '많이 먹기 쉬워요', Mid: '보통', Low: '잘 조절하는 편' },
+  lack: { High: '기준 미만 가능성 높은 편', Mid: '보통', Low: '기준 미만 가능성 낮은 편' },
+  excess: { High: '기준 초과 가능성 높은 편', Mid: '보통', Low: '기준 초과 가능성 낮은 편' },
 }
 export const bandLabel = (n, band) => BAND_LABELS[n.excess ? 'excess' : 'lack'][band]

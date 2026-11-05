@@ -1,6 +1,6 @@
 // 유형 결과 공유 이미지: 휴대폰에서 canvas로 바로 그린다 (서버·외부 라이브러리 없음)
 //   story: 1080×1920 (인스타 스토리 등), square: 1080×1080 (카카오톡·피드)
-//   담는 것: 대분류 색 칩, 유형 마스코트, 유형 이름, 해시태그, '성인 100명 중 N명', 서비스 이름과 주소 (개인 응답·건강 정보는 넣지 않는다)
+//   담는 것: 대분류 색 칩, 유형 마스코트, 유형 이름, 해시태그, '조사 자료에서 성인 100명 중 약 N명', 서비스 이름과 주소 (개인 응답·건강 정보는 넣지 않는다)
 //   색은 디자인 시안 A안(index.css 토큰)과 같은 값
 export const FORMATS = {
   story: { width: 1080, height: 1920, label: '스토리 (9:16)' },
@@ -168,7 +168,7 @@ export async function drawShareImage(r, format = 'story', { host = window.locati
     let yy = cardY + cardH + 100
     ctx.font = `${72}px ${DISPLAY}`
     ctx.fillStyle = C.ink
-    ctx.fillText(`성인 100명 중 ${share}명`, W / 2, yy)
+    ctx.fillText(`조사 자료에서 성인 100명 중 약 ${share}명`, W / 2, yy)
     yy += 80
     const size = 26
     const gap = 14
@@ -185,7 +185,7 @@ export async function drawShareImage(r, format = 'story', { host = window.locati
     ctx.font = `600 36px ${SANS}`
     ctx.fillStyle = C.soft
     // 태그 줄 수에 따라 바로 아래에 둔다 (태그가 두 줄이어도 겹치지 않게)
-    ctx.fillText(`성인 100명 중 ${share}명이 이 유형이에요`, W / 2, Math.min(y - tagH / 2 + 40, cardY + cardH - 50))
+    ctx.fillText(`조사 자료에서 성인 100명 중 약 ${share}명이 이 유형이에요`, W / 2, Math.min(y - tagH / 2 + 40, cardY + cardH - 50))
   }
 
   // 서비스 이름·주소

@@ -36,7 +36,7 @@ function NutrientComparison({ nutrients }) {
   if (!nutrients.length) return <p className="text-sm text-ink-soft">예측 등급이 달라진 영양소가 없어요. 실제 효과가 없다는 뜻은 아니에요.</p>
   return (
     <table className="w-full table-fixed text-sm">
-      <caption className="mb-2 text-left text-xs text-ink-soft">영양소별 상대 등급</caption>
+      <caption className="mb-2 text-left text-xs text-ink-soft">기준 미만 가능성의 상대 등급 · 나트륨은 초과 가능성</caption>
       <thead>
         <tr className="text-xs text-ink-soft">
           <th scope="col" className="w-2/5 pb-2 text-left font-semibold">영양소</th>

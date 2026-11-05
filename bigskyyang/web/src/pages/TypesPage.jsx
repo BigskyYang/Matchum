@@ -38,7 +38,7 @@ function TypeSheet({ t, mine, onClose }) {
           </ul>
         )}
         <p className="mt-3 text-sm text-ink-soft">
-          성인 100명 중 <b className="text-primary-shade">{Math.round(t.sharePct)}명</b>이 이 유형이에요
+          조사 자료에서 성인 100명 중 약 <b className="text-primary-shade">{Math.round(t.sharePct)}명</b>이 이 유형이에요
         </p>
       </div>
       <h4 className="mt-5 mb-2 flex items-center gap-1.5 text-sm font-bold">

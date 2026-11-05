@@ -122,8 +122,8 @@ with sync_playwright() as p:
 
     page.goto(BASE + '/survey?q=strength_days')
     settle(page)
-    axe(page, '설문(통계 말풍선)')
-    shot(page, '설문_통계말풍선')
+    axe(page, '설문')
+    shot(page, '설문_신체활동')
 
     page.goto(BASE + '/reveal')
     page.wait_for_timeout(700)
@@ -131,9 +131,9 @@ with sync_playwright() as p:
     page.wait_for_timeout(2400)
     settle(page, 700)
     axe(page, '공개 카드')
-    for i in range(6):
+    for i in range(5):
         shot(page, f'공개_카드{i + 1}')
-        if i < 5:
+        if i < 4:
             page.get_by_role('button', name='다음').click()
             page.wait_for_timeout(700)
 

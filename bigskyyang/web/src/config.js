@@ -9,4 +9,4 @@ export const SERVICE_NAME = 'NBTI 유형 검사'
 export const SERVICE_SUBTITLE = '생활습관으로 알아보는 나의 영양 유형'
 
 // 링크 공유 미리보기·검색 설명에 쓰는 한 줄 소개
-export const SERVICE_TAGLINE = '생활습관으로 알아보는 나의 영양 유형. 머신러닝이 찾은 유형별 부족 영양소에 맞춰 생활습관·음식·영양제를 추천해요'
+export const SERVICE_TAGLINE = '내 생활습관 유형을 알아보고, 식사에서 살펴볼 점을 확인해요.'
