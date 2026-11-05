@@ -11,6 +11,7 @@ import { DateWheel, DurationWheel, NumberWheel, TimeWheel } from '../components/
 import { SECTIONS, visibleQuestions } from '../data/questions.js'
 import { loadSurvey, saveSurvey } from '../lib/storage.js'
 import { resolveStep, resultPath, surveyPath } from '../lib/surveyFlow.js'
+import { surveyFact } from '../lib/surveyStats.js'
 
 function QuestionStep({ q, answer, isLast, onAnswer }) {
   // 휠 입력은 이전 응답이 있으면 그 값, 없으면 문항의 initial 값에서 시작. 여러 줄 선택은 빈 값에서 시작
@@ -79,6 +80,22 @@ function QuestionStep({ q, answer, isLast, onAnswer }) {
   )
 }
 
+// 방금 답한 문항의 국건영 통계 (마스코트 옆 말풍선). 내용은 lib/surveyStats.js
+function FactBubble({ fact }) {
+  return (
+    <div className="flex animate-rise items-center gap-2 motion-reduce:animate-none">
+      <Mascot name="thinking" size="sm" />
+      <p role="status" className="relative flex-1 rounded-card bg-white px-4 py-3 text-sm leading-relaxed shadow-soft">
+        <span className="flex items-center gap-1 text-xs font-bold text-ink-faint">
+          <Icon name="chart" size={14} /> 국민건강영양조사
+        </span>
+        {fact.lead} 약 <b className="text-base text-primary-shade">{fact.pct}</b>
+        {fact.tail}
+      </p>
+    </div>
+  )
+}
+
 // 문항마다 주소(/survey?q=문항ID, 2단계는 /survey2?q=)를 하나씩 쌓아서, 휴대폰의 뒤로·앞으로 가기로 문항을 오갈 수 있다
 // stage 1: 유형 분류 문항 → /result, stage 2: 개인 결과 문항 → /result2 (1단계 응답을 이어 쓴다)
 export default function SurveyPage({ stage = 1 }) {
@@ -104,6 +121,7 @@ export default function SurveyPage({ stage = 1 }) {
   const inSection = list.filter((x) => x.section === q.section)
   const position = inSection.indexOf(q) + 1
   const percent = Math.round((step / list.length) * 100)
+  const fact = step > 0 ? surveyFact(list[step - 1].id, state.answers) : null
 
   const answer = (value) => {
     if (busy.current) return
@@ -168,8 +186,8 @@ export default function SurveyPage({ stage = 1 }) {
         </div>
       </header>
 
-      <div className="mt-6 flex justify-center">
-        <Mascot name="thinking" size="sm" />
+      <div className="mt-6 flex min-h-24 justify-center">
+        {fact ? <FactBubble key={list[step - 1].id} fact={fact} /> : <Mascot name="thinking" size="sm" />}
       </div>
 
       <div className="mt-4 flex flex-1 flex-col">
