@@ -14,7 +14,8 @@
      - 오메가3의 기억력 문구, 식이섬유의 콜레스테롤 문구는 충돌로 보지 않음
   ③ 단백질·근력 원료 (단백질, 크레아틴, 루바브, 백수오 등)가 있으면 제외
   ④ 제품명에 다른 목적(피부·미백·다이어트·콜라겐·관절·프로틴·갱년기 등)을 내세우면 제외
-  * 제품명에 멀티·종합·올인원이 있는 종합비타민(성분 3개 이상)은 원래 여러 성분이 섞인 제품이라 검사하지 않음
+  * (11-05 변경, 팀 피드백) 예전에는 이름에 멀티·종합·올인원이 있는 종합비타민(성분 3개 이상)을 검사하지 않았지만,
+    그러면 홍삼·은행잎·콜라겐 등이 든 종합비타민이 남아서 이제 종합비타민도 똑같이 검사함
 
 입력  2단계_결과.pkl
 출력  3단계_목적충돌.xlsx, 3단계_결과.pkl (다음 단계 입력), 3단계_스트레스참고.pkl
@@ -78,8 +79,6 @@ def claim_conflict(f, ings):
 
 def check(name, f, ings):
     """(결과, 이유) — 결과: '통과' / '제외' / '스트레스 참고'"""
-    if len(ings) >= 3 and re.search(MULTI, name):
-        return "통과", "종합비타민 이름 (검사 안 함)"
     f = nf(f)
     for kind, how in ((raw_conflict(f), "원료"), (claim_conflict(f, ings), "기능성 문구")):
         if kind:
@@ -111,14 +110,15 @@ def main():
     stress.to_pickle(out("3단계_스트레스참고.pkl"))
 
     kind_cnt = removed["이유"].str.replace(r" \(.*\)", "", regex=True).value_counts()
-    multi_pass = int((p["이유"] == "종합비타민 이름 (검사 안 함)").sum())
+    is_multi = [len(i.split(", ")) >= 3 and bool(re.search(MULTI, n)) for n, i in zip(p["제품명"], p["함께 든 가이드 성분"])]
+    multi_out = int((pd.Series(is_multi, index=p.index) & (p["결과"] == "제외")).sum())
 
     print("[3/3] 결과 엑셀 저장 중... (1~2분, 아무 키도 누르지 마세요)")
     lines = [
         ("3단계: 목적 충돌", True), ("", False),
         ("결과", True),
         (f"· 시작 {n0:,}개 → 제외 {len(removed):,}개 · 스트레스 참고 {len(stress):,}개 → 다음 단계로 {len(keep):,}개", False),
-        (f"· 멀티·종합·올인원 이름의 종합비타민 {multi_pass:,}개는 검사하지 않고 통과", False),
+        (f"· 멀티·종합·올인원 이름의 종합비타민도 똑같이 검사 (11-05 변경) → 그중 {multi_out:,}개 제외", False),
         ("", False), ("제외 이유 (목적)", True),
     ] + [(f"· {k}: {v:,}개", False) for k, v in kind_cnt.items()] + [
         ("", False), ("규칙", True),

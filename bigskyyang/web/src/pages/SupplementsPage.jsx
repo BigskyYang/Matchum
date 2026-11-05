@@ -7,26 +7,19 @@ import { NUTRIENT_GUIDE } from '../data/nutrientGuide.js'
 import { PAGE_SIZE, SUPPLEMENT_NOTICES, TARGET_LABELS } from '../data/supplementInfo.js'
 import { buildPersonalResult } from '../lib/result.js'
 import { loadSurvey } from '../lib/storage.js'
-import { combinedIds, dailyTotals, formsOf, productCount, productSections, productTexts, targetsFor } from '../lib/supplements.js'
+import { combinedIds, dailyTotals, formsOf, headroomProducts, productCount, productSections, productTexts, targetsFor } from '../lib/supplements.js'
 import { useCatalog, useModels } from '../lib/useCatalog.js'
 import { usePicks } from '../lib/usePicks.js'
 import TotalsTable from '../components/supplements/TotalsTable.jsx'
 import NutrientArt from '../components/NutrientArt.jsx'
 
-// 건강기능식품 살펴보기 (/supplements?n=영양소). 개인 결과에서 '부족하기 쉬워요'로 나온 영양소의 제품을 모두 보고 고른다
+// 성분별 제품 표시 정보 (/supplements?n=영양소). 개인 결과에서 '부족하기 쉬워요'로 나온 영양소의 제품을 모두 보고 고른다
 //   제품: 준혁님 9단계 통과 후보 전체 (data/supplementCatalog.json). 대상 칸을 섞지 않고, 같은 칸 안의 순서는 그대로
 //   고른 제품(♡)은 이 휴대폰(sessionStorage)에만 두고, 함께 먹을 때 성분별 하루 합계를 상한섭취량과 비교해 보여 준다
 //   (내가 먹는 제품을 등록해 두면(/my-supplements) 그 제품도 합계에 넣는다)
 //   제품을 보기 전에 임신·수유·질환·복용약을 한 번 묻고(답은 이 휴대폰에만), 해당되면 제품 대신 상담을 권한다
 const GUIDE = Object.fromEntries(NUTRIENT_GUIDE.map((n) => [n.key, n]))
 const SOURCE = { habitual: '평소 식사 응답으로 예측', lifestyle: '생활습관 응답으로 예측' }
-
-// '마그네슘이' / '비타민 B1·B2가' (숫자로 끝나면 읽는 소리로)
-const iGa = (word) => {
-  const code = word.charCodeAt(word.length - 1) - 0xac00
-  const final = code >= 0 && code <= 11171 ? code % 28 !== 0 : /[136780LMNR]$/i.test(word)
-  return final ? '이' : '가'
-}
 
 function Gate({ onAnswer }) {
   return (
@@ -43,7 +36,7 @@ function Gate({ onAnswer }) {
           해당돼요
         </button>
       </div>
-      <p className="mt-2 text-xs text-ink-soft">답은 이 휴대폰에만 잠시 두고 저장하지 않아요.</p>
+      <p className="mt-2 text-xs text-ink-soft">선택은 이 브라우저 탭에 임시 보관해요.</p>
     </div>
   )
 }
@@ -146,8 +139,9 @@ function ProductSheet({ catalog, p, picked, onToggle, onClose }) {
   )
 }
 
-function PicksSheet({ catalog, ids, mine, sex, onToggle, onClose }) {
-  const totals = dailyTotals(catalog, combinedIds(mine, ids), sex)
+function PicksSheet({ catalog, ids, mine, sex, age, onToggle, onClose }) {
+  const combined = combinedIds(mine, ids)
+  const totals = dailyTotals(catalog, combined, sex, age)
   const mineCount = mine.filter((m) => m.id && !ids.includes(m.id)).length
   return (
     <BottomSheet title={`고른 제품 ${ids.length}개`} onClose={onClose}>
@@ -170,7 +164,7 @@ function PicksSheet({ catalog, ids, mine, sex, onToggle, onClose }) {
       <p className="mt-5 font-bold">함께 먹으면 하루에 이만큼이에요</p>
       {mineCount > 0 && <p className="mt-0.5 text-xs text-ink-soft">내가 먹는 제품 {mineCount}개도 함께 계산했어요.</p>}
       <div className="mt-1">
-        <TotalsTable totals={totals} />
+        <TotalsTable totals={totals} headroom={headroomProducts(catalog, combined)} />
       </div>
       <Link to="/my-supplements" className="mt-4 flex items-center justify-center gap-1 py-2 text-sm font-bold text-primary-shade">
         내가 먹는 제품 등록 · 약사 상담 메모 ›
@@ -215,7 +209,7 @@ export default function SupplementsPage() {
   const [params, setParams] = useSearchParams()
   const models = useModels()
   const catalog = useCatalog()
-  const { picks, toggle, setGate } = usePicks()
+  const { picks, toggle, setGate } = usePicks(catalog)
   const [form, setForm] = useState(null)
   const [open, setOpen] = useState(null) // 제품 또는 'picks'
   const close = useCallback(() => setOpen(null), [])
@@ -235,7 +229,7 @@ export default function SupplementsPage() {
       >
         <Icon name="back" size={26} />
       </button>
-      <h1 className="font-display text-xl font-normal">건강기능식품 살펴보기</h1>
+      <h1 className="font-display text-xl font-normal">성분별 제품 표시 정보</h1>
     </header>
   )
   const wrap = (children) => (
@@ -260,7 +254,7 @@ export default function SupplementsPage() {
   if (!nutrients.length) {
     return wrap(
       <p className="rounded-card bg-white p-5 leading-relaxed shadow-soft">
-        지금 응답으로는 건강기능식품으로 챙길 영양소가 없어요. 결과 화면의 음식 안내를 참고해 주세요.
+        이번 결과에 연결된 성분별 제품 목록이 없어요.
       </p>,
     )
   }
@@ -316,7 +310,7 @@ export default function SupplementsPage() {
       <div className="rounded-card bg-lavender/50 px-4 py-3 text-sm leading-relaxed">
         <p className="font-bold">
           {reasonName}
-          {iGa(reasonName)} 부족하기 쉬워요
+           · 제품 성분표 확인
           <span className="ml-1.5 text-xs font-normal text-ink-soft">{SOURCE[watchRows[0].source]}</span>
         </p>
         {foods.length > 0 && <p className="mt-0.5 text-ink-soft">음식으로는 {foods.join('·')}에 많아요.</p>}
@@ -374,7 +368,7 @@ export default function SupplementsPage() {
       )}
 
       {open === 'picks' && (
-        <PicksSheet catalog={catalog} ids={picks.ids} mine={picks.mine} sex={sex} onToggle={toggle} onClose={close} />
+        <PicksSheet catalog={catalog} ids={picks.ids} mine={picks.mine} sex={sex} age={age} onToggle={toggle} onClose={close} />
       )}
       {open && open !== 'picks' && (
         <ProductSheet catalog={catalog} p={open} picked={picks.ids.includes(open.id)} onToggle={() => toggle(open.id)} onClose={close} />

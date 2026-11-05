@@ -4,9 +4,9 @@ import { BASIS_TEXT } from '../../data/nutrientGuide.js'
 import NutrientArt from '../NutrientArt.jsx'
 
 // 유형 화면의 '부족할 수 있는 영양소' ((나)안, 데이터는 lib/nutrition.js의 typeNutrients)
-//   🔹 내 유형이 특히 챙길 영양소: 2줄 중 유형특이·식사량영향 (테두리 색 = 부족·주의). 내 유형 결과라 맨 위에 크게
-//   ▫️ 나와 같은 성별·나이대가 챙겨야 할 영양소: 2줄 중 '흔함' (유형이 아니라 성별·나이 때문에 많이 부족한 영양소)
-//   🔸 모두가 챙겨야 할 영양소: 공통 8개 (유형과 상관없어 맨 아래 작은 칩으로)
+//   🔹 같은 유형에서 섭취가 적었던 영양소: 2줄 중 유형특이·식사량영향 (테두리 색 = 부족·주의). 내 유형 결과라 맨 위에 크게
+//   ▫️ 같은 성별·나이대의 섭취 경향: 2줄 중 '흔함' (유형이 아니라 성별·나이 때문에 많이 부족한 영양소)
+//   🔸 조사에서 섭취가 적었던 영양소: 공통 8개 (유형과 상관없어 맨 아래 작은 칩으로)
 // 영양소를 누르면 화면 아래에서 올라오는 창(BottomSheet)으로 역할·대표 음식을 보여 준다. 근거 설명은 '어떻게 만들었나요?' 창에
 const BORDER = { poor: 'border-primary-strong', fair: 'border-[#f2c14e]' }
 const CHIP = { poor: 'bg-primary-soft text-primary-shade', fair: 'bg-butter text-ink' }
@@ -81,11 +81,11 @@ function NutrientSheet({ n, sexLabel, ageLabel, onClose }) {
       <p className="leading-relaxed">
         {pick ? (
           <>
-            나와 같은 유형·{sexLabel}·{ageLabel} <b>10명 중 {n.of10}명</b>이 {BASIS_TEXT[n.basis]}보다 적게 먹어요. 같은 성별·나이
+            조사 자료로 추정하면 같은 유형·{sexLabel}·{ageLabel} <b>10명 중 약 {n.of10}명</b>이 {BASIS_TEXT[n.basis]}보다 적게 먹어요. 같은 성별·나이
             평균은 10명 중 {n.peerOf10}명이에요.
           </>
         ) : (
-          <>성인 절반 이상이 {BASIS_TEXT[n.basis]}보다 적게 먹는 영양소예요. 유형과 상관없이 모두 챙겨 주세요.</>
+          <>조사에서 성인 절반 이상이 하루 식사로 {BASIS_TEXT[n.basis]}보다 적게 섭취한 영양소예요.</>
         )}
       </p>
       {pick && n.text && <p className="mt-2 inline-block rounded-full bg-lavender px-2.5 py-1 text-xs font-bold">{n.text}</p>}
@@ -120,7 +120,7 @@ export default function TypeNutrients({ common, picks, sexLabel, ageLabel }) {
       {typePicks.length > 0 && (
         <section>
           <h3 className="flex items-center gap-2 text-sm font-bold">
-            <span aria-hidden="true" className="size-2.5 rounded-full bg-primary-strong" />내 유형이 특히 챙길 영양소
+            <span aria-hidden="true" className="size-2.5 rounded-full bg-primary-strong" />같은 유형에서 섭취가 적었던 영양소
           </h3>
           <ul className="mt-2 space-y-2">
             {typePicks.map((n) => (
@@ -133,7 +133,7 @@ export default function TypeNutrients({ common, picks, sexLabel, ageLabel }) {
       {peerPicks.length > 0 && (
         <section>
           <h3 className="flex items-center gap-2 text-sm font-bold">
-            <span aria-hidden="true" className="size-2.5 rounded-full bg-ink-faint" />나와 같은 성별·나이대가 챙겨야 할 영양소
+            <span aria-hidden="true" className="size-2.5 rounded-full bg-ink-faint" />같은 성별·나이대의 섭취 경향
           </h3>
           <ul className="mt-2 space-y-2">
             {peerPicks.map((n) => (
@@ -145,9 +145,8 @@ export default function TypeNutrients({ common, picks, sexLabel, ageLabel }) {
 
       <section>
         <h3 className="flex items-center gap-2 text-sm font-bold">
-          <span aria-hidden="true" className="size-2.5 rounded-full bg-[#e0a92e]" />모두가 챙겨야 할 영양소 {common.length}개
+          <span aria-hidden="true" className="size-2.5 rounded-full bg-[#e0a92e]" />조사에서 섭취가 적었던 영양소 {common.length}개
         </h3>
-        <p className="mt-1 text-xs text-ink-soft">유형과 상관없이 성인 절반 이상이 적게 먹는 영양소예요.</p>
         <ul className="mt-2 flex flex-wrap gap-1.5">
           {common.map((n) => (
             <CommonChip key={n.key} n={n} onOpen={setOpen} />

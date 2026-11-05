@@ -1,72 +1,91 @@
 import { useMemo, useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
-import GroupChip from '../components/GroupChip.jsx'
 import Icon from '../components/Icon.jsx'
 import Mascot from '../components/Mascot.jsx'
 import NutrientArt from '../components/NutrientArt.jsx'
-import { BAND_CLS, bandLabel } from '../data/bands.js'
 import { availableChanges, simulate } from '../lib/simulate.js'
 import { loadSurvey } from '../lib/storage.js'
 import { useModels } from '../lib/useCatalog.js'
 
-// '습관을 바꾸면 어떻게 될까?' (/simulate): 습관을 켜 보면 유형·영양소 결과를 다시 계산해 지금과 비교한다 (계산은 lib/simulate.js)
+// 응답 변경 비교 (/simulate): 결과 화면과 같은 대표 모델을 유지하고 생활습관 모델은 따로 비교한다.
 //   습관 버튼(2열) 바로 아래에 결과를 두어 한 화면에서 같이 보이게 한다 (고정 영역은 두지 않는다)
-//   모델이 학습 자료에서 본 경향일 뿐 실제로 바뀐다는 뜻이 아니라는 안내를 한 줄 둔다
-function Badge({ n, band }) {
-  return <span className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-bold ${BAND_CLS[band]}`}>{bandLabel(n, band)}</span>
+//   실제 효과를 예측하지 않는다는 안내는 비교 결과 바로 위에 둔다.
+const BAND = { High: '높은 편', Mid: '보통', Low: '낮은 편' }
+const SOURCE = { lifestyle: '생활습관', habitual: '평소 식사' }
+const NOTICE = '설문 응답을 바꿨을 때 모델의 예측을 비교하는 기능이며, 실제 영양 상태의 변화나 습관 개선 효과를 예측하는 것은 아닙니다.'
+
+function Badge({ band }) {
+  return <span className="inline-block rounded-full bg-cream px-2 py-1 text-xs font-bold">{BAND[band]}</span>
 }
 
 function TypeRow({ type }) {
-  if (!type.changed) {
-    return (
-      <p className="flex items-center gap-2 text-sm text-ink-soft">
-        <Mascot name={`type_${type.before.id}`} size="xs" />
-        유형은 그대로 <b className="text-ink">{type.before.name}</b>예요
-      </p>
-    )
-  }
   return (
-    <div className="flex items-center gap-2">
-      <Mascot name={`type_${type.before.id}`} size="xs" className="opacity-60" />
-      <Icon name="next" size={18} className="text-ink-faint" />
-      <Mascot name={`type_${type.after.id}`} size="xs" className="animate-pop motion-reduce:animate-none" />
-      <span className="min-w-0">
-        <GroupChip code={type.after.id[0]} name={type.after.main.name} className="text-xs" />
-        <span className="mt-0.5 block font-bold">{type.after.name}</span>
-      </span>
+    <div className="grid grid-cols-2 gap-3 text-center">
+      {[['현재 응답 기준', type.before], ['변경한 응답 기준', type.after]].map(([label, t]) => (
+        <div key={label} className="flex min-w-0 flex-col items-center">
+          <p className="text-xs text-ink-soft">{label}</p>
+          <Mascot name={`type_${t.id}`} size="xs" className="my-1" />
+          <p className="text-sm font-bold">{t.name}</p>
+        </div>
+      ))}
     </div>
   )
 }
 
-function Result({ sim, loading }) {
+function NutrientComparison({ nutrients }) {
+  if (!nutrients.length) return <p className="text-sm text-ink-soft">예측 등급이 달라진 영양소가 없어요. 실제 효과가 없다는 뜻은 아니에요.</p>
+  return (
+    <table className="w-full table-fixed text-sm">
+      <caption className="mb-2 text-left text-xs text-ink-soft">기준 미만 가능성의 상대 등급 · 나트륨은 초과 가능성</caption>
+      <thead>
+        <tr className="text-xs text-ink-soft">
+          <th scope="col" className="w-2/5 pb-2 text-left font-semibold">영양소</th>
+          <th scope="col" className="px-1 pb-2 font-semibold">현재 응답 기준</th>
+          <th scope="col" className="px-1 pb-2 font-semibold">변경한 응답 기준</th>
+        </tr>
+      </thead>
+      <tbody>
+        {nutrients.map((n) => (
+          <tr key={n.key} className="border-t border-ink/10">
+            <th scope="row" className="py-3 text-left">
+              <span className="flex items-center gap-1.5"><NutrientArt n={n} className="size-6" />{n.label}</span>
+              {n.excess && <span className="mt-1 block text-[11px] font-normal text-ink-soft">기준 초과 가능성</span>}
+              <span className="block text-[11px] font-normal text-ink-faint">{SOURCE[n.source]} 응답 기준</span>
+            </th>
+            <td className="px-1 py-3 text-center"><Badge band={n.from} /></td>
+            <td className="px-1 py-3 text-center"><Badge band={n.to} /></td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )
+}
+
+function Result({ sim, showLifestyle }) {
   return (
     <section aria-live="polite" className="rounded-card bg-white p-5 shadow-soft">
-      <h2 className="font-display text-xl font-normal">이렇게 바뀌어요</h2>
+      <h2 className="font-display text-xl font-normal">응답별 예측 비교</h2>
+      <p className="mt-2 text-xs leading-relaxed text-ink-soft">{NOTICE}</p>
       <div className="mt-3">
         <TypeRow type={sim.type} />
       </div>
       <div className="mt-4">
-        {loading ? (
+        {!sim.nutrients ? (
           <p className="text-sm text-ink-soft">영양소를 계산하고 있어요…</p>
-        ) : sim.nutrients.length ? (
-          <ul className="flex flex-col gap-2">
-            {sim.nutrients.map((n) => (
-              <li
-                key={n.key}
-                className={`flex items-center gap-2 rounded-card px-3 py-2.5 ${n.better ? 'bg-mint/60' : 'bg-primary-soft/60'}`}
-              >
-                <NutrientArt n={n} className="size-7" />
-                <span className="min-w-0 flex-1 text-sm font-bold">{n.label}</span>
-                <Badge n={n} band={n.from} />
-                <Icon name="next" size={14} className="shrink-0 text-ink-faint" />
-                <Badge n={n} band={n.to} />
-              </li>
-            ))}
-          </ul>
         ) : (
-          <p className="text-sm text-ink-soft">영양소 결과는 그대로예요.</p>
+          <NutrientComparison nutrients={sim.nutrients} />
         )}
       </div>
+      {showLifestyle && sim.habitualAvailable && (
+        <details className="mt-4 border-t border-ink/10 pt-3">
+          <summary className="cursor-pointer text-sm font-bold">생활습관 응답 기준으로 비교</summary>
+          <p className="mt-2 text-xs leading-relaxed text-ink-soft">평소 식사 모델에는 운동·수면·끼니 응답이 반영되지 않아요. 아래는 생활습관 모델만 따로 비교한 결과예요.</p>
+          <div className="mt-3"><NutrientComparison nutrients={sim.lifestyleNutrients} /></div>
+        </details>
+      )}
+      {sim.nutrients?.some((n) => n.excess) && (
+        <p className="mt-3 text-xs leading-relaxed text-ink-soft">나트륨의 등급 차이는 선택한 음식이나 습관이 나트륨 섭취를 늘리거나 줄인다는 뜻이 아니에요.</p>
+      )}
     </section>
   )
 }
@@ -90,16 +109,16 @@ export default function SimulatePage() {
 
   return (
     <main className="flex flex-1 flex-col gap-4 px-5 pt-4 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
-      <header className="flex items-center gap-2">
+      <header className="flex items-start gap-2">
         <button
           type="button"
           onClick={back}
           aria-label="뒤로"
-          className="-ml-2 flex size-11 items-center justify-center rounded-full text-2xl text-ink-soft active:bg-primary-soft"
+          className="-ml-2 flex size-11 shrink-0 items-center justify-center rounded-full text-2xl text-ink-soft active:bg-primary-soft"
         >
           <Icon name="back" size={26} />
         </button>
-        <h1 className="font-display text-xl font-normal">습관을 바꾸면 어떻게 될까?</h1>
+        <h1 className="py-2 font-display text-xl font-normal">응답을 바꾸면 예측은 어떻게 달라질까?</h1>
       </header>
 
       {changes.length ? (
@@ -117,7 +136,10 @@ export default function SimulatePage() {
                   }`}
                 >
                   <Icon name={active ? 'check' : c.icon} size={20} className="shrink-0" />
-                  {c.label}
+                  <span>
+                    {c.label}
+                    <span className={`mt-1 block text-[11px] font-normal ${active ? 'text-white' : 'text-ink-soft'}`}>{SOURCE[c.model]} 모델에 반영</span>
+                  </span>
                 </button>
               </li>
             )
@@ -126,17 +148,17 @@ export default function SimulatePage() {
       ) : (
         <p className="flex items-center gap-3 rounded-card bg-white p-5 text-sm shadow-soft">
           <Mascot name="cheer" fallback="happy" size="xs" />
-          바꿔 볼 습관이 없을 만큼 잘 챙기고 있어요.
+          비교할 수 있는 응답 변경 항목이 없어요.
         </p>
       )}
 
       {sim ? (
-        <Result sim={sim} loading={!sim.nutrients} />
+        <Result sim={sim} showLifestyle={changes.some((c) => on.includes(c.id) && c.model === 'lifestyle')} />
       ) : (
         changes.length > 0 && (
           <p className="flex items-center gap-3 rounded-card bg-white p-5 text-sm text-ink-soft shadow-soft">
             <Mascot name="thinking" size="xs" />
-            위에서 습관을 하나 켜 보세요.
+            비교할 응답을 선택해 보세요.
           </p>
         )
       )}
@@ -147,11 +169,7 @@ export default function SimulatePage() {
         </button>
       )}
 
-      <p className="mt-auto text-center text-xs leading-relaxed text-ink-faint">
-        모델이 국민건강영양조사 자료에서 본 경향이에요.
-        <br />
-        습관을 바꾸면 꼭 이렇게 된다는 뜻은 아니에요.
-      </p>
+      <p className="mt-auto text-center text-xs leading-relaxed text-ink-faint">변경값은 비교를 위한 가정이며 개인별 권장 목표는 아니에요.</p>
     </main>
   )
 }

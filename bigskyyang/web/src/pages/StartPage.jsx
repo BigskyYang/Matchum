@@ -1,5 +1,3 @@
-import { Link } from 'react-router-dom'
-import Icon from '../components/Icon.jsx'
 import Mascot from '../components/Mascot.jsx'
 import PrimaryButton from '../components/PrimaryButton.jsx'
 import RotatingNotes from '../components/RotatingNotes.jsx'
@@ -44,21 +42,18 @@ export default function StartPage() {
         {/* NBTI = Nutrient + MBTI */}
         <p className="mt-2.5 flex items-center gap-1.5 text-xs font-bold" aria-label="Nutrient와 MBTI를 합친 말">
           <span className="inline-flex items-center gap-1 rounded-full bg-mint px-2.5 py-1">
-            <Icon name="salad" size={14} /> Nutrient
+            <span aria-hidden="true">🥗</span> Nutrient
           </span>
           <span className="text-ink-faint">+</span>
           <span className="inline-flex items-center gap-1 rounded-full bg-lavender px-2.5 py-1">
-            <Icon name="puzzle" size={14} /> MBTI
+            <span aria-hidden="true">🧩</span> MBTI
           </span>
         </p>
         <p className="mt-5 text-sm leading-relaxed text-ink-soft">
-          나의 생활습관 기반 유형을 확인하고
+          내 생활습관 유형을 알아보고,
           <br />
-          챙기면 좋을 영양소를 알려드려요
+          식사에서 살펴볼 점을 확인해요
         </p>
-        <Link to="/types" className="mt-2 px-3 py-2 text-sm font-bold text-primary-shade">
-          {model.types.length}가지 유형 미리 보기 ›
-        </Link>
       </section>
 
       <footer>
@@ -67,14 +62,14 @@ export default function StartPage() {
           className="mb-3 text-center text-xs text-ink-soft"
           items={[
             <>
-              <Icon name="sparkles" size={14} className="mr-1 inline -mt-0.5" />머신러닝으로 <b className="text-ink">유형별 부족 영양소</b>를 찾아 두었어요
+              <span aria-hidden="true" className="mr-1">✨</span>먼저 <b className="text-ink">생활습관 유형</b>을 보고, 개인 식사 설문은 이어서 선택해요
             </>,
             <>
-              <Icon name="chart" size={14} className="mr-1 inline -mt-0.5" />국민건강영양조사 성인 <b className="text-ink">{sampleSize}명</b>(2022–2024) 분석
+              <span aria-hidden="true" className="mr-1">📊</span>국민건강영양조사 성인 <b className="text-ink">{sampleSize}명</b>(2022–2024) 분석
             </>,
             // 응답은 sessionStorage에만 잠시 두고 서버로 보내지 않는다 (lib/storage.js)
             <>
-              <Icon name="lock" size={14} className="mr-1 inline -mt-0.5" />응답은 <b className="text-ink">서버에 저장되지 않고</b>, 창을 닫으면 사라져요
+              <span aria-hidden="true" className="mr-1">🔒</span>응답과 결과는 <b className="text-ink">이 브라우저 탭</b>에서 계산하고 보관해요
             </>,
           ]}
         />

@@ -9,7 +9,7 @@ import { drawMemoImage } from '../lib/memoImage.js'
 import { buildPersonalResult } from '../lib/result.js'
 import { canShareFile, imageFile, shareOrSave } from '../lib/saveImage.js'
 import { loadSurvey } from '../lib/storage.js'
-import { combinedIds, dailyTotals, searchProducts } from '../lib/supplements.js'
+import { combinedIds, dailyTotals, headroomProducts, searchProducts } from '../lib/supplements.js'
 import { useCatalog, useModels } from '../lib/useCatalog.js'
 import { usePicks } from '../lib/usePicks.js'
 
@@ -89,7 +89,7 @@ function MemoSheet({ memo, onClose }) {
           {note}
         </p>
       )}
-      <p className="mt-2 text-center text-xs text-ink-faint">메모는 이 휴대폰에서만 만들고 어디에도 보내지 않아요.</p>
+      <p className="mt-2 text-center text-xs text-ink-faint">메모에는 제품과 직접 적은 질문이 담겨요. 저장하거나 공유하기 전에 내용을 확인해 주세요.</p>
     </BottomSheet>
   )
 }
@@ -99,18 +99,22 @@ export default function MySupplementsPage() {
   const survey = useMemo(() => loadSurvey(), [])
   const models = useModels()
   const catalog = useCatalog()
-  const { picks, addMine, removeMine } = usePicks()
+  const { picks, addMine, removeMine } = usePicks(catalog)
   const [query, setQuery] = useState('')
   const [memoOpen, setMemoOpen] = useState(false)
   const [today] = useState(() => new Date().toLocaleDateString('ko-KR'))
   const r = useMemo(() => (survey.done[2] && models ? buildPersonalResult(survey.answers, models) : null), [survey, models])
   const found = useMemo(() => (catalog ? searchProducts(catalog, query) : { items: [], total: 0 }), [catalog, query])
-  const totals = catalog ? dailyTotals(catalog, combinedIds(picks.mine, picks.ids), survey.answers.sex) : []
+  const combined = combinedIds(picks.mine, picks.ids)
+  const totals = catalog && r ? dailyTotals(catalog, combined, r.sex, r.age) : []
   const manualCount = picks.mine.filter((m) => !m.id).length
 
   const memo = useMemo(() => {
     if (!catalog || !r) return null
-    const product = (id) => ({ name: catalog.products[id].name, maker: catalog.products[id].maker })
+    const product = (id) => {
+      const p = catalog.products[id]
+      return { id, name: p.name, maker: p.maker, form: p.form, intake: p.intake }
+    }
     return {
       who: `${r.sex === 1 ? '남성' : '여성'} · ${decadeOf(r.age)}`,
       dateLabel: today,
@@ -118,7 +122,7 @@ export default function MySupplementsPage() {
       mine: picks.mine.map((m) => (m.id ? product(m.id) : { name: m.name })),
       picks: picks.ids.filter((id) => !picks.mine.some((m) => m.id === id)).map(product),
       manualCount: picks.mine.filter((m) => !m.id).length,
-      totals: dailyTotals(catalog, combinedIds(picks.mine, picks.ids), r.sex),
+      totals: dailyTotals(catalog, combinedIds(picks.mine, picks.ids), r.sex, r.age),
     }
   }, [catalog, r, picks, today])
 
@@ -239,7 +243,7 @@ export default function MySupplementsPage() {
           <h2 className="font-display text-xl font-normal">함께 먹으면 하루에</h2>
           {picks.ids.length > 0 && <p className="mt-1 text-xs text-ink-soft">고른 제품 {picks.ids.length}개도 함께 계산했어요.</p>}
           <div className="mt-2">
-            <TotalsTable totals={totals} />
+            <TotalsTable totals={totals} headroom={headroomProducts(catalog, combined)} />
           </div>
           {manualCount > 0 && <p className="mt-1 text-xs text-ink-soft">이름만 적은 제품 {manualCount}개는 함량을 몰라 합계에 넣지 않았어요.</p>}
         </section>

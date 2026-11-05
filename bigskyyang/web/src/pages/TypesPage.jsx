@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
 import BottomSheet from '../components/BottomSheet.jsx'
 import GroupChip, { GroupDot } from '../components/GroupChip.jsx'
 import Icon from '../components/Icon.jsx'
@@ -8,7 +8,7 @@ import HabitSignals from '../components/result/HabitSignals.jsx'
 import { allTypes, buildTypeResult } from '../lib/result.js'
 import { loadSurvey } from '../lib/storage.js'
 
-// 전체 유형 보기 (/types): 대분류 4개 × 세부 유형 3개. 설문을 하지 않아도 볼 수 있다
+// 전체 유형 보기 (/types): 1단계 설문 완료 후 대분류 4개 × 세부 유형 3개를 볼 수 있다
 //   유형을 누르면 그 유형 평균의 생활습관 신호등·해시태그·비율을 아래에서 올라오는 창으로
 //   내 결과가 있으면 내 유형에 '내 유형' 표시
 function useMyType() {
@@ -38,7 +38,7 @@ function TypeSheet({ t, mine, onClose }) {
           </ul>
         )}
         <p className="mt-3 text-sm text-ink-soft">
-          성인 100명 중 <b className="text-primary-shade">{Math.round(t.sharePct)}명</b>이 이 유형이에요
+          조사 자료에서 성인 100명 중 약 <b className="text-primary-shade">{Math.round(t.sharePct)}명</b>이 이 유형이에요
         </p>
       </div>
       <h4 className="mt-5 mb-2 flex items-center gap-1.5 text-sm font-bold">
@@ -55,10 +55,11 @@ export default function TypesPage() {
   const groups = useMemo(() => allTypes(), [])
   const myType = useMyType()
   const [open, setOpen] = useState(null)
+  if (!myType) return <Navigate to="/" replace />
 
   const back = () => {
     if ((window.history.state?.idx ?? 0) > 0) navigate(-1)
-    else navigate(myType ? '/result' : '/')
+    else navigate('/result')
   }
 
   return (
@@ -115,12 +116,6 @@ export default function TypesPage() {
           </ul>
         </section>
       ))}
-
-      {!myType && (
-        <Link to="/survey" className="block rounded-button bg-primary-strong py-4 text-center text-xl font-bold text-white shadow-button">
-          내 유형 알아보기
-        </Link>
-      )}
 
       {open && <TypeSheet t={open} mine={open.id === myType} onClose={() => setOpen(null)} />}
     </main>

@@ -1,4 +1,17 @@
 import Icon from '../Icon.jsx'
+import { HABIT_SUPPORT } from '../../data/habitSupport.js'
+
+function Support({ support }) {
+  if (!support) return null
+  const external = support.href.startsWith('https:')
+  return (
+    <div className="mt-1.5 text-xs leading-relaxed">
+      <a href={support.href} target={external ? '_blank' : undefined} rel={external ? 'noopener noreferrer' : undefined} className="font-semibold text-primary-shade underline underline-offset-2">{support.label}</a>
+      {support.moreHref && <a href={support.moreHref} target="_blank" rel="noopener noreferrer" className="mt-1 block text-ink-soft underline underline-offset-2">{support.moreLabel} ↗</a>}
+      {support.note && <p className="mt-1 text-ink-soft">{support.note}</p>}
+    </div>
+  )
+}
 
 // '이번 주 해볼 것' 목록. 결과를 읽고 지나가는 화면이라 체크 기능 없이 짧게 보여 준다
 export default function MissionList({ missions, empty = '지금의 생활습관을 꾸준히 유지해 보세요.' }) {
@@ -10,10 +23,10 @@ export default function MissionList({ missions, empty = '지금의 생활습관�
           <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-white text-primary-shade shadow-soft">
             <Icon name={m.icon} size={22} />
           </span>
-          <span className="min-w-0 flex-1">
-            <span className="block font-bold">{m.title}</span>
-            <span className="block text-xs leading-relaxed text-ink-soft">{m.detail}</span>
-          </span>
+          <div className="min-w-0 flex-1">
+            <p className="font-bold">{m.title}</p>
+            <Support support={HABIT_SUPPORT[m.support]} />
+          </div>
         </li>
       ))}
     </ul>

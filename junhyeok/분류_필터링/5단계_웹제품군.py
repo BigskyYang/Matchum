@@ -12,12 +12,21 @@
   · 웹에서 쓰지 않는 것: 오메가3·유산균·루테인·밀크씨슬 (모델이 부족 위험으로 정하지 않는 성분),
                        비타민 A·E·K·칼륨 단일 (추천 대상 아님)
   · 한 제품이 여러 영양소에 해당하면 영양소마다 한 줄씩 들어감 (웹이 영양소별로 읽기 때문)
+  · (11-05) 비타민 B군 칸(단일·목적형)은 B1과 B2가 기준규격에 '둘 다' 든 제품만
+      - 재준님 모델은 B1·B2만 예측함. 화면에서는 'B군'으로 묶되, B1이 부족하든 B2가 부족하든 맞는 제품만 남김
+  · (11-05) 생활기능 영양제 성분(유산균·오메가3·루테인·밀크씨슬)이 섞인 단일·목적형은 영양제 칸에서 모두 뺌 (종합비타민은 그대로)
+      - 영양제와 생활기능 영양제에 같은 제품이 겹치지 않게 하려고 (11-05 결정: 공통 제품 없음)
+      - 유산균 + 식이섬유 제품도 식이섬유 칸에 두지 않고 생활기능(유산균) 쪽에만
+  · (11-05) 보관 파일: 주 목적이 루테인·유산균·오메가3·밀크씨슬인 제품만 5단계_보관.pkl 로 저장
+      - 단일: 주성분이 4가지 중 하나 / 목적형: 눈(루테인)·장(유산균)·혈행(오메가3)·간(밀크씨슬) 목적에 그 성분이 실제로 든 제품
+      - 보조 성분이 섞인 건 괜찮음. 나중에 '생활유지 기능성' 제품으로 따로 다룸 (6~9단계는 거치지 않았음)
 
 입력  4단계_결과.pkl
-출력  5단계_웹제품군.xlsx, 5단계_결과.pkl (다음 단계 입력)
+출력  5단계_웹제품군.xlsx, 5단계_결과.pkl (다음 단계 입력), 5단계_보관.pkl (생활유지 기능성용 보관)
 """
+import re
 import pandas as pd
-from 공통 import out, new_book, add_sheet, add_criteria_sheet
+from 공통 import out, nf, new_book, add_sheet, add_criteria_sheet
 
 TARGETS = ["일반", "남성", "여성", "시니어"]
 WEB_NUTRIENTS = ["비타민 B군", "비타민 C", "비타민 D", "칼슘", "마그네슘", "아연", "철", "엽산", "식이섬유"]
@@ -26,6 +35,11 @@ WEB_MULTI = ["균형형", "피로회복형"]
 PURPOSE_OF = {"비타민 B군": ["피로·활력"], "비타민 C": ["면역"], "비타민 D": ["뼈", "면역"],
               "칼슘": ["뼈"], "마그네슘": ["뼈", "피로·활력"], "아연": ["면역"],
               "철": ["혈행·혈액"], "엽산": ["혈행·혈액"], "식이섬유": ["장"]}
+B1 = r"비타민\s*B1(?!\d)|티아민"
+B2 = r"비타민\s*B2|리보플라빈"
+UNUSED_ALL = ["밀크씨슬", "오메가3", "루테인", "유산균"]   # 단일·목적형에 들어 있으면 영양제 칸에서 모두 뺌 (생활기능 쪽)
+HOLD_MAIN = ["루테인", "유산균", "오메가3", "밀크씨슬"]   # 보관: 주 목적이 이 4가지인 제품
+HOLD_GOAL = {"눈": "루테인", "장": "유산균", "혈행·혈액": "오메가3", "간": "밀크씨슬"}
 
 
 def main():
@@ -52,11 +66,40 @@ def main():
         multi["구분"] = "종합비타민"
         rows.append(multi)
     web = pd.concat(rows, ignore_index=True)
+    web["_빠짐"] = ""
+    multi_row = web["구분"].eq("종합비타민")
+    spec = web["기준규격"].fillna("").map(nf)
+    no_b12 = web["영양소"].eq("비타민 B군") & ~multi_row & ~(spec.str.contains(B1) & spec.str.contains(B2))
+    web.loc[no_b12, "_빠짐"] = "B1·B2가 둘 다 들어 있지 않은 B군 제품"
+    ing = web["성분 목록"]
+    has_unused = ing.map(lambda s: any(x in s for x in UNUSED_ALL)) & ~multi_row & web["_빠짐"].eq("")
+    web.loc[has_unused, "_빠짐"] = "웹 미사용 성분(" + ing[has_unused].map(lambda s: "·".join(x for x in UNUSED_ALL if x in s)) + ") 혼합"
+    cut = web[web["_빠짐"].ne("")]
+    web = web[web["_빠짐"].eq("")].drop(columns="_빠짐").reset_index(drop=True)
     order = WEB_NUTRIENTS + [f"종합비타민 ({x})" for x in WEB_MULTI]
     web["영양소"] = pd.Categorical(web["영양소"], order, ordered=True)
     web["대상"] = pd.Categorical(web["대상"], TARGETS, ordered=True)
     web = web.sort_values(["영양소", "대상", "구분", "품목제조신고번호"]).drop(columns="성분 목록").reset_index(drop=True)
     web.to_pickle(out("5단계_결과.pkl"))
+
+    # 보관 (11-05): 주 목적이 루테인·유산균·오메가3·밀크씨슬인 제품만 → 나중에 '생활유지 기능성'으로 다룸
+    #   단일: 주성분이 4가지 중 하나 / 목적형: 목적(눈·장·혈행·간)에 맞는 성분이 실제로 든 제품 (보조 성분이 섞여도 괜찮음)
+    def keep_reason(r):
+        if r["풀"] == "단일":
+            return f"{r['주성분·목적']} (단일)" if r["주성분·목적"] in HOLD_MAIN else ""
+        if r["풀"] == "목적형":
+            goals = str(r["주성분·목적"]).split("+")
+            hit = [ing for goal, ing in HOLD_GOAL.items() if goal in goals and ing in r["성분 목록"]]
+            return " · ".join(f"{ing} (목적형: {r['주성분·목적']})" for ing in hit)
+        return ""
+    reason = p.apply(keep_reason, axis=1)
+    hold = p[reason.ne("")].drop(columns="성분 목록").copy()
+    hold["보관 이유"] = reason[reason.ne("")]
+    hold["주 성분"] = hold["보관 이유"].str.extract(r"^(\S+)")[0]
+    hold["웹 후보에도 있음"] = hold["품목제조신고번호"].isin(web["품목제조신고번호"]).map({True: "예", False: ""})
+    hold = hold.sort_values(["주 성분", "풀", "주성분·목적", "품목제조신고번호"]).reset_index(drop=True)
+    hold.to_pickle(out("5단계_보관.pkl"))
+    hold_why = hold["주 성분"].value_counts()
 
     # 영양소 × 대상 개수, 3개 미만 칸
     cnt = pd.crosstab(web["영양소"], web["대상"]).reindex(index=order, columns=TARGETS).fillna(0).astype(int)
@@ -70,9 +113,14 @@ def main():
         ("5단계: 웹용 제품군 만들기", True), ("", False),
         ("결과", True),
         (f"· 4단계 제품 {len(p):,}개 중 웹 11종에 들어간 제품 {web['품목제조신고번호'].nunique():,}개 (영양소별로 나누면 {len(web):,}줄)", False),
-        ("· 한 제품이 여러 영양소에 해당하면 영양소마다 한 줄 (예: 칼슘·비타민 D가 든 뼈 목적형 → 칼슘, 비타민 D 양쪽)", False),
+        ("· 이 단계에서는 한 제품이 여러 영양소에 해당하면 영양소마다 한 줄 → 6단계에서 대표 칸 하나로 정리 (11-05)", False),
         ("· 영양소 × 대상 개수는 '영양소×대상' 시트", False),
-        ("", False), ("3개가 안 되는 칸 (있는 것만 넣기로 결정)", True),
+        ("", False), ("11-05 변경", True),
+        (f"· B군 칸: B1·B2가 둘 다 든 제품만 → {int(no_b12.sum()):,}줄 뺌", False),
+        (f"· 유산균·오메가3·루테인·밀크씨슬이 섞인 단일·목적형 → {int(has_unused.sum()):,}줄 뺌 (생활기능 영양제 쪽, 공통 제품 없음)", False),
+        (f"· 보관 (5단계_보관.pkl, '보관' 시트): 주 목적이 루테인·유산균·오메가3·밀크씨슬인 제품 {len(hold):,}개 → 나중에 생활유지 기능성으로 다룸 ("
+         + " · ".join(f"{k} {v:,}" for k, v in hold_why.items()) + ")", False),
+        ("", False), ("3개가 안 되는 칸 (참고)", True),
         ("· " + (" / ".join(f"{n}·{t} {c}개" for n, t, c in short) if short else "없음"), False),
         ("", False), ("웹에 쓰지 않는 제품 (4단계에는 있지만 이번에 빠진 것)", True),
     ] + [(f"· {k}: {v:,}개", False) for k, v in unused_why.head(15).items()] + [
@@ -96,6 +144,10 @@ def main():
         "제품 식별자는": "적용 완료 (영양소별로는 한 줄씩, 9단계에서 중복 확인)",
     })
     add_criteria_sheet(wb, done)
+    add_sheet(wb, "보관 이유별 개수", hold["보관 이유"].value_counts().rename_axis("보관 이유").reset_index(name="제품 수"), [50, 10], freeze="A2")
+    add_sheet(wb, f"보관 ({len(hold):,})", hold[["주 성분", "보관 이유", "웹 후보에도 있음", "풀", "주성분·목적", "대상", "품목제조신고번호", "제품명", "업체명",
+                                                "함께 든 가이드 성분", "기능성", "섭취방법", "기준규격", "섭취 시 주의사항"]],
+              [10, 34, 10, 10, 16, 8, 18, 32, 20, 30, 60, 30, 40, 40])
     add_sheet(wb, "영양소×대상", cnt.reset_index().rename(columns={"index": "영양소"}), [22, 10, 10, 10, 10], freeze="A2")
     add_sheet(wb, "영양소×구분", kind_cnt.reset_index().rename(columns={"index": "영양소"}), [22, 10, 10, 12], freeze="A2")
     cols = ["영양소", "대상", "구분", "품목제조신고번호", "제품명", "업체명", "가이드 성분 수", "함께 든 가이드 성분",
