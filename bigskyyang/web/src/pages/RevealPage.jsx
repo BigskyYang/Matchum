@@ -244,7 +244,7 @@ export default function RevealPage() {
       </section>
 
       <footer className="grid gap-2">
-        {card === 0 && <SecondaryButton to={survey.done[2] ? '/result2' : '/survey2'}>{survey.done[2] ? '내 식사 결과 다시 보기' : '내 식사 응답으로 영양소 살펴보기'}</SecondaryButton>}
+        {card === 0 && <SecondaryButton to={survey.done[2] ? '/result2' : '/survey2'}>{survey.done[2] ? '내 식사 결과 다시 보기' : '식사 설문하고 내 영양소 보기'}</SecondaryButton>}
         {card < last ? (
           <div className="flex gap-2">
             {card > 0 && (

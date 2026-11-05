@@ -62,7 +62,7 @@ export default function ResultPage() {
           조사 자료에서 성인 100명 중 약 <b className="text-primary-shade">{Math.round(r.sharePct)}명</b>이 이 유형이에요
         </p>
         <PrimaryButton to={r.personalDone ? '/result2' : '/survey2'} size="sm" className="mt-5">
-          {r.personalDone ? '내 식사 결과 다시 보기' : '내 식사 응답으로 영양소 살펴보기'}
+          {r.personalDone ? '내 식사 결과 다시 보기' : '식사 설문하고 내 영양소 보기'}
         </PrimaryButton>
         {/* 누르면 첫 카드(생활습관 신호등)로 내려간다 */}
         <button

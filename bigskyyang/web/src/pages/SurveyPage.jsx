@@ -7,7 +7,7 @@ import PrimaryButton from '../components/PrimaryButton.jsx'
 import ChoiceInput from '../components/survey/ChoiceInput.jsx'
 import ProgressBar from '../components/survey/ProgressBar.jsx'
 import RowsInput from '../components/survey/RowsInput.jsx'
-import { DurationWheel, NumberWheel, TimeWheel } from '../components/survey/WheelInputs.jsx'
+import { DateWheel, DurationWheel, NumberWheel, TimeWheel } from '../components/survey/WheelInputs.jsx'
 import { SECTIONS, visibleQuestions } from '../data/questions.js'
 import { loadSurvey, saveSurvey } from '../lib/storage.js'
 import { recordAnswer, resolveStep, resultPath, surveyPath } from '../lib/surveyFlow.js'
@@ -59,7 +59,7 @@ function QuestionStep({ q, answer, answers, isLast, onAnswer }) {
           {q.type === 'number' && <NumberWheel value={draft} onChange={setDraft} unit={q.unit} min={q.min} max={q.max} />}
           {q.type === 'time' && <TimeWheel value={draft} onChange={setDraft} hourStart={q.hourStart} />}
           {q.type === 'duration' && <DurationWheel value={draft} onChange={setDraft} per={q.per} maxHours={q.maxHours} />}
-          {q.type === 'date' && <input aria-label="생년월일" type="date" min={`${q.minYear}-01-01`} max={`${q.maxYear}-12-31`} value={draft ?? ''} onChange={(e) => setDraft(e.target.value)} className="w-full rounded-card bg-white p-4 text-lg shadow-soft" />}
+          {q.type === 'date' && <DateWheel value={draft} onChange={setDraft} minYear={q.minYear} maxYear={q.maxYear} />}
           {error && draft && (
             <p role="alert" className="mt-3 text-center text-sm font-semibold text-primary-shade">
               {error}

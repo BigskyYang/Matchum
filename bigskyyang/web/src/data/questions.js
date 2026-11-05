@@ -95,6 +95,7 @@ const STAGE_1 = [
     type: 'date',
     minYear: THIS_YEAR - 121,
     maxYear: THIS_YEAR - ADULT,
+    initial: '1990-01-01',
     check: (v) => {
       if (!v || typeof v !== 'string') return '생년월일을 선택해 주세요.'
       const day = new Date(v + 'T00:00:00Z')
@@ -235,8 +236,6 @@ const STAGE_2 = [
     id: 'smoke_now',
     section: 'smoke',
     title: '요즘 담배를 피우나요?',
-    note: '전자담배도 포함, 가끔 피워도 \'네\'',
-    info: ['일반 담배와 전자담배를 똑같이 봐요.', '끊었으면 \'아니요\'를 골라 주세요.'],
     type: 'choice',
     options: [
       { label: '네, 피워요', value: 'yes' },
@@ -247,7 +246,6 @@ const STAGE_2 = [
     id: 'cigarettes',
     section: 'smoke',
     title: '피우는 날에는 하루 몇 개비 정도 피우나요?',
-    note: '전자담배는 1개비를 피우는 정도를 1개비로',
     type: 'number',
     unit: '개비',
     min: 1,
