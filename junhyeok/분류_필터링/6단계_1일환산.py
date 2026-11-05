@@ -15,12 +15,20 @@
   ③ 상한이 있는 성분은 모두 계산 (주성분이 아니어도): 비타민 C·D·A·E, 칼슘, 마그네슘, 철, 아연, 엽산, 비타민 B6, 니아신
      - 니아신은 원재료로 형태를 구분 (니코틴산 / 니코틴산아미드) → 상한이 다름
   ④ 계산할 수 없는 성분은 '확인 불가'로 남긴다 (빼는 건 7단계에서 결정)
+  ⑤ (11-05) 한 제품 = 한 칸: 여러 영양소 칸에 들어간 목적형 제품은 대표 칸 하나에만 남긴다 (공통 제품 없음)
+     - 제품의 목적(4단계)으로 정함: 뼈 → 칼슘, 혈행·혈액 → 철, 피로·활력 → 비타민 B군
+     - 면역처럼 대표 영양소가 정해지지 않은 목적은 기준치 대비 %가 가장 높은 영양소 (같으면 영양소 순서)
+     - 제품명은 쓰지 않음 (마케팅 표현이라 실제로 많이 든 성분과 다를 수 있어서)
 
 입력  5단계_결과.pkl
 출력  6단계_1일환산.xlsx, 6단계_결과.pkl (영양소별 줄 + 1일 함량), 6단계_제품별함량.pkl
 """
 import re
 import pandas as pd
+
+# 11-05: 한 제품 = 한 칸. 목적형의 목적 → 대표 영양소
+REP_OF_GOAL = {"뼈": "칼슘", "혈행·혈액": "철", "피로·활력": "비타민 B군"}
+NUTRIENT_ORDER = ["비타민 B군", "비타민 C", "비타민 D", "칼슘", "마그네슘", "아연", "철", "엽산", "식이섬유"]
 from 공통 import out, nf, new_book, add_sheet, add_criteria_sheet
 
 # 상한 확인에 필요한 성분: (기준규격에서 찾는 이름, 표준 단위)
@@ -36,10 +44,12 @@ NUTRIENTS = {
     "니아신": (r"나이아신|니아신", "mg"),
     "비타민 A": (r"비타민\s*A", "μg"),
     "비타민 E": (r"비타민\s*E", "mg"),
+    "요오드": (r"요오드|아이오딘", "μg"),          # 11-05 추가: 우리 가이드 성분은 아니지만 상한(2,400μg) 확인용
 }
 # 읽은 값이 이보다 크면 잘못 읽은 것으로 보고 '확인 불가' 처리 (단위 착오 방지)
 TOO_BIG = {"비타민 C": 10000, "비타민 D": 500, "칼슘": 3000, "마그네슘": 1000, "철": 100, "아연": 100,
-           "엽산": 5000, "비타민 B6": 300, "니아신": 2000, "비타민 A": 10000, "비타민 E": 2000}
+           "엽산": 5000, "비타민 B6": 300, "니아신": 2000, "비타민 A": 10000, "비타민 E": 2000,
+           "요오드": 10000}
 # 웹 영양소의 1일 영양성분 기준치 (기준치 대비 %에 사용, 초안)
 DV = {"비타민 C": 100, "비타민 D": 10, "칼슘": 700, "마그네슘": 315, "철": 12, "아연": 8.5, "엽산": 400}
 UNIT_FORM = {"정": "정", "캡슐": "캡슐", "포": "포", "병": "병", "매": "매", "스틱": "포", "알": "알", "환": "환",
@@ -137,10 +147,12 @@ def main():
             if k in ("비타민 B6", "니아신"):
                 if "비타민 B군" not in ings:
                     continue
+            elif k == "요오드":
+                pass                                # 가이드 성분이 아니라서 기준규격에 있으면 항상 확인
             elif k not in ings:
                 continue
             found = find_amount(r["기준규격"], pat)
-            if found == NOT_IN_SPEC and k in ("비타민 B6", "니아신"):
+            if found == NOT_IN_SPEC and k in ("비타민 B6", "니아신", "요오드"):
                 continue                            # B군 제품이어도 B6·니아신이 안 든 경우
             if found == NOT_IN_SPEC or not found or found[0] is None:
                 rec[k] = None
@@ -188,6 +200,26 @@ def main():
     web["1일 함량 단위"] = web["영양소"].map(lambda k: NUTRIENTS.get(k, (None, ""))[1])
     web["기준치 대비(%)"] = web.apply(lambda r: round(r["1일 함량"] / DV[r["영양소"]] * 100)
                                     if r["영양소"] in DV and pd.notna(r["1일 함량"]) else None, axis=1)
+
+    # ⑤ 한 제품 = 한 칸 (11-05)
+    cnt = web.groupby("품목제조신고번호")["영양소"].transform("size")
+    multi_cell = web[cnt > 1].copy()
+    rep = {}
+    for no, g in multi_cell.groupby("품목제조신고번호"):
+        goal = str(g["주성분·목적"].iloc[0]).split("+")[0]
+        cells = [str(x) for x in g["영양소"]]
+        if REP_OF_GOAL.get(goal) in cells:
+            rep[no] = (REP_OF_GOAL[goal], f"목적 '{goal}' → {REP_OF_GOAL[goal]}")
+        else:
+            g2 = g.assign(_p=g["기준치 대비(%)"].fillna(-1), _o=g["영양소"].astype(str).map(NUTRIENT_ORDER.index))
+            best = g2.sort_values(["_p", "_o"], ascending=[False, True]).iloc[0]
+            rep[no] = (str(best["영양소"]), f"목적 '{goal}' → 기준치 % 최고 ({best['영양소']} {best['_p']:.0f}%)")
+    is_rep = [(no not in rep) or (str(k) == rep[no][0]) for no, k in zip(web["품목제조신고번호"], web["영양소"])]
+    rep_table = pd.DataFrame([{"품목제조신고번호": no, "제품명": multi_cell.loc[multi_cell["품목제조신고번호"] == no, "제품명"].iloc[0],
+                               "들어 있던 칸": " + ".join(multi_cell.loc[multi_cell["품목제조신고번호"] == no, "영양소"].astype(str)),
+                               "대표 칸": v[0], "정한 이유": v[1]} for no, v in rep.items()])
+    n_cut = len(web) - sum(is_rep)
+    web = web[is_rep].reset_index(drop=True)
     web.to_pickle(out("6단계_결과.pkl"))
 
     # 집계
@@ -210,6 +242,8 @@ def main():
         (f"· 1일 섭취량을 읽은 제품: {n_prod - no_intake:,}개 / 읽지 못함: {no_intake:,}개", False),
         (f"· 표시 기준이 1회분이라 하루 양으로 늘린 경우: {rescaled:,}개", False),
         ("· 성분별 계산 결과는 '성분별 계산' 시트", False),
+        (f"· 한 제품 = 한 칸 (11-05): 여러 칸에 있던 제품 {len(rep):,}개를 대표 칸 하나에만 남김 ({n_cut:,}줄 정리) → '대표 칸' 시트", False),
+        ("   - 목적으로 정함: 뼈 → 칼슘 / 혈행·혈액 → 철 / 피로·활력 → 비타민 B군 / 그 밖(면역 등)은 기준치 %가 가장 높은 영양소", False),
         ("", False), ("계산 방법", True),
         ("· 식약처 기준규격의 표시량은 '1일 섭취량당 함량'. 섭취방법에 1정 무게가 적힌 582개 중 약 92%에서 표시 기준 무게 = 하루 먹는 총 무게로 확인", False),
         ("· 비타민 D IU는 μg로 바꿈 (40 IU = 1 μg). 니아신은 원재료로 니코틴산 / 니코틴산아미드를 구분", False),
@@ -229,6 +263,8 @@ def main():
     done["압축된 후보만 표시량"] = f"적용 완료 (제품 {n_prod:,}개, 1일 섭취량 읽음 {n_prod - no_intake:,})"
     add_criteria_sheet(wb, done)
     add_sheet(wb, "성분별 계산", per_nutrient, [14, 20, 18, 12], freeze="A2")
+    if len(rep_table):
+        add_sheet(wb, f"대표 칸 ({len(rep_table):,})", rep_table.sort_values(["대표 칸", "정한 이유"]), [18, 34, 30, 12, 40], freeze="A2")
     cols = ["영양소", "대상", "구분", "품목제조신고번호", "제품명", "업체명", "1일 섭취량", "1일 함량", "1일 함량 단위",
             "기준치 대비(%)", "섭취방법", "기준규격"]
     add_sheet(wb, f"영양소별 ({len(web):,})", web[cols], [20, 8, 18, 18, 32, 20, 26, 10, 8, 10, 40, 60])
