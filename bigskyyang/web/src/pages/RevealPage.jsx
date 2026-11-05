@@ -3,16 +3,13 @@ import { Navigate, useNavigate } from 'react-router-dom'
 import GroupChip, { GroupDot } from '../components/GroupChip.jsx'
 import Icon from '../components/Icon.jsx'
 import Mascot from '../components/Mascot.jsx'
-import PrimaryButton, { SecondaryButton } from '../components/PrimaryButton.jsx'
-import ShareButton from '../components/result/ShareButton.jsx'
-import ShareImageButton from '../components/result/ShareImageButton.jsx'
 import { model } from '../lib/classify.js'
 import { buildTypeResult, revealStory } from '../lib/result.js'
 import { loadSurvey } from '../lib/storage.js'
 import NutrientArt from '../components/NutrientArt.jsx'
 
 // 결과 공개 (/reveal): 1단계 설문이 끝나면 '분석 중' → 유형 공개 스토리 카드 6장 → 자세한 유형 결과(/result)
-//   카드: 유형 공개 · 100명 중 N명 · 잘 챙기는/챙겨 볼 습관 · 챙길 영양소 · 짝꿍 · 마무리(공유)
+//   카드: 유형 공개 · 100명 중 N명 · 잘 챙기는/챙겨 볼 습관 · 같은 유형의 섭취 경향. 마지막 카드에서 한 번 더 넘기면 유형 결과(공유는 거기서)
 //   넘기기: 옆으로 밀기(스와이프) 또는 화면 오른쪽 2/3 누르기 = 다음, 왼쪽 1/3 = 이전, 키보드 ←·→
 //   카드를 모두 보게 한다: '건너뛰기'·'다음' 버튼·첫 카드의 식사 설문 버튼은 두지 않는다
 //   화면 읽기 프로그램용 이전·다음 버튼은 눈에 보이지 않게 두고, 키보드로 가면 보인다
@@ -190,12 +187,6 @@ function cardsOf(r, s) {
         </ul>
       </>
     ),
-    // 6. 마무리
-    <>
-      <Mascot name="cheer" fallback="happy" className="animate-pop motion-reduce:animate-none" />
-      <Title>나의 유형을 확인했어요</Title>
-      <p className="mt-2 text-ink-soft">자세한 결과와 나에게 맞는 영양 정보도 볼 수 있어요</p>
-    </>,
   ]
 }
 
@@ -232,8 +223,9 @@ export default function RevealPage() {
   const [card, setCard] = useState(0)
   const cards = useMemo(() => (r ? cardsOf(r, revealStory(r)) : []), [r])
   const last = cards.length - 1
-  const go = useCallback((d) => setCard((c) => Math.min(Math.max(c + d, 0), last)), [last])
   const toResult = useCallback(() => navigate('/result', { replace: true }), [navigate])
+  // 마지막 카드에서 다음으로 넘기면 유형 결과로
+  const go = useCallback((d) => (card + d > last ? toResult() : setCard(Math.max(card + d, 0))), [card, last, toResult])
   const touch = useRef(null) // 밀기 시작점 { x, y }, 밀어서 넘겼으면 swiped
 
   useEffect(() => {
@@ -276,7 +268,7 @@ export default function RevealPage() {
     }
   }
 
-  // 화면 왼쪽 1/3을 누르면 이전, 나머지는 다음 (마지막 카드에서는 넘기지 않는다)
+  // 화면 왼쪽 1/3을 누르면 이전, 나머지는 다음 (마지막 카드에서 다음 = 유형 결과)
   const onTap = (e) => {
     if (touch.current?.swiped) {
       touch.current = null
@@ -284,7 +276,7 @@ export default function RevealPage() {
     }
     const { left, width } = e.currentTarget.getBoundingClientRect()
     if (e.clientX - left < width / 3) go(-1)
-    else if (card < last) go(1)
+    else go(1)
   }
 
   return (
@@ -313,31 +305,16 @@ export default function RevealPage() {
         {cards[card]}
       </section>
 
-      <footer className="grid gap-2">
-        {card < last ? (
-          <div className="flex items-center justify-center gap-2 py-3 text-sm text-ink-faint">
-            {card > 0 && (
-              <button type="button" onClick={() => go(-1)} className="sr-only rounded-button bg-white px-4 py-2 text-ink-soft focus:not-sr-only">
-                이전 카드
-              </button>
-            )}
-            <span aria-hidden="true">‹ 옆으로 넘겨 보세요 ›</span>
-            <button type="button" onClick={() => go(1)} className="sr-only rounded-button bg-white px-4 py-2 text-ink-soft focus:not-sr-only">
-              다음 카드
-            </button>
-          </div>
-        ) : (
-          <>
-            <div className="relative grid grid-cols-2 gap-2">
-              <ShareButton typeName={r.name} className="py-3.5" />
-              <ShareImageButton r={r} className="py-3.5" />
-            </div>
-            <PrimaryButton size="sm" onClick={toResult}>
-              결과 자세히 보기
-            </PrimaryButton>
-            <SecondaryButton to={survey.done[2] ? '/result2' : '/survey2'}>내 식사 결과 살펴보기</SecondaryButton>
-          </>
+      <footer className="flex items-center justify-center gap-2 py-3 text-sm text-ink-faint">
+        {card > 0 && (
+          <button type="button" onClick={() => go(-1)} className="sr-only rounded-button bg-white px-4 py-2 text-ink-soft focus:not-sr-only">
+            이전 카드
+          </button>
         )}
+        <span aria-hidden="true">{card < last ? '‹ 옆으로 넘겨 보세요 ›' : '옆으로 넘기면 자세한 결과를 볼 수 있어요 ›'}</span>
+        <button type="button" onClick={() => go(1)} className="sr-only rounded-button bg-white px-4 py-2 text-ink-soft focus:not-sr-only">
+          {card < last ? '다음 카드' : '자세한 결과 보기'}
+        </button>
       </footer>
     </main>
   )

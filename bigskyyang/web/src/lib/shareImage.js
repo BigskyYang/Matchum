@@ -195,7 +195,7 @@ export async function drawShareImage(r, format = 'story', { host = window.locati
   ctx.fillText(serviceName, W / 2, fy)
   ctx.font = `500 ${story ? 34 : 30}px ${SANS}`
   ctx.fillStyle = C.soft
-  ctx.fillText(`나도 해 보기 · ${host}`, W / 2, fy + (story ? 64 : 50))
+  ctx.fillText(`너는 무슨 유형이야? · ${host}`, W / 2, fy + (story ? 64 : 50))
 
   return new Promise((resolve, reject) => canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('이미지를 만들지 못했어요'))), 'image/png'))
 }
