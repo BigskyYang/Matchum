@@ -73,7 +73,11 @@ export default function ResultPage() {
         {/* 누르면 첫 카드(생활습관 신호등)로 내려간다 */}
         <button
           type="button"
-          onClick={(e) => e.currentTarget.closest('header').nextElementSibling?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+          onClick={(e) => {
+            // 카드 위가 화면 끝에 딱 붙지 않게 24px 띄워서 멈춘다
+            const card = e.currentTarget.closest('header').nextElementSibling
+            if (card) window.scrollTo({ top: card.getBoundingClientRect().top + window.scrollY - 24, behavior: 'smooth' })
+          }}
           className="mt-auto animate-bounce px-4 pt-6 pb-2 text-sm font-semibold text-ink-faint motion-reduce:animate-none"
         >
           <span className="inline-flex items-center gap-1">
