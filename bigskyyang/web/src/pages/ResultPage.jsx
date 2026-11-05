@@ -66,7 +66,7 @@ export default function ResultPage() {
           {r.personalDone ? '내 식사 결과 다시 보기' : PERSONAL_CTA}
         </PrimaryButton>
         {/* 공유: '너는 무슨 유형이야?' (링크 공유 문구·공유 이미지에 내 유형을 담는다) */}
-        <div className="relative mt-2 grid w-full grid-cols-2 gap-2">
+        <div className="relative mt-6 grid w-full grid-cols-2 gap-2">
           <ShareButton typeName={r.name} className="py-3.5" />
           <ShareImageButton r={r} className="py-3.5" />
         </div>
