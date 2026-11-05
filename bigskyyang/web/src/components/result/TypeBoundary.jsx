@@ -29,9 +29,9 @@ export default function TypeBoundary({ leafId, name, boundary }) {
           <span className={`absolute right-0 bottom-2 h-1.5 w-1/2 rounded-r-full ${HALF[n.id[0]]}`} />
           <span className="absolute bottom-0 left-1/2 h-5 -translate-x-1/2 border-l-2 border-dashed border-ink-faint" />
           <span className="absolute top-0 left-1/2 -translate-x-1/2 text-xs text-ink-faint">경계</span>
-          <span className="absolute bottom-0.5 flex -translate-x-1/2 flex-col items-center" style={{ left: `${boundary.pos * 100}%` }}>
-            <span className="text-xs font-bold text-primary-shade">나</span>
-            <span className="mt-0.5 block size-4 rounded-full bg-primary-strong ring-2 ring-white" />
+          <span className="absolute top-[21px] flex -translate-x-1/2 flex-col items-center" style={{ left: `${boundary.pos * 100}%` }}>
+            <span className="block size-4 rounded-full bg-primary-strong ring-2 ring-white" />
+            <span className="mt-0.5 text-xs font-bold text-primary-shade">나</span>
           </span>
         </span>
         <button
