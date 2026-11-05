@@ -35,7 +35,7 @@ export const CHANGES = [
     icon: 'active',
     label: '하루 2시간 덜 앉기',
     when: (a) => a.sedentary_min >= 360,
-    apply: (a) => ({ ...a, sedentary_min: a.sedentary_min - 120 }),
+    apply: (a) => ({ ...a, sedentary_min: Math.max(0, a.sedentary_min - 120) }),
   },
   {
     // 평일·주말 모두 7시간 (기상 시각은 그대로, 잠드는 시각을 당기거나 늦춘다)
@@ -70,6 +70,7 @@ export const CHANGES = [
   { id: 'fruit', icon: 'apple', label: '과일을 하루 1번 이상', when: (a) => a.fruit !== undefined && a.fruit < 6, apply: (a) => ({ ...a, fruit: 6 }) },
   {
     id: 'dairy',
+    model: 'habitual',
     icon: 'kitchen',
     label: '우유·유제품 하루 1번',
     when: (a) => a.ffq_dairy !== undefined && a.ffq_dairy < 5,
@@ -77,33 +78,40 @@ export const CHANGES = [
   },
   {
     id: 'legume',
+    model: 'habitual',
     icon: 'kitchen',
     label: '두부·콩 하루 1번',
     when: (a) => a.ffq_legume !== undefined && a.ffq_legume < 5,
     apply: (a) => ({ ...a, ffq_legume: 5 }),
   },
-  { id: 'smoke', icon: 'smoke', label: '담배 끊기', when: (a) => a.smoke_now === 'yes', apply: (a) => ({ ...a, smoke_now: 'no' }) },
+  { id: 'smoke', icon: 'smoke', label: '담배 끊기', when: (a) => a.smoke_now === 'yes', apply: (a) => ({ ...a, smoke_now: 'no', cigarettes: 0 }) },
   {
     id: 'drink',
     icon: 'drink',
     label: '술은 한 달 2~4번, 1~2잔',
     when: (a) => a.drink_freq >= 4 || (a.drink_freq > 0 && a.drink_amount >= 3),
-    apply: (a) => ({ ...a, drink_freq: Math.min(a.drink_freq, 3), drink_amount: Math.min(a.drink_amount, 1) }),
+    apply: (a) => ({ ...a, drink_freq: Math.min(a.drink_freq, 3), drink_amount: a.drink_freq > 0 ? Math.min(a.drink_amount, 1) : 0 }),
   },
 ]
 
 // 지금 응답에서 켤 수 있는 습관
 export function availableChanges(answers) {
   const { features } = encode(answers)
-  return CHANGES.filter((c) => c.when(answers, features))
+  return CHANGES.filter((c) => c.when(answers, features)).map((c) => ({ ...c, model: c.model ?? 'lifestyle' }))
 }
 
-export const applyChanges = (answers, ids) => CHANGES.filter((c) => ids.includes(c.id)).reduce((a, c) => c.apply(a), answers)
+// 이미 충족한 응답은 낮추지 않는다. 저장된 선택이나 직접 호출에도 같은 규칙을 적용한다.
+export const applyChanges = (answers, ids) =>
+  CHANGES.filter((c) => ids.includes(c.id)).reduce((a, c) => (c.when(a, encode(a).features) ? c.apply(a) : a), answers)
 
-const RANK = { Low: 0, Mid: 1, High: 2 }
 const bandsOf = (nutrition) => Object.fromEntries([...nutrition.watch, ...nutrition.rest].map((n) => [n.key, n]))
 
-// 지금 vs 바꾼 뒤 → { type: { before, after, changed }, nutrients: [{ key, label, icon, excess, from, to, better }] }
+const changesOf = (before, after, field) =>
+  Object.values(before)
+    .filter((n) => after[n.key] && after[n.key][field] !== n[field])
+    .map((n) => ({ key: n.key, label: n.label, icon: n.icon, excess: !!n.excess, source: field === 'band' ? n.source : 'lifestyle', from: n[field], to: after[n.key][field] }))
+
+// 현재 응답 vs 변경 응답. 개선·악화 순으로 정렬하지 않고 현재 결과의 영양소 순서로 비교한다.
 //   영양소는 화면과 같은 대표 등급(평소 식사 기준이 있으면 그것, 없으면 생활습관 기준)으로 비교한다
 export function simulate(answers, ids, models) {
   const next = applyChanges(answers, ids)
@@ -114,12 +122,13 @@ export function simulate(answers, ids, models) {
     after: { id: t1.leafId, name: t1.name, main: t1.mainType },
     changed: t0.leafId !== t1.leafId,
   }
-  if (!models) return { type, nutrients: null }
+  if (!models) return { type, nutrients: null, lifestyleNutrients: null, habitualAvailable: false }
   const b0 = bandsOf(buildPersonalResult(answers, models).nutrition)
   const b1 = bandsOf(buildPersonalResult(next, models).nutrition)
-  const nutrients = Object.values(b0)
-    .filter((n) => b1[n.key] && b1[n.key].band !== n.band)
-    .map((n) => ({ key: n.key, label: n.label, icon: n.icon, excess: !!n.excess, from: n.band, to: b1[n.key].band, better: RANK[b1[n.key].band] < RANK[n.band] }))
-    .sort((a, b) => b.better - a.better)
-  return { type, nutrients }
+  return {
+    type,
+    nutrients: changesOf(b0, b1, 'band'),
+    lifestyleNutrients: changesOf(b0, b1, 'lifestyle'),
+    habitualAvailable: Object.values(b0).some((n) => n.habitual !== null),
+  }
 }

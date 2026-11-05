@@ -1,0 +1,2013 @@
+{
+ "version": "yuhwan-12types-screen-B-v1.1-addon",
+ "generated": "2026-11-05",
+ "source_types": "nbti-12types-v2",
+ "low": {
+  "rule": "같은 성별·나이 대비 1/1.2배(0.83배) 이하, 비타민 D·E·칼륨과 2줄 항목 제외. 08번 최종 확률표 기준",
+  "text": "같은 성별·나이보다 덜 부족한 편이에요",
+  "note": "덜 부족하다는 뜻이며 충분하다는 뜻이 아님. 공통 영양소(common=true)는 1줄에도 그대로 표시",
+  "validation_2024": {
+   "items": 173,
+   "oe": 0.749,
+   "ci": [
+    0.712,
+    0.785
+   ],
+   "shuffle_mean": 0.999,
+   "shuffle_min": 0.93
+  },
+  "cells": {
+   "N1": {
+    "1": {
+     "19-29": [
+      {
+       "key": "zinc",
+       "nutrient": "아연",
+       "of10": 3,
+       "peerOf10": 4,
+       "ratio": 0.79,
+       "common": false
+      }
+     ],
+     "30-49": [
+      {
+       "key": "iron",
+       "nutrient": "철",
+       "of10": 2,
+       "peerOf10": 2,
+       "ratio": 0.73,
+       "common": false
+      }
+     ],
+     "50-64": [],
+     "65-74": [],
+     "75+": []
+    },
+    "2": {
+     "19-29": [
+      {
+       "key": "zinc",
+       "nutrient": "아연",
+       "of10": 4,
+       "peerOf10": 5,
+       "ratio": 0.77,
+       "common": false
+      },
+      {
+       "key": "phosphorus",
+       "nutrient": "인",
+       "of10": 2,
+       "peerOf10": 2,
+       "ratio": 0.81,
+       "common": false
+      }
+     ],
+     "30-49": [],
+     "50-64": [],
+     "65-74": [
+      {
+       "key": "iron",
+       "nutrient": "철",
+       "of10": 1,
+       "peerOf10": 2,
+       "ratio": 0.72,
+       "common": false
+      }
+     ],
+     "75+": [
+      {
+       "key": "iron",
+       "nutrient": "철",
+       "of10": 2,
+       "peerOf10": 3,
+       "ratio": 0.75,
+       "common": false
+      }
+     ]
+    }
+   },
+   "N2": {
+    "1": {
+     "19-29": [],
+     "30-49": [],
+     "50-64": [],
+     "65-74": [],
+     "75+": []
+    },
+    "2": {
+     "19-29": [],
+     "30-49": [],
+     "50-64": [],
+     "65-74": [],
+     "75+": []
+    }
+   },
+   "N3": {
+    "1": {
+     "19-29": [
+      {
+       "key": "zinc",
+       "nutrient": "아연",
+       "of10": 3,
+       "peerOf10": 4,
+       "ratio": 0.68,
+       "common": false
+      },
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 1,
+       "peerOf10": 2,
+       "ratio": 0.68,
+       "common": false
+      },
+      {
+       "key": "phosphorus",
+       "nutrient": "인",
+       "of10": 1,
+       "peerOf10": 1,
+       "ratio": 0.72,
+       "common": false
+      }
+     ],
+     "30-49": [
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 1,
+       "peerOf10": 1,
+       "ratio": 0.67,
+       "common": false
+      },
+      {
+       "key": "iron",
+       "nutrient": "철",
+       "of10": 2,
+       "peerOf10": 2,
+       "ratio": 0.7,
+       "common": false
+      },
+      {
+       "key": "zinc",
+       "nutrient": "아연",
+       "of10": 2,
+       "peerOf10": 3,
+       "ratio": 0.79,
+       "common": false
+      }
+     ],
+     "50-64": [
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 1,
+       "peerOf10": 2,
+       "ratio": 0.73,
+       "common": false
+      }
+     ],
+     "65-74": [
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 2,
+       "peerOf10": 2,
+       "ratio": 0.75,
+       "common": false
+      }
+     ],
+     "75+": [
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 2,
+       "peerOf10": 3,
+       "ratio": 0.74,
+       "common": false
+      },
+      {
+       "key": "phosphorus",
+       "nutrient": "인",
+       "of10": 1,
+       "peerOf10": 1,
+       "ratio": 0.79,
+       "common": false
+      }
+     ]
+    },
+    "2": {
+     "19-29": [
+      {
+       "key": "phosphorus",
+       "nutrient": "인",
+       "of10": 1,
+       "peerOf10": 2,
+       "ratio": 0.56,
+       "common": false
+      },
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 2,
+       "peerOf10": 3,
+       "ratio": 0.65,
+       "common": false
+      },
+      {
+       "key": "zinc",
+       "nutrient": "아연",
+       "of10": 3,
+       "peerOf10": 5,
+       "ratio": 0.67,
+       "common": false
+      }
+     ],
+     "30-49": [
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 1,
+       "peerOf10": 2,
+       "ratio": 0.63,
+       "common": false
+      },
+      {
+       "key": "phosphorus",
+       "nutrient": "인",
+       "of10": 1,
+       "peerOf10": 1,
+       "ratio": 0.66,
+       "common": false
+      },
+      {
+       "key": "zinc",
+       "nutrient": "아연",
+       "of10": 3,
+       "peerOf10": 4,
+       "ratio": 0.76,
+       "common": false
+      },
+      {
+       "key": "magnesium",
+       "nutrient": "마그네슘",
+       "of10": 4,
+       "peerOf10": 5,
+       "ratio": 0.82,
+       "common": false
+      }
+     ],
+     "50-64": [
+      {
+       "key": "iron",
+       "nutrient": "철",
+       "of10": 1,
+       "peerOf10": 3,
+       "ratio": 0.57,
+       "common": false
+      },
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 2,
+       "peerOf10": 2,
+       "ratio": 0.69,
+       "common": false
+      },
+      {
+       "key": "phosphorus",
+       "nutrient": "인",
+       "of10": 1,
+       "peerOf10": 1,
+       "ratio": 0.72,
+       "common": false
+      },
+      {
+       "key": "zinc",
+       "nutrient": "아연",
+       "of10": 2,
+       "peerOf10": 3,
+       "ratio": 0.82,
+       "common": false
+      }
+     ],
+     "65-74": [
+      {
+       "key": "iron",
+       "nutrient": "철",
+       "of10": 1,
+       "peerOf10": 2,
+       "ratio": 0.41,
+       "common": false
+      },
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 2,
+       "peerOf10": 3,
+       "ratio": 0.72,
+       "common": false
+      },
+      {
+       "key": "phosphorus",
+       "nutrient": "인",
+       "of10": 1,
+       "peerOf10": 1,
+       "ratio": 0.76,
+       "common": false
+      }
+     ],
+     "75+": [
+      {
+       "key": "iron",
+       "nutrient": "철",
+       "of10": 1,
+       "peerOf10": 3,
+       "ratio": 0.48,
+       "common": false
+      },
+      {
+       "key": "phosphorus",
+       "nutrient": "인",
+       "of10": 1,
+       "peerOf10": 2,
+       "ratio": 0.62,
+       "common": false
+      },
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 3,
+       "peerOf10": 4,
+       "ratio": 0.72,
+       "common": false
+      },
+      {
+       "key": "vitamin_b2",
+       "nutrient": "리보플라빈",
+       "of10": 3,
+       "peerOf10": 4,
+       "ratio": 0.83,
+       "common": false
+      }
+     ]
+    }
+   },
+   "A1": {
+    "1": {
+     "19-29": [
+      {
+       "key": "iron",
+       "nutrient": "철",
+       "of10": 2,
+       "peerOf10": 3,
+       "ratio": 0.78,
+       "common": false
+      },
+      {
+       "key": "zinc",
+       "nutrient": "아연",
+       "of10": 3,
+       "peerOf10": 4,
+       "ratio": 0.8,
+       "common": false
+      },
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 2,
+       "peerOf10": 2,
+       "ratio": 0.83,
+       "common": false
+      }
+     ],
+     "30-49": [
+      {
+       "key": "iron",
+       "nutrient": "철",
+       "of10": 1,
+       "peerOf10": 2,
+       "ratio": 0.6,
+       "common": false
+      },
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 1,
+       "peerOf10": 1,
+       "ratio": 0.82,
+       "common": false
+      }
+     ],
+     "50-64": [],
+     "65-74": [],
+     "75+": [
+      {
+       "key": "iron",
+       "nutrient": "철",
+       "of10": 1,
+       "peerOf10": 1,
+       "ratio": 0.81,
+       "common": false
+      }
+     ]
+    },
+    "2": {
+     "19-29": [
+      {
+       "key": "phosphorus",
+       "nutrient": "인",
+       "of10": 2,
+       "peerOf10": 2,
+       "ratio": 0.73,
+       "common": false
+      },
+      {
+       "key": "zinc",
+       "nutrient": "아연",
+       "of10": 4,
+       "peerOf10": 5,
+       "ratio": 0.77,
+       "common": false
+      },
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 2,
+       "peerOf10": 3,
+       "ratio": 0.79,
+       "common": false
+      }
+     ],
+     "30-49": [
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 2,
+       "peerOf10": 2,
+       "ratio": 0.77,
+       "common": false
+      }
+     ],
+     "50-64": [
+      {
+       "key": "iron",
+       "nutrient": "철",
+       "of10": 1,
+       "peerOf10": 3,
+       "ratio": 0.5,
+       "common": false
+      }
+     ],
+     "65-74": [
+      {
+       "key": "iron",
+       "nutrient": "철",
+       "of10": 1,
+       "peerOf10": 2,
+       "ratio": 0.44,
+       "common": false
+      }
+     ],
+     "75+": [
+      {
+       "key": "iron",
+       "nutrient": "철",
+       "of10": 1,
+       "peerOf10": 3,
+       "ratio": 0.46,
+       "common": false
+      },
+      {
+       "key": "phosphorus",
+       "nutrient": "인",
+       "of10": 2,
+       "peerOf10": 2,
+       "ratio": 0.79,
+       "common": false
+      }
+     ]
+    }
+   },
+   "A2": {
+    "1": {
+     "19-29": [],
+     "30-49": [],
+     "50-64": [],
+     "65-74": [],
+     "75+": []
+    },
+    "2": {
+     "19-29": [
+      {
+       "key": "phosphorus",
+       "nutrient": "인",
+       "of10": 2,
+       "peerOf10": 2,
+       "ratio": 0.78,
+       "common": false
+      }
+     ],
+     "30-49": [],
+     "50-64": [],
+     "65-74": [],
+     "75+": []
+    }
+   },
+   "A3": {
+    "1": {
+     "19-29": [
+      {
+       "key": "iron",
+       "nutrient": "철",
+       "of10": 2,
+       "peerOf10": 3,
+       "ratio": 0.55,
+       "common": false
+      },
+      {
+       "key": "zinc",
+       "nutrient": "아연",
+       "of10": 2,
+       "peerOf10": 4,
+       "ratio": 0.61,
+       "common": false
+      },
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 1,
+       "peerOf10": 2,
+       "ratio": 0.66,
+       "common": false
+      },
+      {
+       "key": "phosphorus",
+       "nutrient": "인",
+       "of10": 1,
+       "peerOf10": 1,
+       "ratio": 0.68,
+       "common": false
+      },
+      {
+       "key": "magnesium",
+       "nutrient": "마그네슘",
+       "of10": 5,
+       "peerOf10": 6,
+       "ratio": 0.73,
+       "common": false
+      },
+      {
+       "key": "folate",
+       "nutrient": "엽산",
+       "of10": 5,
+       "peerOf10": 7,
+       "ratio": 0.74,
+       "common": true
+      },
+      {
+       "key": "vitamin_b2",
+       "nutrient": "리보플라빈",
+       "of10": 3,
+       "peerOf10": 3,
+       "ratio": 0.82,
+       "common": false
+      }
+     ],
+     "30-49": [
+      {
+       "key": "iron",
+       "nutrient": "철",
+       "of10": 1,
+       "peerOf10": 2,
+       "ratio": 0.49,
+       "common": false
+      },
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 1,
+       "peerOf10": 1,
+       "ratio": 0.65,
+       "common": false
+      },
+      {
+       "key": "folate",
+       "nutrient": "엽산",
+       "of10": 4,
+       "peerOf10": 6,
+       "ratio": 0.69,
+       "common": true
+      },
+      {
+       "key": "magnesium",
+       "nutrient": "마그네슘",
+       "of10": 4,
+       "peerOf10": 5,
+       "ratio": 0.7,
+       "common": false
+      },
+      {
+       "key": "zinc",
+       "nutrient": "아연",
+       "of10": 2,
+       "peerOf10": 3,
+       "ratio": 0.71,
+       "common": false
+      },
+      {
+       "key": "fiber",
+       "nutrient": "식이섬유",
+       "of10": 6,
+       "peerOf10": 7,
+       "ratio": 0.81,
+       "common": true
+      },
+      {
+       "key": "vitamin_b1",
+       "nutrient": "티아민",
+       "of10": 3,
+       "peerOf10": 4,
+       "ratio": 0.83,
+       "common": false
+      },
+      {
+       "key": "vitamin_b2",
+       "nutrient": "리보플라빈",
+       "of10": 2,
+       "peerOf10": 3,
+       "ratio": 0.83,
+       "common": false
+      },
+      {
+       "key": "phosphorus",
+       "nutrient": "인",
+       "of10": 0,
+       "peerOf10": 1,
+       "ratio": 0.83,
+       "common": false
+      }
+     ],
+     "50-64": [
+      {
+       "key": "folate",
+       "nutrient": "엽산",
+       "of10": 3,
+       "peerOf10": 4,
+       "ratio": 0.67,
+       "common": true
+      },
+      {
+       "key": "iron",
+       "nutrient": "철",
+       "of10": 1,
+       "peerOf10": 1,
+       "ratio": 0.69,
+       "common": false
+      },
+      {
+       "key": "magnesium",
+       "nutrient": "마그네슘",
+       "of10": 3,
+       "peerOf10": 4,
+       "ratio": 0.7,
+       "common": false
+      },
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 1,
+       "peerOf10": 2,
+       "ratio": 0.71,
+       "common": false
+      },
+      {
+       "key": "zinc",
+       "nutrient": "아연",
+       "of10": 2,
+       "peerOf10": 2,
+       "ratio": 0.77,
+       "common": false
+      },
+      {
+       "key": "fiber",
+       "nutrient": "식이섬유",
+       "of10": 5,
+       "peerOf10": 6,
+       "ratio": 0.81,
+       "common": true
+      }
+     ],
+     "65-74": [
+      {
+       "key": "folate",
+       "nutrient": "엽산",
+       "of10": 3,
+       "peerOf10": 4,
+       "ratio": 0.72,
+       "common": true
+      },
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 2,
+       "peerOf10": 2,
+       "ratio": 0.73,
+       "common": false
+      },
+      {
+       "key": "magnesium",
+       "nutrient": "마그네슘",
+       "of10": 3,
+       "peerOf10": 4,
+       "ratio": 0.75,
+       "common": false
+      },
+      {
+       "key": "fiber",
+       "nutrient": "식이섬유",
+       "of10": 4,
+       "peerOf10": 5,
+       "ratio": 0.83,
+       "common": true
+      },
+      {
+       "key": "vitamin_b2",
+       "nutrient": "리보플라빈",
+       "of10": 3,
+       "peerOf10": 3,
+       "ratio": 0.83,
+       "common": false
+      }
+     ],
+     "75+": [
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 2,
+       "peerOf10": 3,
+       "ratio": 0.72,
+       "common": false
+      },
+      {
+       "key": "phosphorus",
+       "nutrient": "인",
+       "of10": 1,
+       "peerOf10": 1,
+       "ratio": 0.75,
+       "common": false
+      },
+      {
+       "key": "folate",
+       "nutrient": "엽산",
+       "of10": 4,
+       "peerOf10": 5,
+       "ratio": 0.76,
+       "common": true
+      },
+      {
+       "key": "magnesium",
+       "nutrient": "마그네슘",
+       "of10": 4,
+       "peerOf10": 5,
+       "ratio": 0.79,
+       "common": false
+      },
+      {
+       "key": "vitamin_b2",
+       "nutrient": "리보플라빈",
+       "of10": 3,
+       "peerOf10": 4,
+       "ratio": 0.79,
+       "common": false
+      }
+     ]
+    },
+    "2": {
+     "19-29": [
+      {
+       "key": "phosphorus",
+       "nutrient": "인",
+       "of10": 1,
+       "peerOf10": 2,
+       "ratio": 0.54,
+       "common": false
+      },
+      {
+       "key": "zinc",
+       "nutrient": "아연",
+       "of10": 3,
+       "peerOf10": 5,
+       "ratio": 0.6,
+       "common": false
+      },
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 2,
+       "peerOf10": 3,
+       "ratio": 0.63,
+       "common": false
+      },
+      {
+       "key": "magnesium",
+       "nutrient": "마그네슘",
+       "of10": 5,
+       "peerOf10": 6,
+       "ratio": 0.71,
+       "common": false
+      },
+      {
+       "key": "vitamin_b2",
+       "nutrient": "리보플라빈",
+       "of10": 2,
+       "peerOf10": 3,
+       "ratio": 0.79,
+       "common": false
+      },
+      {
+       "key": "fiber",
+       "nutrient": "식이섬유",
+       "of10": 6,
+       "peerOf10": 8,
+       "ratio": 0.8,
+       "common": true
+      },
+      {
+       "key": "folate",
+       "nutrient": "엽산",
+       "of10": 7,
+       "peerOf10": 8,
+       "ratio": 0.81,
+       "common": true
+      },
+      {
+       "key": "vitamin_b1",
+       "nutrient": "티아민",
+       "of10": 4,
+       "peerOf10": 5,
+       "ratio": 0.82,
+       "common": false
+      },
+      {
+       "key": "vitamin_a",
+       "nutrient": "비타민A",
+       "of10": 6,
+       "peerOf10": 8,
+       "ratio": 0.83,
+       "common": true
+      }
+     ],
+     "30-49": [
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 1,
+       "peerOf10": 2,
+       "ratio": 0.61,
+       "common": false
+      },
+      {
+       "key": "phosphorus",
+       "nutrient": "인",
+       "of10": 1,
+       "peerOf10": 1,
+       "ratio": 0.63,
+       "common": false
+      },
+      {
+       "key": "magnesium",
+       "nutrient": "마그네슘",
+       "of10": 4,
+       "peerOf10": 5,
+       "ratio": 0.67,
+       "common": false
+      },
+      {
+       "key": "zinc",
+       "nutrient": "아연",
+       "of10": 3,
+       "peerOf10": 4,
+       "ratio": 0.69,
+       "common": false
+      },
+      {
+       "key": "fiber",
+       "nutrient": "식이섬유",
+       "of10": 5,
+       "peerOf10": 6,
+       "ratio": 0.76,
+       "common": true
+      },
+      {
+       "key": "folate",
+       "nutrient": "엽산",
+       "of10": 6,
+       "peerOf10": 7,
+       "ratio": 0.76,
+       "common": true
+      },
+      {
+       "key": "vitamin_b2",
+       "nutrient": "리보플라빈",
+       "of10": 2,
+       "peerOf10": 3,
+       "ratio": 0.8,
+       "common": false
+      },
+      {
+       "key": "vitamin_b1",
+       "nutrient": "티아민",
+       "of10": 4,
+       "peerOf10": 5,
+       "ratio": 0.81,
+       "common": false
+      }
+     ],
+     "50-64": [
+      {
+       "key": "iron",
+       "nutrient": "철",
+       "of10": 1,
+       "peerOf10": 3,
+       "ratio": 0.41,
+       "common": false
+      },
+      {
+       "key": "magnesium",
+       "nutrient": "마그네슘",
+       "of10": 3,
+       "peerOf10": 4,
+       "ratio": 0.67,
+       "common": false
+      },
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 2,
+       "peerOf10": 2,
+       "ratio": 0.67,
+       "common": false
+      },
+      {
+       "key": "phosphorus",
+       "nutrient": "인",
+       "of10": 1,
+       "peerOf10": 1,
+       "ratio": 0.68,
+       "common": false
+      },
+      {
+       "key": "folate",
+       "nutrient": "엽산",
+       "of10": 4,
+       "peerOf10": 6,
+       "ratio": 0.72,
+       "common": true
+      },
+      {
+       "key": "zinc",
+       "nutrient": "아연",
+       "of10": 2,
+       "peerOf10": 3,
+       "ratio": 0.73,
+       "common": false
+      },
+      {
+       "key": "fiber",
+       "nutrient": "식이섬유",
+       "of10": 4,
+       "peerOf10": 5,
+       "ratio": 0.76,
+       "common": true
+      },
+      {
+       "key": "vitamin_b2",
+       "nutrient": "리보플라빈",
+       "of10": 2,
+       "peerOf10": 3,
+       "ratio": 0.82,
+       "common": false
+      }
+     ],
+     "65-74": [
+      {
+       "key": "iron",
+       "nutrient": "철",
+       "of10": 1,
+       "peerOf10": 2,
+       "ratio": 0.5,
+       "common": false
+      },
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 2,
+       "peerOf10": 3,
+       "ratio": 0.7,
+       "common": false
+      },
+      {
+       "key": "magnesium",
+       "nutrient": "마그네슘",
+       "of10": 3,
+       "peerOf10": 4,
+       "ratio": 0.71,
+       "common": false
+      },
+      {
+       "key": "phosphorus",
+       "nutrient": "인",
+       "of10": 1,
+       "peerOf10": 1,
+       "ratio": 0.72,
+       "common": false
+      },
+      {
+       "key": "folate",
+       "nutrient": "엽산",
+       "of10": 4,
+       "peerOf10": 5,
+       "ratio": 0.75,
+       "common": true
+      },
+      {
+       "key": "fiber",
+       "nutrient": "식이섬유",
+       "of10": 4,
+       "peerOf10": 5,
+       "ratio": 0.78,
+       "common": true
+      },
+      {
+       "key": "vitamin_b2",
+       "nutrient": "리보플라빈",
+       "of10": 3,
+       "peerOf10": 3,
+       "ratio": 0.8,
+       "common": false
+      },
+      {
+       "key": "zinc",
+       "nutrient": "아연",
+       "of10": 2,
+       "peerOf10": 3,
+       "ratio": 0.81,
+       "common": false
+      }
+     ],
+     "75+": [
+      {
+       "key": "iron",
+       "nutrient": "철",
+       "of10": 1,
+       "peerOf10": 3,
+       "ratio": 0.39,
+       "common": false
+      },
+      {
+       "key": "phosphorus",
+       "nutrient": "인",
+       "of10": 1,
+       "peerOf10": 2,
+       "ratio": 0.59,
+       "common": false
+      },
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 3,
+       "peerOf10": 4,
+       "ratio": 0.71,
+       "common": false
+      },
+      {
+       "key": "magnesium",
+       "nutrient": "마그네슘",
+       "of10": 4,
+       "peerOf10": 5,
+       "ratio": 0.76,
+       "common": false
+      },
+      {
+       "key": "vitamin_b2",
+       "nutrient": "리보플라빈",
+       "of10": 3,
+       "peerOf10": 4,
+       "ratio": 0.77,
+       "common": false
+      },
+      {
+       "key": "folate",
+       "nutrient": "엽산",
+       "of10": 5,
+       "peerOf10": 6,
+       "ratio": 0.8,
+       "common": true
+      },
+      {
+       "key": "fiber",
+       "nutrient": "식이섬유",
+       "of10": 5,
+       "peerOf10": 6,
+       "ratio": 0.81,
+       "common": true
+      },
+      {
+       "key": "zinc",
+       "nutrient": "아연",
+       "of10": 2,
+       "peerOf10": 3,
+       "ratio": 0.81,
+       "common": false
+      },
+      {
+       "key": "vitamin_b1",
+       "nutrient": "티아민",
+       "of10": 5,
+       "peerOf10": 6,
+       "ratio": 0.83,
+       "common": false
+      }
+     ]
+    }
+   },
+   "S1": {
+    "1": {
+     "19-29": [],
+     "30-49": [],
+     "50-64": [],
+     "65-74": [],
+     "75+": []
+    },
+    "2": {
+     "19-29": [],
+     "30-49": [],
+     "50-64": [],
+     "65-74": [],
+     "75+": []
+    }
+   },
+   "S2": {
+    "1": {
+     "19-29": [],
+     "30-49": [],
+     "50-64": [],
+     "65-74": [],
+     "75+": []
+    },
+    "2": {
+     "19-29": [],
+     "30-49": [],
+     "50-64": [],
+     "65-74": [
+      {
+       "key": "iron",
+       "nutrient": "철",
+       "of10": 2,
+       "peerOf10": 2,
+       "ratio": 0.82,
+       "common": false
+      }
+     ],
+     "75+": [
+      {
+       "key": "iron",
+       "nutrient": "철",
+       "of10": 2,
+       "peerOf10": 3,
+       "ratio": 0.74,
+       "common": false
+      }
+     ]
+    }
+   },
+   "S3": {
+    "1": {
+     "19-29": [
+      {
+       "key": "iron",
+       "nutrient": "철",
+       "of10": 2,
+       "peerOf10": 3,
+       "ratio": 0.78,
+       "common": false
+      }
+     ],
+     "30-49": [
+      {
+       "key": "iron",
+       "nutrient": "철",
+       "of10": 2,
+       "peerOf10": 2,
+       "ratio": 0.83,
+       "common": false
+      }
+     ],
+     "50-64": [],
+     "65-74": [],
+     "75+": []
+    },
+    "2": {
+     "19-29": [
+      {
+       "key": "phosphorus",
+       "nutrient": "인",
+       "of10": 2,
+       "peerOf10": 2,
+       "ratio": 0.75,
+       "common": false
+      }
+     ],
+     "30-49": [],
+     "50-64": [],
+     "65-74": [],
+     "75+": [
+      {
+       "key": "phosphorus",
+       "nutrient": "인",
+       "of10": 2,
+       "peerOf10": 2,
+       "ratio": 0.81,
+       "common": false
+      }
+     ]
+    }
+   },
+   "O1": {
+    "1": {
+     "19-29": [],
+     "30-49": [],
+     "50-64": [],
+     "65-74": [],
+     "75+": []
+    },
+    "2": {
+     "19-29": [],
+     "30-49": [],
+     "50-64": [],
+     "65-74": [],
+     "75+": []
+    }
+   },
+   "O2": {
+    "1": {
+     "19-29": [
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 1,
+       "peerOf10": 2,
+       "ratio": 0.65,
+       "common": false
+      },
+      {
+       "key": "zinc",
+       "nutrient": "아연",
+       "of10": 3,
+       "peerOf10": 4,
+       "ratio": 0.69,
+       "common": false
+      },
+      {
+       "key": "iron",
+       "nutrient": "철",
+       "of10": 2,
+       "peerOf10": 3,
+       "ratio": 0.73,
+       "common": false
+      },
+      {
+       "key": "phosphorus",
+       "nutrient": "인",
+       "of10": 1,
+       "peerOf10": 1,
+       "ratio": 0.75,
+       "common": false
+      },
+      {
+       "key": "vitamin_b2",
+       "nutrient": "리보플라빈",
+       "of10": 3,
+       "peerOf10": 3,
+       "ratio": 0.81,
+       "common": false
+      }
+     ],
+     "30-49": [
+      {
+       "key": "iron",
+       "nutrient": "철",
+       "of10": 1,
+       "peerOf10": 2,
+       "ratio": 0.5,
+       "common": false
+      },
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 1,
+       "peerOf10": 1,
+       "ratio": 0.64,
+       "common": false
+      },
+      {
+       "key": "zinc",
+       "nutrient": "아연",
+       "of10": 2,
+       "peerOf10": 3,
+       "ratio": 0.81,
+       "common": false
+      },
+      {
+       "key": "vitamin_b2",
+       "nutrient": "리보플라빈",
+       "of10": 2,
+       "peerOf10": 3,
+       "ratio": 0.82,
+       "common": false
+      }
+     ],
+     "50-64": [
+      {
+       "key": "iron",
+       "nutrient": "철",
+       "of10": 1,
+       "peerOf10": 1,
+       "ratio": 0.65,
+       "common": false
+      },
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 1,
+       "peerOf10": 2,
+       "ratio": 0.7,
+       "common": false
+      }
+     ],
+     "65-74": [
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 2,
+       "peerOf10": 2,
+       "ratio": 0.72,
+       "common": false
+      },
+      {
+       "key": "vitamin_b2",
+       "nutrient": "리보플라빈",
+       "of10": 3,
+       "peerOf10": 3,
+       "ratio": 0.82,
+       "common": false
+      }
+     ],
+     "75+": [
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 2,
+       "peerOf10": 3,
+       "ratio": 0.72,
+       "common": false
+      },
+      {
+       "key": "vitamin_b2",
+       "nutrient": "리보플라빈",
+       "of10": 3,
+       "peerOf10": 4,
+       "ratio": 0.78,
+       "common": false
+      },
+      {
+       "key": "phosphorus",
+       "nutrient": "인",
+       "of10": 1,
+       "peerOf10": 1,
+       "ratio": 0.83,
+       "common": false
+      }
+     ]
+    },
+    "2": {
+     "19-29": [
+      {
+       "key": "phosphorus",
+       "nutrient": "인",
+       "of10": 1,
+       "peerOf10": 2,
+       "ratio": 0.59,
+       "common": false
+      },
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 2,
+       "peerOf10": 3,
+       "ratio": 0.63,
+       "common": false
+      },
+      {
+       "key": "zinc",
+       "nutrient": "아연",
+       "of10": 3,
+       "peerOf10": 5,
+       "ratio": 0.68,
+       "common": false
+      },
+      {
+       "key": "vitamin_b2",
+       "nutrient": "리보플라빈",
+       "of10": 2,
+       "peerOf10": 3,
+       "ratio": 0.78,
+       "common": false
+      }
+     ],
+     "30-49": [
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 1,
+       "peerOf10": 2,
+       "ratio": 0.61,
+       "common": false
+      },
+      {
+       "key": "phosphorus",
+       "nutrient": "인",
+       "of10": 1,
+       "peerOf10": 1,
+       "ratio": 0.7,
+       "common": false
+      },
+      {
+       "key": "zinc",
+       "nutrient": "아연",
+       "of10": 3,
+       "peerOf10": 4,
+       "ratio": 0.77,
+       "common": false
+      },
+      {
+       "key": "vitamin_b2",
+       "nutrient": "리보플라빈",
+       "of10": 2,
+       "peerOf10": 3,
+       "ratio": 0.79,
+       "common": false
+      },
+      {
+       "key": "magnesium",
+       "nutrient": "마그네슘",
+       "of10": 4,
+       "peerOf10": 5,
+       "ratio": 0.82,
+       "common": false
+      }
+     ],
+     "50-64": [
+      {
+       "key": "iron",
+       "nutrient": "철",
+       "of10": 1,
+       "peerOf10": 3,
+       "ratio": 0.39,
+       "common": false
+      },
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 2,
+       "peerOf10": 2,
+       "ratio": 0.66,
+       "common": false
+      },
+      {
+       "key": "phosphorus",
+       "nutrient": "인",
+       "of10": 1,
+       "peerOf10": 1,
+       "ratio": 0.76,
+       "common": false
+      },
+      {
+       "key": "vitamin_b2",
+       "nutrient": "리보플라빈",
+       "of10": 2,
+       "peerOf10": 3,
+       "ratio": 0.81,
+       "common": false
+      },
+      {
+       "key": "zinc",
+       "nutrient": "아연",
+       "of10": 2,
+       "peerOf10": 3,
+       "ratio": 0.83,
+       "common": false
+      }
+     ],
+     "65-74": [
+      {
+       "key": "iron",
+       "nutrient": "철",
+       "of10": 1,
+       "peerOf10": 2,
+       "ratio": 0.63,
+       "common": false
+      },
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 2,
+       "peerOf10": 3,
+       "ratio": 0.69,
+       "common": false
+      },
+      {
+       "key": "phosphorus",
+       "nutrient": "인",
+       "of10": 1,
+       "peerOf10": 1,
+       "ratio": 0.8,
+       "common": false
+      },
+      {
+       "key": "vitamin_b2",
+       "nutrient": "리보플라빈",
+       "of10": 3,
+       "peerOf10": 3,
+       "ratio": 0.8,
+       "common": false
+      }
+     ],
+     "75+": [
+      {
+       "key": "iron",
+       "nutrient": "철",
+       "of10": 1,
+       "peerOf10": 3,
+       "ratio": 0.43,
+       "common": false
+      },
+      {
+       "key": "phosphorus",
+       "nutrient": "인",
+       "of10": 1,
+       "peerOf10": 2,
+       "ratio": 0.65,
+       "common": false
+      },
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 3,
+       "peerOf10": 4,
+       "ratio": 0.7,
+       "common": false
+      },
+      {
+       "key": "vitamin_b2",
+       "nutrient": "리보플라빈",
+       "of10": 3,
+       "peerOf10": 4,
+       "ratio": 0.76,
+       "common": false
+      }
+     ]
+    }
+   },
+   "O3": {
+    "1": {
+     "19-29": [
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 1,
+       "peerOf10": 2,
+       "ratio": 0.7,
+       "common": false
+      },
+      {
+       "key": "zinc",
+       "nutrient": "아연",
+       "of10": 3,
+       "peerOf10": 4,
+       "ratio": 0.76,
+       "common": false
+      }
+     ],
+     "30-49": [
+      {
+       "key": "iron",
+       "nutrient": "철",
+       "of10": 1,
+       "peerOf10": 2,
+       "ratio": 0.56,
+       "common": false
+      },
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 1,
+       "peerOf10": 1,
+       "ratio": 0.69,
+       "common": false
+      }
+     ],
+     "50-64": [
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 1,
+       "peerOf10": 2,
+       "ratio": 0.75,
+       "common": false
+      }
+     ],
+     "65-74": [
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 2,
+       "peerOf10": 2,
+       "ratio": 0.77,
+       "common": false
+      }
+     ],
+     "75+": [
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 2,
+       "peerOf10": 3,
+       "ratio": 0.76,
+       "common": false
+      }
+     ]
+    },
+    "2": {
+     "19-29": [
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 2,
+       "peerOf10": 3,
+       "ratio": 0.67,
+       "common": false
+      },
+      {
+       "key": "phosphorus",
+       "nutrient": "인",
+       "of10": 1,
+       "peerOf10": 2,
+       "ratio": 0.71,
+       "common": false
+      },
+      {
+       "key": "zinc",
+       "nutrient": "아연",
+       "of10": 4,
+       "peerOf10": 5,
+       "ratio": 0.74,
+       "common": false
+      }
+     ],
+     "30-49": [
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 1,
+       "peerOf10": 2,
+       "ratio": 0.65,
+       "common": false
+      }
+     ],
+     "50-64": [
+      {
+       "key": "iron",
+       "nutrient": "철",
+       "of10": 2,
+       "peerOf10": 3,
+       "ratio": 0.6,
+       "common": false
+      },
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 2,
+       "peerOf10": 2,
+       "ratio": 0.71,
+       "common": false
+      }
+     ],
+     "65-74": [
+      {
+       "key": "iron",
+       "nutrient": "철",
+       "of10": 1,
+       "peerOf10": 2,
+       "ratio": 0.61,
+       "common": false
+      },
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 2,
+       "peerOf10": 3,
+       "ratio": 0.73,
+       "common": false
+      }
+     ],
+     "75+": [
+      {
+       "key": "iron",
+       "nutrient": "철",
+       "of10": 2,
+       "peerOf10": 3,
+       "ratio": 0.59,
+       "common": false
+      },
+      {
+       "key": "protein",
+       "nutrient": "단백질",
+       "of10": 3,
+       "peerOf10": 4,
+       "ratio": 0.74,
+       "common": false
+      },
+      {
+       "key": "phosphorus",
+       "nutrient": "인",
+       "of10": 2,
+       "peerOf10": 2,
+       "ratio": 0.77,
+       "common": false
+      },
+      {
+       "key": "vitamin_b2",
+       "nutrient": "리보플라빈",
+       "of10": 3,
+       "peerOf10": 4,
+       "ratio": 0.81,
+       "common": false
+      }
+     ]
+    }
+   }
+  }
+ },
+ "foods": {
+  "rule": "같은 성별·나이 대비 섭취 배수 ≤ 0.85 덜 먹음 / ≥ 1.15 더 먹음 (조사 가중). stable = 2022–23과 2024에서 방향이 같음",
+  "source": "육류·생선·유제품·달걀·콩류는 24시간 회상 g, 과일·채소(김치 제외)는 설문 주당 빈도",
+  "note": "관련성이며 인과가 아님. why의 몫 = 유형 차이 중 에너지만/식품군만/둘 다 맞췄을 때 줄어드는 비율 (18번 4절)",
+  "types": {
+   "N1": {
+    "energy_ratio": 0.97,
+    "less": [
+     {
+      "food": "유제품",
+      "pct": 22,
+      "stable": true
+     },
+     {
+      "food": "육류",
+      "pct": 15,
+      "stable": true
+     }
+    ],
+    "more": [],
+    "why": []
+   },
+   "N2": {
+    "energy_ratio": 0.92,
+    "less": [
+     {
+      "food": "콩류",
+      "pct": 25,
+      "stable": true
+     },
+     {
+      "food": "유제품",
+      "pct": 18,
+      "stable": true
+     },
+     {
+      "food": "과일",
+      "pct": 16,
+      "stable": true
+     },
+     {
+      "food": "달걀",
+      "pct": 15,
+      "stable": true
+     },
+     {
+      "food": "채소",
+      "pct": 15,
+      "stable": true
+     }
+    ],
+    "more": [],
+    "why": [
+     {
+      "nutrient": "단백질",
+      "key": "protein",
+      "energy_only": 0.83,
+      "foods_only": 0.67,
+      "both": 0.92
+     },
+     {
+      "nutrient": "티아민",
+      "key": "vitamin_b1",
+      "energy_only": 0.75,
+      "foods_only": 0.56,
+      "both": 0.82
+     },
+     {
+      "nutrient": "리보플라빈",
+      "key": "vitamin_b2",
+      "energy_only": 0.9,
+      "foods_only": 0.75,
+      "both": 1.04
+     },
+     {
+      "nutrient": "인",
+      "key": "phosphorus",
+      "energy_only": 0.75,
+      "foods_only": 0.69,
+      "both": 0.89
+     },
+     {
+      "nutrient": "마그네슘",
+      "key": "magnesium",
+      "energy_only": 0.61,
+      "foods_only": 0.58,
+      "both": 0.82
+     },
+     {
+      "nutrient": "철",
+      "key": "iron",
+      "energy_only": 0.6,
+      "foods_only": 0.5,
+      "both": 0.73
+     },
+     {
+      "nutrient": "아연",
+      "key": "zinc",
+      "energy_only": 0.75,
+      "foods_only": 0.58,
+      "both": 0.87
+     }
+    ]
+   },
+   "N3": {
+    "energy_ratio": 1.04,
+    "less": [],
+    "more": [],
+    "why": []
+   },
+   "A1": {
+    "energy_ratio": 1.03,
+    "less": [],
+    "more": [],
+    "why": []
+   },
+   "A2": {
+    "energy_ratio": 0.95,
+    "less": [],
+    "more": [],
+    "why": [
+     {
+      "nutrient": "아연",
+      "key": "zinc",
+      "energy_only": 0.63,
+      "foods_only": 0.46,
+      "both": 0.72
+     }
+    ]
+   },
+   "A3": {
+    "energy_ratio": 1.06,
+    "less": [],
+    "more": [
+     {
+      "food": "콩류",
+      "pct": 38,
+      "stable": true
+     },
+     {
+      "food": "달걀",
+      "pct": 34,
+      "stable": true
+     },
+     {
+      "food": "유제품",
+      "pct": 32,
+      "stable": true
+     },
+     {
+      "food": "과일",
+      "pct": 32,
+      "stable": true
+     }
+    ],
+    "why": []
+   },
+   "S1": {
+    "energy_ratio": 0.99,
+    "less": [
+     {
+      "food": "과일",
+      "pct": 17,
+      "stable": true
+     }
+    ],
+    "more": [],
+    "why": [
+     {
+      "nutrient": "단백질",
+      "key": "protein",
+      "energy_only": 0.75,
+      "foods_only": 0.78,
+      "both": 0.82
+     },
+     {
+      "nutrient": "인",
+      "key": "phosphorus",
+      "energy_only": 0.66,
+      "foods_only": 0.64,
+      "both": 0.79
+     },
+     {
+      "nutrient": "철",
+      "key": "iron",
+      "energy_only": 0.37,
+      "foods_only": 0.56,
+      "both": 0.57
+     }
+    ]
+   },
+   "S2": {
+    "energy_ratio": 0.99,
+    "less": [],
+    "more": [],
+    "why": []
+   },
+   "S3": {
+    "energy_ratio": 0.98,
+    "less": [],
+    "more": [
+     {
+      "food": "콩류",
+      "pct": 41,
+      "stable": true
+     }
+    ],
+    "why": []
+   },
+   "O1": {
+    "energy_ratio": 0.96,
+    "less": [
+     {
+      "food": "콩류",
+      "pct": 33,
+      "stable": true
+     },
+     {
+      "food": "달걀",
+      "pct": 18,
+      "stable": true
+     },
+     {
+      "food": "과일",
+      "pct": 16,
+      "stable": true
+     }
+    ],
+    "more": [],
+    "why": []
+   },
+   "O2": {
+    "energy_ratio": 1.08,
+    "less": [],
+    "more": [],
+    "why": []
+   },
+   "O3": {
+    "energy_ratio": 1.02,
+    "less": [],
+    "more": [
+     {
+      "food": "콩류",
+      "pct": 15,
+      "stable": true
+     }
+    ],
+    "why": []
+   }
+  }
+ }
+}

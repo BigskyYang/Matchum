@@ -7,7 +7,7 @@ import { NUTRIENT_GUIDE } from '../data/nutrientGuide.js'
 import { PAGE_SIZE, SUPPLEMENT_NOTICES, TARGET_LABELS } from '../data/supplementInfo.js'
 import { buildPersonalResult } from '../lib/result.js'
 import { loadSurvey } from '../lib/storage.js'
-import { combinedIds, dailyTotals, formsOf, productCount, productSections, productTexts, targetsFor } from '../lib/supplements.js'
+import { combinedIds, dailyTotals, formsOf, headroomProducts, productCount, productSections, productTexts, targetsFor } from '../lib/supplements.js'
 import { useCatalog, useModels } from '../lib/useCatalog.js'
 import { usePicks } from '../lib/usePicks.js'
 import TotalsTable from '../components/supplements/TotalsTable.jsx'
@@ -146,8 +146,9 @@ function ProductSheet({ catalog, p, picked, onToggle, onClose }) {
   )
 }
 
-function PicksSheet({ catalog, ids, mine, sex, onToggle, onClose }) {
-  const totals = dailyTotals(catalog, combinedIds(mine, ids), sex)
+function PicksSheet({ catalog, ids, mine, sex, age, onToggle, onClose }) {
+  const combined = combinedIds(mine, ids)
+  const totals = dailyTotals(catalog, combined, sex, age)
   const mineCount = mine.filter((m) => m.id && !ids.includes(m.id)).length
   return (
     <BottomSheet title={`고른 제품 ${ids.length}개`} onClose={onClose}>
@@ -170,7 +171,7 @@ function PicksSheet({ catalog, ids, mine, sex, onToggle, onClose }) {
       <p className="mt-5 font-bold">함께 먹으면 하루에 이만큼이에요</p>
       {mineCount > 0 && <p className="mt-0.5 text-xs text-ink-soft">내가 먹는 제품 {mineCount}개도 함께 계산했어요.</p>}
       <div className="mt-1">
-        <TotalsTable totals={totals} />
+        <TotalsTable totals={totals} headroom={headroomProducts(catalog, combined)} />
       </div>
       <Link to="/my-supplements" className="mt-4 flex items-center justify-center gap-1 py-2 text-sm font-bold text-primary-shade">
         내가 먹는 제품 등록 · 약사 상담 메모 ›
@@ -215,7 +216,7 @@ export default function SupplementsPage() {
   const [params, setParams] = useSearchParams()
   const models = useModels()
   const catalog = useCatalog()
-  const { picks, toggle, setGate } = usePicks()
+  const { picks, toggle, setGate } = usePicks(catalog)
   const [form, setForm] = useState(null)
   const [open, setOpen] = useState(null) // 제품 또는 'picks'
   const close = useCallback(() => setOpen(null), [])
@@ -374,7 +375,7 @@ export default function SupplementsPage() {
       )}
 
       {open === 'picks' && (
-        <PicksSheet catalog={catalog} ids={picks.ids} mine={picks.mine} sex={sex} onToggle={toggle} onClose={close} />
+        <PicksSheet catalog={catalog} ids={picks.ids} mine={picks.mine} sex={sex} age={age} onToggle={toggle} onClose={close} />
       )}
       {open && open !== 'picks' && (
         <ProductSheet catalog={catalog} p={open} picked={picks.ids.includes(open.id)} onToggle={() => toggle(open.id)} onClose={close} />

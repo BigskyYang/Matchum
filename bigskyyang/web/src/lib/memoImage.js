@@ -2,6 +2,9 @@
 //   담는 것: 성별·나이대, 결과에서 '부족하기 쉬워요'로 나온 영양소, 먹고 있는 제품, 고민 중인 제품,
 //           함께 먹을 때 하루 합계와 상한, 물어보고 싶은 것(직접 적은 글), 만든 날짜
 //   폭 1080px, 높이는 내용만큼. 글이 길면 줄을 바꾼다
+import { UL_NOTICES } from '../data/supplementInfo.js'
+import { totalsMessage } from './supplements.js'
+
 const W = 1080
 const PAD = 72
 const C = { bg: '#fff8f1', card: '#ffffff', ink: '#3d3333', soft: '#6b5d59', faint: '#766864', over: '#a8425a', line: '#ece4de', accent: '#e2647c' }
@@ -61,21 +64,27 @@ export async function drawMemoImage(memo, { serviceName = 'NBTI 유형 검사' }
     text(str, { size: 34, weight: 600, indent: 32, gap: sub ? 2 : 12 })
     if (sub) text(sub, { size: 28, color: C.soft, indent: 32, gap: 14 })
   }
+  const product = (p) => {
+    bullet(p.name, p.maker ?? '목록에 없어 함량을 알 수 없는 제품')
+    if (p.form) text(`제형: ${p.form}`, { size: 28, color: C.soft, indent: 32, gap: 4 })
+    if (p.id) text(`품목제조신고번호: ${p.id}`, { size: 28, color: C.soft, indent: 32, gap: 4 })
+    if (p.intake) text(`1일 섭취량 (제품 표시 기준): ${p.intake}`, { size: 28, color: C.soft, indent: 32, gap: 14 })
+  }
 
   y = PAD + 40
   text('약사 상담 메모', { size: 64, font: DISPLAY, gap: 8 })
   text(`${memo.who} · ${memo.dateLabel}`, { size: 30, color: C.soft, gap: 8 })
 
   if (memo.watch.length) {
-    heading('결과에서 부족하기 쉽다고 나온 영양소')
+    heading('결과에서 살펴볼 영양소')
     text(memo.watch.join(' · '), { size: 34 })
   }
   heading('지금 먹고 있는 건강기능식품')
-  if (memo.mine.length) for (const p of memo.mine) bullet(p.name, p.maker ?? '목록에 없어 이름만 적었어요')
+  if (memo.mine.length) for (const p of memo.mine) product(p)
   else text('없어요', { color: C.soft })
   if (memo.picks.length) {
-    heading('먹어 볼까 고민 중인 제품')
-    for (const p of memo.picks) bullet(p.name, p.maker)
+    heading('확인하고 싶은 제품')
+    for (const p of memo.picks) product(p)
   }
   if (memo.totals.length) {
     heading('함께 먹으면 하루에 (상한섭취량)')
@@ -83,6 +92,8 @@ export async function drawMemoImage(memo, { serviceName = 'NBTI 유형 검사' }
       const row = `${t.label}  ${t.total.toLocaleString('ko-KR')} ${t.unit}${t.ul ? ` (상한 ${t.ul.toLocaleString('ko-KR')} ${t.unit})` : ''}${t.over ? '  넘어요' : ''}`
       text(row, { size: 32, weight: t.over ? 700 : 400, color: t.over ? C.over : C.ink, gap: 6 })
     }
+    text(totalsMessage(memo.totals), { size: 26, color: C.faint, gap: 8 })
+    for (const notice of UL_NOTICES) text(notice, { size: 26, color: C.faint, gap: 6 })
     if (memo.manualCount) text(`이름만 적은 제품 ${memo.manualCount}개는 함량을 몰라 합계에 넣지 않았어요.`, { size: 26, color: C.faint, gap: 6 })
   }
   if (memo.question) {
@@ -94,6 +105,9 @@ export async function drawMemoImage(memo, { serviceName = 'NBTI 유형 검사' }
   const cardBottom = y + 40
 
   const H = Math.ceil(cardBottom + PAD)
+  // 제품 정보를 추가해 메모가 길어져도 처음 잡은 4,000px 아래의 글이 잘리지 않게 한다.
+  canvas.height = H
+  ctx.textBaseline = 'top'
   const out = document.createElement('canvas')
   out.width = W
   out.height = H

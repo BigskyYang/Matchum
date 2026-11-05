@@ -10,14 +10,14 @@ export const TIPS = [
     id: 'smoke',
     personal: true,
     when: (f) => f.ML_smoker === 1,
-    mission: { icon: 'smoke', title: '금연 상담 받아보기', detail: '가까운 보건소 금연클리닉에서 무료로 상담받을 수 있어요.' },
+    mission: { icon: 'smoke', title: '금연 상담 받아보기', support: 'smoke', detail: '가까운 보건소 금연클리닉에서 무료로 상담받을 수 있어요.' },
     foods: [{ emoji: '🍊', label: '귤·키위', why: '매일 간식으로' }],
   },
   {
     id: 'drink',
     personal: true,
     when: (f) => f.ML_drink_freq_ord >= 4 || f.ML_drink_amount_ord >= 3,
-    mission: { icon: 'drink', title: '술자리 한 번 줄이기', detail: '횟수와 한 번에 마시는 양을 조금씩 줄여 보세요.' },
+    mission: { icon: 'drink', title: '술자리 한 번 줄이기', support: 'drink', detail: '횟수와 한 번에 마시는 양을 조금씩 줄여 보세요.' },
     foods: [{ emoji: '🐟', label: '두부·생선 안주', why: '술 마실 때 함께' }],
   },
   {
