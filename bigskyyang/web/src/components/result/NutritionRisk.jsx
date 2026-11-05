@@ -5,6 +5,7 @@ import BottomSheet from '../BottomSheet.jsx'
 import Icon from '../Icon.jsx'
 import Mascot from '../Mascot.jsx'
 import NutrientArt from '../NutrientArt.jsx'
+import { BAND_CLS, bandLabel } from '../../data/bands.js'
 
 // 개인 결과의 '내가 챙겨야 할 영양소' (데이터는 lib/result.js의 buildPersonalResult → nutrition)
 //   재준님 화면 규칙 (Jaejun/nutrition_final_feedback_applied/config/display_policy.json)
@@ -13,12 +14,6 @@ import NutrientArt from '../NutrientArt.jsx'
 //     판정처럼 보이지 않게 경향으로 쓴다: 부족하기 쉬워요 · 보통 · 잘 챙기는 편 (나트륨은 많이 먹을 위험이라 따로)
 //   화면에는 '높은 편' 영양소 칩만 두고, 누르면 아래에서 올라오는 창에 기준·음식·건강기능식품 안내를 보여 준다
 //   근거·정확도·진단 아님 안내는 화면 맨 아래 '어떻게 만들었나요?'(AboutLink)에 모았다
-const BAND_CLS = { High: 'bg-primary-soft text-primary-shade', Mid: 'bg-butter text-ink', Low: 'bg-mint text-ink' }
-const LABELS = {
-  lack: { High: '부족하기 쉬워요', Mid: '보통', Low: '잘 챙기는 편' },
-  excess: { High: '많이 먹기 쉬워요', Mid: '보통', Low: '잘 조절하는 편' },
-}
-const bandLabel = (n, band) => LABELS[n.excess ? 'excess' : 'lack'][band]
 const SOURCE = { habitual: '평소 식사 응답으로 예측했어요', lifestyle: '생활습관 응답으로 예측했어요' }
 
 function Badge({ n }) {

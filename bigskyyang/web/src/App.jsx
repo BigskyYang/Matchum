@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import MobileFrame from './components/MobileFrame.jsx'
 import PersonalResultPage from './pages/PersonalResultPage.jsx'
 import ResultPage from './pages/ResultPage.jsx'
+import SimulatePage from './pages/SimulatePage.jsx'
 import RevealPage from './pages/RevealPage.jsx'
 import StartPage from './pages/StartPage.jsx'
 import SupplementsPage from './pages/SupplementsPage.jsx'
@@ -26,6 +27,7 @@ export default function App() {
         <Route path="/result2" element={<PersonalResultPage />} />
         <Route path="/supplements" element={<SupplementsPage />} />
         <Route path="/types" element={<TypesPage />} />
+        <Route path="/simulate" element={<SimulatePage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </MobileFrame>
