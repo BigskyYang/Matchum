@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import BottomSheet from '../components/BottomSheet.jsx'
 import Icon from '../components/Icon.jsx'
@@ -7,11 +7,13 @@ import PrimaryButton from '../components/PrimaryButton.jsx'
 import ChoiceInput from '../components/survey/ChoiceInput.jsx'
 import ProgressBar from '../components/survey/ProgressBar.jsx'
 import RowsInput from '../components/survey/RowsInput.jsx'
+import PeerFactToast from '../components/survey/PeerFactToast.jsx'
 import { DateWheel, DurationWheel, NumberWheel, TimeWheel } from '../components/survey/WheelInputs.jsx'
 import { SECTIONS, visibleQuestions } from '../data/questions.js'
 import { loadSurvey, saveSurvey } from '../lib/storage.js'
 import { recordAnswer, resolveStep, resultPath, surveyPath } from '../lib/surveyFlow.js'
 import { SKIP } from '../lib/vitaminD.js'
+import { surveyFact } from '../lib/surveyStats.js'
 
 function QuestionStep({ q, answer, answers, isLast, onAnswer, onSkip }) {
   // 휠 입력은 이전 응답이 있으면 그 값, 없으면 문항의 initial 값에서 시작. 여러 줄 선택은 빈 값에서 시작
@@ -93,6 +95,9 @@ export default function SurveyPage({ stage = 1 }) {
   const [state, setState] = useState(loadSurvey)
   const busy = useRef(false)
   const timer = useRef(null)
+  // 방금 답한 문항의 같은 성별·나이대 통계 (다음 문항 화면 아래에서 잠깐 보여 준다)
+  const [fact, setFact] = useState(null)
+  const hideFact = useCallback(() => setFact(null), [])
 
   const list = visibleQuestions(state.answers, stage)
   const step = resolveStep(list, state.answers, params.get('q'), state.step[stage])
@@ -123,6 +128,8 @@ export default function SurveyPage({ stage = 1 }) {
       busy.current = false
       saveSurvey(updated)
       setState(updated)
+      const f = last ? null : surveyFact(q.id, updated.answers)
+      setFact(f && { ...f, id: `${q.id}-${Date.now()}` })
       navigate(last ? resultPath(stage) : surveyPath(next[updated.step[stage]], stage))
     }
     // 보기를 누른 경우 선택 표시가 잠깐 보이도록 조금 늦게 넘어간다
@@ -198,6 +205,7 @@ export default function SurveyPage({ stage = 1 }) {
           onSkip={skipRest}
         />
       </div>
+      {fact && <PeerFactToast key={fact.id} fact={fact} onDone={hideFact} raised={q.type !== 'choice'} />}
     </main>
   )
 }

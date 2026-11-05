@@ -95,6 +95,28 @@
     }
   }
 
+  /* 설문 통계 말풍선 (components/survey/PeerFactToast.jsx): 아래에서 스르륵 올라왔다가 내려간다 */
+  --animate-peek-in: peek-in 0.45s cubic-bezier(0.2, 1.2, 0.4, 1) both;
+  --animate-peek-out: peek-out 0.3s ease-in both;
+
+  @keyframes peek-in {
+    from {
+      transform: translateY(110%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes peek-out {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(110%);
+    }
+  }
+
   /* 바텀시트 (components/BottomSheet.jsx): 아래에서 올라오고, 뒤가 어두워진다 */
   --animate-sheet-up: sheet-up 0.25s ease-out both;
   --animate-fade-in: fade-in 0.2s ease-out both;

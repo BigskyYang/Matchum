@@ -124,10 +124,12 @@ with sync_playwright() as p:
     axe(page, '시작')
     shot(page, '시작')
 
-    page.goto(BASE + '/survey?q=strength_days')
+    page.goto(BASE + '/survey?q=activity')
     settle(page)
-    axe(page, '설문')
-    shot(page, '설문_신체활동')
+    page.locator('main ul button').first.click()  # 운동 문항에 답하면 다음 화면 아래에서 통계 말풍선이 올라온다
+    page.wait_for_timeout(1100)
+    axe(page, '설문(통계 말풍선)')
+    shot(page, '설문_통계말풍선')
 
     page.goto(BASE + '/survey?q=birth_date')
     settle(page)
