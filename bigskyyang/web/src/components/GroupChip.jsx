@@ -10,8 +10,8 @@ const TONE = {
 const dotOf = (code) => TONE[code]?.dot ?? 'bg-ink-faint'
 
 // 대분류 색 점 하나 (제목 옆 등)
-export function GroupDot({ code, className = 'size-2' }) {
-  return <span aria-hidden="true" className={`rounded-full ${dotOf(code)} ${className}`} />
+export function GroupDot({ code, className = 'size-2', style }) {
+  return <span aria-hidden="true" style={style} className={`rounded-full ${dotOf(code)} ${className}`} />
 }
 
 export default function GroupChip({ code, name, className = '' }) {

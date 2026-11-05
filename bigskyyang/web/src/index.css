@@ -69,6 +69,32 @@
     }
   }
 
+  /* 결과 공개 (pages/RevealPage.jsx): 마스코트·점이 톡 튀어나오고, 카드 내용이 살짝 올라온다 */
+  --animate-pop: pop 0.5s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+  --animate-rise: rise 0.35s ease-out both;
+
+  @keyframes pop {
+    from {
+      transform: scale(0.6);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  @keyframes rise {
+    from {
+      transform: translateY(12px);
+      opacity: 0;
+    }
+    to {
+      transform: none;
+      opacity: 1;
+    }
+  }
+
   /* 바텀시트 (components/BottomSheet.jsx): 아래에서 올라오고, 뒤가 어두워진다 */
   --animate-sheet-up: sheet-up 0.25s ease-out both;
   --animate-fade-in: fade-in 0.2s ease-out both;

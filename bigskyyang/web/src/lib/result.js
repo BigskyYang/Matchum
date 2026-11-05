@@ -46,6 +46,23 @@ export function allTypes() {
   })
 }
 
+// 결과 공개 스토리 (/reveal) 카드에 쓸 값: 유형 결과에서 고른다
+//   strong: '좋아요'(0.75 이상)인 습관 2개까지, weak: 그 아래 습관 중 점수 낮은 2개
+//   nutrient: 내 유형 영양소 → 없으면 같은 성별·나이대 영양소 → 없으면 공통 영양소 3개
+export function revealStory(r) {
+  const strong = r.habits.filter((h) => h.score >= 0.75).sort((a, b) => b.score - a.score).slice(0, 2)
+  const weak = r.habits.filter((h) => h.score < 0.75).sort((a, b) => a.score - b.score).slice(0, 2)
+  const picks = r.nutrients?.picks ?? []
+  const typePicks = picks.filter((n) => n.tag !== '흔함')
+  const peerPicks = picks.filter((n) => n.tag === '흔함')
+  const nutrient = typePicks.length
+    ? { kind: 'type', items: typePicks }
+    : peerPicks.length
+      ? { kind: 'peer', items: peerPicks }
+      : { kind: 'common', items: (r.nutrients?.common ?? []).slice(0, 3) }
+  return { strong, weak, mission: r.missions[0] ?? null, nutrient, share: Math.round(r.sharePct) }
+}
+
 // 1단계 응답(+ 있으면 2단계)으로 유형 결과
 export function buildTypeResult(answers) {
   const { features, extras } = encode(answers)
