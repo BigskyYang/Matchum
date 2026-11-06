@@ -1,0 +1,42 @@
+{
+  "cards": [
+    "calcium",
+    "vitamin_d"
+  ],
+  "dropdown": [
+    {
+      "value": "vitamin_d",
+      "label": "비타민 D",
+      "count": 852,
+      "disabled": false,
+      "linked_nutrient_ids": [],
+      "source": "추가 생활문항 기반 안내"
+    },
+    {
+      "value": "calcium",
+      "label": "칼슘",
+      "count": 334,
+      "disabled": false,
+      "linked_nutrient_ids": [
+        "calcium"
+      ],
+      "source": "model"
+    }
+  ],
+  "groups": [
+    {
+      "category_id": "vitamin_d",
+      "total_count": 852,
+      "page_size": 20,
+      "visible": 20,
+      "connection_kind": "information_only"
+    },
+    {
+      "category_id": "calcium",
+      "total_count": 334,
+      "page_size": 20,
+      "visible": 20,
+      "connection_kind": "model_nutrient"
+    }
+  ]
+}
