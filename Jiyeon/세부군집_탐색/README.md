@@ -9,6 +9,8 @@
 
 최종 선택한 4개 조합의 실루엣, 군집 크기, 기여도는 `cluster_report.md` 4장의 값과 일치한다.
 
+세부 군집 수 확인: `python sub_k_compare.py <Jiyeon 폴더> sub_k.csv` → 선택된 조합마다 k=2~5의 실루엣·ARI·최소 군집 비교. 결과는 `cluster_report.md` 4장 "세부 군집 수(k) 확인"에 정리했다.
+
 ## 선정 규칙
 
 | 단계 | 기준 | 거르는 대상 |
