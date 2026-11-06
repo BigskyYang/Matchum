@@ -20,7 +20,7 @@ try {
     $left = $doc.Content; if ($left.Find.Execute('{{fn:')) { Write-Output 'leftover marker found' }
     $st = $doc.Styles.Item(-30)            # wdStyleFootnoteText
     $st.Font.Name = 'Malgun Gothic'; $st.Font.Size = 7.5; $st.ParagraphFormat.SpaceAfter = 1; $st.ParagraphFormat.LineSpacingRule = 0
-    $doc.TablesOfContents.Item(1).Update()
+    if ($doc.TablesOfContents.Count -gt 0) { $doc.TablesOfContents.Item(1).Update() }
     $doc.Save()
     $doc.SaveAs([ref]$pdf, [ref]17)
     Write-Output ('footnotes ' + $doc.Footnotes.Count + ', pages ' + $doc.ComputeStatistics(2))

@@ -4,7 +4,6 @@ import GroupChip from '../components/GroupChip.jsx'
 import Icon from '../components/Icon.jsx'
 import Mascot from '../components/Mascot.jsx'
 import PrimaryButton, { SecondaryButton } from '../components/PrimaryButton.jsx'
-import { FACTS, surveyFact } from '../lib/surveyStats.js'
 import Card from '../components/result/Card.jsx'
 import HabitTabs from '../components/result/HabitTabs.jsx'
 import MissionList from '../components/result/MissionList.jsx'
@@ -28,7 +27,7 @@ const PERSONAL_CTA = '나에게 부족할 수 있는 영양소는?'
 function useResult() {
   return useMemo(() => {
     const { answers, done } = loadSurvey()
-    return done[1] ? { ...buildTypeResult(answers), personalDone: done[2], peerFacts: Object.keys(FACTS).map((id) => surveyFact(id, answers)).filter(Boolean) } : null
+    return done[1] ? { ...buildTypeResult(answers), personalDone: done[2] } : null
   }, [])
 }
 
@@ -88,11 +87,6 @@ export default function ResultPage() {
 
       <Card title="나의 생활습관" icon="traffic">
         <HabitTabs habits={r.habits} code={r.leafId[0]} />
-        {r.peerFacts.length > 0 && <details className="mt-3 text-sm text-ink-soft">
-          <summary className="cursor-pointer py-2 font-bold">같은 성별·나이대의 조사 통계</summary>
-          <ul className="space-y-2">{r.peerFacts.map((f) => <li key={f.label}>{f.lead} 약 {f.pct}{f.tail}.</li>)}</ul>
-          <p className="mt-2 text-xs">※ 국민건강영양조사 2022–2024 가중 비율을 약 5% 단위로 표시했어요.</p>
-        </details>}
         <h3 className="mt-5 mb-2 flex items-center gap-1.5 text-sm font-bold">
           <Icon name="target" size={18} className="text-primary-shade" />
           이번 주 해볼 것

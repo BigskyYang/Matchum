@@ -51,7 +51,7 @@ export default function AboutLink({ personal = false }) {
               </p>
             </Section>
             {personal && (
-              <Section icon="checklist" title="내 식사에서 살펴볼 영양소">
+              <Section icon="checklist" title="내가 특히 살펴볼 영양소">
                 <p>내 응답으로 섭취 기준보다 적게 먹었을 가능성(나트륨은 기준 초과 가능성)을 예측해, 조사 참여자들과 비교한 세 단계(높은 편·보통·낮은 편)로 보여 줘요. 실제로 충분히 먹는지는 알 수 없어요.</p>
                 <p>
                   고기·생선·달걀·콩·유제품을 먹는 횟수로 예측한 결과(평소 식사 기준, 19~64세)가 있으면 그 결과를 먼저

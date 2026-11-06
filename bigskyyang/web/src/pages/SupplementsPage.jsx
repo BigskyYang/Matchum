@@ -14,7 +14,7 @@ import { buildVitaminDInfo } from '../lib/vitaminDInfo.js'
 import TotalsTable from '../components/supplements/TotalsTable.jsx'
 import NutrientArt from '../components/NutrientArt.jsx'
 
-// 성분별 제품 표시 정보 (/supplements?n=영양소). 개인 결과에서 '부족하기 쉬워요'로 나온 영양소의 제품을 모두 보고 고른다
+// 관련 제품 찾아보기 (/supplements?n=영양소). 성분별 제품 표시 정보를 보여 준다. 개인 결과에서 '부족하기 쉬워요'로 나온 영양소의 제품을 모두 보고 고른다
 //   제품: 준혁님 9단계 통과 후보 전체 (data/supplementCatalog.json). 대상 칸을 섞지 않고, 같은 칸 안의 순서는 그대로
 //   고른 제품(♡)은 이 휴대폰(sessionStorage)에만 두고, 함께 먹을 때 성분별 하루 합계를 상한섭취량과 비교해 보여 준다
 //   (내가 먹는 제품을 등록해 두면(/my-supplements) 그 제품도 합계에 넣는다)
@@ -235,7 +235,7 @@ export default function SupplementsPage() {
       >
         <Icon name="back" size={26} />
       </button>
-      <h1 className="font-display text-xl font-normal">성분별 제품 표시 정보</h1>
+      <h1 className="font-display text-xl font-normal">관련 제품 찾아보기</h1>
     </header>
   )
   const wrap = (children) => (

@@ -9,7 +9,7 @@ import { BAND_CLS, bandLabel } from '../../data/bands.js'
 //   - 영양소마다 등급 하나: 평소 식사 기준이 있으면 그것, 없으면 생활습관 기준 (두 확률은 평균하지 않는다)
 //   - 확률 숫자는 보여 주지 않고 세 단계만. 재준님 등급(High·Mid·Low = 부족 위험 높은 편·보통·낮은 편)을
 //     판정처럼 보이지 않게 경향으로 쓴다: 부족하기 쉬워요 · 보통 · 잘 챙기는 편 (나트륨은 많이 먹을 위험이라 따로)
-//   화면에는 '높은 편' 영양소를 카드로 두고(그림·이름·등급·하는 일 한 줄), 누르면 아래에서 올라오는 창에 기준·음식·건강기능식품 안내를 보여 준다
+//   화면에는 '높은 편' 영양소를 같은 크기 카드(그림·이름)로 3열에 두고, 등급·하는 일은 누르면 아래에서 올라오는 창에 기준·음식·건강기능식품 안내를 보여 준다
 //   근거·정확도·진단 아님 안내는 화면 맨 아래 '어떻게 만들었나요?'(AboutLink)에 모았다
 const SOURCE = { habitual: '평소 식사 응답으로 예측했어요', lifestyle: '생활습관 응답으로 예측했어요' }
 
@@ -57,23 +57,21 @@ function RiskSheet({ n, onClose }) {
   )
 }
 
-// 나머지 영양소 (보통·잘 챙기는 편, 또는 5개를 넘은 부족하기 쉬운 영양소)
+// 나머지 영양소 (보통·잘 챙기는 편, 또는 5개를 넘은 부족하기 쉬운 영양소). 위 카드와 같은 모양, 등급은 누르면
 function RestSheet({ rest, onPick, onClose }) {
   return (
     <BottomSheet title="나머지 영양소" onClose={onClose}>
-      <ul className="grid grid-cols-2 gap-1.5">
+      <ul className="grid grid-cols-3 gap-2">
         {rest.map((n) => (
           <li key={n.key}>
             <button
               type="button"
               onClick={() => onPick(n)}
-              className="flex h-full w-full flex-col items-start gap-1.5 rounded-card bg-cream px-3 py-2.5 text-left active:scale-[0.98]"
+              aria-label={`${n.label} 자세히 보기`}
+              className="flex h-full w-full flex-col items-center gap-1.5 rounded-card bg-cream px-1 py-3 text-center text-sm leading-tight font-bold active:scale-95"
             >
-              <span className="flex items-start gap-1.5 text-sm leading-tight font-bold">
-                <NutrientArt n={n} className="size-6" />
-                {n.label}
-              </span>
-              <Badge n={n} />
+              <NutrientArt n={n} className="size-10" emojiClass="text-2xl" />
+              {n.label}
             </button>
           </li>
         ))}
@@ -99,25 +97,17 @@ export default function NutritionRisk({ nutrition, ffqAsked }) {
     <div>
       {watch.length ? (
         <>
-          <ul className="space-y-2">
+          <ul className="grid grid-cols-3 gap-2">
             {watch.map((n) => (
               <li key={n.key}>
                 <button
                   type="button"
                   onClick={() => setOpen(n)}
-                  className="flex w-full items-center gap-3 rounded-card border-2 border-primary-strong bg-white px-3.5 py-3 text-left active:scale-[0.98]"
+                  aria-label={`${n.label} 자세히 보기`}
+                  className="flex h-full w-full flex-col items-center gap-1.5 rounded-card border-2 border-primary-strong bg-white px-1 py-3 text-center text-sm leading-tight font-bold active:scale-95"
                 >
                   <NutrientArt n={n} className="size-10" emojiClass="text-2xl" />
-                  <span className="min-w-0 flex-1">
-                    <span className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
-                      <b>{n.label}</b>
-                      <Badge n={n} />
-                    </span>
-                    {n.role && <span className="mt-1 line-clamp-1 text-xs text-ink-soft">{n.role}</span>}
-                  </span>
-                  <span aria-hidden="true" className="text-ink-faint">
-                    ›
-                  </span>
+                  {n.label}
                 </button>
               </li>
             ))}
