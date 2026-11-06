@@ -20,6 +20,9 @@ sys.stdout.reconfigure(encoding='utf-8')
 DIST = Path(__file__).resolve().parents[1] / 'web' / 'dist'
 OUT = Path.home() / 'Desktop' / 'NBTI_발표캡처'
 OUT.mkdir(exist_ok=True)
+# 화면 순서가 바뀌면 번호가 달라지므로 지난 캡처는 지우고 새로 찍는다 (이 스크립트가 만든 PNG만)
+for old in OUT.glob('[0-9][0-9]_*.png'):
+    old.unlink()
 AXE = 'https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.10.2/axe.min.js'
 
 
@@ -46,6 +49,7 @@ SURVEY = {
         'stress': 2, 'meals': {'breakfast': 0, 'lunch': 3, 'dinner': 3}, 'eating_out': 4,
         'smoke_now': 'no', 'drink_freq': 3, 'drink_amount': 2, 'veg': 5, 'fruit': 3,
         'ffq_meat': 3, 'ffq_fish': 2, 'ffq_egg': 3, 'ffq_legume': 2, 'ffq_dairy': 2,
+        'vitd_commute': 'transit', 'vitd_lunch_outing': 'rarely', 'vitd_exercise_setting': 'indoor', 'vitd_day_off_outing': 'rarely',
     },
     'step': {'1': 0, '2': 0},
     'done': {'1': True, '2': True},
@@ -120,10 +124,21 @@ with sync_playwright() as p:
     axe(page, '시작')
     shot(page, '시작')
 
-    page.goto(BASE + '/survey?q=strength_days')
+    page.goto(BASE + '/survey?q=activity')
     settle(page)
-    axe(page, '설문')
-    shot(page, '설문_신체활동')
+    page.locator('main ul button').first.click()  # 운동 문항에 답하면 다음 화면 아래에서 통계 말풍선이 올라온다
+    page.wait_for_timeout(1100)
+    axe(page, '설문(통계 말풍선)')
+    shot(page, '설문_통계말풍선')
+
+    page.goto(BASE + '/survey?q=birth_date')
+    settle(page)
+    shot(page, '설문_생년월일')
+
+    page.goto(BASE + '/survey2?q=vitd_commute')
+    settle(page)
+    axe(page, '설문(비타민 D)')
+    shot(page, '설문_비타민D')
 
     page.goto(BASE + '/reveal')
     page.wait_for_timeout(700)
@@ -131,10 +146,10 @@ with sync_playwright() as p:
     page.wait_for_timeout(2400)
     settle(page, 700)
     axe(page, '공개 카드')
-    for i in range(5):
+    for i in range(4):
         shot(page, f'공개_카드{i + 1}')
-        if i < 4:
-            page.get_by_role('button', name='다음').click()
+        if i < 3:
+            page.keyboard.press('ArrowRight')  # 카드는 밀기·좌우 누르기·←→로 넘긴다 (다음 버튼 없음)
             page.wait_for_timeout(700)
 
     page.goto(BASE + '/result')
@@ -162,6 +177,7 @@ with sync_playwright() as p:
     axe(page, '개인 결과')
     shot(page, '개인결과_첫화면')
     shot(page, '개인결과_전체', full=True)
+    shot(page, '개인결과_비타민D', el=page.locator('section', has_text='비타민 D와 내 생활'))
 
     page.goto(BASE + '/simulate')
     settle(page, 1500)
@@ -176,6 +192,11 @@ with sync_playwright() as p:
     settle(page, 1800)
     axe(page, '건강기능식품')
     shot(page, '건강기능식품')
+
+    page.goto(BASE + '/supplements?n=vitamin_d')
+    settle(page, 1500)
+    axe(page, '건강기능식품(비타민 D)')
+    shot(page, '건강기능식품_비타민D')
 
     page.goto(BASE + '/my-supplements')
     settle(page, 1800)

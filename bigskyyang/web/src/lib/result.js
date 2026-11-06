@@ -56,13 +56,13 @@ export function revealStory(r) {
   const strong = r.habits.filter((h) => h.score >= 0.75).sort((a, b) => b.score - a.score).slice(0, 2)
   const weak = r.habits.filter((h) => h.score < 0.75).sort((a, b) => a.score - b.score).slice(0, 2)
   const picks = r.nutrients?.picks ?? []
-  const typePicks = picks.filter((n) => n.tag !== '흔함')
-  const peerPicks = picks.filter((n) => n.tag === '흔함')
-  const nutrient = typePicks.length
-    ? { kind: 'type', items: typePicks }
-    : peerPicks.length
-      ? { kind: 'peer', items: peerPicks }
-      : { kind: 'common', items: (r.nutrients?.common ?? []).slice(0, 3) }
+  // 2줄 영양소를 한 카드로: 내 유형이라 적은 것(reason 'type') 먼저, 같은 성별·나이대라 적은 것('peer') 뒤에, 3개까지
+  //   없으면 1줄 공통 영양소 (유형과 상관없이 성인 절반 이상이 적게 먹는 것)
+  const merged = [
+    ...picks.filter((n) => n.tag !== '흔함').map((n) => ({ ...n, reason: 'type' })),
+    ...picks.filter((n) => n.tag === '흔함').map((n) => ({ ...n, reason: 'peer' })),
+  ].slice(0, 3)
+  const nutrient = merged.length ? { kind: 'picks', items: merged } : { kind: 'common', items: (r.nutrients?.common ?? []).slice(0, 3) }
   return { strong, weak, mission: r.missions[0] ?? null, nutrient, share: Math.round(r.sharePct) }
 }
 
@@ -193,7 +193,7 @@ export function buildPersonalResult(answers, models = null) {
 
   // 음식은 이름이 겹치지 않게 모은다
   const foods = []
-  for (const f of tips.flatMap((t) => t.foods ?? [])) {
+  for (const f of tips.flatMap((t) => (t.foods ?? []).map((food) => ({ ...food, reason: t.reason })))) {
     if (!foods.some((x) => x.label === f.label)) foods.push(f)
   }
 

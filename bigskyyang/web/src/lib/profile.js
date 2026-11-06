@@ -65,9 +65,16 @@ const TAGS = {
   fruit: ['#과일러', '#과일부족'],
 }
 
+// 점심·저녁도 거르는 편인지 (아래 hashtags에서 #끼니패스 / #아침패스 중 하나만 고를 때)
+const SKIPS_MORE = -0.3
+const skipsLunchOrDinner = (z) => (z.lunch ?? 0) <= SKIPS_MORE || (z.dinner ?? 0) <= SKIPS_MORE
+
 export function hashtags(type, limit = 4) {
   const picked = []
+  const mealLow = (type.z.meal_score ?? 0) <= -0.5 && (type.z.breakfast ?? 0) <= -0.5
+  const skip = mealLow ? (skipsLunchOrDinner(type.z) ? 'breakfast' : 'meal_score') : null
   Object.entries(type.z)
+    .filter(([name]) => name !== skip)
     .filter(([, z]) => Math.abs(z) >= 0.5)
     .sort((a, b) => Math.abs(b[1]) - Math.abs(a[1]))
     .forEach(([name, z]) => {

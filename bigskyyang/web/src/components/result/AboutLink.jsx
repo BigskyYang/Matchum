@@ -51,12 +51,17 @@ export default function AboutLink({ personal = false }) {
               </p>
             </Section>
             {personal && (
-              <Section icon="checklist" title="내 식사에서 살펴볼 영양소">
+              <Section icon="checklist" title="내가 특히 살펴볼 영양소">
                 <p>내 응답으로 섭취 기준보다 적게 먹었을 가능성(나트륨은 기준 초과 가능성)을 예측해, 조사 참여자들과 비교한 세 단계(높은 편·보통·낮은 편)로 보여 줘요. 실제로 충분히 먹는지는 알 수 없어요.</p>
                 <p>
                   고기·생선·달걀·콩·유제품을 먹는 횟수로 예측한 결과(평소 식사 기준, 19~64세)가 있으면 그 결과를 먼저
                   보여 줘요. 그 밖에는 생활습관 응답을 사용해요. 영양소마다 예측 성능은 달라요.
                 </p>
+              </Section>
+            )}
+            {personal && (
+              <Section icon="sunrise" title="비타민 D와 내 생활">
+                <p>출퇴근·점심 외출·운동·쉬는 날 외출 응답에 맞춰 식품 정보와 야외활동 정보의 순서만 정했어요. 비타민 D 상태를 측정하거나 예측한 결과가 아니고, 영양소 예측에는 쓰지 않아요.</p>
               </Section>
             )}
             <Section icon="alert" title="꼭 알아 두세요">

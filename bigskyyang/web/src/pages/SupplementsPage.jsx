@@ -10,16 +10,20 @@ import { loadSurvey } from '../lib/storage.js'
 import { combinedIds, dailyTotals, formsOf, headroomProducts, productCount, productSections, productTexts, targetsFor } from '../lib/supplements.js'
 import { useCatalog, useModels } from '../lib/useCatalog.js'
 import { usePicks } from '../lib/usePicks.js'
+import { buildVitaminDInfo } from '../lib/vitaminDInfo.js'
 import TotalsTable from '../components/supplements/TotalsTable.jsx'
 import NutrientArt from '../components/NutrientArt.jsx'
 
-// 성분별 제품 표시 정보 (/supplements?n=영양소). 개인 결과에서 '부족하기 쉬워요'로 나온 영양소의 제품을 모두 보고 고른다
+// 관련 제품 찾아보기 (/supplements?n=영양소). 성분별 제품 표시 정보를 보여 준다. 개인 결과에서 '부족하기 쉬워요'로 나온 영양소의 제품을 모두 보고 고른다
 //   제품: 준혁님 9단계 통과 후보 전체 (data/supplementCatalog.json). 대상 칸을 섞지 않고, 같은 칸 안의 순서는 그대로
 //   고른 제품(♡)은 이 휴대폰(sessionStorage)에만 두고, 함께 먹을 때 성분별 하루 합계를 상한섭취량과 비교해 보여 준다
 //   (내가 먹는 제품을 등록해 두면(/my-supplements) 그 제품도 합계에 넣는다)
 //   제품을 보기 전에 임신·수유·질환·복용약을 한 번 묻고(답은 이 휴대폰에만), 해당되면 제품 대신 상담을 권한다
 const GUIDE = Object.fromEntries(NUTRIENT_GUIDE.map((n) => [n.key, n]))
 const SOURCE = { habitual: '평소 식사 응답으로 예측', lifestyle: '생활습관 응답으로 예측' }
+// 비타민 D는 모델이 예측하지 않는다. 생활 안내에서 누른 사람에게만 일반 제품 정보로 (재준님 v1.2.0 productNotice)
+const VITAMIN_D = { key: 'vitamin_d', label: '비타민 D', icon: '☀️', from: [], general: true }
+const VITAMIN_D_NOTICE = buildVitaminDInfo().productNotice
 
 function Gate({ onAnswer }) {
   return (
@@ -212,6 +216,8 @@ export default function SupplementsPage() {
   const { picks, toggle, setGate } = usePicks(catalog)
   const [form, setForm] = useState(null)
   const [open, setOpen] = useState(null) // 제품 또는 'picks'
+  // 비타민 D 생활 안내의 '관련 제품 정보'로 들어온 경우에만 비타민 D 탭을 더한다 (응답과 관계없이 누구나 같은 목록)
+  const [withVitaminD] = useState(() => params.get('n') === VITAMIN_D.key)
   const close = useCallback(() => setOpen(null), [])
 
   const survey = useMemo(() => loadSurvey(), [])
@@ -229,7 +235,7 @@ export default function SupplementsPage() {
       >
         <Icon name="back" size={26} />
       </button>
-      <h1 className="font-display text-xl font-normal">성분별 제품 표시 정보</h1>
+      <h1 className="font-display text-xl font-normal">관련 제품 찾아보기</h1>
     </header>
   )
   const wrap = (children) => (
@@ -250,7 +256,7 @@ export default function SupplementsPage() {
     )
   }
 
-  const { nutrients } = r.supplements
+  const nutrients = withVitaminD ? [VITAMIN_D, ...r.supplements.nutrients] : r.supplements.nutrients
   if (!nutrients.length) {
     return wrap(
       <p className="rounded-card bg-white p-5 leading-relaxed shadow-soft">
@@ -264,8 +270,8 @@ export default function SupplementsPage() {
   const targets = targetsFor(sex, age)
   const active = nutrients.find((n) => n.key === params.get('n')) ?? nutrients[0]
   const watchRows = r.nutrition.watch.filter((w) => active.from.includes(w.key))
-  const foods = [...new Set(active.from.flatMap((k) => GUIDE[k]?.foods ?? []))]
-  const reasonName = watchRows.length > 1 ? `비타민 ${watchRows.map((w) => w.label.replace('비타민 ', '')).join('·')}` : watchRows[0].label
+  const foods = [...new Set((active.general ? [active.key] : active.from).flatMap((k) => GUIDE[k]?.foods ?? []))]
+  const reasonName = active.general ? active.label : watchRows.length > 1 ? `비타민 ${watchRows.map((w) => w.label.replace('비타민 ', '')).join('·')}` : watchRows[0].label
   const forms = formsOf(catalog, active.key, targets)
   const sections = productSections(catalog, active.key, targets, form ? [form] : [])
   const pick = (key) => {
@@ -311,8 +317,9 @@ export default function SupplementsPage() {
         <p className="font-bold">
           {reasonName}
            · 제품 성분표 확인
-          <span className="ml-1.5 text-xs font-normal text-ink-soft">{SOURCE[watchRows[0].source]}</span>
+          {!active.general && <span className="ml-1.5 text-xs font-normal text-ink-soft">{SOURCE[watchRows[0].source]}</span>}
         </p>
+        {active.general && <p className="mt-0.5 text-ink-soft">{VITAMIN_D_NOTICE}</p>}
         {foods.length > 0 && <p className="mt-0.5 text-ink-soft">음식으로는 {foods.join('·')}에 많아요.</p>}
       </div>
 

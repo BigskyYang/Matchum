@@ -2,7 +2,8 @@
 // when(features, extras): 해당하면 true
 //   personal: true면 2단계 문항(흡연·음주·채소·과일·식품)을 쓰는 팁 → 개인 결과에만, 없으면 유형 결과에
 //   mission: '이번 주 해볼 것' { icon(components/Icon.jsx 아이콘 이름), title, detail }
-//   foods:   '챙겨 먹으면 좋은 음식' 타일 [{ emoji, label, why }] (개인 결과)
+//   foods:   '챙겨 먹으면 좋은 음식' 타일 [{ emoji, label, why: 먹는 방법, nutrients: 들어 있는 영양소 키 }] (개인 결과)
+//   reason:  음식을 고른 이유 (내 응답). 음식 타일을 누르면 보인다
 // ※ 의료적 효능을 말하지 않고, 일반적인 생활·식생활 정보 수준으로 쓴다.
 
 export const TIPS = [
@@ -11,22 +12,25 @@ export const TIPS = [
     personal: true,
     when: (f) => f.ML_smoker === 1,
     mission: { icon: 'smoke', title: '금연 상담 받아보기', support: 'smoke', detail: '가까운 보건소 금연클리닉에서 무료로 상담받을 수 있어요.' },
-    foods: [{ emoji: '🍊', label: '귤·키위', why: '매일 간식으로' }],
+    reason: '담배를 피운다고 답했어요.',
+    foods: [{ emoji: '🍊', label: '귤·키위', why: '매일 간식으로', nutrients: ['vitamin_c', 'potassium', 'fiber'] }],
   },
   {
     id: 'drink',
     personal: true,
     when: (f) => f.ML_drink_freq_ord >= 4 || f.ML_drink_amount_ord >= 3,
     mission: { icon: 'drink', title: '술자리 한 번 줄이기', support: 'drink', detail: '횟수와 한 번에 마시는 양을 조금씩 줄여 보세요.' },
-    foods: [{ emoji: '🐟', label: '두부·생선 안주', why: '술 마실 때 함께' }],
+    reason: '술을 자주 마시거나 한 번에 많이 마신다고 답했어요. 기름지고 짠 안주 대신 골라 보세요.',
+    foods: [{ emoji: '🐟', label: '두부·생선 안주', why: '술 마실 때 함께', nutrients: ['protein', 'calcium', 'vitamin_d'] }],
   },
   {
     id: 'breakfast',
     when: (f) => f.ML_breakfast_freq_ord <= 1,
     mission: { icon: 'sunrise', title: '간단한 아침 챙기기', detail: '우유 한 잔, 바나나 하나로도 충분해요.' },
+    reason: '아침을 주 2번 이하로 먹는다고 답했어요. 준비 없이 바로 먹을 수 있어요.',
     foods: [
-      { emoji: '🥛', label: '우유·요구르트', why: '간단한 아침' },
-      { emoji: '🍌', label: '바나나', why: '간단한 아침' },
+      { emoji: '🥛', label: '우유·요구르트', why: '간단한 아침', nutrients: ['calcium', 'vitamin_b2', 'protein'] },
+      { emoji: '🍌', label: '바나나', why: '간단한 아침', nutrients: ['potassium', 'fiber'] },
     ],
   },
   {
@@ -68,44 +72,50 @@ export const TIPS = [
     id: 'eating_out',
     when: (f) => f.ML_eatingout_freq_ord >= 4,
     mission: { icon: 'kitchen', title: '주 2번 집밥·도시락', detail: '외식할 때는 국물은 덜, 채소 반찬은 더!' },
-    foods: [{ emoji: '🥬', label: '채소 반찬', why: '외식할 때 추가' }],
+    reason: '외식을 자주 한다고 답했어요. 외식 메뉴는 채소가 적기 쉬워요.',
+    foods: [{ emoji: '🥬', label: '채소 반찬', why: '외식할 때 추가', nutrients: ['fiber', 'potassium', 'folate'] }],
   },
   {
     id: 'veg',
     personal: true,
     when: (_, x) => x.veg !== null && x.veg < 6,
-    foods: [{ emoji: '🥦', label: '채소·나물', why: '하루 한 번 이상' }],
+    reason: '채소·버섯·해조류를 하루 1번보다 적게 먹는다고 답했어요.',
+    foods: [{ emoji: '🥦', label: '채소·나물', why: '하루 한 번 이상', nutrients: ['fiber', 'folate', 'potassium', 'vitamin_a'] }],
   },
   {
     id: 'fruit',
     personal: true,
     when: (_, x) => x.fruit !== null && x.fruit < 6,
-    foods: [{ emoji: '🍎', label: '과일', why: '하루 1~2회 간식' }],
+    reason: '과일을 하루 1번보다 적게 먹는다고 답했어요.',
+    foods: [{ emoji: '🍎', label: '과일', why: '하루 1~2회 간식', nutrients: ['vitamin_c', 'potassium', 'fiber'] }],
   },
   {
     id: 'protein',
     personal: true,
     // 고기·생선·달걀·두부 중 어느 것도 하루 1회 이상 먹지 않음 (mini-FFQ 5 = 하루 1회)
     when: (_, x) => x.ffq !== null && Math.max(x.ffq.meat, x.ffq.fish, x.ffq.egg, x.ffq.legume) < 5,
+    reason: '고기·생선·달걀·콩을 모두 하루 1번보다 적게 먹는다고 답했어요.',
     foods: [
-      { emoji: '🥚', label: '달걀', why: '매끼 단백질' },
-      { emoji: '🫘', label: '콩·두부', why: '매끼 단백질' },
+      { emoji: '🥚', label: '달걀', why: '매끼 단백질', nutrients: ['protein', 'vitamin_b2', 'vitamin_d'] },
+      { emoji: '🫘', label: '콩·두부', why: '매끼 단백질', nutrients: ['protein', 'calcium', 'magnesium', 'iron'] },
     ],
   },
   {
     id: 'dairy',
     personal: true,
     when: (_, x) => x.ffq !== null && x.ffq.dairy < 5,
-    foods: [{ emoji: '🧀', label: '치즈·요구르트', why: '하루 1회 이상' }],
+    reason: '우유·유제품을 하루 1번보다 적게 먹는다고 답했어요.',
+    foods: [{ emoji: '🧀', label: '치즈·요구르트', why: '하루 1회 이상', nutrients: ['calcium', 'protein'] }],
   },
 ]
 
 // 고칠 점이 없을 때 보여줄 기본 음식
+const BALANCED_REASON = '응답에서 특별히 더 챙길 음식이 보이지 않아, 골고루 먹는 식단을 보여 드려요.'
 export const BALANCED_FOODS = [
-  { emoji: '🍚', label: '잡곡밥', why: '골고루' },
-  { emoji: '🥦', label: '채소', why: '골고루' },
-  { emoji: '🐟', label: '생선', why: '골고루' },
-  { emoji: '🍎', label: '과일', why: '골고루' },
+  { emoji: '🍚', label: '잡곡밥', why: '흰쌀밥 대신 한 끼부터', reason: BALANCED_REASON, nutrients: ['fiber', 'vitamin_b1', 'magnesium'] },
+  { emoji: '🥦', label: '채소', why: '매끼 한 가지 이상', reason: BALANCED_REASON, nutrients: ['fiber', 'folate', 'potassium'] },
+  { emoji: '🐟', label: '생선', why: '주 2번 정도', reason: BALANCED_REASON, nutrients: ['protein', 'vitamin_d'] },
+  { emoji: '🍎', label: '과일', why: '하루 1~2회 간식', reason: BALANCED_REASON, nutrients: ['vitamin_c', 'potassium'] },
 ]
 
 // personal: false = 유형 결과용 팁, true = 개인 결과용 팁

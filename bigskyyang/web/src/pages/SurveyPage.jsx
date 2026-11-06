@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import BottomSheet from '../components/BottomSheet.jsx'
 import Icon from '../components/Icon.jsx'
@@ -7,12 +7,15 @@ import PrimaryButton from '../components/PrimaryButton.jsx'
 import ChoiceInput from '../components/survey/ChoiceInput.jsx'
 import ProgressBar from '../components/survey/ProgressBar.jsx'
 import RowsInput from '../components/survey/RowsInput.jsx'
-import { DurationWheel, NumberWheel, TimeWheel } from '../components/survey/WheelInputs.jsx'
+import PeerFactToast from '../components/survey/PeerFactToast.jsx'
+import { DateWheel, DurationWheel, NumberWheel, TimeWheel } from '../components/survey/WheelInputs.jsx'
 import { SECTIONS, visibleQuestions } from '../data/questions.js'
 import { loadSurvey, saveSurvey } from '../lib/storage.js'
 import { recordAnswer, resolveStep, resultPath, surveyPath } from '../lib/surveyFlow.js'
+import { SKIP } from '../lib/vitaminD.js'
+import { surveyFact } from '../lib/surveyStats.js'
 
-function QuestionStep({ q, answer, answers, isLast, onAnswer }) {
+function QuestionStep({ q, answer, answers, isLast, onAnswer, onSkip }) {
   // 휠 입력은 이전 응답이 있으면 그 값, 없으면 문항의 initial 값에서 시작. 여러 줄 선택은 빈 값에서 시작
   const [draft, setDraft] = useState(() => answer ?? q.initial ?? (q.type === 'rows' ? {} : undefined))
   // check: 다음으로 넘어갈 수 없는 값이면 안내 문구 (예: 만 19세 미만)
@@ -55,11 +58,16 @@ function QuestionStep({ q, answer, answers, isLast, onAnswer }) {
 
         <div className="mt-6">
           {q.type === 'choice' && <ChoiceInput options={q.options} value={answer} onSelect={onAnswer} layout={q.layout} />}
+          {q.optional && onSkip && (
+            <button type="button" onClick={onSkip} className="mt-3 w-full py-3 text-center text-sm font-semibold text-ink-soft underline decoration-ink/20 underline-offset-4">
+              {SECTIONS[q.section]} 문항 건너뛰고 결과 보기
+            </button>
+          )}
           {q.type === 'rows' && <RowsInput rows={q.rows} options={q.options} value={draft} onChange={setDraft} />}
           {q.type === 'number' && <NumberWheel value={draft} onChange={setDraft} unit={q.unit} min={q.min} max={q.max} />}
           {q.type === 'time' && <TimeWheel value={draft} onChange={setDraft} hourStart={q.hourStart} />}
           {q.type === 'duration' && <DurationWheel value={draft} onChange={setDraft} per={q.per} maxHours={q.maxHours} />}
-          {q.type === 'date' && <input aria-label="생년월일" type="date" min={`${q.minYear}-01-01`} max={`${q.maxYear}-12-31`} value={draft ?? ''} onChange={(e) => setDraft(e.target.value)} className="w-full rounded-card bg-white p-4 text-lg shadow-soft" />}
+          {q.type === 'date' && <DateWheel value={draft} onChange={setDraft} minYear={q.minYear} maxYear={q.maxYear} />}
           {error && draft && (
             <p role="alert" className="mt-3 text-center text-sm font-semibold text-primary-shade">
               {error}
@@ -87,6 +95,9 @@ export default function SurveyPage({ stage = 1 }) {
   const [state, setState] = useState(loadSurvey)
   const busy = useRef(false)
   const timer = useRef(null)
+  // 방금 답한 문항의 같은 성별·나이대 통계 (다음 문항 화면 아래에서 잠깐 보여 준다)
+  const [fact, setFact] = useState(null)
+  const hideFact = useCallback(() => setFact(null), [])
 
   const list = visibleQuestions(state.answers, stage)
   const step = resolveStep(list, state.answers, params.get('q'), state.step[stage])
@@ -117,6 +128,8 @@ export default function SurveyPage({ stage = 1 }) {
       busy.current = false
       saveSurvey(updated)
       setState(updated)
+      const f = last ? null : surveyFact(q.id, updated.answers)
+      setFact(f && { ...f, id: `${q.id}-${Date.now()}` })
       navigate(last ? resultPath(stage) : surveyPath(next[updated.step[stage]], stage))
     }
     // 보기를 누른 경우 선택 표시가 잠깐 보이도록 조금 늦게 넘어간다
@@ -127,6 +140,18 @@ export default function SurveyPage({ stage = 1 }) {
     } else {
       go()
     }
+  }
+
+  // 선택 문항(비타민 D): 지금 문항부터 남은 선택 문항을 모두 '건너뛰기'로 기록하고 결과로
+  const skipRest = () => {
+    if (busy.current) return
+    let updated = state
+    for (const x of list.slice(step)) {
+      if (x.optional && updated.answers[x.id] == null) updated = recordAnswer(updated, stage, x, SKIP)
+    }
+    saveSurvey(updated)
+    setState(updated)
+    navigate(updated.done[stage] ? resultPath(stage) : surveyPath(visibleQuestions(updated.answers, stage)[updated.step[stage]], stage))
   }
 
   // 화면의 ‹ 버튼은 휴대폰 뒤로 가기와 똑같이 동작한다.
@@ -177,8 +202,10 @@ export default function SurveyPage({ stage = 1 }) {
           answer={state.answers[q.id]}
           isLast={step === list.length - 1}
           onAnswer={answer}
+          onSkip={skipRest}
         />
       </div>
+      {fact && <PeerFactToast key={fact.id} fact={fact} onDone={hideFact} raised={q.type !== 'choice'} />}
     </main>
   )
 }

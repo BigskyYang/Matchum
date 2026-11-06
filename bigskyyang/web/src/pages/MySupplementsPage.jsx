@@ -50,7 +50,7 @@ function MemoSheet({ memo, onClose }) {
   const sharable = image && canShareFile(imageFile(image.blob, fileName))
   const save = async () => {
     if (!image) return
-    const result = await shareOrSave(image.blob, fileName, '약사 상담 메모')
+    const result = await shareOrSave(image.blob, fileName)
     if (result === 'saved') setNote('이미지를 저장했어요. 저장이 안 되면 위 이미지를 길게 눌러 저장해 주세요.')
   }
 
