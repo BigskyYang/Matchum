@@ -1,6 +1,6 @@
 {
-  "name": "nutrition-vitamin-d-info",
-  "version": "1.2.0",
+  "name": "nutrition-vitamin-d-card",
+  "version": "1.3.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -9,6 +9,5 @@
   },
   "engines": {
     "node": ">=18"
-  },
-  "description": "Separate self-report information module; does not change trained nutrition models."
+  }
 }
