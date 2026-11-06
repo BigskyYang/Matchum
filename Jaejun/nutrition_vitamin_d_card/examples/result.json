@@ -1,0 +1,120 @@
+{
+  "card": {
+    "id": "vitamin_d",
+    "nutrient_id": "vitamin_d",
+    "name": "비타민 D",
+    "version": "1.3.0",
+    "cardType": "nutrient_guidance",
+    "source": {
+      "id": "lifestyle_questionnaire",
+      "label": "추가 생활문항 기반 안내"
+    },
+    "assessment": {
+      "type": "guidance",
+      "grade": null,
+      "probability": null
+    },
+    "reason": {
+      "title": "일상에서 낮 야외활동의 접점이 적게 나타나요",
+      "text": "점심과 쉬는 날 모두 외출이 드물고, 낮 야외운동도 선택하지 않았어요. 한 장면만의 문제가 아니라 응답한 여러 생활 장면에서 낮 야외활동 기회가 제한적으로 나타나는 패턴이에요.",
+      "nextStep": "햇빛을 통한 확보를 당연하게 전제하기보다, 비타민 D 식품 등 다른 공급 경로를 함께 확인해 보세요.",
+      "patternKey": "limited_contexts",
+      "evidence": [
+        {
+          "questionId": "commute",
+          "value": "car"
+        },
+        {
+          "questionId": "lunch_outing",
+          "value": "rarely"
+        },
+        {
+          "questionId": "exercise_setting",
+          "value": "indoor"
+        },
+        {
+          "questionId": "day_off_outing",
+          "value": "rarely"
+        }
+      ]
+    },
+    "foodGuidance": {
+      "title": "식품으로 챙기는 방법",
+      "text": "연어·고등어 같은 생선과 달걀노른자 등에 비타민 D가 들어 있어요. 강화식품은 영양표시에서 비타민 D 함유 여부를 확인해 주세요."
+    },
+    "productLink": {
+      "categoryId": "vitamin_d",
+      "label": "관련 제품 정보",
+      "mode": "related_information",
+      "reuseExistingList": true,
+      "pageSize": 20
+    },
+    "note": "생활 응답을 해석한 참고 안내이며, 비타민 D 상태를 측정한 결과는 아니에요.",
+    "activityNote": "비타민 D를 위해 햇빛 노출 시간을 늘리도록 권하지 않아요. 야외에서는 자외선 보호 수칙을 지켜 주세요.",
+    "productNotice": "관련 제품의 정보이며, 개인의 복용 필요성이나 적합성을 확인한 결과는 아니에요."
+  },
+  "cards": [
+    {
+      "nutrient_id": "calcium",
+      "name": "칼슘",
+      "assessment": {
+        "grade": "High",
+        "probability": 0.8
+      }
+    },
+    {
+      "id": "vitamin_d",
+      "nutrient_id": "vitamin_d",
+      "name": "비타민 D",
+      "version": "1.3.0",
+      "cardType": "nutrient_guidance",
+      "source": {
+        "id": "lifestyle_questionnaire",
+        "label": "추가 생활문항 기반 안내"
+      },
+      "assessment": {
+        "type": "guidance",
+        "grade": null,
+        "probability": null
+      },
+      "reason": {
+        "title": "일상에서 낮 야외활동의 접점이 적게 나타나요",
+        "text": "점심과 쉬는 날 모두 외출이 드물고, 낮 야외운동도 선택하지 않았어요. 한 장면만의 문제가 아니라 응답한 여러 생활 장면에서 낮 야외활동 기회가 제한적으로 나타나는 패턴이에요.",
+        "nextStep": "햇빛을 통한 확보를 당연하게 전제하기보다, 비타민 D 식품 등 다른 공급 경로를 함께 확인해 보세요.",
+        "patternKey": "limited_contexts",
+        "evidence": [
+          {
+            "questionId": "commute",
+            "value": "car"
+          },
+          {
+            "questionId": "lunch_outing",
+            "value": "rarely"
+          },
+          {
+            "questionId": "exercise_setting",
+            "value": "indoor"
+          },
+          {
+            "questionId": "day_off_outing",
+            "value": "rarely"
+          }
+        ]
+      },
+      "foodGuidance": {
+        "title": "식품으로 챙기는 방법",
+        "text": "연어·고등어 같은 생선과 달걀노른자 등에 비타민 D가 들어 있어요. 강화식품은 영양표시에서 비타민 D 함유 여부를 확인해 주세요."
+      },
+      "productLink": {
+        "categoryId": "vitamin_d",
+        "label": "관련 제품 정보",
+        "mode": "related_information",
+        "reuseExistingList": true,
+        "pageSize": 20
+      },
+      "note": "생활 응답을 해석한 참고 안내이며, 비타민 D 상태를 측정한 결과는 아니에요.",
+      "activityNote": "비타민 D를 위해 햇빛 노출 시간을 늘리도록 권하지 않아요. 야외에서는 자외선 보호 수칙을 지켜 주세요.",
+      "productNotice": "관련 제품의 정보이며, 개인의 복용 필요성이나 적합성을 확인한 결과는 아니에요."
+    }
+  ]
+}

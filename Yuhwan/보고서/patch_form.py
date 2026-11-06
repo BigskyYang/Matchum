@@ -132,6 +132,10 @@ for row in head.rows:
     k = row.cells[0].text.strip()
     if k in info:
         set_text(row.cells[1].paragraphs[0], info[k])
+for r in doc.sections[0].header.paragraphs[0].runs:   # 머리글 기수: 7기 → 9기 (11/6 사용자 확인)
+    if r.text == '7':
+        r.text = '9'
+assert doc.sections[0].header.paragraphs[0].text.strip().endswith('9기')
 fp = doc.sections[0].footer.paragraphs[0]; fp.alignment = WD_ALIGN_PARAGRAPH.CENTER
 field(fp, 'PAGE')
 for r in fp.runs:
@@ -446,7 +450,8 @@ CODE('⑤ 제품 점수: 함량 적정성 (기준치 대비 %)', 'junhyeok/분�
     '    return 10'])
 H('산출물과 코드 목록', 3)
 """)
-rep("H('C. 예상 질문과 답변', 3)\n", "MARK('ref')\nH('예상 질문과 답변', 3)\n")
+# 예상 질문과 답변은 결과 보고서에서 뺀다 (11/6 사용자 결정, 발표 자료에만 둠)
+rep_block("H('C. 예상 질문과 답변', 3)\n", "'예상 질문', widths=[5.2, 11.3], first_col_bold=True, align_num=False)\n", "")
 rep("H('D. 영양소별 최종 하이퍼파라미터', 3)\n", "MARK('algo')\nH('영양소별 최종 하이퍼파라미터', 3)\n")
 rep("refs = ['질병관리청. 국민건강영양조사 제9기(2022–2024) 원시자료 및 이용지침서.',",
     "MARK('ref')\nrefs = ['질병관리청. 국민건강영양조사 제9기(2022–2024) 원시자료 및 이용지침서.',")

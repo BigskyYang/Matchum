@@ -1,0 +1,20 @@
+{
+  "CHANGELOG.md": "43cedc613fe8f305ca3626043e7d0aebfb977237b296b62391b0b17dd6714c35",
+  "DISPLAY_RULES.md": "b67177e6de210e983f688fb0f5ab3ecc41988935da1e7a89a870bc74e3e52c69",
+  "HANDOFF.md": "87c4995a948ea312b1fbab2a1eeda2f8efbe46e69f00e6acc14c7f48cd01130f",
+  "README.md": "9a8f1dfaa5b3a6c5befcc612b9350583b4ba81617542cb41e4297e2a570b529c",
+  "SOURCES.md": "d545ccdd94e2e31a4e431dea08fb9410585a4bcefd71e9d9a1b5c47d5c3e1c96",
+  "VALIDATION.md": "77feaf23f535a67007c3a2d63479d2941fed653335093157cfe5dda9e92d4b60",
+  "compat/productBridge.v1.0.1.mjs": "f43fb786263aca250465424ed7e847c77c4e7b1a2f8091f9915f41e391c95c7b",
+  "config/survey.ko.json": "23b06e8c657656f721acb050ec967adf864c416ec29a7ebf4aaadec2a00f1c28",
+  "examples/answers.json": "328308494f53fddc6ae0e6b3678e6720c5172f5dc766f1db0544af68a37e873f",
+  "examples/card_cases.json": "aa334222c43f39b2005eac11d4af631a2bb8f2150d74e1402952b77b626b105d",
+  "examples/result.json": "12c41bb1730baa8e8261eb6e4772933b22c3a1e9a9b4efe614e89dc8be3f3036",
+  "examples/run.mjs": "7bf808361617ff3159adb8afa1e18f9c938b6ef8b8be743cb5e3b617b0ec022a",
+  "examples/verified_product_connection.json": "ffabd2dc130d616892c91b434bf1affcfca1f26f81649e25f2eae861693436e7",
+  "examples/webIntegration.mjs": "f8e7692a49acbaa5b1eda89d7a7ce035de13324aba2313ea390ab8de9c8e2d87",
+  "package.json": "bde474b6dd62e65797c11da4638d677485b492dcccd995023b119765f9a933ba",
+  "src/productAdapter.mjs": "c5759b4a49b3819fe0b5f8482a0a0a4be16a4b5e1b4607c6daaf264ae535a774",
+  "src/vitaminDCard.mjs": "f2d1e4f60da2dc86cef121a0f38cf124df45577f21d9b00dd63c888bac6f6515",
+  "tests/card.test.mjs": "5b048357bd5dd3e3eb4ae3e22f7747d7d1fda1a9f821c67e780421209239574b"
+}
