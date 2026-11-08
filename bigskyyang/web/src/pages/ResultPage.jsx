@@ -22,7 +22,7 @@ import { clearSurvey, loadSurvey } from '../lib/storage.js'
 // '나에게 맞는 결과'는 첫 화면과 맨 아래 두 곳, '공유'는 첫 화면
 const PENDING = '영양 분석 결과가 준비되면 이곳에 표시돼요.'
 // 2단계(식사 설문)로 가는 버튼 문구
-const PERSONAL_CTA = '나에게 부족할 수 있는 영양소는?'
+const PERSONAL_CTA = '나에게 부족할 수 있는 영양성분은?'
 
 function useResult() {
   return useMemo(() => {

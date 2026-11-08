@@ -82,7 +82,7 @@ const STAGE_1 = [
     id: 'sex',
     section: 'basic',
     title: '성별을 알려 주세요',
-    note: '조사 자료에서 같은 성별·나이대의 식사와 비교할 때 사용해요.',
+    note: '같은 성별·나이대의 식사와 비교할 때 사용해요.',
     type: 'choice',
     options: [
       { label: '남성', value: 1 },
@@ -162,21 +162,20 @@ const STAGE_1 = [
     initial: 8 * 60,
   },
   // 수면: 취침·기상 시각 (주말도 비슷하면 주중만). 팀 합의로 '날마다 들쭉날쭉' 보기는 두지 않는다
-  { id: 'weekday_bed', section: 'sleep', title: '평일에는 몇 시에 잠자리에 드나요?', note: '주로 일하는 날 기준', type: 'time', initial: '22:00', hourStart: 18 },
-  { id: 'weekday_wake', section: 'sleep', title: '평일에는 몇 시에 일어나나요?', note: '주로 일하는 날 기준', type: 'time', initial: '07:00', hourStart: 3, check: (v, a) => v === a.weekday_bed ? '잠든 시각과 일어난 시각을 다시 확인해 주세요.' : null },
+  { id: 'weekday_bed', section: 'sleep', title: '평일 기준 몇 시에 주무시나요?', type: 'time', initial: '22:00', hourStart: 18 },
+  { id: 'weekday_wake', section: 'sleep', title: '평일 기준 몇 시에 일어나시나요?', type: 'time', initial: '07:00', hourStart: 3, check: (v, a) => v === a.weekday_bed ? '잠든 시각과 일어난 시각을 다시 확인해 주세요.' : null },
   {
     id: 'weekend_same',
     section: 'sleep',
     title: '주말에도 비슷한 시각에 자고 일어나나요?',
-    note: '쉬는 날 기준',
     type: 'choice',
     options: [
       { label: '네, 비슷해요', value: 'yes' },
       { label: '아니요, 달라요', value: 'no' },
     ],
   },
-  { id: 'weekend_bed', section: 'sleep', title: '주말에는 몇 시에 잠자리에 드나요?', note: '쉬는 날 기준', type: 'time', initial: '22:00', hourStart: 18, showIf: weekendDiffers },
-  { id: 'weekend_wake', section: 'sleep', title: '주말에는 몇 시에 일어나나요?', note: '쉬는 날 기준', type: 'time', initial: '07:00', hourStart: 3, check: (v, a) => v === a.weekend_bed ? '잠든 시각과 일어난 시각을 다시 확인해 주세요.' : null, showIf: weekendDiffers },
+  { id: 'weekend_bed', section: 'sleep', title: '주말 기준 몇 시에 주무시나요?', type: 'time', initial: '22:00', hourStart: 18, showIf: weekendDiffers },
+  { id: 'weekend_wake', section: 'sleep', title: '주말 기준 몇 시에 일어나시나요?', type: 'time', initial: '07:00', hourStart: 3, check: (v, a) => v === a.weekend_bed ? '잠든 시각과 일어난 시각을 다시 확인해 주세요.' : null, showIf: weekendDiffers },
   // 7. 스트레스
   {
     id: 'stress',
@@ -195,7 +194,7 @@ const STAGE_1 = [
   {
     id: 'meals',
     section: 'meal',
-    title: '평균적인 한 주에 아침·점심·저녁을 각각 며칠 먹었나요?',
+    title: '일주일에 평균적으로 아침·점심·저녁은 얼마나 먹나요?',
     period: '최근 1년',
     type: 'rows',
     rows: [

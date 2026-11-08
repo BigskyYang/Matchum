@@ -40,8 +40,8 @@ export default function HabitCompare({ habits, code }) {
   return (
     <div>
       <div className="flex flex-col gap-1.5">
-        <Chips title="우리 유형보다 잘 챙겨요" items={ahead} tone="bg-mint text-mint-strong" />
-        <Chips title="우리 유형보다 아쉬워요" items={behind} tone="bg-primary-soft text-primary-shade" />
+        <Chips title="내 유형보다 잘 챙겨요" items={ahead} tone="bg-mint text-mint-strong" />
+        <Chips title="내 유형보다 아쉬워요" items={behind} tone="bg-primary-soft text-primary-shade" />
         {!ahead.length && !behind.length && <p className="text-sm font-bold">우리 유형 평균과 비슷한 생활습관이에요.</p>}
       </div>
 

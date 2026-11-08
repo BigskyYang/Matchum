@@ -64,7 +64,7 @@ export default function StartPage() {
         <p className="mt-5 text-sm leading-relaxed text-ink-soft">
           내 생활습관 유형을 알아보고,
           <br />
-          식사에서 살펴볼 점을 확인해요
+          부족할 수 있는 영양성분을 확인해보세요
         </p>
       </section>
 
