@@ -1,4 +1,6 @@
 import { useCallback, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { NUTRIENT_GUIDE } from '../../data/nutrientGuide.js'
 import BottomSheet from '../BottomSheet.jsx'
 import Mascot from '../Mascot.jsx'
 import NutrientArt from '../NutrientArt.jsx'
@@ -12,6 +14,39 @@ import { BAND_CLS, bandLabel } from '../../data/bands.js'
 //   화면에는 '높은 편' 영양소를 같은 크기 카드(그림·이름)로 3열에 두고, 등급·하는 일은 누르면 아래에서 올라오는 창에 기준·음식·건강기능식품 안내를 보여 준다
 //   근거·정확도·진단 아님 안내는 화면 맨 아래 '어떻게 만들었나요?'(AboutLink)에 모았다
 const SOURCE = { habitual: '평소 식사 응답으로 예측했어요', lifestyle: '생활습관 응답으로 예측했어요' }
+// 비타민 D (재준님 v1.3.0 카드): 모델 예측이 아니라 생활 4문항을 종합한 안내. 같은 모양의 카드를 목록 끝에 두되 등급은 없다
+const VITAMIN_D_ART = NUTRIENT_GUIDE.find((n) => n.key === 'vitamin_d')
+
+function VitaminDSheet({ card, onClose }) {
+  return (
+    <BottomSheet
+      title={
+        <>
+          <NutrientArt n={VITAMIN_D_ART} className="size-6" />
+          {card.name}
+        </>
+      }
+      aside={<span className="shrink-0 rounded-full bg-cream px-2.5 py-1 text-xs font-bold text-ink-soft">{card.source.label}</span>}
+      onClose={onClose}
+    >
+      <p className="font-bold leading-snug">{card.reason.title}</p>
+      <p className="mt-1.5 text-sm leading-relaxed text-ink-soft">{card.reason.text}</p>
+      <p className="mt-2 text-sm leading-relaxed">{card.reason.nextStep}</p>
+      <div className="mt-4 rounded-card bg-cream px-4 py-3 text-sm leading-relaxed">
+        <p className="font-bold">{card.foodGuidance.title}</p>
+        <p className="mt-0.5 text-ink-soft">{card.foodGuidance.text}</p>
+      </div>
+      <p className="mt-3 text-xs leading-relaxed text-ink-soft">{card.activityNote}</p>
+      <Link
+        to={`/supplements?n=${card.productLink.categoryId}`}
+        className="mt-4 block rounded-button bg-cream py-3 text-center text-sm font-bold text-primary-shade active:scale-[0.99]"
+      >
+        {card.productLink.label} ›
+      </Link>
+      <p className="mt-3 text-xs text-ink-faint">{card.note}</p>
+    </BottomSheet>
+  )
+}
 
 function Badge({ n }) {
   return <span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-bold ${BAND_CLS[n.band]}`}>{bandLabel(n, n.band)}</span>
@@ -80,7 +115,7 @@ function RestSheet({ rest, onPick, onClose }) {
   )
 }
 
-export default function NutritionRisk({ nutrition, ffqAsked }) {
+export default function NutritionRisk({ nutrition, ffqAsked, vitaminD = null }) {
   const [open, setOpen] = useState(null) // 영양소 또는 'rest'
   const close = useCallback(() => setOpen(null), [])
   if (!nutrition) {
@@ -92,10 +127,30 @@ export default function NutritionRisk({ nutrition, ffqAsked }) {
     )
   }
   const { watch, rest, habitualAvailable } = nutrition
+  const dCard = vitaminD && (
+    <li key="vitamin_d">
+      <button
+        type="button"
+        onClick={() => setOpen('vitamin_d')}
+        aria-label={`${vitaminD.name} 자세히 보기 (${vitaminD.source.label})`}
+        className="flex h-full w-full flex-col items-center gap-1.5 rounded-card border-2 border-dashed border-primary-strong/60 bg-white px-1 py-3 text-center text-sm leading-tight font-bold active:scale-95"
+      >
+        <NutrientArt n={VITAMIN_D_ART} className="size-10" emojiClass="text-2xl" />
+        {vitaminD.name}
+        <span className="text-[10px] font-normal text-ink-soft">생활 응답 기반</span>
+      </button>
+    </li>
+  )
 
   return (
     <div>
-      {watch.length ? (
+      {!watch.length && (
+        <p className="mb-3 flex items-center gap-3 text-sm text-ink-soft">
+          <Mascot name="cheer" fallback="happy" size="xs" />
+          이번 응답에서 상대 등급이 높은 영양소는 없어요.
+        </p>
+      )}
+      {(watch.length > 0 || dCard) && (
         <>
           <ul className="grid grid-cols-3 gap-2">
             {watch.map((n) => (
@@ -111,13 +166,9 @@ export default function NutritionRisk({ nutrition, ffqAsked }) {
                 </button>
               </li>
             ))}
+            {dCard}
           </ul>
         </>
-      ) : (
-        <p className="flex items-center gap-3 text-sm text-ink-soft">
-          <Mascot name="cheer" fallback="happy" size="xs" />
-          이번 응답에서 상대 등급이 높은 영양소는 없어요.
-        </p>
       )}
 
       {rest.length > 0 && (
@@ -133,7 +184,8 @@ export default function NutritionRisk({ nutrition, ffqAsked }) {
       )}
 
       {open === 'rest' && <RestSheet rest={rest} onPick={setOpen} onClose={close} />}
-      {open && open !== 'rest' && <RiskSheet n={open} onClose={close} />}
+      {open === 'vitamin_d' && vitaminD && <VitaminDSheet card={vitaminD} onClose={close} />}
+      {open && open !== 'rest' && open !== 'vitamin_d' && <RiskSheet n={open} onClose={close} />}
     </div>
   )
 }

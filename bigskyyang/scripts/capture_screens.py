@@ -178,7 +178,11 @@ with sync_playwright() as p:
     axe(page, '개인 결과')
     shot(page, '개인결과_첫화면')
     shot(page, '개인결과_전체', full=True)
-    shot(page, '개인결과_비타민D', el=page.locator('section', has_text='비타민 D와 내 생활'))
+    page.get_by_role('button', name='비타민 D 자세히 보기', exact=False).click()
+    page.wait_for_timeout(700)
+    shot(page, '개인결과_비타민D')
+    page.keyboard.press('Escape')
+    page.wait_for_timeout(300)
 
     page.goto(BASE + '/simulate')
     settle(page, 1500)

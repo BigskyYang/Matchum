@@ -60,8 +60,8 @@ export default function AboutLink({ personal = false }) {
               </Section>
             )}
             {personal && (
-              <Section icon="sunrise" title="비타민 D와 내 생활">
-                <p>출퇴근·점심 외출·운동·쉬는 날 외출 응답에 맞춰 식품 정보와 야외활동 정보의 순서만 정했어요. 비타민 D 상태를 측정하거나 예측한 결과가 아니고, 영양소 예측에는 쓰지 않아요.</p>
+              <Section icon="sunrise" title="비타민 D 카드">
+                <p>출퇴근·점심 외출·운동·쉬는 날 외출 응답을 함께 보고 살펴볼 이유를 적었어요. 비타민 D는 학습한 예측 모델이 없어서 다른 영양소 같은 등급(높은 편·보통·낮은 편)이 없고, 비타민 D 상태를 측정한 결과도 아니에요.</p>
               </Section>
             )}
             <Section icon="alert" title="꼭 알아 두세요">

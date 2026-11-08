@@ -10,7 +10,7 @@ import { loadSurvey } from '../lib/storage.js'
 import { combinedIds, dailyTotals, formsOf, headroomProducts, productCount, productSections, productTexts, targetsFor } from '../lib/supplements.js'
 import { useCatalog, useModels } from '../lib/useCatalog.js'
 import { usePicks } from '../lib/usePicks.js'
-import { buildVitaminDInfo } from '../lib/vitaminDInfo.js'
+import { VITAMIN_D_PRODUCT_NOTICE, vitaminDCard } from '../lib/vitaminD.js'
 import TotalsTable from '../components/supplements/TotalsTable.jsx'
 import NutrientArt from '../components/NutrientArt.jsx'
 
@@ -21,9 +21,9 @@ import NutrientArt from '../components/NutrientArt.jsx'
 //   제품을 보기 전에 임신·수유·질환·복용약을 한 번 묻고(답은 이 휴대폰에만), 해당되면 제품 대신 상담을 권한다
 const GUIDE = Object.fromEntries(NUTRIENT_GUIDE.map((n) => [n.key, n]))
 const SOURCE = { habitual: '평소 식사 응답으로 예측', lifestyle: '생활습관 응답으로 예측' }
-// 비타민 D는 모델이 예측하지 않는다. 생활 안내에서 누른 사람에게만 일반 제품 정보로 (재준님 v1.2.0 productNotice)
+// 비타민 D는 모델이 예측하지 않는다. 생활문항 카드(재준님 v1.3.0)가 있을 때만 같은 탭 줄에 넣고, 예측 문구 대신 제품 안내 문장을 쓴다
 const VITAMIN_D = { key: 'vitamin_d', label: '비타민 D', icon: '☀️', from: [], general: true }
-const VITAMIN_D_NOTICE = buildVitaminDInfo().productNotice
+const VITAMIN_D_NOTICE = VITAMIN_D_PRODUCT_NOTICE
 
 function Gate({ onAnswer }) {
   return (
@@ -216,8 +216,8 @@ export default function SupplementsPage() {
   const { picks, toggle, setGate } = usePicks(catalog)
   const [form, setForm] = useState(null)
   const [open, setOpen] = useState(null) // 제품 또는 'picks'
-  // 비타민 D 생활 안내의 '관련 제품 정보'로 들어온 경우에만 비타민 D 탭을 더한다 (응답과 관계없이 누구나 같은 목록)
-  const [withVitaminD] = useState(() => params.get('n') === VITAMIN_D.key)
+  // 비타민 D 카드의 '관련 제품 정보'로 들어오면 비타민 D 탭을 맨 앞에
+  const [fromVitaminD] = useState(() => params.get('n') === VITAMIN_D.key)
   const close = useCallback(() => setOpen(null), [])
 
   const survey = useMemo(() => loadSurvey(), [])
@@ -256,7 +256,8 @@ export default function SupplementsPage() {
     )
   }
 
-  const nutrients = withVitaminD ? [VITAMIN_D, ...r.supplements.nutrients] : r.supplements.nutrients
+  const hasVitaminD = Boolean(vitaminDCard(survey.answers))
+  const nutrients = !hasVitaminD ? r.supplements.nutrients : fromVitaminD ? [VITAMIN_D, ...r.supplements.nutrients] : [...r.supplements.nutrients, VITAMIN_D]
   if (!nutrients.length) {
     return wrap(
       <p className="rounded-card bg-white p-5 leading-relaxed shadow-soft">

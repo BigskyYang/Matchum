@@ -8,16 +8,15 @@ import HabitSignals from '../components/result/HabitSignals.jsx'
 import MissionList from '../components/result/MissionList.jsx'
 import AboutLink from '../components/result/AboutLink.jsx'
 import NutritionRisk from '../components/result/NutritionRisk.jsx'
-import VitaminDCard from '../components/result/VitaminDCard.jsx'
 import { buildPersonalResult } from '../lib/result.js'
 import { clearSurvey, loadSurvey } from '../lib/storage.js'
 import { useModels } from '../lib/useCatalog.js'
-import { vitaminDInfo } from '../lib/vitaminD.js'
+import { vitaminDCard } from '../lib/vitaminD.js'
 
 // 2단계 개인 결과 (나만 보기). 보여 줄 값은 lib/result.js의 buildPersonalResult가 계산한다
 // 개인 영양 위험은 재준님 모델(data/nutritionModels.json, 약 1.3MB)을 이 화면에서만 불러와 휴대폰에서 계산한다
 // 우울 점수·질환별 조언은 하지 않는다
-// 순서: 영양소 → 비타민 D와 내 생활(재준님 생활 안내, 예측 아님) → 음식 → 흡연·음주 신호등·이번 주 해볼 것 → 응답 변경 비교(/simulate)
+// 순서: 영양소(끝에 비타민 D 생활문항 카드, 예측 아님) → 음식 → 흡연·음주 신호등·이번 주 해볼 것 → 응답 변경 비교(/simulate)
 // 영양소 칩 아래에 도움이 될 수 있는 건강기능식품(추천 이유·제품 수) → 모두 보고 고르기는 /supplements
 // 근거·주의 안내는 맨 아래 '어떻게 만들었나요?' 창에 모았다
 
@@ -27,7 +26,7 @@ function useResult() {
   return useMemo(() => {
     const { answers, done } = survey
     const redirect = !done[1] ? '/survey' : !done[2] ? '/survey2' : null
-    return { redirect, result: redirect ? null : { ...buildPersonalResult(answers, models), vitaminD: vitaminDInfo(answers) } }
+    return { redirect, result: redirect ? null : { ...buildPersonalResult(answers, models), vitaminD: vitaminDCard(answers) } }
   }, [survey, models])
 }
 
@@ -53,16 +52,12 @@ export default function PersonalResultPage() {
       </header>
 
       <Card title="내가 특히 살펴볼 영양소" icon="checklist">
-        <NutritionRisk nutrition={r.nutrition} ffqAsked={r.ffqAsked} />
-        {r.supplements?.nutrients.length > 0 && (
+        <NutritionRisk nutrition={r.nutrition} ffqAsked={r.ffqAsked} vitaminD={r.vitaminD} />
+        {(r.supplements?.nutrients.length > 0 || r.vitaminD) && (
           <Link to="/supplements" className="mt-3 block rounded-button bg-cream py-3 text-center text-sm font-bold text-primary-shade active:scale-[0.99]">
             관련 제품 찾아보기 ›
           </Link>
         )}
-      </Card>
-
-      <Card title="비타민 D와 내 생활" icon="sunrise">
-        <VitaminDCard info={r.vitaminD} />
       </Card>
 
       <Card title="챙겨 먹으면 좋은 음식" icon="salad">
