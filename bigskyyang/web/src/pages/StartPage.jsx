@@ -1,8 +1,11 @@
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import Mascot from '../components/Mascot.jsx'
 import PrimaryButton from '../components/PrimaryButton.jsx'
 import RotatingNotes from '../components/RotatingNotes.jsx'
 import { SERVICE_NAME, TEAM_NAME } from '../config.js'
 import { model } from '../lib/classify.js'
+import { clearSurvey, loadSurvey } from '../lib/storage.js'
 
 // 'NBTI 유형 검사'에서 앞의 N(Nutrient)만 강조
 function Title() {
@@ -22,7 +25,16 @@ function Title() {
 }
 
 export default function StartPage() {
+  const navigate = useNavigate()
   const sampleSize = model.population.n.toLocaleString('ko-KR')
+  // 이 휴대폰에 남아 있는 응답 (7일): 끝냈으면 결과 다시 보기, 하던 중이면 이어서 하기
+  const [saved] = useState(() => loadSurvey())
+  const finished = saved.done[1]
+  const started = !finished && Object.keys(saved.answers).length > 0
+  const restart = () => {
+    clearSurvey()
+    navigate('/survey')
+  }
 
   return (
     <main className="flex flex-1 flex-col px-6 pt-5 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
@@ -67,13 +79,18 @@ export default function StartPage() {
             <>
               <span aria-hidden="true" className="mr-1">📊</span>국민건강영양조사 성인 <b className="text-ink">{sampleSize}명</b>(2022–2024) 분석
             </>,
-            // 응답은 sessionStorage에만 잠시 두고 서버로 보내지 않는다 (lib/storage.js)
+            // 응답은 서버로 보내지 않는다 (이 휴대폰에만 7일, lib/storage.js)
             <>
-              <span aria-hidden="true" className="mr-1">🔒</span>응답과 결과는 <b className="text-ink">이 브라우저 탭</b>에서 계산하고 보관해요
+              <span aria-hidden="true" className="mr-1">🔒</span>응답과 결과는 <b className="text-ink">서버에 저장되지 않아요</b>
             </>,
           ]}
         />
-        <PrimaryButton to="/survey">검사 시작하기</PrimaryButton>
+        <PrimaryButton to={finished ? '/result' : '/survey'}>{finished ? '내 결과 다시 보기' : started ? '이어서 검사하기' : '검사 시작하기'}</PrimaryButton>
+        {(finished || started) && (
+          <button type="button" onClick={restart} className="mt-2 w-full py-2 text-sm font-semibold text-ink-soft underline decoration-ink/20 underline-offset-4">
+            처음부터 다시 검사하기
+          </button>
+        )}
         <p className="mt-4 text-center text-xs leading-relaxed text-ink-faint">
           추천 결과는 참고용이며 의료적 진단이나 처방을 대체하지 않습니다.
         </p>

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { loadPicks, savePicks } from './storage.js'
 import { reconcilePicks } from './supplements.js'
 
-// 건강기능식품 화면들이 같이 쓰는 상태 (이 휴대폰 sessionStorage에만): 고른 제품, 확인 답, 내가 먹는 제품
+// 건강기능식품 화면들이 같이 쓰는 상태 (이 휴대폰 localStorage에만, 7일): 고른 제품, 확인 답, 내가 먹는 제품
 export function usePicks(catalog) {
   const [picks, setPicks] = useState(loadPicks)
   const current = useMemo(() => catalog ? reconcilePicks(catalog, picks) : picks, [catalog, picks])

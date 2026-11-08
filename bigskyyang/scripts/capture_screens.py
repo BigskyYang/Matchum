@@ -57,8 +57,9 @@ SURVEY = {
 PICKS = {'ids': ['20220010222177'], 'gate': 'ok', 'mine': [{'id': '200400200073012'}, {'name': '우리집 오메가3'}]}
 SEED = f"""
 if (!sessionStorage.getItem('__seeded')) {{
-  sessionStorage.setItem('nbti-survey-v4', {json.dumps(json.dumps(SURVEY, ensure_ascii=False), ensure_ascii=False)});
-  sessionStorage.setItem('nbti-picks-v1', {json.dumps(json.dumps(PICKS, ensure_ascii=False), ensure_ascii=False)});
+  // 앱은 localStorage에 {{ savedAt, value }}로 저장한다 (lib/storage.js)
+  localStorage.setItem('nbti-survey-v4', JSON.stringify({{ savedAt: Date.now(), value: {json.dumps(SURVEY, ensure_ascii=False)} }}));
+  localStorage.setItem('nbti-picks-v1', JSON.stringify({{ savedAt: Date.now(), value: {json.dumps(PICKS, ensure_ascii=False)} }}));
   sessionStorage.setItem('__seeded', '1');
 }}
 """
