@@ -15,7 +15,7 @@
 //   time     : 시각 'HH:MM' 휠 { initial, hourStart: 시 목록을 몇 시부터 보여줄지 }
 //   duration : 시간 + 분 → 분 단위 숫자 휠 { per: '일주일에' | '하루', maxHours, initial(분) }
 //   date     : 생년월일 'YYYY-MM-DD' 휠 (년·월·일) { minYear, maxYear, initial }
-// layout (choice): 'list' 한 줄에 하나 | 'grid' 2열 | 'row' 한 줄에 모두 (짧은 숫자 보기)
+// layout (choice): 'list' 한 줄에 하나 | 'grid' 2열 | 'row' 한 줄에 모두 (짧은 숫자 보기) | 'cards' 좌우 큰 카드 (보기 emoji)
 // initial: 처음 화면에 맞춰져 있는 값 (많이 고르는 값을 기준으로)
 // 문구: 제목은 짧은 말투로, 꼭 필요한 조건은 note 한 줄로, 예시·자세한 기준은 info로 (ⓘ 자세히 → 아래에서 올라오는 창)
 //   note: 제목 아래 한 줄 안내, info: ['도움말 줄', ...], period: 응답 기간 ('최근 1년' 등, 제목 위 작은 표시)
@@ -84,9 +84,10 @@ const STAGE_1 = [
     title: '성별을 알려 주세요',
     note: '같은 성별·나이대의 식사와 비교할 때 사용해요.',
     type: 'choice',
+    layout: 'cards',
     options: [
-      { label: '남성', value: 1 },
-      { label: '여성', value: 2 },
+      { label: '남성', value: 1, emoji: '🙋‍♂️' },
+      { label: '여성', value: 2, emoji: '🙋‍♀️' },
     ],
   },
   // 만 나이는 생년월일로 계산 (lib/encode.js ageFromBirth). 만 19세 이상 성인 대상
