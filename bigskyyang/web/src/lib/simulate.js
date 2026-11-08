@@ -2,7 +2,7 @@
 //   응답 단위로 바꾼 뒤 결과 계산(lib/result.js)을 그대로 다시 돌린다. 화면 결과와 계산 방법이 하나라 어긋나지 않는다
 //   바꿀 수 있는 습관은 미션 기준(data/tips.js)과 같은 방향. 지금 응답이 이미 그 기준을 넘으면 보여 주지 않는다
 //   모델이 학습 자료에서 본 경향을 보여 줄 뿐, 습관을 바꾸면 실제로 그렇게 된다는 뜻이 아니다 (인과 아님)
-import { encode } from './encode.js'
+import { AEROBIC_HOURS, encode } from './encode.js'
 import { buildPersonalResult, buildTypeResult } from './result.js'
 
 const toTime = (min) => {
@@ -19,9 +19,9 @@ export const CHANGES = [
   {
     id: 'aerobic',
     icon: 'exercise',
-    label: '운동을 주 2시간 반 이상',
-    when: (a) => a.activity !== 3,
-    apply: (a) => ({ ...a, activity: 3 }),
+    label: '유산소 운동 주 3시간',
+    when: (a) => !(a.activity >= AEROBIC_HOURS),
+    apply: (a) => ({ ...a, activity: AEROBIC_HOURS }),
   },
   {
     id: 'strength',

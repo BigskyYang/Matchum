@@ -78,10 +78,12 @@ describe('수면 응답 수정', () => {
   })
 })
 
-it('이전 운동 응답 세 구간을 150분 기준으로 복구하고 완료 상태를 유지한다', () => {
-  for (const [old, current] of [[0, 0], [1, 0], [2, 0], [3, 3]]) {
-    const restored = restoreSurvey({ answers: { ...SAMPLE, activity: old }, done: { 1: true, 2: true } })
-    expect(restored.answers.activity).toBe(current)
+it('운동 응답(주 0~5시간)은 그대로 두고 3시간 이상만 150분 이상으로 본다 (예전 0·3 값도 같은 뜻)', async () => {
+  const { encode } = await import('./encode.js')
+  for (const [hours, aerobic] of [[0, 0], [1, 0], [2, 0], [3, 1], [4, 1], [5, 1]]) {
+    const restored = restoreSurvey({ answers: { ...SAMPLE, activity: hours }, done: { 1: true, 2: true } })
+    expect(restored.answers.activity).toBe(hours)
     expect(restored.done[2]).toBe(true)
+    expect(encode(restored.answers).features.ML_aerobic).toBe(aerobic)
   }
 })

@@ -1,5 +1,5 @@
 import stats from '../data/surveyStats.json'
-import { ageFromBirth } from './encode.js'
+import { AEROBIC_HOURS, ageFromBirth } from './encode.js'
 
 // 설문 중간 통계 카드: 문항에 답하면 다음 문항 위에 "나처럼 ~한 30대 여성은 약 55%예요"
 //   비율: data/surveyStats.json (bigskyyang/scripts/build_survey_stats.py, 국건영 2022~2024 가중 비율)
@@ -9,7 +9,7 @@ export const roundPct = (p) => Math.min(95, Math.max(5, Math.round(p / 5) * 5))
 
 // 문항 ID → 통계. has: 내 답이 그 습관에 해당하는지, yes·no: 해당할 때·아닐 때 문구
 export const FACTS = {
-  activity: { label: '운동 시간', habit: 'aerobic', has: (a) => a.activity === 3, yes: '주 2시간 반 이상 운동하는', no: '운동이 주 2시간 반이 안 되는' },
+  activity: { label: '운동 시간', habit: 'aerobic', has: (a) => a.activity >= AEROBIC_HOURS, yes: '주 2시간 반 이상 운동하는', no: '운동이 주 2시간 반이 안 되는' },
   sedentary_min: {
     label: '앉아 있는 시간',
     habit: 'sedentary',

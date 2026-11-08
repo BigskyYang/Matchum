@@ -59,8 +59,6 @@ export function restoreSurvey(saved) {
 
 function visibleAnswers(raw) {
   const answers = { ...raw }
-  // 기존 4지선다의 1·2번도 동일한 '150분 미만' 모델 입력이었다.
-  if ([1, 2].includes(answers.activity)) answers.activity = 0
   for (const q of QUESTIONS) {
     if (q.showIf && !q.showIf(answers)) delete answers[q.id]
   }

@@ -14,6 +14,9 @@ const toMinutes = (hhmm) => {
   return h * 60 + m
 }
 
+// 유산소 운동 문항(주 몇 시간, 0~5) → 3시간 이상이면 주 150분 이상 (팀 합의 aerobic_150min)
+export const AEROBIC_HOURS = 3
+
 // 취침·기상 시각으로 수면 시간(시간) 계산. 자정을 넘기면 다음 날로 본다
 export const sleepHours = (bed, wake) => {
   let diff = toMinutes(wake) - toMinutes(bed)
@@ -52,8 +55,8 @@ export function encode(a) {
     ML_drink_month: drinkFreq >= 2 ? 1 : 0,
     ML_drink_freq_ord: drinkFreq,
     ML_drink_amount_ord: drinkAmount,
-    // 유산소 신체활동: 숨이 조금 찰 정도로 움직인 시간을 모두 합쳐 주 150분 이상 = 보기 '2시간 반 이상'
-    ML_aerobic: a.activity === 3 ? 1 : 0,
+    // 유산소 신체활동: 숨이 찰 정도의 운동을 합쳐 주 150분 이상 = 보기 '3시간' 이상 (AEROBIC_HOURS)
+    ML_aerobic: a.activity >= AEROBIC_HOURS ? 1 : 0,
     ML_strength_days: a.strength_days,
     ML_sedentary_min: clamp(a.sedentary_min, 0, 24 * 60),
     ML_sleep_hours: sleepOf(a),

@@ -182,7 +182,7 @@ with sync_playwright() as p:
 
     page.goto(BASE + '/simulate')
     settle(page, 1500)
-    for name in ['운동을 주 2시간 반 이상', '우유·유제품 하루 1번']:
+    for name in ['유산소 운동 주 3시간', '우유·유제품 하루 1번']:
         page.get_by_role('button', name=name).click()
         page.wait_for_timeout(300)
     page.wait_for_timeout(600)
