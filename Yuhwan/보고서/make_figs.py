@@ -128,7 +128,7 @@ ax.hlines(y, V['ΔAUC_CI_low'], V['ΔAUC_CI_high'], color=np.where(sig, BLUE, GR
 ax.scatter(V['ΔAUC'], y, s=46, color=np.where(sig, BLUE, GRAY), zorder=3, edgecolor='#fcfcfb', linewidth=1.5)
 ax.axvline(0, color=INK2, lw=1)
 ax.set_yticks(y); ax.set_yticklabels(V['영양소'])
-ax.set_xlabel('AUC 향상 (유형 추가 모델 - 성별·연령 모델), 2024년 평가')
+ax.set_xlabel('ΔAUC (선택 모델 - 성별·연령대 기준 모델), 2024년 평가. 철만 부스팅')
 for yi, (v, s_) in enumerate(zip(V['ΔAUC'], sig)):
     ax.text(V['ΔAUC_CI_high'].iloc[yi] + 0.002, yi, f'{v:+.3f}', va='center', fontsize=8.5, color=INK if s_ else INK2)
 ax.legend(handles=[plt.Line2D([], [], color=BLUE, marker='o', lw=2, label='95% CI가 0보다 큼 (13개)'),
@@ -197,6 +197,9 @@ def oe_ci(g):
 
 lab = {'유형특이': '이 유형에서\n특히 많아요', '식사량영향': '식사량 점검이\n먼저예요', '흔함': '같은 성별·나이대에서\n흔해요', '전체': '표시 항목\n전체'}
 R = {k: oe_ci(O[O['판정'] == k]) for k in ['유형특이', '식사량영향', '흔함']} | {'전체': oe_ci(O)}
+# 전체 구간은 본문·목표 표와 같은 결과 파일(13번 검증_2024, 163개 항목 재표집)의 값을 쓴다 (11/9 Codex 검토 10)
+_v = json.load(open(OUT8 / '13_유형화면_나안.json', encoding='utf-8'))['검증_2024']
+R['전체'] = (_v['관측기대비'], *_v['CI'], _v['항목수'])
 S['oe'] = {k: [round(x, 3) for x in v[:3]] + [v[3]] for k, v in R.items()}
 fig, ax = plt.subplots(figsize=(7.4, 3.9))
 ks = list(R)
@@ -215,7 +218,7 @@ save(fig, 'f08_2024검증.png')
 fig, ax = plt.subplots(figsize=(10, 2.5)); ax.axis('off'); ax.set_xlim(0, 10); ax.set_ylim(0, 2.5)
 steps = [('데이터 준비', 'KNHANES 2022–24\n성인 15,062명\nKDRI 2025 기준', TEAL_L),
          ('고객 군집화', '생활습관 7개 지표\nPCA → 2단계 k-medoids\n4 대분류 × 3 = 12유형', TEAL_L),
-         ('부족 확률 예측', '유형+성별+연령대\n→ 영양소 15개\n가중 로지스틱 회귀', TEAL_L),
+         ('부족 확률 예측', '유형+성별+연령대\n→ 영양소 15개\n로지스틱 14·부스팅 1', TEAL_L),
          ('검증', '2022–23 학습\n→ 2024 평가\n민감도 분석', TEAL_L),
          ('서비스 표시', '공통 영양소 +\n유형 영양소 2단 표시\n웹 JSON 120조합', TEAL_L)]
 for i, (t, b, c) in enumerate(steps):
