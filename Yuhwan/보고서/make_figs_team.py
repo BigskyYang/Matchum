@@ -53,23 +53,27 @@ box(4.45, 0.25, 1.9, 1.65, '제품 분류·필터링', '박준혁\n식약처 19,
 box(6.65, 0.25, 1.9, 1.65, '개인 결과 화면', '살펴볼 영양소 (최대 5개)\n음식·실천 먼저\n관련 제품 정보 탐색', OCHRE_L)
 arrow(1.97, 1.07, 2.23, 1.07); arrow(4.17, 1.07, 4.43, 1.07); arrow(6.37, 1.07, 6.63, 1.07)
 ax.text(5.4, 1.98, '', fontsize=8)
-box(8.85, 0.25, 1.6, 3.95, '웹 서비스', '양대천\n\nmatchum.vercel.app\n\n학습은 미리,\n휴대폰에서 계산만\n\n응답은 브라우저\n탭에만 보관', '#eef5f3')
+box(8.85, 0.25, 1.6, 3.95, '웹 서비스', '양대천\n\nmatchum.vercel.app\n\n학습은 미리,\n휴대폰에서 계산만\n\n응답은 서버로\n보내지 않고\n휴대폰에 7일 보관', '#eef5f3')
 arrow(8.57, 3.37, 8.83, 3.37); arrow(8.57, 1.07, 8.83, 1.07)
 arrow(7.6, 2.53, 7.6, 1.92)
 ax.text(7.7, 2.2, '더 알아보기', fontsize=8, color=INK2)
 save(fig, 'f11_서비스흐름.png')
 
-# 2. 웹 화면 (11/5 캡처, 예시 응답: 20대 여성)
-crops = [(WEB / 'result_full.png', (0, 200, 780, 1300), '① 유형 결과'),
-         (WEB / 'result_full.png', (0, 3380, 780, 4480), '② 부족할 수 있는 영양소'),
-         (WEB / 'result2_full.png', (0, 0, 780, 1100), '③ 개인 결과'),
-         (WEB / 'supplements_full.png', (0, 0, 780, 1100), '④ 제품 정보 (확인 질문)')]
-fig, axes = plt.subplots(1, 4, figsize=(12, 4.6))
+# 2. 웹 화면 (11/9 배포본을 내장 브라우저로 캡처, 예시 응답: 30대 여성 = 대천님 capture_screens.py의 SURVEY)
+W9 = HERE / 'fig' / 'web_1109'
+crops = [(W9 / '1_유형결과.png', (0, 90, 364, 640), '① 유형 결과'),
+         (W9 / '2_부족영양소.jpg', (0, 0, 364, 550), '② 부족할 수 있는 영양소'),
+         (W9 / '3_개인결과.jpg', (0, 0, 364, 550), '③ 개인 결과'),
+         (W9 / '4_제품정보.jpg', None, '④ 제품 정보 (확인 질문 뒤)')]
+fig, axes = plt.subplots(1, 4, figsize=(12, 4.8))
 for ax, (f, b, t) in zip(axes, crops):
-    ax.imshow(Image.open(f).crop(b)); ax.axis('off'); ax.set_title(t, fontsize=10.5, color=INK, pad=6)
-    for s in ax.spines.values():
-        s.set_visible(True)
-fig.subplots_adjust(wspace=0.08)
+    im = Image.open(f).convert('RGB')
+    if b is None:   # 해상도가 다른 캡처: 다른 그림과 같은 가로세로 비율(364 × 550)로 위쪽을 자른다
+        b = (0, 0, im.width, round(im.width * 550 / 364))
+    ax.imshow(im.crop(b));ax.set_xticks([]); ax.set_yticks([]); ax.set_title(t, fontsize=10.5, color=INK, pad=6)
+    for sp in ax.spines.values():
+        sp.set_visible(True); sp.set_color('#C9D9D6')
+fig.subplots_adjust(wspace=0.06)
 save(fig, 'f12_웹화면.png')
 
 # 3. 제품 분류 단계별 남은 제품 수 (준혁님 README 11/5 14:57)
