@@ -1,14 +1,21 @@
+# 원자료·개인 단위 결과는 올리지 않는다 (국민건강영양조사 이용 규정)
 *.csv
 *.xlsx
 *.sas7bdat
+data/
+analysis/raw/
+
+# 웹앱이 쓰는 문항·유형·모델 데이터는 올린다 (원자료 data/ 폴더와 다름)
+!web/src/data/
+
+# 마스코트 그림 생성 원본 (웹용으로 줄인 그림은 web/public/mascot/에 있다)
+scripts/mascot_types/
+
+# 개발 환경
 /.claude
 __pycache__/
 *.pyc
 .venv/
 .env
 .DS_Store
-data/
-# 마스코트 그림 생성 원본 (웹용으로 줄인 그림은 web/public/mascot/에 있다)
-bigskyyang/mascot_types/
-# 웹앱이 쓰는 문항·유형·모델 데이터는 올린다 (원자료 data/ 폴더와 다름)
-!bigskyyang/web/src/data/
+~$*

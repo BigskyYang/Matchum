@@ -1,0 +1,113 @@
+{
+  "source": "analysis/03_personal_prediction/model/models/mini_ffq",
+  "sklearn": "1.8.0",
+  "change": "legume_ord 2 -> 5 only",
+  "cases": [
+    {
+      "row": {
+        "sex": 2,
+        "age": 25,
+        "meat_ord": 3,
+        "fish_ord": 2,
+        "egg_ord": 3,
+        "legume_ord": 2,
+        "dairy_ord": 2
+      },
+      "expected": {
+        "protein": {
+          "probability": 0.09560185000688408,
+          "band": "Mid"
+        },
+        "calcium": {
+          "probability": 0.8567631446523265,
+          "band": "Mid"
+        },
+        "iron": {
+          "probability": 0.06874096148706833,
+          "band": "Mid"
+        },
+        "phosphorus": {
+          "probability": 0.05419604919968712,
+          "band": "Mid"
+        },
+        "vitamin_b1": {
+          "probability": 0.030888875432052893,
+          "band": "Mid"
+        },
+        "vitamin_b2": {
+          "probability": 0.21354917907843907,
+          "band": "Low"
+        },
+        "vitamin_c": {
+          "probability": 0.4394708084656132,
+          "band": "Mid"
+        },
+        "fiber": {
+          "probability": 0.7321986159530846,
+          "band": "Low"
+        },
+        "potassium": {
+          "probability": 0.9257954978788409,
+          "band": "Mid"
+        },
+        "sodium_excess": {
+          "probability": 0.7601180324589273,
+          "band": "Mid"
+        }
+      }
+    },
+    {
+      "row": {
+        "sex": 2,
+        "age": 25,
+        "meat_ord": 3,
+        "fish_ord": 2,
+        "egg_ord": 3,
+        "legume_ord": 5,
+        "dairy_ord": 2
+      },
+      "expected": {
+        "protein": {
+          "probability": 0.02363427066759685,
+          "band": "Low"
+        },
+        "calcium": {
+          "probability": 0.6169877662607561,
+          "band": "Low"
+        },
+        "iron": {
+          "probability": 0.00682950850276368,
+          "band": "Low"
+        },
+        "phosphorus": {
+          "probability": 0.010927305001246602,
+          "band": "Low"
+        },
+        "vitamin_b1": {
+          "probability": 0.0048187996093693964,
+          "band": "Low"
+        },
+        "vitamin_b2": {
+          "probability": 0.08541936400226043,
+          "band": "Low"
+        },
+        "vitamin_c": {
+          "probability": 0.29510824313070594,
+          "band": "Low"
+        },
+        "fiber": {
+          "probability": 0.35779517187686877,
+          "band": "Low"
+        },
+        "potassium": {
+          "probability": 0.811717429432296,
+          "band": "Low"
+        },
+        "sodium_excess": {
+          "probability": 0.9465684479673548,
+          "band": "High"
+        }
+      }
+    }
+  ]
+}

@@ -1,9 +1,0 @@
-{
-  "version": "v1.2-final-frozen",
-  "frozen": true,
-  "lifestyle_mean_auc": 0.6645206417494842,
-  "mini_ffq_mean_auc": 0.8766402722744397,
-  "binary_threshold": "training Youden J",
-  "risk_band": "relative Low/Mid/High",
-  "probability_combination": "none"
-}

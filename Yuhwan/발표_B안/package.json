@@ -1,1 +1,0 @@
-{"name":"matchum-deck-b","version":"1.0.0","private":true,"dependencies":{"pptxgenjs":"^4.0.1","puppeteer-core":"^25.16.0","qrcode":"^1.5.4","sharp":"^0.35.5"}}
