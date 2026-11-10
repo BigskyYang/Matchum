@@ -153,7 +153,7 @@ npm run build    # 배포용 빌드 (dist/)
 
 ## 🎤 발표자료
 
-[📄 발표자료 PDF 내려받기](docs/presentation/slides.pdf) · 본편 71장, 참고자료 20장
+[📄 발표자료 PDF 내려받기](docs/presentation/slides.pdf) · 본편 65장, 참고자료 27장
 
 [표지 · 도입](#표지--도입) · [01 데이터 소개 및 전처리](#01-데이터-소개-및-전처리) · [02 생활습관 유형 분석](#02-생활습관-유형-분석) · [03 유형별 영양 특성 분석](#03-유형별-영양-특성-분석) · [04 개인별 영양 위험 예측](#04-개인별-영양-위험-예측) · [05 맞춤 개선안 및 영양 정보 제공](#05-맞춤-개선안-및-영양-정보-제공) · [06 웹 서비스 구현](#06-웹-서비스-구현) · [07 시연](#07-시연) · [08 의의 및 한계](#08-의의-및-한계) · [참고자료](#참고자료)
 
@@ -287,7 +287,11 @@ npm run build    # 배포용 빌드 (dist/)
 
 <img src="docs/presentation/slides/slide-58.jpg" alt="슬라이드 58" width="100%">
 
+### 07 시연
+
 <img src="docs/presentation/slides/slide-59.jpg" alt="슬라이드 59" width="100%">
+
+### 08 의의 및 한계
 
 <img src="docs/presentation/slides/slide-60.jpg" alt="슬라이드 60" width="100%">
 
@@ -301,11 +305,13 @@ npm run build    # 배포용 빌드 (dist/)
 
 <img src="docs/presentation/slides/slide-65.jpg" alt="슬라이드 65" width="100%">
 
-### 07 시연
+### 참고자료
+
+<details>
+<summary>참고자료 27장 펼치기 (이론 설명·예상 질문·서비스 화면)</summary>
+<br>
 
 <img src="docs/presentation/slides/slide-66.jpg" alt="슬라이드 66" width="100%">
-
-### 08 의의 및 한계
 
 <img src="docs/presentation/slides/slide-67.jpg" alt="슬라이드 67" width="100%">
 
@@ -316,12 +322,6 @@ npm run build    # 배포용 빌드 (dist/)
 <img src="docs/presentation/slides/slide-70.jpg" alt="슬라이드 70" width="100%">
 
 <img src="docs/presentation/slides/slide-71.jpg" alt="슬라이드 71" width="100%">
-
-### 참고자료
-
-<details>
-<summary>참고자료 20장 펼치기 (이론 설명·추가 근거)</summary>
-<br>
 
 <img src="docs/presentation/slides/slide-72.jpg" alt="슬라이드 72" width="100%">
 
@@ -362,5 +362,7 @@ npm run build    # 배포용 빌드 (dist/)
 <img src="docs/presentation/slides/slide-90.jpg" alt="슬라이드 90" width="100%">
 
 <img src="docs/presentation/slides/slide-91.jpg" alt="슬라이드 91" width="100%">
+
+<img src="docs/presentation/slides/slide-92.jpg" alt="슬라이드 92" width="100%">
 
 </details>
